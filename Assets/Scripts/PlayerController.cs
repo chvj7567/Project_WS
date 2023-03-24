@@ -14,7 +14,9 @@ public class PlayerController : MonoBehaviour
     float rotationY = 0f;
     float rotationX = 0f;
     
-    
+    public UnitHand GetLeftHand() { return leftHand; }
+    public UnitHand GetRightHand() { return rightHand; }
+
     private void Start()
     {
         Init();
@@ -24,8 +26,8 @@ public class PlayerController : MonoBehaviour
     {
         rbPlayer.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-        leftHand.Init();
-        rightHand.Init();
+        leftHand.UpdateState();
+        rightHand.UpdateState();
     }
 
     void Look()

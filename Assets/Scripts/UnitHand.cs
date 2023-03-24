@@ -12,7 +12,7 @@ public class UnitHand : MonoBehaviour
 
     public EHandState handState { get; private set; }
 
-    public void Init()
+    public void UpdateState()
     {
         int weaponCount = transform.childCount;
 

@@ -97,8 +97,8 @@ GameObject:
   - component: {fileID: 8286961677873787191}
   - component: {fileID: 8286961677874178953}
   m_Layer: 0
-  m_Name: RocketModernBullet
-  m_TagString: Untagged
+  m_Name: RocketLauncherModernBullet
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
