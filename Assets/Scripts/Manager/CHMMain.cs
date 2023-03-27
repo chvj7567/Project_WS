@@ -49,6 +49,7 @@ public class CHMMain : MonoBehaviour
             m_instance = go.GetOrAddComponent<CHMMain>();
 
             m_instance.m_pool.Init();
+            m_instance.m_contents.Init();
         }
     }
 }

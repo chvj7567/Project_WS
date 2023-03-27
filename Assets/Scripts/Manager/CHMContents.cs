@@ -38,7 +38,12 @@ public class CHMContents
     List<Action<TextAsset>> listAction = new List<Action<TextAsset>>();
     Dictionary<int, string> dicStringInfo = new Dictionary<int, string>();
 
-    public void LoadContentsData()
+    public void Init()
+    {
+        LoadContentsData();
+    }
+
+    void LoadContentsData()
     {
         loadCompleteFileCount = 0;
         listAction.Clear();
@@ -48,7 +53,7 @@ public class CHMContents
         loadingFileCount = listAction.Count;
     }
 
-    public float GetLoadingPercent()
+    float GetLoadingPercent()
     {
         if (loadingFileCount == 0 || loadCompleteFileCount == 0)
         {
@@ -58,7 +63,7 @@ public class CHMContents
         return ((float)loadCompleteFileCount) / loadingFileCount;
     }
 
-    public Action<TextAsset> LoadStringInfo()
+    Action<TextAsset> LoadStringInfo()
     {
         Action<TextAsset> callback;
 
