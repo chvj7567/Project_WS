@@ -113,8 +113,7 @@ public class CHMResource
         CHPoolable poolable = _object.GetComponent<CHPoolable>();
         if (poolable != null && poolable.GetIsUse())
         {
-            CHMMain.Pool.Push(_object.GetComponent<CHPoolable>());
-            return;
+            CHMMain.Pool.Push(poolable);
         }
         else
         {

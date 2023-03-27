@@ -17,7 +17,7 @@ public class CHMPool
         {
             Original = _original;
             Root = new GameObject().transform;
-            Root.name = $"{_original.name}_Root";
+            Root.name = $"{_original.name}Root";
 
             for (int i = 0; i < _count; ++i)
             {
@@ -38,7 +38,6 @@ public class CHMPool
 
             _poolable.transform.parent = Root;
             _poolable.gameObject.SetActive(false);
-            _poolable.IsNotUse();
 
             poolStack.Push(_poolable);
         }
@@ -57,7 +56,6 @@ public class CHMPool
             }
 
             poolable.transform.parent = _parent;
-            poolable.IsUse();
             poolable.gameObject.SetActive(true);
 
             return poolable;
@@ -77,7 +75,7 @@ public class CHMPool
         }
     }
 
-    public void CreatePool(GameObject _original, int _count = 10)
+    public void CreatePool(GameObject _original, int _count = 5)
     {
         CHPool pool = new CHPool();
         pool.Init(_original, _count);
@@ -115,7 +113,9 @@ public class CHMPool
     public void Clear()
     {
         foreach (Transform child in root)
+        {
             GameObject.Destroy(child.gameObject);
+        }
 
         poolDic.Clear();
     }
