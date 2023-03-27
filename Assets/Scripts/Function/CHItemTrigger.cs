@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class ItemBoxTrigger : MonoBehaviour
+public class CHItemTrigger : MonoBehaviour
 {
     BoxCollider itemTrigger;
 
