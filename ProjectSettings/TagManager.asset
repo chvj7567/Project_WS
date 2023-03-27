@@ -6,11 +6,14 @@ TagManager:
   tags:
   - Weapon
   - Bullet
+  - UICamera
+  - EventSystem
+  - UICanvas
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - 

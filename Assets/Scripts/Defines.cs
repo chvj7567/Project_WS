@@ -1,7 +1,8 @@
 public class Defines
 {
-    public enum EWeapon
+    public enum EGunType
     {
+        None,
         Machinegun,
         MachinegunLauncher,
         Pistol,
@@ -12,14 +13,16 @@ public class Defines
         Uzi,
     }
 
-    public enum EWeaponSkin
+    public enum EGunSkin
     {
+        None,
         SniperCamo,
         UziGold,
     }
 
     public enum ETag
     {
+        None,
         Player,
         Weapon,
         Bullet,
