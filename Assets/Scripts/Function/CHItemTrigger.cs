@@ -23,7 +23,7 @@ public class CHItemTrigger : MonoBehaviour
     {
         if (other.transform.gameObject.tag == Defines.ETag.Player.ToString())
         {
-            var controller = other.GetComponent<PlayerController>();
+            var controller = other.GetComponent<ContPlayer>();
 
             if (controller)
             {

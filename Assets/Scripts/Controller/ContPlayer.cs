@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class ContPlayer : MonoBehaviour
 {
     [SerializeField] Rigidbody rbPlayer;
     [SerializeField] Camera camPlayer;

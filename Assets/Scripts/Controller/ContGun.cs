@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class ContGun : MonoBehaviour
 {
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] Transform bulletSpawnPoint;
@@ -40,7 +40,7 @@ public class Gun : MonoBehaviour
         bullet.transform.up = bulletSpawnPoint.transform.up;
 
         // 총알을 스폰 지점의 방향으로 힘을 가해 발사
-        bullet.GetOrAddComponent<Bullet>();
+        bullet.GetOrAddComponent<ContBullet>();
 
         // 총알을 스폰 지점의 방향으로 힘을 가해 발사
         bullet.GetOrAddComponent<Rigidbody>().AddForce(bulletSpawnPoint.up * bulletForce, ForceMode.Impulse);

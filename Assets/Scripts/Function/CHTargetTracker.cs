@@ -14,9 +14,9 @@ public class CHTargetTracker : MonoBehaviour
     }
 
     // 타겟이 될 레이어 마스크
-    public LayerMask targetMask;
+    public List<LayerMask> liTargetMask;
     // 무시 할 레이어 마스크
-    public LayerMask ignoreMask;
+    public List<LayerMask> liIgnoreMask;
     // 타겟을 감지할 범위
     public float range;
     // 타겟을 감지할 시야각
@@ -32,16 +32,27 @@ public class CHTargetTracker : MonoBehaviour
     
     [SerializeField, ReadOnly] TargetInfo target;
     float viewAngleOrigin;
+    LayerMask targetMask;
+    LayerMask ignoreMask;
 
     private void Awake()
     {
         // 시야각 저장
         viewAngleOrigin = viewAngle;
+
+        foreach (LayerMask layerMask in liTargetMask)
+        {
+            targetMask |= layerMask;
+        }
+
+        foreach (LayerMask layerMask in liIgnoreMask)
+        {
+            ignoreMask |= layerMask;
+        }
     }
 
     private void Start()
     {
-        
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
             target = GetClosestTargetInfo();
@@ -138,7 +149,7 @@ public class CHTargetTracker : MonoBehaviour
                 float targetDis = Vector3.Distance(transform.position, targetTr.position);
 
                 // 장애물이 있는지 확인
-                if (Physics.Raycast(transform.position, targetDir, targetDis, targetMask & ignoreMask) == false)
+                if (Physics.Raycast(transform.position, targetDir, targetDis, ~(targetMask | ignoreMask)) == false)
                 {
                     if (viewEditor)
                     {
