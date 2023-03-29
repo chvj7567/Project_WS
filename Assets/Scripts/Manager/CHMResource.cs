@@ -10,17 +10,7 @@ using static UnityEngine.UI.Image;
 using UnityEditor;
 #endif
 
-public enum EResourceType
-{
-    Character,
-    UI,
-    Json,
-}
 
-public enum ECharacter
-{
-    Slime,
-}
 
 public class CHMResource
 {
@@ -35,31 +25,28 @@ public class CHMResource
 
     public void LoadString(EJsonType _stringType, Action<TextAsset> _callback)
     {
-        LoadAsset<TextAsset>($"{EResourceType.Json.ToString()}", $"{_stringType.ToString()}", _callback);
+        LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_stringType.ToString()}", _callback);
     }
 
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object
     {
         Action<T> _callbackTemp = original =>
         {
-            if (_callback != null)
+            if (original == null)
             {
-                if (original == null)
+                _callback(null);
+            }
+            else
+            {
+                if (typeof(T) == typeof(GameObject))
                 {
-                    _callback(null);
+                    GameObject go = original as GameObject;
+                    T t = Instantiate(go) as T;
+                    if (_callback != null) _callback(t);
                 }
                 else
                 {
-                    if (typeof(T) == typeof(GameObject))
-                    {
-                        GameObject go = original as GameObject;
-                        T t = Instantiate(go) as T;
-                        _callback(t);
-                    }
-                    else
-                    {
-                        _callback(GameObject.Instantiate(original));
-                    }
+                    if (_callback != null) _callback(GameObject.Instantiate(original));
                 }
             }
         };
@@ -67,21 +54,26 @@ public class CHMResource
         LoadAsset<T>(_bundleName, _assetName, _callbackTemp);
     }
 
-    public void InstantiateCharacter(ECharacter _character, Action<GameObject> _callback = null, bool _bRandom = false, int _iIndex = 1)
+    public void InstantiateCharacter(Defines.ECharacter _character, Action<GameObject> _callback = null, bool _random = false, int _index = 1)
     {
-        if (_bRandom == false)
+        if (_random == false)
         {
-            InstantiateAsObservable<GameObject>($"{EResourceType.Character.ToString()}/{_character.ToString()}", $"{_character.ToString()}{_iIndex}", _callback);
+            InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Character.ToString()}/{_character.ToString()}", $"{_character.ToString()}{_index}", _callback);
         }
         else
         {
-            InstantiateAsObservable<GameObject>($"{EResourceType.Character.ToString()}/{_character.ToString()}", $"{_character.ToString()}{GetRandomCharacterNumber(_character)}", _callback);
+            InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Character.ToString()}/{_character.ToString()}", $"{_character.ToString()}{GetRandomCharacterNumber(_character)}", _callback);
         }
     }
 
-    public void InstantiateUI(EUI _ui, Action<GameObject> _event = null)
+    public void InstantiateMajor(Defines.EMajor _major, Action<GameObject> _callback = null)
     {
-        InstantiateAsObservable<GameObject>($"{EResourceType.UI.ToString()}", $"{_ui.ToString()}", _event);
+        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Major.ToString()}", $"{_major.ToString()}", _callback);
+    }
+
+    public void InstantiateUI(Defines.EUI _ui, Action<GameObject> _event = null)
+    {
+        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.UI.ToString()}", $"{_ui.ToString()}", _event);
     }
 
     public GameObject Instantiate(GameObject _object, Transform _parent = null)
@@ -121,11 +113,11 @@ public class CHMResource
         }
     }
 
-    int GetRandomCharacterNumber(ECharacter _character)
+    int GetRandomCharacterNumber(Defines.ECharacter _character)
     {
         switch (_character)
         {
-            case ECharacter.Slime:
+            case Defines.ECharacter.Slime:
                 return UnityEngine.Random.Range(1, 9);
         }
 

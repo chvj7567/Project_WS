@@ -1,5 +1,32 @@
 public class Defines
 {
+    public enum EMajor
+    {
+        GlobalVolume,
+        Player,
+    }
+
+    public enum EResourceType
+    {
+        Major,
+        Character,
+        UI,
+        Json,
+    }
+
+    public enum ECharacter
+    {
+        Slime,
+    }
+
+    public enum EUI
+    {
+        EventSystem,
+        UICamera,
+        UICanvas,
+        UIAlarm,
+    }
+
     public enum EGunType
     {
         None,

@@ -1,13 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum EUI
-{
-    EventSystem,
-    UICamera,
-    UICanvas,
-    UIAlarm,
-}
 
 public class UIArg
 {
@@ -17,7 +10,7 @@ public class UIArg
 public class UIWaitData
 {
     public int uid;
-    public EUI uiType;
+    public Defines.EUI uiType;
     public UIArg uiArg;
     public bool showCurrentBackground;
 }
@@ -35,7 +28,7 @@ public class CHMUI
 
     public void CreateEventSystemObject()
     {
-        CHMMain.Resource.InstantiateUI(EUI.EventSystem);
+        CHMMain.Resource.InstantiateUI(Defines.EUI.EventSystem);
     }
 
     public void UpdateUI()
@@ -61,7 +54,7 @@ public class CHMUI
         }
     }
 
-    public int ShowUI(EUI _uiType, UIArg _uiArg, bool _bCurrentBackground = true)
+    public int ShowUI(Defines.EUI _uiType, UIArg _uiArg, bool _bCurrentBackground = true)
     {
         var uiWateData = new UIWaitData
         {
@@ -88,7 +81,7 @@ public class CHMUI
 
             if (uiCanvas == null)
             {
-                CHMMain.Resource.InstantiateUI(EUI.UICanvas, (GameObject canvas) =>
+                CHMMain.Resource.InstantiateUI(Defines.EUI.UICanvas, (GameObject canvas) =>
                 {
                     uiCanvas = canvas;
                 });
@@ -100,7 +93,7 @@ public class CHMUI
 
             if (uiCamera == null)
             {
-                CHMMain.Resource.InstantiateUI(EUI.UICamera, (GameObject camera) =>
+                CHMMain.Resource.InstantiateUI(Defines.EUI.UICamera, (GameObject camera) =>
                 {
                     uiCamera = camera;
                 });
@@ -110,7 +103,7 @@ public class CHMUI
 
             if (uiCanvas == null)
             {
-                CHMMain.Resource.InstantiateUI(EUI.UICanvas, (GameObject canvas) =>
+                CHMMain.Resource.InstantiateUI(Defines.EUI.UICanvas, (GameObject canvas) =>
                 {
                     uiCanvas = canvas;
                 });
@@ -171,7 +164,7 @@ public class CHMUI
         }
     }
 
-    public static void CloseUI(EUI _uiType)
+    public static void CloseUI(Defines.EUI _uiType)
     {
         activeUI = activeUI.FindAll(_ => _ != null);
         foreach (var obj in activeUI)

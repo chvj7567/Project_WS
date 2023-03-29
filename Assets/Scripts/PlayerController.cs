@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         //CHMMain.UI.ShowUI(EUI.UIAlarm, new UIArg());
+        CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
         Init();
     }
 
