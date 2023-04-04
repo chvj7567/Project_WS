@@ -71,9 +71,14 @@ public class CHMResource
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Major.ToString()}", $"{_major.ToString()}", _callback);
     }
 
-    public void InstantiateUI(Defines.EUI _ui, Action<GameObject> _event = null)
+    public void InstantiateUI(Defines.EUI _ui, Action<GameObject> _callback = null)
     {
-        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.UI.ToString()}", $"{_ui.ToString()}", _event);
+        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.UI.ToString()}", $"{_ui.ToString()}", _callback);
+    }
+
+    public void InstantiateEffect(Defines.EEffect _effect, Action<GameObject> _callback = null)
+    {
+        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Effect.ToString()}", $"{_effect.ToString()}", _callback);
     }
 
     public GameObject Instantiate(GameObject _object, Transform _parent = null)
