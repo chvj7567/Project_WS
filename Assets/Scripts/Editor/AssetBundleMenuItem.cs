@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class AssetBundleMenuItem
 {
-    [MenuItem("SHTools/CreateAssetBundleNameJson")]
+    [MenuItem("CHTools/CreateAssetBundleNameJson")]
     public static void CreateAssetBundleNameJson()
     {
         List<string> listAssetBundleName = AssetDatabase.GetAllAssetBundleNames().ToList();
@@ -24,7 +24,7 @@ public class AssetBundleMenuItem
         File.WriteAllText($"{Application.dataPath}/Resources/AssetBundleName.json", json);
     }
 
-    [MenuItem("SHTools/AssetBundleBuild Windows")]
+    [MenuItem("CHTools/AssetBundleBuild Windows")]
     public static void AssetBundleBuildWindows()
     {
         string directory = "Assets/Bundle";
@@ -37,7 +37,7 @@ public class AssetBundleMenuItem
         BuildPipeline.BuildAssetBundles(directory, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
     }
 
-    [MenuItem("SHTools/AssetBundleBuild Android")]
+    [MenuItem("CHTools/AssetBundleBuild Android")]
     public static void AssetBundleBuildAndroid()
     {
         string directory = "Assets/Bundle";
