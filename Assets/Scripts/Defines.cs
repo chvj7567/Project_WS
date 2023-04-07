@@ -12,6 +12,7 @@ public class Defines
         Character,
         UI,
         Json,
+        Effect,
     }
 
     public enum ECharacter
@@ -25,6 +26,23 @@ public class Defines
         UICamera,
         UICanvas,
         UIAlarm,
+    }
+
+    public enum EEffect
+    {
+        FX_Curse,
+        FX_Devil,
+        FX_Devil2,
+        FX_Electricity,
+        FX_Energy,
+        FX_Explosion,
+        FX_Explosion_Magic,
+        FX_Explosion_Magic2,
+        FX_Fire,
+        FX_Floor_splash,
+        FX_Healing,
+        FX_Iceflake,
+        FX_Poison,
     }
 
     public enum EGunType
