@@ -6,29 +6,26 @@ public class ContGun : MonoBehaviour
     [SerializeField] Transform bulletSpawnPoint;
     [SerializeField] float bulletForce = 10f;
     [SerializeField] float fireDelay = .1f;
-
+    [SerializeField] bool isFire = false;
     [SerializeField, ReadOnly] float timeSinceLastFire = 0f;
-    [SerializeField, ReadOnly] bool isFire = false;
+    
+    public void IsFire(bool _isFire)
+    {
+        isFire = _isFire;
+    }
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (isFire)
         {
-            isFire = true;
-        }
-
-        if (Input.GetButtonUp("Fire1"))
-        {
-            isFire = false;
-        }
-
-        if (timeSinceLastFire < fireDelay)
-        {
-            timeSinceLastFire += Time.deltaTime;
-        }
-        else if(isFire)
-        {
-            Fire();
+            if (timeSinceLastFire < fireDelay)
+            {
+                timeSinceLastFire += Time.deltaTime;
+            }
+            else
+            {
+                Fire();
+            }
         }
     }
 
@@ -41,7 +38,6 @@ public class ContGun : MonoBehaviour
 
         // 총알을 스폰 지점의 방향으로 힘을 가해 발사
         bullet.GetOrAddComponent<ContBullet>();
-
         // 총알을 스폰 지점의 방향으로 힘을 가해 발사
         bullet.GetOrAddComponent<Rigidbody>().AddForce(bulletSpawnPoint.up * bulletForce, ForceMode.Impulse);
 

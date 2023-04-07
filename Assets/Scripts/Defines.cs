@@ -28,7 +28,7 @@ public class Defines
         UIAlarm,
     }
 
-    public enum EEffect
+    public enum EParticle
     {
         FX_Curse,
         FX_Devil,

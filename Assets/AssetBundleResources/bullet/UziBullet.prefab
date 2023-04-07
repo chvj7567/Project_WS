@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3740359877717397534}
   - component: {fileID: 2032328892866926199}
   - component: {fileID: -277595935340750662}
+  - component: {fileID: -5902698406176533774}
   m_Layer: 0
   m_Name: UziBullet
   m_TagString: Bullet
@@ -78,6 +79,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUse: 1
+--- !u!114 &-5902698406176533774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3740359877717497504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe3f3ef306d94c4ca2ec0a27def88fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitParticle: {fileID: 0}
 --- !u!1 &3740359877717497506
 GameObject:
   m_ObjectHideFlags: 0

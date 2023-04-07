@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 4100959487839313541}
   - component: {fileID: 4100959487838913543}
   - component: {fileID: 5218376402368036234}
+  - component: {fileID: -785567610954447564}
   m_Layer: 0
   m_Name: SniperBullet
   m_TagString: Bullet
@@ -147,6 +148,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-785567610954447564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4100959487839011493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe3f3ef306d94c4ca2ec0a27def88fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitParticle: {fileID: 0}
 --- !u!1 &4100959487839011495
 GameObject:
   m_ObjectHideFlags: 0

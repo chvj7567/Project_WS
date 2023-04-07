@@ -2,9 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Util
+public class ReadOnlyAttribute : PropertyAttribute {}
+
+public static class CHUtil
 {
-    // 해당 컴포넌트가 있으면 추가하여 가져오고, 없으면 그냥 가져온다.
+    public static bool IsNullOrEmpty<T>(this List<T> list)
+    {
+        if (list == null)
+        {
+            return true;
+        }
+
+        if (list.Count <= 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static T GetOrAddComponent<T>(this GameObject go) where T : UnityEngine.Component
     {
         T component = go.GetComponent<T>();
@@ -53,5 +69,19 @@ public static class Util
             return null;
 
         return transform.gameObject;
+    }
+
+    public static float GetParticleTime(this ParticleSystem _particle)
+    {
+        float time = -1;
+
+        var arrParticle = _particle.GetComponentsInChildren<ParticleSystem>();
+
+        foreach (var particle in arrParticle)
+        {
+            time = Mathf.Max(time, particle.duration);
+        }
+
+        return time;
     }
 }

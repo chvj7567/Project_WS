@@ -29,7 +29,7 @@ public class CHMPool
         {
             GameObject go = Object.Instantiate<GameObject>(Original);
             go.name = Original.name;
-            return Util.GetOrAddComponent<CHPoolable>(go);
+            return go.GetOrAddComponent<CHPoolable>();
         }
 
         public void Push(CHPoolable _poolable)
