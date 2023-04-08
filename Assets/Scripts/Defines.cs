@@ -4,6 +4,8 @@ public class Defines
     {
         GlobalVolume,
         Player,
+
+        Max
     }
 
     public enum EResourceType
@@ -13,6 +15,8 @@ public class Defines
         UI,
         Json,
         Effect,
+
+        Max
     }
 
     public enum ECharacter
@@ -26,6 +30,8 @@ public class Defines
         UICamera,
         UICanvas,
         UIAlarm,
+
+        Max
     }
 
     public enum EParticle
@@ -43,6 +49,8 @@ public class Defines
         FX_Healing,
         FX_Iceflake,
         FX_Poison,
+
+        Max
     }
 
     public enum EGunType
@@ -56,6 +64,8 @@ public class Defines
         Shotgun,
         Sniper,
         Uzi,
+
+        Max
     }
 
     public enum EGunSkin
@@ -63,6 +73,8 @@ public class Defines
         None,
         SniperCamo,
         UziGold,
+
+        Max
     }
 
     public enum ETag
@@ -71,5 +83,7 @@ public class Defines
         Player,
         Weapon,
         Bullet,
+
+        Max
     }
 }

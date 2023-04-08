@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Resources;
-using Unity.VisualScripting;
-using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CHMMain : MonoBehaviour
 {
@@ -18,13 +11,14 @@ public class CHMMain : MonoBehaviour
     CHMUI m_ui = new CHMUI();
     CHMContents m_contents = new CHMContents();
     CHMString m_string = new CHMString();
+    CHMParticle m_particle = new CHMParticle();
 
     public static CHMPool Pool { get { return Instance.m_pool; } }
     public static CHMResource Resource { get { return Instance.m_resource; } }
     public static CHMUI UI { get { return Instance.m_ui; } }
     public static CHMContents Contents { get { return Instance.m_contents; } }
     public static CHMString String { get { return Instance.m_string; } }
-
+    public static CHMParticle Particle { get { return Instance.m_particle; } }
     #endregion
 
     void Start()
@@ -50,6 +44,7 @@ public class CHMMain : MonoBehaviour
 
             m_instance.m_pool.Init();
             m_instance.m_contents.Init();
+            m_instance.m_particle.Init();
         }
     }
 }

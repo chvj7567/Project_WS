@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class ContBullet : MonoBehaviour
 {
-    static GameObject hitParticleObj;
     static float hitParticleTime;
     Rigidbody hitRb;
     Vector3 direction;
@@ -16,19 +15,7 @@ public class ContBullet : MonoBehaviour
     {
         direction = _direction;
         bulletSpeed = _bulletSpeed;
-
         hitRb = gameObject.GetOrAddComponent<Rigidbody>();
-
-        if (hitParticleObj == null)
-        {
-            CHMMain.Resource.InstantiateEffect(Defines.EParticle.FX_Fire, (effect) =>
-            {
-                hitParticleObj = effect;
-                hitParticleObj.GetOrAddComponent<CHPoolable>();
-                hitParticleTime = hitParticleObj.GetOrAddComponent<ParticleSystem>().GetParticleTime();
-                hitParticleObj.SetActive(false);
-            });
-        }
     }
     private void FixedUpdate()
     {
@@ -37,7 +24,8 @@ public class ContBullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        var particle = CHMMain.Resource.Instantiate(hitParticleObj);
+        var particle = CHMMain.Particle.GetRandomParticle();
+        hitParticleTime = CHMMain.Particle.GetParticleTime(particle.GetOrAddComponent<ParticleSystem>());
         particle.transform.position = collision.contacts.First().point;
         CHMMain.Resource.Destroy(gameObject);
         CollisionBullet(particle);

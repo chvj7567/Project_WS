@@ -70,18 +70,4 @@ public static class CHUtil
 
         return transform.gameObject;
     }
-
-    public static float GetParticleTime(this ParticleSystem _particle)
-    {
-        float time = -1;
-
-        var arrParticle = _particle.GetComponentsInChildren<ParticleSystem>();
-
-        foreach (var particle in arrParticle)
-        {
-            time = Mathf.Max(time, particle.duration);
-        }
-
-        return time;
-    }
 }
