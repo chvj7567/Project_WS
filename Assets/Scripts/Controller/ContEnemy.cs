@@ -30,9 +30,6 @@ public class ContEnemy : MonoBehaviour
                 var particle = CHMMain.Particle.GetRandomParticleObject();
                 particle.transform.position = target.targetObj.transform.position;
                 timeSinceLastAttack = 0f;
-
-                await Task.Delay((int)(CHMMain.Particle.GetParticleTime(particle) * 1000));
-                CHMMain.Resource.Destroy(particle);
             }
         });
     }

@@ -69,6 +69,6 @@ public class CHMParticle
     {
         await Task.Delay((int)(dicParticleTime[_particle] * 1000));
 
-        CHMMain.Resource.Destroy(_particleObj);
+        if (_particleObj) CHMMain.Resource.Destroy(_particleObj);
     }
 }
