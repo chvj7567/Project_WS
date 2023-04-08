@@ -1,5 +1,6 @@
+using UniRx.Triggers;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
+using UniRx;
 
 public class ContGun : MonoBehaviour
 {
@@ -15,19 +16,22 @@ public class ContGun : MonoBehaviour
         isFire = _isFire;
     }
 
-    void Update()
+    private void Start()
     {
-        if (isFire)
+        gameObject.UpdateAsObservable().Subscribe(_ =>
         {
-            if (timeSinceLastFire < fireDelay)
+            if (isFire)
             {
-                timeSinceLastFire += Time.deltaTime;
+                if (timeSinceLastFire < fireDelay)
+                {
+                    timeSinceLastFire += Time.deltaTime;
+                }
+                else
+                {
+                    Fire();
+                }
             }
-            else
-            {
-                Fire();
-            }
-        }
+        });
     }
 
     void Fire()

@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class ContBullet : MonoBehaviour
 {
-    static float hitParticleTime;
     Rigidbody hitRb;
     Vector3 direction;
     float bulletSpeed;
@@ -24,16 +23,8 @@ public class ContBullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        var particle = CHMMain.Particle.GetRandomParticle();
-        hitParticleTime = CHMMain.Particle.GetParticleTime(particle.GetOrAddComponent<ParticleSystem>());
+        var particle = CHMMain.Particle.GetRandomParticleObject();
         particle.transform.position = collision.contacts.First().point;
         CHMMain.Resource.Destroy(gameObject);
-        CollisionBullet(particle);
-    }
-
-    async void CollisionBullet(GameObject _obj)
-    {
-        await Task.Delay((int)(hitParticleTime * 1000));
-        if (_obj) { CHMMain.Resource.Destroy(_obj);}
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CHTargetTracker : MonoBehaviour
 {
-    class TargetInfo
+    public class TargetInfo
     {
         public GameObject targetObj;
         public Vector3 direction;
@@ -81,6 +81,11 @@ public class CHTargetTracker : MonoBehaviour
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, range);
         }
+    }
+
+    public TargetInfo GetTargetInfo()
+    {
+        return target;
     }
 
     void LookAtTarget(Vector3 _direction)
