@@ -8,9 +8,17 @@ public class ContBullet : MonoBehaviour
 {
     static GameObject hitParticleObj;
     static float hitParticleTime;
+    Rigidbody hitRb;
+    Vector3 direction;
+    float bulletSpeed;
 
-    private void Start()
+    public void Init(Vector3 _direction, float _bulletSpeed)
     {
+        direction = _direction;
+        bulletSpeed = _bulletSpeed;
+
+        hitRb = gameObject.GetOrAddComponent<Rigidbody>();
+
         if (hitParticleObj == null)
         {
             CHMMain.Resource.InstantiateEffect(Defines.EParticle.FX_Fire, (effect) =>
@@ -18,23 +26,26 @@ public class ContBullet : MonoBehaviour
                 hitParticleObj = effect;
                 hitParticleObj.GetOrAddComponent<CHPoolable>();
                 hitParticleTime = hitParticleObj.GetOrAddComponent<ParticleSystem>().GetParticleTime();
+                hitParticleObj.SetActive(false);
             });
         }
+    }
+    private void FixedUpdate()
+    {
+        hitRb.MovePosition(hitRb.position + direction * bulletSpeed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(CHMMain.Resource.Instantiate(hitParticleObj));
-
+        var particle = CHMMain.Resource.Instantiate(hitParticleObj);
+        particle.transform.position = collision.contacts.First().point;
         CHMMain.Resource.Destroy(gameObject);
+        CollisionBullet(particle);
     }
 
-    async void Destroy(GameObject _obj)
+    async void CollisionBullet(GameObject _obj)
     {
         await Task.Delay((int)(hitParticleTime * 1000));
-        if (_obj != null)
-        {
-            CHMMain.Resource.Destroy(_obj);
-        }
+        if (_obj) { CHMMain.Resource.Destroy(_obj);}
     }
 }

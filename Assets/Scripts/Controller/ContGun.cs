@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class ContGun : MonoBehaviour
 {
@@ -37,9 +38,7 @@ public class ContGun : MonoBehaviour
         bullet.transform.up = bulletSpawnPoint.transform.up;
 
         // 총알을 스폰 지점의 방향으로 힘을 가해 발사
-        bullet.GetOrAddComponent<ContBullet>();
-        // 총알을 스폰 지점의 방향으로 힘을 가해 발사
-        bullet.GetOrAddComponent<Rigidbody>().AddForce(bulletSpawnPoint.up * bulletForce, ForceMode.Impulse);
+        bullet.GetOrAddComponent<ContBullet>().Init(transform.forward, bulletForce);
 
         // 딜레이 초기화
         timeSinceLastFire = 0f;
