@@ -35,8 +35,9 @@ public class CHMJson
     int loadCompleteFileCount = 0;
     int loadingFileCount = 0;
 
-    List<Action<TextAsset>> listAction = new List<Action<TextAsset>>();
+    List<Action<TextAsset>> liAction = new List<Action<TextAsset>>();
     Dictionary<int, string> dicStringInfo = new Dictionary<int, string>();
+    List<SkillJson> liSkillInfo = new List<SkillJson>();
 
     public void Init()
     {
@@ -47,12 +48,12 @@ public class CHMJson
     void LoadJsonData()
     {
         loadCompleteFileCount = 0;
-        listAction.Clear();
+        liAction.Clear();
 
-        listAction.Add(LoadStringInfo());
-        listAction.Add(LoadSkillInfo());
+        liAction.Add(LoadStringInfo());
+        liAction.Add(LoadSkillInfo());
 
-        loadingFileCount = listAction.Count;
+        loadingFileCount = liAction.Count;
     }
 
     float GetLoadingPercent()
@@ -71,8 +72,8 @@ public class CHMJson
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.Korea, callback = (TextAsset textAsset) =>
         {
-            var contentsData = JsonUtility.FromJson<JsonData>(("{\"arrStringInfo\":" + textAsset.text + "}"));
-            foreach (var data in contentsData.arrStringInfo)
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"arrStringInfo\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.arrStringInfo)
             {
                 dicStringInfo.Add(data.stringID, data.value);
             }
@@ -89,10 +90,10 @@ public class CHMJson
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.Skill, callback = (TextAsset textAsset) =>
         {
-            var contentsData = JsonUtility.FromJson<JsonData>(("{\"arrSkillInfo\":" + textAsset.text + "}"));
-            foreach (var data in contentsData.arrSkillInfo)
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"arrSkillInfo\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.arrSkillInfo)
             {
-                Debug.Log(data);
+                liSkillInfo.Add(data);
             }
 
             ++loadCompleteFileCount;

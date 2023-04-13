@@ -17,7 +17,7 @@ public class CHMMain : MonoBehaviour
     public static CHMPool Pool { get { return Instance.m_pool; } }
     public static CHMResource Resource { get { return Instance.m_resource; } }
     public static CHMUI UI { get { return Instance.m_ui; } }
-    public static CHMJson Contents { get { return Instance.m_json; } }
+    public static CHMJson Json { get { return Instance.m_json; } }
     public static CHMString String { get { return Instance.m_string; } }
     public static CHMParticle Particle { get { return Instance.m_particle; } }
     public static CHMSkill Skill { get { return Instance.m_skill; } }
