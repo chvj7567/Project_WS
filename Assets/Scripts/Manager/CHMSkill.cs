@@ -1,34 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Defines;
+using static Infomation;
 
 public class CHMSkill
 {
-    Vector3 Angle(Transform _trOriginPos, float _angle)
-    {
-        _angle += _trOriginPos.eulerAngles.y;
-        return new Vector3(Mathf.Sin(_angle * Mathf.Deg2Rad), 0f, Mathf.Cos(_angle * Mathf.Deg2Rad));
-    }
-
-    public List<TargetInfo> GetTargetInfoListInRange(Transform _trOriginPos, LayerMask _lmTarget, LayerMask _lmIgnore, float _range, float _viewAngle = 360f)
+    public List<TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
     {
         List<TargetInfo> targetInfoList = new List<TargetInfo>();
 
         // 범위내에 있는 타겟들 확인
-        Collider[] targets = Physics.OverlapSphere(_trOriginPos.position, _range, _lmTarget);
+        Collider[] targets = Physics.OverlapSphere(_originPos, _range, _lmTarget);
 
         foreach (Collider target in targets)
         {
             Transform targetTr = target.transform;
-            Vector3 targetDir = (targetTr.position - _trOriginPos.position).normalized;
+            Vector3 targetDir = (targetTr.position - _originPos).normalized;
 
             // 시야각에 걸리는지 확인
-            if (Vector3.Angle(_trOriginPos.forward, targetDir) < _viewAngle / 2)
+            if (Vector3.Angle(_direction, targetDir) < _viewAngle / 2)
             {
-                float targetDis = Vector3.Distance(_trOriginPos.position, targetTr.position);
+                float targetDis = Vector3.Distance(_originPos, targetTr.position);
 
                 // 장애물이 있는지 확인
-                if (Physics.Raycast(_trOriginPos.position, targetDir, targetDis, ~(_lmTarget | _lmIgnore)) == false)
+                if (Physics.Raycast(_originPos, targetDir, targetDis, ~_lmTarget) == false)
                 {
                     targetInfoList.Add(new TargetInfo
                     {
@@ -43,10 +38,10 @@ public class CHMSkill
         return targetInfoList;
     }
 
-    public TargetInfo GetClosestTargetInfo(Transform _trOriginPos, LayerMask _lmTarget, LayerMask _lmIgnore, float _range, float _viewAngle = 360f)
+    public TargetInfo GetClosestTargetInfo(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
     {
         TargetInfo closestTargetInfo = null;
-        List<TargetInfo> targetInfoList = GetTargetInfoListInRange(_trOriginPos, _lmTarget, _lmIgnore, _range, _viewAngle);
+        List<TargetInfo> targetInfoList = GetTargetInfoListInRange(_originPos, _direction, _lmTarget, _range, _viewAngle);
 
         if (targetInfoList.Count > 0)
         {
@@ -65,21 +60,21 @@ public class CHMSkill
         return closestTargetInfo;
     }
 
-    public List<TargetInfo> GetTargetInfoListInRange(Transform _trOriginPos, LayerMask _lmTarget, LayerMask _lmIgnore, Vector3 _size, Quaternion _quater)
+    public List<TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, LayerMask _lmTarget, Vector3 _size, Quaternion _quater)
     {
         List<TargetInfo> targetInfoList = new List<TargetInfo>();
 
         // 범위내에 있는 타겟들 확인
-        Collider[] targets = Physics.OverlapBox(_trOriginPos.position, _size / 2f, _quater, _lmTarget);
+        Collider[] targets = Physics.OverlapBox(_originPos, _size / 2f, _quater, _lmTarget);
 
         foreach (Collider target in targets)
         {
             Transform targetTr = target.transform;
-            Vector3 targetDir = (targetTr.position - _trOriginPos.position).normalized;
-            float targetDis = Vector3.Distance(_trOriginPos.position, targetTr.position);
+            Vector3 targetDir = (targetTr.position - _originPos).normalized;
+            float targetDis = Vector3.Distance(_originPos, targetTr.position);
 
             // 장애물이 있는지 확인
-            if (Physics.Raycast(_trOriginPos.position, targetDir, targetDis, ~(_lmTarget | _lmIgnore)) == false)
+            if (Physics.Raycast(_originPos, targetDir, targetDis, ~_lmTarget) == false)
             {
                 targetInfoList.Add(new TargetInfo
                 {
@@ -93,10 +88,10 @@ public class CHMSkill
         return targetInfoList;
     }
 
-    public TargetInfo GetClosestTargetInfo(Transform _trOriginPos, LayerMask _lmTarget, LayerMask _lmIgnore, Vector3 _size, Quaternion _quater)
+    public TargetInfo GetClosestTargetInfo(Vector3 _originPos, LayerMask _lmTarget, Vector3 _size, Quaternion _quater)
     {
         TargetInfo closestTargetInfo = null;
-        List<TargetInfo> targetInfoList = GetTargetInfoListInRange(_trOriginPos, _lmTarget, _lmIgnore, _size, _quater);
+        List<TargetInfo> targetInfoList = GetTargetInfoListInRange(_originPos, _lmTarget, _size, _quater);
 
         if (targetInfoList.Count > 0)
         {
@@ -115,5 +110,47 @@ public class CHMSkill
         return closestTargetInfo;
     }
 
-    
+    public List<Transform> GetTargetTransformList(List<TargetInfo> _liTargetInfo)
+    {
+        if (_liTargetInfo == null) return null;
+
+        List<Transform> targetTransformList = new List<Transform>();
+        foreach (TargetInfo targetInfo in _liTargetInfo)
+        {
+            targetTransformList.Add(targetInfo.targetObj.transform);
+        }
+
+        return targetTransformList;
+    }
+
+    public List<Transform> GetTargetTransformList(TargetInfo _targetInfo)
+    {
+        if (_targetInfo == null) return null;
+
+        List<Transform> targetTransformList = new List<Transform>();
+        targetTransformList.Add(_targetInfo.targetObj.transform);
+
+        return targetTransformList;
+    }
+
+    public int GetTargetMask(Defines.ETargetMask _targetMask)
+    {
+        switch (_targetMask)
+        {
+            case Defines.ETargetMask.Me:
+                return LayerMask.GetMask(ETargetMask.Me.ToString());
+            case Defines.ETargetMask.Red:
+                return LayerMask.GetMask(ETargetMask.Red.ToString());
+            case Defines.ETargetMask.Blue:
+                return LayerMask.GetMask(ETargetMask.Blue.ToString());
+            case Defines.ETargetMask.Me_Red:
+                return LayerMask.GetMask(ETargetMask.Me.ToString()) | LayerMask.GetMask(ETargetMask.Red.ToString());
+            case Defines.ETargetMask.Me_Blue:
+                return LayerMask.GetMask(ETargetMask.Me.ToString()) | LayerMask.GetMask(ETargetMask.Blue.ToString());
+            case Defines.ETargetMask.Red_Blue:
+                return LayerMask.GetMask(ETargetMask.Red.ToString()) | LayerMask.GetMask(ETargetMask.Blue.ToString());
+            default:
+                return -1;
+        }
+    }
 }

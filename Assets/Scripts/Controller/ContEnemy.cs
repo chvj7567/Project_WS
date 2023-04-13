@@ -15,8 +15,7 @@ public class ContEnemy : MonoBehaviour
 
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
-            TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
-
+            Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
 
             if (timeSinceLastAttack < attackDelay)
             {
@@ -30,7 +29,7 @@ public class ContEnemy : MonoBehaviour
                 {
                     List<Transform> liTarget = new List<Transform>();
                     liTarget.Add(target.targetObj.transform);
-                    CHMMain.Particle.CreateParticle(transform, liTarget, Defines.EStandardPos.TargetAll, (Defines.EParticle)Random.Range(0, (int)Defines.EParticle.Max), true);
+                   // CHMMain.Skill.CreateNoneTargetingSkill(transform, Defines.ESkillID.Explosion);
                 }
 
                 //CHMMain.Particle.CreateParticle(transform, liTarget, Defines.EStandardPos.TargetAll, (Defines.EParticle)Random.Range(0, (int)Defines.EParticle.Max), true);

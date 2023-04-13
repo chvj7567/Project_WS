@@ -1,3 +1,5 @@
+using System;
+
 public class Defines
 {
     public enum EJsonType
@@ -53,7 +55,7 @@ public class Defines
         Max
     }
 
-    public enum ESkill
+    public enum ESkillID
     {
         None = -1,
 
@@ -75,8 +77,30 @@ public class Defines
         Max
     }
 
+    public enum EEffect
+    {
+        None = -1,
+
+        FX_Curse, // 0
+        FX_Devil, // 1
+        FX_Devil2, // 2
+        FX_Electricity, // 3
+        FX_Energy, // 4
+        FX_Explosion, // 5
+        FX_Explosion_Magic, // 6
+        FX_Explosion_Magic2, // 7
+        FX_Fire, // 8
+        FX_Floor_splash, // 9
+        FX_Healing, // 10
+        FX_Iceflake, // 11
+        FX_Poison, // 12
+        Slash, // 13
+
+        Max
+    }
+
     // 스킬대상자 스킬형태
-    public enum ESkillType
+    public enum EEffectType
     {
         None = -1,
 
@@ -98,20 +122,10 @@ public class Defines
         Max,
     }
 
-    public enum ESkillTarget
-    {
-        None = -1,
-        // 타겟팅 스킬
-        Targeting,
-        // 논타겟팅 스킬
-        NoneTargeting
-    }
-
     public enum ECollision
     {
         None = -1,
 
-        Capsule,
         Sphere,
         Box,
 
@@ -129,12 +143,27 @@ public class Defines
         Max
     }
 
-    public enum EDamageEffect
+    public enum ETargetMask
     {
         None = -1,
 
-        Constantly, // 지속
+        Me,
+        Red,
+        Blue,
+        Me_Red,
+        Me_Blue,
+        Red_Blue,
+        Me_Red_Blue,
+
+        Max
+    }
+
+    public enum EDamageState
+    {
+        None = -1,
+
         AtOnce, // 한번에
+        Constantly, // 지속
 
         Max
     }
@@ -148,27 +177,6 @@ public class Defines
         PercentRemainHp, // 남은 Hp 퍼센트 데미지
 
         Max,
-    }
-    public enum EParticle
-    {
-        None = -1,
-
-        FX_Curse, // 0
-        FX_Devil, // 1
-        FX_Devil2, // 2
-        FX_Electricity, // 3
-        FX_Energy, // 4
-        FX_Explosion, // 5
-        FX_Explosion_Magic, // 6
-        FX_Explosion_Magic2, // 7
-        FX_Fire, // 8
-        FX_Floor_splash, // 9
-        FX_Healing, // 10
-        FX_Iceflake, // 11
-        FX_Poison, // 12
-        Slash, // 13
-
-        Max
     }
 
     public enum EGunType

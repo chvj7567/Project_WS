@@ -76,7 +76,7 @@ public class CHMResource
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.UI.ToString()}", $"{_ui.ToString()}", _callback);
     }
 
-    public void InstantiateEffect(Defines.EParticle _effect, Action<GameObject> _callback = null)
+    public void InstantiateEffect(Defines.EEffect _effect, Action<GameObject> _callback = null)
     {
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Effect.ToString()}", $"{_effect.ToString()}", _callback);
     }

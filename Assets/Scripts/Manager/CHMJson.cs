@@ -2,31 +2,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Defines;
+using static Infomation;
 
 public class CHMJson
 {
     [Serializable]
-    class StringJson
+    public class StringJson
     {
         public int stringID = -1;
         public string value = "";
     }
 
     [Serializable]
-    class SkillJson
+    public class SkillJson
     {
-        public int skillID = -1;
-        public int skillType = -1;
-        public int skillTarget = -1;
-        public int collision = -1;
-        public int standardPos = -1;
-        public int damageEffect = -1;
-        public int damageType = -1;
-        public float damage = 0f;
+        public ESkillID skillID = ESkillID.None;
+        public int skillDesc = -1;
+        public List<EffectInfo> liEffectInfo = new List<EffectInfo>(); // 스킬 그 자체
     }
 
     [Serializable]
-    class JsonData
+    public class JsonData
     {
         public StringJson[] arrStringInfo;
         public SkillJson[] arrSkillInfo;
@@ -70,6 +67,8 @@ public class CHMJson
     {
         Action<TextAsset> callback;
 
+        dicStringInfo.Clear();
+
         CHMMain.Resource.LoadJson(Defines.EJsonType.Korea, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"arrStringInfo\":" + textAsset.text + "}"));
@@ -87,6 +86,8 @@ public class CHMJson
     Action<TextAsset> LoadSkillInfo()
     {
         Action<TextAsset> callback;
+
+        liSkillInfo.Clear();
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.Skill, callback = (TextAsset textAsset) =>
         {
@@ -110,5 +111,10 @@ public class CHMJson
         }
 
         return "";
+    }
+
+    public SkillJson GetSkillInfo(Defines.ESkillID _skillID)
+    {
+        return liSkillInfo.Find(_ => _.skillID == _skillID);
     }
 }

@@ -10,8 +10,6 @@ public class CHTargetTracker : MonoBehaviour
     public Transform trOrigin;
     // 타겟이 될 레이어 마스크
     public List<LayerMask> liTargetMask;
-    // 무시 할 레이어 마스크
-    public List<LayerMask> liIgnoreMask;
     // 타겟을 감지할 범위
     public float range;
     // 타겟을 감지할 시야각
@@ -25,10 +23,9 @@ public class CHTargetTracker : MonoBehaviour
     // 에디터 상에서 시야각 확인 여부
     public bool viewEditor;
     
-    [SerializeField, ReadOnly] TargetInfo closestTarget;
+    [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
     float viewAngleOrigin;
     LayerMask targetMask;
-    LayerMask ignoreMask;
 
     private void Awake()
     {
@@ -39,18 +36,13 @@ public class CHTargetTracker : MonoBehaviour
         {
             targetMask |= layerMask;
         }
-
-        foreach (LayerMask layerMask in liIgnoreMask)
-        {
-            ignoreMask |= layerMask;
-        }
     }
 
     private void Start()
     {
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
-            closestTarget = CHMMain.Skill.GetClosestTargetInfo(transform, targetMask, ignoreMask, range, viewAngle);
+            closestTarget = CHMMain.Skill.GetClosestTargetInfo(transform.position, transform.forward, targetMask, range, viewAngle);
 
             if (closestTarget != null)
             {
@@ -94,13 +86,13 @@ public class CHTargetTracker : MonoBehaviour
         }
     }
 
-    public TargetInfo GetClosestTargetInfo()
+    public Infomation.TargetInfo GetClosestTargetInfo()
     {
         return closestTarget;
     }
 
-    public List<TargetInfo> GetTargetInfoListInRange()
+    public List<Infomation.TargetInfo> GetTargetInfoListInRange()
     {
-        return CHMMain.Skill.GetTargetInfoListInRange(transform, targetMask, ignoreMask, range, viewAngle);
+        return CHMMain.Skill.GetTargetInfoListInRange(transform.position, transform.forward, targetMask, range, viewAngle);
     }
 }
