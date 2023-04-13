@@ -4,7 +4,7 @@ using UnityEngine;
 public class UIBase : MonoBehaviour
 {
     [ReadOnly]
-    public Defines.EUI uiType;
+    public Defines.EUI eUIType;
     [ReadOnly]
     public int uid = 0;
 

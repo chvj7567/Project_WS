@@ -126,7 +126,7 @@ public class CHMUI
                 {
                     activeUI.Add(uiObj);
                     var script = uiObj.GetComponent<UIBase>();
-                    script.uiType = _uiWaitData.uiType;
+                    script.eUIType = _uiWaitData.uiType;
                     script.uid = _uiWaitData.uid;
                     script.InitUI(_uiWaitData.uiArg);
                     uiObj.SetActive(true);
@@ -170,7 +170,7 @@ public class CHMUI
         foreach (var obj in activeUI)
         {
             var ui = obj.GetComponent<UIBase>();
-            if (ui.uiType == _uiType)
+            if (ui.eUIType == _uiType)
             {
                 ui.CloseUI();
                 waitCloseUI.Add(obj);

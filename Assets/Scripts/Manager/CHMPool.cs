@@ -11,7 +11,7 @@ public class CHMPool
         public GameObject Original { get; private set; }
         public Transform Root { get; set; }
 
-        Stack<CHPoolable> poolStack = new Stack<CHPoolable>();
+        Stack<CHPoolable> stPool = new Stack<CHPoolable>();
 
         public void Init(GameObject _original, int _count = 5)
         {
@@ -39,16 +39,16 @@ public class CHMPool
             _poolable.transform.parent = Root;
             _poolable.gameObject.SetActive(false);
 
-            poolStack.Push(_poolable);
+            stPool.Push(_poolable);
         }
 
         public CHPoolable Pop(Transform _parent)
         {
             CHPoolable poolable;
 
-            if (poolStack.Count > 0)
+            if (stPool.Count > 0)
             {
-                poolable = poolStack.Pop();
+                poolable = stPool.Pop();
             }
             else
             {

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UniRx.Triggers;
 using UnityEngine;
 using UniRx;
-using static CHTargetTracker;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class ContEnemy : MonoBehaviour
 {
@@ -12,23 +9,32 @@ public class ContEnemy : MonoBehaviour
     [SerializeField] float attackDelay = 1f;
     [SerializeField] float timeSinceLastAttack;
 
-    TargetInfo target;
     private void Start()
     {
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
 
-        gameObject.UpdateAsObservable().Subscribe(async _ =>
+        gameObject.UpdateAsObservable().Subscribe(_ =>
         {
-            target = targetTracker.GetTargetInfo();
+            TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
+
 
             if (timeSinceLastAttack < attackDelay)
             {
                 timeSinceLastAttack += Time.deltaTime;
             }
-            else if (target != null && target.distance <= attackDistance)
+            else if (mainTarget != null && mainTarget.distance <= attackDistance)
             {
-                var particle = CHMMain.Particle.GetRandomParticleObject();
-                particle.transform.position = target.targetObj.transform.position;
+                //List<Transform> liTarget = new List<Transform>();
+
+                foreach (var target in targetTracker.GetTargetInfoListInRange())
+                {
+                    List<Transform> liTarget = new List<Transform>();
+                    liTarget.Add(target.targetObj.transform);
+                    CHMMain.Particle.CreateParticle(transform, liTarget, Defines.EStandardPos.TargetAll, (Defines.EParticle)Random.Range(0, (int)Defines.EParticle.Max), true);
+                }
+
+                //CHMMain.Particle.CreateParticle(transform, liTarget, Defines.EStandardPos.TargetAll, (Defines.EParticle)Random.Range(0, (int)Defines.EParticle.Max), true);
+
                 timeSinceLastAttack = 0f;
             }
         });

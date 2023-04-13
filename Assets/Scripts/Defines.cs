@@ -1,7 +1,19 @@
 public class Defines
 {
+    public enum EJsonType
+    {
+        None = -1,
+
+        Korea,
+        Skill,
+
+        Max
+    }
+
     public enum EMajor
     {
+        None = -1,
+
         GlobalVolume,
         Player,
 
@@ -10,6 +22,8 @@ public class Defines
 
     public enum EResourceType
     {
+        None = -1,
+
         Major,
         Character,
         UI,
@@ -21,11 +35,16 @@ public class Defines
 
     public enum ECharacter
     {
+        None = -1,
+
         Slime,
+        Max
     }
 
     public enum EUI
     {
+        None = -1,
+
         EventSystem,
         UICamera,
         UICanvas,
@@ -34,28 +53,128 @@ public class Defines
         Max
     }
 
+    public enum ESkill
+    {
+        None = -1,
+
+        Curse, // 0
+        Devil, // 1
+        Devil2, // 2
+        Electricity, // 3
+        Energy, // 4
+        Explosion, // 5
+        Explosion_Magic, // 6
+        Explosion_Magic2, // 7
+        Fire, // 8
+        Floor_splash, // 9
+        Healing, // 10
+        Iceflake, // 11
+        Poison, // 12
+        Slash, // 13
+
+        Max
+    }
+
+    // 스킬대상자 스킬형태
+    public enum ESkillType
+    {
+        None = -1,
+
+        // 대상자가 자기 자신일 때
+        MeHpUp, // 0
+        MeHpDown, // 1
+        MeAttackStatUp, // 2
+        MeAttackStatDown, // 3
+        MeDefenseStatUp, // 4
+        MeDefenseStatDown, // 5
+        // 대상자가 적 또는 팀원일 때
+        TargetHpUp, // 6
+        TargetHpDown, // 7
+        TargetAttackStatUp, // 8
+        TargetAttackStatDown, // 9
+        TargetDefenseStatUp, // 10
+        TargetDefenseStatDown, // 11
+
+        Max,
+    }
+
+    public enum ESkillTarget
+    {
+        None = -1,
+        // 타겟팅 스킬
+        Targeting,
+        // 논타겟팅 스킬
+        NoneTargeting
+    }
+
+    public enum ECollision
+    {
+        None = -1,
+
+        Capsule,
+        Sphere,
+        Box,
+
+        Max
+    }
+
+    public enum EStandardPos
+    {
+        None = -1,
+
+        Me,
+        TargetOne,
+        TargetAll,
+
+        Max
+    }
+
+    public enum EDamageEffect
+    {
+        None = -1,
+
+        Constantly, // 지속
+        AtOnce, // 한번에
+
+        Max
+    }
+
+    public enum EDamageType
+    {
+        None = -1,
+
+        Fixed, // 고정 데미지
+        PercentMaxHp, // 전체 Hp 퍼센트 데미지
+        PercentRemainHp, // 남은 Hp 퍼센트 데미지
+
+        Max,
+    }
     public enum EParticle
     {
-        FX_Curse,
-        FX_Devil,
-        FX_Devil2,
-        FX_Electricity,
-        FX_Energy,
-        FX_Explosion,
-        FX_Explosion_Magic,
-        FX_Explosion_Magic2,
-        FX_Fire,
-        FX_Floor_splash,
-        FX_Healing,
-        FX_Iceflake,
-        FX_Poison,
+        None = -1,
+
+        FX_Curse, // 0
+        FX_Devil, // 1
+        FX_Devil2, // 2
+        FX_Electricity, // 3
+        FX_Energy, // 4
+        FX_Explosion, // 5
+        FX_Explosion_Magic, // 6
+        FX_Explosion_Magic2, // 7
+        FX_Fire, // 8
+        FX_Floor_splash, // 9
+        FX_Healing, // 10
+        FX_Iceflake, // 11
+        FX_Poison, // 12
+        Slash, // 13
 
         Max
     }
 
     public enum EGunType
     {
-        None,
+        None = -1,
+
         Machinegun,
         MachinegunLauncher,
         Pistol,
@@ -70,7 +189,8 @@ public class Defines
 
     public enum EGunSkin
     {
-        None,
+        None = -1,
+
         SniperCamo,
         UziGold,
 
@@ -79,7 +199,8 @@ public class Defines
 
     public enum ETag
     {
-        None,
+        None = -1,
+
         Player,
         Weapon,
         Bullet,

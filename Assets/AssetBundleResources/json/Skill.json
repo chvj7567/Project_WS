@@ -1,0 +1,142 @@
+[
+  {
+    "skillID": "0",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "1",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "2",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "3",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "4",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "5",
+    "skillType": "7",
+	"skillTarget": "1",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "6",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "7",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "8",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "9",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "10",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "11",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "12",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  },
+  {
+    "skillID": "13",
+    "skillType": "7",
+	"skillTarget": "0",
+	"collision": "1",
+	"standardPos": "1",
+	"damageEffect": "1",
+	"damageType": "0",
+	"damage": "10.5"
+  }
+]

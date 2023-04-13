@@ -1,18 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 
 public class CHTargetTracker : MonoBehaviour
 {
-    public class TargetInfo
-    {
-        public GameObject targetObj;
-        public Vector3 direction;
-        public float distance;
-    }
-
+    public Transform trOrigin;
     // 타겟이 될 레이어 마스크
     public List<LayerMask> liTargetMask;
     // 무시 할 레이어 마스크
@@ -30,7 +25,7 @@ public class CHTargetTracker : MonoBehaviour
     // 에디터 상에서 시야각 확인 여부
     public bool viewEditor;
     
-    [SerializeField, ReadOnly] TargetInfo target;
+    [SerializeField, ReadOnly] TargetInfo closestTarget;
     float viewAngleOrigin;
     LayerMask targetMask;
     LayerMask ignoreMask;
@@ -55,14 +50,14 @@ public class CHTargetTracker : MonoBehaviour
     {
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
-            target = GetClosestTargetInfo();
+            closestTarget = CHMMain.Skill.GetClosestTargetInfo(transform, targetMask, ignoreMask, range, viewAngle);
 
-            if (target != null)
+            if (closestTarget != null)
             {
                 // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
                 viewAngle = 360f;
 
-                Vector3 direction = target.targetObj.transform.position - transform.position;
+                Vector3 direction = closestTarget.targetObj.transform.position - transform.position;
 
                 LookAtTarget(direction);
                 FollowTarget(direction);
@@ -83,11 +78,6 @@ public class CHTargetTracker : MonoBehaviour
         }
     }
 
-    public TargetInfo GetTargetInfo()
-    {
-        return target;
-    }
-
     void LookAtTarget(Vector3 _direction)
     {
         Quaternion targetRotation = Quaternion.LookRotation(_direction);
@@ -96,7 +86,7 @@ public class CHTargetTracker : MonoBehaviour
 
     void FollowTarget(Vector3 _direction)
     {
-        float distance = Vector3.Distance(transform.position, target.targetObj.transform.position);
+        float distance = Vector3.Distance(transform.position, closestTarget.targetObj.transform.position);
 
         if (distance > approachDistance)
         {
@@ -104,80 +94,13 @@ public class CHTargetTracker : MonoBehaviour
         }
     }
 
-    TargetInfo GetClosestTargetInfo()
+    public TargetInfo GetClosestTargetInfo()
     {
-        TargetInfo tempTarget = null;
-        List<TargetInfo> targetInfoList = GetTargetInfoListInRange();
-
-        if (targetInfoList.Count > 0)
-        {
-            float minDis = Mathf.Infinity;
-
-            foreach (TargetInfo targetInfo in targetInfoList)
-            {
-                if (targetInfo.distance < minDis)
-                {
-                    minDis = targetInfo.distance;
-                    tempTarget = targetInfo;
-                }
-            }
-        }
-
-        return tempTarget;
+        return closestTarget;
     }
 
-    List<TargetInfo> GetTargetInfoListInRange()
+    public List<TargetInfo> GetTargetInfoListInRange()
     {
-        List<TargetInfo> targetInfoList = new List<TargetInfo>();
-
-        // 시야각의 경계선
-        Vector3 left = Angle(-viewAngle * 0.5f);
-        Vector3 right = Angle(viewAngle * 0.5f);
-
-        if (viewEditor)
-        {
-            Debug.DrawRay(transform.position, left * range, Color.green);
-            Debug.DrawRay(transform.position, right * range, Color.green);
-        }
-
-        // 범위내에 있는 타겟들 확인
-        Collider[] targets = Physics.OverlapSphere(transform.position, range, targetMask);
-
-        foreach (Collider target in targets)
-        {
-            Transform targetTr = target.transform;
-            Vector3 targetDir = (targetTr.position - transform.position).normalized;
-
-            // 시야각에 걸리는지 확인
-            if (Vector3.Angle(transform.forward, targetDir) < viewAngle / 2)
-            {
-                float targetDis = Vector3.Distance(transform.position, targetTr.position);
-
-                // 장애물이 있는지 확인
-                if (Physics.Raycast(transform.position, targetDir, targetDis, ~(targetMask | ignoreMask)) == false)
-                {
-                    if (viewEditor)
-                    {
-                        Debug.DrawRay(transform.position, targetDir * targetDis, Color.red);
-                    }
-
-                    targetInfoList.Add(new TargetInfo
-                    {
-                        targetObj = target.gameObject,
-                        direction = targetDir,
-                        distance = targetDis,
-                    });
-                }
-            }
-        }
-
-        return targetInfoList;
+        return CHMMain.Skill.GetTargetInfoListInRange(transform, targetMask, ignoreMask, range, viewAngle);
     }
-
-    Vector3 Angle(float _angle)
-    {
-        _angle += transform.eulerAngles.y;
-        return new Vector3(Mathf.Sin(_angle * Mathf.Deg2Rad), 0f, Mathf.Cos(_angle * Mathf.Deg2Rad));
-    }
-
 }

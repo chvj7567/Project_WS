@@ -4,8 +4,8 @@ public class ContPlayer : MonoBehaviour
 {
     [SerializeField] Rigidbody rbPlayer;
     [SerializeField] Camera camPlayer;
-    [SerializeField] UnitHand leftHand;
-    [SerializeField] UnitHand rightHand;
+    [SerializeField] UnitHand csLeftHand;
+    [SerializeField] UnitHand csRightHand;
 
     [SerializeField] float maxSpeed;
     [SerializeField] float mouseSensitivity = 200f;
@@ -14,8 +14,8 @@ public class ContPlayer : MonoBehaviour
     float rotationY = 0f;
     float rotationX = 0f;
     
-    public UnitHand GetLeftHand() { return leftHand; }
-    public UnitHand GetRightHand() { return rightHand; }
+    public UnitHand GetLeftHand() { return csLeftHand; }
+    public UnitHand GetRightHand() { return csRightHand; }
 
     private void Start()
     {
@@ -28,8 +28,8 @@ public class ContPlayer : MonoBehaviour
     {
         rbPlayer.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-        leftHand.UpdateState();
-        rightHand.UpdateState();
+        if (csLeftHand) csLeftHand.UpdateState();
+        if (csRightHand) csRightHand.UpdateState();
     }
 
     void Look()

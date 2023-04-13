@@ -6,19 +6,19 @@ using UnityEngine;
 
 public class ContBullet : MonoBehaviour
 {
-    Rigidbody hitRb;
-    Vector3 direction;
+    Rigidbody rbHit;
+    Vector3 v3Direct;
     float bulletSpeed;
 
     public void Init(Vector3 _direction, float _bulletSpeed)
     {
-        direction = _direction;
+        v3Direct = _direction;
         bulletSpeed = _bulletSpeed;
-        hitRb = gameObject.GetOrAddComponent<Rigidbody>();
+        rbHit = gameObject.GetOrAddComponent<Rigidbody>();
     }
     private void FixedUpdate()
     {
-        hitRb.MovePosition(hitRb.position + direction * bulletSpeed * Time.deltaTime);
+        rbHit.MovePosition(rbHit.position + v3Direct * bulletSpeed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)

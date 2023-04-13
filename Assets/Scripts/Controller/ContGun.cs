@@ -4,8 +4,8 @@ using UniRx;
 
 public class ContGun : MonoBehaviour
 {
-    [SerializeField] GameObject bulletPrefab;
-    [SerializeField] Transform bulletSpawnPoint;
+    [SerializeField] GameObject objBullet;
+    [SerializeField] Transform trBulletSpawnPoint;
     [SerializeField] float bulletForce = 10f;
     [SerializeField] float fireDelay = .1f;
     [SerializeField] bool isFire = false;
@@ -37,9 +37,9 @@ public class ContGun : MonoBehaviour
     void Fire()
     {
         // 스폰 지점에서 새 총알 생성
-        GameObject bullet = CHMMain.Resource.Instantiate(bulletPrefab, bulletSpawnPoint);
+        GameObject bullet = CHMMain.Resource.Instantiate(objBullet, trBulletSpawnPoint);
         bullet.transform.localPosition = Vector3.zero;
-        bullet.transform.up = bulletSpawnPoint.transform.up;
+        bullet.transform.up = trBulletSpawnPoint.transform.up;
 
         // 총알을 스폰 지점의 방향으로 힘을 가해 발사
         bullet.GetOrAddComponent<ContBullet>().Init(transform.forward, bulletForce);

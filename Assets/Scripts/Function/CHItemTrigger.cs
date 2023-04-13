@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class CHItemTrigger : MonoBehaviour
 {
-    BoxCollider itemTrigger;
+    BoxCollider colItem;
 
     void Start()
     {
@@ -15,8 +15,8 @@ public class CHItemTrigger : MonoBehaviour
 
     void Init()
     {
-        itemTrigger = GetComponent<BoxCollider>();
-        itemTrigger.isTrigger = true;
+        colItem = GetComponent<BoxCollider>();
+        colItem.isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider other)

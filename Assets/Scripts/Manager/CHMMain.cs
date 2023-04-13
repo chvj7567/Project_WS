@@ -9,16 +9,18 @@ public class CHMMain : MonoBehaviour
     CHMPool m_pool = new CHMPool();
     CHMResource m_resource = new CHMResource();
     CHMUI m_ui = new CHMUI();
-    CHMContents m_contents = new CHMContents();
+    CHMJson m_json = new CHMJson();
     CHMString m_string = new CHMString();
     CHMParticle m_particle = new CHMParticle();
+    CHMSkill m_skill = new CHMSkill();
 
     public static CHMPool Pool { get { return Instance.m_pool; } }
     public static CHMResource Resource { get { return Instance.m_resource; } }
     public static CHMUI UI { get { return Instance.m_ui; } }
-    public static CHMContents Contents { get { return Instance.m_contents; } }
+    public static CHMJson Contents { get { return Instance.m_json; } }
     public static CHMString String { get { return Instance.m_string; } }
     public static CHMParticle Particle { get { return Instance.m_particle; } }
+    public static CHMSkill Skill { get { return Instance.m_skill; } }
     #endregion
 
     void Start()
@@ -43,7 +45,7 @@ public class CHMMain : MonoBehaviour
             m_instance = go.GetOrAddComponent<CHMMain>();
 
             m_instance.m_pool.Init();
-            m_instance.m_contents.Init();
+            m_instance.m_json.Init();
             m_instance.m_particle.Init();
         }
     }

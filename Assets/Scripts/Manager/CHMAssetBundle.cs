@@ -24,22 +24,6 @@ public class AssetBundleData
     public List<AssetBundleInfo> listAssetBundleInfo = new List<AssetBundleInfo>();
 }
 
-[Flags, Serializable]
-public enum AssetTag : int
-{
-    NONE = 0,
-    DEFAULT = 1 << 0,
-    SOUND_CLIP = 1 << 1,
-    PREFAB_SCENARIO_WEBTON = 1 << 2,
-    PREFAB_INGAME_OBJECT = 1 << 3,
-    ANI_SCENARIO_CHAR = 1 << 4,
-    ANI_UNIT = 1 << 5,
-    TEXT = 1 << 6,
-    SPRITE_ATLAS = 1 << 7,
-    SCENE = 1 << 8,
-    MAP = 1 << 9,
-}
-
 public partial class AssetBundlePool
 {
     [Serializable]

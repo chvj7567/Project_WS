@@ -23,9 +23,9 @@ public class CHMResource
 #endif
     }
 
-    public void LoadString(EJsonType _stringType, Action<TextAsset> _callback)
+    public void LoadJson(Defines.EJsonType _jsonType, Action<TextAsset> _callback)
     {
-        LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_stringType.ToString()}", _callback);
+        LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_jsonType.ToString()}", _callback);
     }
 
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object
