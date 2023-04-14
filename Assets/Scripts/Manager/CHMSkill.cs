@@ -60,14 +60,22 @@ public class CHMSkill
                                     }
                                     // Test
 
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effect.eStandardPos, effect.eEffect, effect.isTargeting);
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effect.eStandardPos, effect.eEffect);
                                 }
                                 break;
                             case Defines.EStandardPos.TargetAll:
                                 {
                                     var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(effect.eTargetMask), effect.sphereRadius, effect.angle);
                                     liTarget = GetTargetTransformList(liTargetInfo);
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effect.eStandardPos, effect.eEffect, effect.isTargeting);
+
+                                    // Test
+                                    foreach (var target in liTarget)
+                                    {
+                                        target.GetComponent<ContPlayer>().tempHp -= effect.damage;
+                                    }
+                                    // Test
+
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effect.eStandardPos, effect.eEffect);
                                 }
                                 break;
                             default:

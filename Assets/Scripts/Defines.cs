@@ -77,6 +77,18 @@ public class Defines
         Max
     }
 
+    public enum ESkillCost
+    {
+        None = -1,
+
+        FixedHP,
+        PercentHP,
+        FixedMP,
+        PErcentMP,
+
+        Max
+    }
+
     public enum EEffect
     {
         None = -1,

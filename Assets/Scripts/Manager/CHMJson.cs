@@ -20,6 +20,9 @@ public class CHMJson
         public ESkillID skillID = ESkillID.None;
         public int skillDesc = -1;
         public bool isTargeting = false;
+        public float coolTime = -1f;
+        public ESkillCost eSkillCost = ESkillCost.None;
+        public float cost = -1f;
         public List<EffectInfo> liEffectInfo = new List<EffectInfo>(); // 스킬 그 자체
     }
 

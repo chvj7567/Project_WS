@@ -22,7 +22,6 @@ public class Infomation
         public ECollision eCollision = ECollision.None;
         public EStandardPos eStandardPos = EStandardPos.None;
         public ETargetMask eTargetMask = ETargetMask.None;
-        public bool isTargeting = false;
         public float startTime = -1f;
         public float angle = -1f;
         public float sphereRadius = -1f;
