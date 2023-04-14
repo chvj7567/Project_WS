@@ -1,10 +1,8 @@
 using UniRx.Triggers;
 using UnityEngine;
 using UniRx;
-using System.Collections.Generic;
-using System.Linq;
 
-public class ContEnemy : MonoBehaviour
+public class ContA : MonoBehaviour
 {
     [SerializeField] float attackDistance;
     [SerializeField] float attackDelay = 1f;
@@ -24,17 +22,7 @@ public class ContEnemy : MonoBehaviour
             }
             else if (mainTarget != null && mainTarget.distance <= attackDistance)
             {
-                //List<Transform> liTarget = new List<Transform>();
-
-                foreach (var target in targetTracker.GetTargetInfoListInRange())
-                {
-                    List<Transform> liTarget = new List<Transform>();
-                    liTarget.Add(target.targetObj.transform);
-                    CHMMain.Skill.CreateAISkill(transform, liTarget.Last(), Defines.ESkillID.Explosion);
-                }
-
-                //CHMMain.Particle.CreateParticle(transform, liTarget, Defines.EStandardPos.TargetAll, (Defines.EParticle)Random.Range(0, (int)Defines.EParticle.Max), true);
-
+                CHMMain.Skill.CreateAISkill(transform, mainTarget.targetObj.transform, Defines.ESkillID.Explosion);
                 timeSinceLastAttack = 0f;
             }
         });

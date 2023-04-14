@@ -56,7 +56,8 @@ public class CHMSkill
                                     // Test
                                     foreach (var target in liTarget)
                                     {
-                                        target.GetComponent<ContPlayer>().tempHp -= effect.damage;
+                                        var unit = target.GetComponent<UnitBase>();
+                                        unit.MinusHp(effect.damage);
                                     }
                                     // Test
 
@@ -71,7 +72,8 @@ public class CHMSkill
                                     // Test
                                     foreach (var target in liTarget)
                                     {
-                                        target.GetComponent<ContPlayer>().tempHp -= effect.damage;
+                                        var unit = target.GetComponent<UnitBase>();
+                                        unit.MinusHp(effect.damage);
                                     }
                                     // Test
 
@@ -121,7 +123,8 @@ public class CHMSkill
                             // Test
                             foreach (var target in liTarget)
                             {
-                                target.GetComponent<ContPlayer>().tempHp -= effect.damage;
+                                var unit = target.GetComponent<UnitBase>();
+                                unit.MinusHp(effect.damage);
                             }
                             // Test
 
