@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Infomation;
-using static UnityEngine.ParticleSystem;
 
 public class CHMSkill
 {
@@ -33,11 +32,17 @@ public class CHMSkill
 
         if (skillInfo != null)
         {
-            
             foreach (var effectInfo in skillInfo.liEffectInfo)
             {
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
-                await CreateDecal(effectInfo, _trTarget, skillInfo.isTargeting);
+                if (effectInfo.onDecal)
+                {
+                    await CreateTargetingDecal(effectInfo, _trTarget);
+                }
+                else
+                {
+                    await Task.Delay((int)(effectInfo.startDelay * 1000f));
+                }
 
                 List<Transform> liTarget = new List<Transform>();
 
@@ -48,7 +53,7 @@ public class CHMSkill
                         {
                             case Defines.EStandardPos.Me:
                                 {
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, effectInfo.eStandardPos, effectInfo.eEffect);
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, effectInfo);
                                 }
                                 break;
                             case Defines.EStandardPos.TargetOne:
@@ -63,7 +68,7 @@ public class CHMSkill
                                     }
                                     // Test
 
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo.eStandardPos, effectInfo.eEffect);
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo);
                                 }
                                 break;
                             case Defines.EStandardPos.TargetAll:
@@ -79,7 +84,7 @@ public class CHMSkill
                                     }
                                     // Test
 
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo.eStandardPos, effectInfo.eEffect);
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo);
                                 }
                                 break;
                             default:
@@ -93,6 +98,11 @@ public class CHMSkill
                         }
                         break;
                     default:
+                        {
+                            liTarget.Add(_trTarget);
+
+                            CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo);
+                        }
                         break;
                 }
             }
@@ -105,44 +115,51 @@ public class CHMSkill
 
         if (skillInfo != null)
         {
-            foreach (var effect in skillInfo.liEffectInfo)
+            foreach (var effectInfo in skillInfo.liEffectInfo)
             {
-                // 스킬 시전 후 이펙트 딜레이 시간
-                if (effect.startDelay > 0)
+                // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
+                if (effectInfo.onDecal)
                 {
-                    await Task.Delay((int)(effect.startDelay * 1000f));
+                    await CreateNoneTargetingDecal(effectInfo, _posSkill, _dirSkill);
+                }
+                else
+                {
+                    await Task.Delay((int)(effectInfo.startDelay * 1000f));
                 }
 
                 List<Transform> liTarget = new List<Transform>();
 
-                switch (effect.eCollision)
+                switch (effectInfo.eCollision)
                 {
                     case Defines.ECollision.Sphere:
                         {
-                            var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(effect.eTargetMask), effect.sphereRadius, effect.angle);
+                            var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(effectInfo.eTargetMask), effectInfo.sphereRadius, effectInfo.angle);
                             liTarget = GetTargetTransformList(liTargetInfo);
 
                             // Test
                             foreach (var target in liTarget)
                             {
                                 var unit = target.GetComponent<UnitBase>();
-                                unit.MinusHp(effect.damage);
+                                unit.MinusHp(effectInfo.damage);
                             }
                             // Test
 
-                            CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, effect.eEffect);
+                            CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, effectInfo);
                         }
                         break;
                     case Defines.ECollision.Box:
                         break;
                     default:
+                        {
+                            CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, effectInfo);
+                        }
                         break;
                 }
             }
         }
     }
 
-    public async Task CreateDecal(EffectInfo _effectInfo, Transform _trTarget, bool _isTargeting)
+    public async Task CreateTargetingDecal(EffectInfo _effectInfo, Transform _trTarget)
     {
         GameObject objDecal = null;
 
@@ -169,10 +186,7 @@ public class CHMSkill
                     objDecal.transform.position = _trTarget.position;
                     objDecal.transform.forward = _trTarget.forward;
 
-                    if (_isTargeting)
-                    {
-                        objDecal.transform.SetParent(_trTarget.transform);
-                    }
+                    objDecal.transform.SetParent(_trTarget.transform);
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
 
@@ -189,10 +203,10 @@ public class CHMSkill
                 break;
         }
 
-        await CreateTargetingTimeDecal(_effectInfo, _trTarget, objDecal, _isTargeting);
+        await CreateTargetingTimeDecal(_effectInfo, _trTarget, objDecal);
     }
 
-    public async Task CreateTargetingTimeDecal(EffectInfo _effectInfo, Transform _trTarget, GameObject _areaDecal, bool _isTargeting)
+    public async Task CreateTargetingTimeDecal(EffectInfo _effectInfo, Transform _trTarget, GameObject _areaDecal)
     {
         GameObject objDecal = null;
 
@@ -219,10 +233,108 @@ public class CHMSkill
                     objDecal.transform.position = _trTarget.position;
                     objDecal.transform.forward = _trTarget.forward;
 
-                    if (_isTargeting)
+                    objDecal.transform.SetParent(_trTarget.transform);
+
+                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
                     {
-                        objDecal.transform.SetParent(_trTarget.transform);
+                        float time = 0;
+
+                        while (time <= _effectInfo.startDelay)
+                        {
+                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius, time / _effectInfo.startDelay);
+                            decalProjector.size = Vector3.one * curValue;
+                            time += Time.deltaTime;
+                            await Task.Delay((int)(Time.deltaTime * 1000f));
+                        }
+
+                        Debug.Log(time);
+
+                        CHMMain.Resource.Destroy(objDecal);
+                        CHMMain.Resource.Destroy(_areaDecal);
                     }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
+        }
+    }
+
+    public async Task CreateNoneTargetingDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundAreaDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
+                        {
+                            roundAreaDecal = decal;
+                            roundAreaDecal.SetActive(false);
+                            roundAreaDecal.GetOrAddComponent<CHPoolable>();
+
+                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                    }
+
+                    objDecal.transform.position = _posDecal;
+                    objDecal.transform.forward = _dirDecal;
+
+                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
+                    {
+                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius;
+                    }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
+        }
+
+        await CreateNoneTargetingTimeDecal(_effectInfo, _posDecal, _dirDecal, objDecal);
+    }
+
+    public async Task CreateNoneTargetingTimeDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal, GameObject _areaDecal)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundTimingDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundTiming, (decal) =>
+                        {
+                            roundTimingDecal = decal;
+                            roundTimingDecal.SetActive(false);
+                            roundTimingDecal.GetOrAddComponent<CHPoolable>();
+
+                            objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
+                    }
+
+                    objDecal.transform.position = _posDecal;
+                    objDecal.transform.forward = _dirDecal;
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
 
@@ -251,12 +363,6 @@ public class CHMSkill
             default:
                 break;
         }
-
-        /*if (objDecal != null)
-        {
-            await Task.Delay((int)(_effectInfo.startTime * 1000));
-            CHMMain.Resource.Destroy(objDecal);
-        }*/
     }
 
     public void GetNoneTargetingDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal)

@@ -30,7 +30,7 @@ public class ContA : MonoBehaviour
                 }
                 else if (mainTarget != null && mainTarget.distance <= attackDistance)
                 {
-                    CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, Defines.ESkillID.Explosion);
+                    CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, Defines.ESkillID.Curse);
                     timeSinceLastAttack = 0f;
                 }
             });

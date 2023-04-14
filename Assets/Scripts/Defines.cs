@@ -105,9 +105,10 @@ public class Defines
         FX_Iceflake, // 9
         FX_Poison, // 10
         Slash, // 11
-        FX_Circe_Hit, // 12
-        FX_Circe_meteor, // 13
-        FX_Circe_ring, // 14
+
+        FX_Circle_ring, // 12
+        FX_Circle_meteor, // 13
+        FX_Circle_hit, // 14
 
         Max
     }
@@ -139,8 +140,8 @@ public class Defines
     {
         None = -1,
 
-        Sphere,
-        Box,
+        Sphere, // 0
+        Box, // 1
 
         Max
     }
@@ -149,9 +150,9 @@ public class Defines
     {
         None = -1,
 
-        Me,
-        TargetOne,
-        TargetAll,
+        Me, // 0
+        TargetOne, // 1
+        TargetAll, // 2
 
         Max
     }

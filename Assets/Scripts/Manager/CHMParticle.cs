@@ -3,13 +3,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
 using static Infomation;
-using UnityEngine.Rendering.Universal;
 
 public class CHMParticle
 {
     Dictionary<Defines.EEffect, Infomation.ParticleInfo> dicParticleInfo = new Dictionary<Defines.EEffect, Infomation.ParticleInfo>();
 
-    public void CreateTargetingParticle(Transform _trCaster, List<Transform> _liTarget, Defines.EStandardPos _eStandardPos, Defines.EEffect _particle, bool _autoDestory = true)
+    public void CreateTargetingParticle(Transform _trCaster, List<Transform> _liTarget, EffectInfo _effectInfo, bool _autoDestory = true)
     {
         if (_trCaster == null)
         {
@@ -28,7 +27,7 @@ public class CHMParticle
         // 타겟의 수 만큼 파티클 생성
         for (int i = 0; i < _liTarget.Count; ++i)
         {
-            var tempParticle = CHMMain.Particle.GetParticleObject(_particle, _autoDestory);
+            var tempParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestory);
 
             if (tempParticle == null)
             {
@@ -39,10 +38,8 @@ public class CHMParticle
             liParticle.Add(tempParticle);
         }
 
-        switch (_eStandardPos)
+        switch (_effectInfo.eStandardPos)
         {
-            case Defines.EStandardPos.None:
-                break;
             case Defines.EStandardPos.Me:
                 {
                     // 자신을 지정하는 스킬은 liTarget에도 자기 Transform이 있음
@@ -51,6 +48,8 @@ public class CHMParticle
                     objParticle.transform.rotation = _trCaster.rotation;
 
                     objParticle.transform.SetParent(_trCaster.transform);
+
+                    SetParticleValue(_effectInfo, objParticle);
                 }
                 break;
             case Defines.EStandardPos.TargetOne:
@@ -63,6 +62,8 @@ public class CHMParticle
                     objParticle.transform.rotation = trTarget.rotation;
 
                     objParticle.transform.SetParent(trTarget.transform);
+
+                    SetParticleValue(_effectInfo, objParticle);
                 }
                 break;
             case Defines.EStandardPos.TargetAll:
@@ -73,7 +74,7 @@ public class CHMParticle
 
                     if (objParticle == null || trTarget == null || i >= _liTarget.Count)
                     {
-                        Debug.Log("Error");
+                        Debug.Log("No Particle Or No Target");
                         return;
                     }
 
@@ -81,6 +82,8 @@ public class CHMParticle
                     objParticle.transform.rotation = trTarget.rotation;
 
                     objParticle.transform.SetParent(trTarget.transform);
+
+                    SetParticleValue(_effectInfo, objParticle);
                 }
                 break;
             default:
@@ -88,9 +91,9 @@ public class CHMParticle
         }
     }
 
-    public void CreateNoneTargetingParticle(Vector3 _posParticle, Vector3 _dirParticle, Defines.EEffect _particle, bool _autoDestory = true)
+    public void CreateNoneTargetingParticle(Vector3 _posParticle, Vector3 _dirParticle, EffectInfo _effectInfo, bool _autoDestory = true)
     {
-        GameObject objParticle = CHMMain.Particle.GetParticleObject(_particle, _autoDestory);
+        GameObject objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestory);
 
         if (objParticle == null)
         {
@@ -100,40 +103,42 @@ public class CHMParticle
 
         objParticle.transform.position = _posParticle;
         objParticle.transform.forward = _dirParticle;
+
+        SetParticleValue(_effectInfo, objParticle);
     }
 
-    public GameObject GetParticleObject(Defines.EEffect _particle, bool _autoDestory = true)
+    public GameObject GetParticleObject(Defines.EEffect _eEffect, bool _autoDestory = true)
     {
         GameObject objParticle = null;
 
-        if (dicParticleInfo.ContainsKey(_particle) == false)
+        if (dicParticleInfo.ContainsKey(_eEffect) == false)
         {
-            CHMMain.Resource.InstantiateEffect(_particle, (particle) =>
+            CHMMain.Resource.InstantiateEffect(_eEffect, (particle) =>
             {
                 particle.SetActive(false);
                 particle.GetOrAddComponent<CHPoolable>();
 
-                dicParticleInfo.Add(_particle, new Infomation.ParticleInfo
+                dicParticleInfo.Add(_eEffect, new Infomation.ParticleInfo
                 {
                     objParticle = particle,
                     time = GetParticleTime(particle)
                 });
 
-                objParticle = CHMMain.Resource.Instantiate(dicParticleInfo[_particle].objParticle);
+                objParticle = CHMMain.Resource.Instantiate(dicParticleInfo[_eEffect].objParticle);
 
                 if (_autoDestory)
                 {
-                    DestroyParticle(_particle, objParticle);
+                    DestroyParticle(_eEffect, objParticle);
                 }
             });
         }
         else
         {
-            objParticle = CHMMain.Resource.Instantiate(dicParticleInfo[_particle].objParticle);
+            objParticle = CHMMain.Resource.Instantiate(dicParticleInfo[_eEffect].objParticle);
 
             if (_autoDestory)
             {
-                DestroyParticle(_particle, objParticle);
+                DestroyParticle(_eEffect, objParticle);
             }
         }
 
@@ -156,10 +161,36 @@ public class CHMParticle
 
     //-------------------------------------- private ------------------------------------------//
 
-    async void DestroyParticle(Defines.EEffect _particle, GameObject _objParticle)
+    async void DestroyParticle(Defines.EEffect _eEffect, GameObject _objParticle)
     {
-        await Task.Delay((int)(dicParticleInfo[_particle].time * 1000));
+        await Task.Delay((int)(dicParticleInfo[_eEffect].time * 1000));
 
         if (_objParticle) CHMMain.Resource.Destroy(_objParticle);
+    }
+
+    void SetParticleValue(EffectInfo _effectInfo, GameObject _objParticle)
+    {
+        // 각 이펙트 프리팹별로 세부 설정이 필요한 경우
+        switch (_effectInfo.eEffect)
+        {
+            case Defines.EEffect.FX_Circle_ring:
+                {
+                    var psRing = _objParticle.GetComponent<ParticleSystem>();
+                    var psSmoke = _objParticle.transform.GetChild(0).GetComponent<ParticleSystem>();
+
+                    psRing.startLifetime = _effectInfo.startDelay + GetParticleTime(_objParticle);
+                    psSmoke.startDelay = 1f;
+                    psSmoke.startLifetime = GetParticleTime(_objParticle) - 1f;
+                }
+                break;
+            case Defines.EEffect.FX_Circle_meteor:
+                {
+                    var posOrigin = _objParticle.transform.localPosition;
+                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 5f, posOrigin.z);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
