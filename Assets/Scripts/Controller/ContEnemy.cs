@@ -2,6 +2,7 @@ using UniRx.Triggers;
 using UnityEngine;
 using UniRx;
 using System.Collections.Generic;
+using System.Linq;
 
 public class ContEnemy : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class ContEnemy : MonoBehaviour
                 {
                     List<Transform> liTarget = new List<Transform>();
                     liTarget.Add(target.targetObj.transform);
-                   // CHMMain.Skill.CreateNoneTargetingSkill(transform, Defines.ESkillID.Explosion);
+                    CHMMain.Skill.CreateAISkill(transform, liTarget.Last(), Defines.ESkillID.Explosion);
                 }
 
                 //CHMMain.Particle.CreateParticle(transform, liTarget, Defines.EStandardPos.TargetAll, (Defines.EParticle)Random.Range(0, (int)Defines.EParticle.Max), true);

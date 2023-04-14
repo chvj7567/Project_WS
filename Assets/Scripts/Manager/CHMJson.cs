@@ -19,6 +19,7 @@ public class CHMJson
     {
         public ESkillID skillID = ESkillID.None;
         public int skillDesc = -1;
+        public bool isTargeting = false;
         public List<EffectInfo> liEffectInfo = new List<EffectInfo>(); // 스킬 그 자체
     }
 

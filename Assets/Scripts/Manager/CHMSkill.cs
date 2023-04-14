@@ -1,10 +1,134 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using static Defines;
 using static Infomation;
 
 public class CHMSkill
 {
+    public void CreateAISkill(Transform _trCaster, Transform _trTarget, Defines.ESkillID _skill)
+    {
+        var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
+
+        if (skillInfo != null)
+        {
+            if (skillInfo.isTargeting)
+            {
+                CreateTargetingSkill(_trCaster, _trTarget, _skill);
+            }
+            else
+            {
+                CreateNoneTargetingSkill(_trCaster, _trTarget.position, _trTarget.position - _trCaster.position, _skill);
+            }
+        }
+    }
+
+    public async void CreateTargetingSkill(Transform _trCaster, Transform _trTarget, Defines.ESkillID _skill)
+    {
+        var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
+
+        if (skillInfo != null)
+        {
+            
+            foreach (var effect in skillInfo.liEffectInfo)
+            {
+                // 스킬 시전 후 이펙트 딜레이 시간
+                if (effect.startTime > 0)
+                {
+                    await Task.Delay((int)(effect.startTime * 1000f));
+                }
+
+                List<Transform> liTarget = new List<Transform>();
+
+                switch (effect.eCollision)
+                {
+                    case Defines.ECollision.Sphere:
+                        switch (effect.eStandardPos)
+                        {
+                            case Defines.EStandardPos.Me:
+                                {
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, effect.eStandardPos, effect.eEffect);
+                                }
+                                break;
+                            case Defines.EStandardPos.TargetOne:
+                                {
+                                    liTarget.Add(_trTarget);
+
+                                    // Test
+                                    foreach (var target in liTarget)
+                                    {
+                                        target.GetComponent<ContPlayer>().tempHp -= effect.damage;
+                                    }
+                                    // Test
+
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effect.eStandardPos, effect.eEffect, effect.isTargeting);
+                                }
+                                break;
+                            case Defines.EStandardPos.TargetAll:
+                                {
+                                    var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(effect.eTargetMask), effect.sphereRadius, effect.angle);
+                                    liTarget = GetTargetTransformList(liTargetInfo);
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effect.eStandardPos, effect.eEffect, effect.isTargeting);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Defines.ECollision.Box:
+                        {
+                            var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, GetTargetMask(effect.eTargetMask), new Vector3(effect.boxHalfX, effect.boxHalfY, effect.boxHalfZ), _trCaster.rotation);
+                            liTarget = GetTargetTransformList(liTargetInfo);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    public async void CreateNoneTargetingSkill(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, Defines.ESkillID _skill)
+    {
+        var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
+
+        if (skillInfo != null)
+        {
+            foreach (var effect in skillInfo.liEffectInfo)
+            {
+                // 스킬 시전 후 이펙트 딜레이 시간
+                if (effect.startTime > 0)
+                {
+                    await Task.Delay((int)(effect.startTime * 1000f));
+                }
+
+                List<Transform> liTarget = new List<Transform>();
+
+                switch (effect.eCollision)
+                {
+                    case Defines.ECollision.Sphere:
+                        {
+                            var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(effect.eTargetMask), effect.sphereRadius, effect.angle);
+                            liTarget = GetTargetTransformList(liTargetInfo);
+
+                            // Test
+                            foreach (var target in liTarget)
+                            {
+                                target.GetComponent<ContPlayer>().tempHp -= effect.damage;
+                            }
+                            // Test
+
+                            CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, effect.eEffect);
+                        }
+                        break;
+                    case Defines.ECollision.Box:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
     public List<TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
     {
         List<TargetInfo> targetInfoList = new List<TargetInfo>();
@@ -138,17 +262,17 @@ public class CHMSkill
         switch (_targetMask)
         {
             case Defines.ETargetMask.Me:
-                return LayerMask.GetMask(ETargetMask.Me.ToString());
+                return LayerMask.GetMask(Defines.ETargetMask.Me.ToString());
             case Defines.ETargetMask.Red:
-                return LayerMask.GetMask(ETargetMask.Red.ToString());
+                return LayerMask.GetMask(Defines.ETargetMask.Red.ToString());
             case Defines.ETargetMask.Blue:
-                return LayerMask.GetMask(ETargetMask.Blue.ToString());
+                return LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
             case Defines.ETargetMask.Me_Red:
-                return LayerMask.GetMask(ETargetMask.Me.ToString()) | LayerMask.GetMask(ETargetMask.Red.ToString());
+                return LayerMask.GetMask(Defines.ETargetMask.Me.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Red.ToString());
             case Defines.ETargetMask.Me_Blue:
-                return LayerMask.GetMask(ETargetMask.Me.ToString()) | LayerMask.GetMask(ETargetMask.Blue.ToString());
+                return LayerMask.GetMask(Defines.ETargetMask.Me.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
             case Defines.ETargetMask.Red_Blue:
-                return LayerMask.GetMask(ETargetMask.Red.ToString()) | LayerMask.GetMask(ETargetMask.Blue.ToString());
+                return LayerMask.GetMask(Defines.ETargetMask.Red.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
             default:
                 return -1;
         }

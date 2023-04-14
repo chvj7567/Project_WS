@@ -2,19 +2,19 @@
     {
         "skillID": "5",
         "skillDesc": "-1",
+		"isTargeting": false,
         "liEffectInfo":
 		[
             {
                 "eEffect": "5",
                 "eEffectType": "7",
-                "eEffectTarget": "1",
+                "eEffectTarget": "2",
                 "eStandardPos": "1",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
 				"eTargetMask": "2",
-				"isTargeting": false,
-				"startTime": 1,
+				"startTime": 0,
 				"angle": 360,
 				"sphereRadius": 5,
 				"boxHalfX": -1,
@@ -25,13 +25,12 @@
 			{
                 "eEffect": "5",
                 "eEffectType": "7",
-                "eEffectTarget": "1",
+                "eEffectTarget": "2",
                 "eStandardPos": "1",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
 				"eTargetMask": "2",
-				"isTargeting": false,
 				"startTime": 1,
 				"angle": 360,
 				"sphereRadius": 5,

@@ -7,13 +7,18 @@ public class ContPlayer : MonoBehaviour
     [SerializeField] UnitHand csLeftHand;
     [SerializeField] UnitHand csRightHand;
 
-    [SerializeField] float maxSpeed;
+    [SerializeField] float maxSpeed = 10f;
     [SerializeField] float mouseSensitivity = 200f;
+    [SerializeField] public bool canSee = true;
+    [SerializeField] public bool canMove = true;
     [SerializeField] float limitUpperY = 45f;
     [SerializeField] float limitUnderY = 45f;
     float rotationY = 0f;
     float rotationX = 0f;
+
+    [SerializeField] public float tempHp = 100f;
     
+
     public UnitHand GetLeftHand() { return csLeftHand; }
     public UnitHand GetRightHand() { return csRightHand; }
 
@@ -26,8 +31,7 @@ public class ContPlayer : MonoBehaviour
 
     void Init()
     {
-        rbPlayer.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
+        if (rbPlayer) rbPlayer.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         if (csLeftHand) csLeftHand.UpdateState();
         if (csRightHand) csRightHand.UpdateState();
     }
@@ -72,7 +76,7 @@ public class ContPlayer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Look();
-        Move();
+        if (canSee) Look(); 
+        if (canMove) Move();
     }
 }

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
-using static UnityEngine.GraphicsBuffer;
 
 public class CHMParticle
 {
@@ -105,7 +104,7 @@ public class CHMParticle
         }
     }
 
-    public void CreateNoneTargetingParticle(Vector3 _posParticle, Quaternion _rotParticle, Defines.EEffect _particle, bool _autoDestory = true)
+    public void CreateNoneTargetingParticle(Vector3 _posParticle, Vector3 _dirParticle, Defines.EEffect _particle, bool _autoDestory = true)
     {
         GameObject objParticle = CHMMain.Particle.GetParticleObject(_particle, _autoDestory);
 
@@ -116,7 +115,7 @@ public class CHMParticle
         }
 
         objParticle.transform.position = _posParticle;
-        objParticle.transform.rotation = _rotParticle;
+        objParticle.transform.forward = _dirParticle;
     }
 
     public GameObject GetParticleObject(Defines.EEffect _particle, bool _autoDestory = true)
