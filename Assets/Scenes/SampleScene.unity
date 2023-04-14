@@ -1705,7 +1705,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28312
+  m_Name: pb_Mesh113176
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1881,8 +1881,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be9107ef795b3049a170e6c2ee2a9f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
-  mp: 0
+  unitInfoOrigin:
+    eUnitID: -1
+    nameStringID: -1
+    hp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    skill1CoolTime: -1
+    eSkill2ID: -1
+    skill2CoolTime: -1
+    eSkill3ID: -1
+    skill3CoolTime: -1
+    eSkill4ID: -1
+    skill4CoolTime: -1
+  unitInfoCurrent:
+    eUnitID: -1
+    nameStringID: -1
+    hp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    skill1CoolTime: -1
+    eSkill2ID: -1
+    skill2CoolTime: -1
+    eSkill3ID: -1
+    skill3CoolTime: -1
+    eSkill4ID: -1
+    skill4CoolTime: -1
 --- !u!1 &1734815115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5647054001098654375, guid: c128ac5951f1f594f94f7aac78606c46,
@@ -2085,8 +2115,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
-  mp: 0
+  unitInfoOrigin:
+    eUnitID: -1
+    nameStringID: -1
+    hp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    skill1CoolTime: -1
+    eSkill2ID: -1
+    skill2CoolTime: -1
+    eSkill3ID: -1
+    skill3CoolTime: -1
+    eSkill4ID: -1
+    skill4CoolTime: -1
+  unitInfoCurrent:
+    eUnitID: -1
+    nameStringID: -1
+    hp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    skill1CoolTime: -1
+    eSkill2ID: -1
+    skill2CoolTime: -1
+    eSkill3ID: -1
+    skill3CoolTime: -1
+    eSkill4ID: -1
+    skill4CoolTime: -1
 --- !u!1001 &2376815556681563159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2201,7 +2261,7 @@ PrefabInstance:
     - target: {fileID: 5647054000804174656, guid: c128ac5951f1f594f94f7aac78606c46,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 15.97
       objectReference: {fileID: 0}
     - target: {fileID: 5647054000804174656, guid: c128ac5951f1f594f94f7aac78606c46,
         type: 3}
@@ -2211,7 +2271,7 @@ PrefabInstance:
     - target: {fileID: 5647054000804174656, guid: c128ac5951f1f594f94f7aac78606c46,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 25.99
+      value: 28.65
       objectReference: {fileID: 0}
     - target: {fileID: 5647054000804174656, guid: c128ac5951f1f594f94f7aac78606c46,
         type: 3}

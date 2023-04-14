@@ -1,0 +1,36 @@
+[
+	{
+		"eUnitID": 0,
+		"nameStringID": -1,
+		"hp": 3000,
+		"mp": 1000,
+		"attackDelay": 6,
+		"attackDistance": 3,
+		"moveSpeed": 5,
+		"eSkill1ID": 1,
+		"skill1CoolTime": 5,
+		"eSkill2ID": 2,
+		"skill2CoolTime": 8,
+		"eSkill3ID": 3,
+		"skill3CoolTime": 12,
+		"eSkill4ID": 4,
+		"skill4CoolTime": 15
+	},
+	{
+		"eUnitID": 1,
+		"nameStringID": -1,
+		"hp": 3000,
+		"mp": 1000,
+		"attackDelay": 1.5,
+		"attackDistance": 3,
+		"moveSpeed": 5,
+		"eSkill1ID": 1,
+		"skill1CoolTime": 5,
+		"eSkill2ID": 2,
+		"skill2CoolTime": 8,
+		"eSkill3ID": 3,
+		"skill3CoolTime": 12,
+		"eSkill4ID": 4,
+		"skill4CoolTime": 15
+	}
+]

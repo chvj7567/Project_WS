@@ -49,7 +49,7 @@ public class CHTargetTracker : MonoBehaviour
                 // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
                 viewAngle = 360f;
 
-                Vector3 direction = closestTarget.targetObj.transform.position - transform.position;
+                Vector3 direction = closestTarget.objTarget.transform.position - transform.position;
 
                 LookAtTarget(direction);
                 FollowTarget(direction);
@@ -78,7 +78,7 @@ public class CHTargetTracker : MonoBehaviour
 
     void FollowTarget(Vector3 _direction)
     {
-        float distance = Vector3.Distance(transform.position, closestTarget.targetObj.transform.position);
+        float distance = Vector3.Distance(transform.position, closestTarget.objTarget.transform.position);
 
         if (distance > approachDistance)
         {

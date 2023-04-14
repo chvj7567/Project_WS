@@ -81,6 +81,11 @@ public class CHMResource
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Effect.ToString()}", $"{_effect.ToString()}", _callback);
     }
 
+    public void InstantiateDecal(Defines.EDecal _decal, Action<GameObject> _callback = null)
+    {
+        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Decal.ToString()}", $"{_decal.ToString()}", _callback);
+    }
+
     public GameObject Instantiate(GameObject _object, Transform _parent = null)
     {
         if (_object == null) return null;

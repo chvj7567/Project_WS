@@ -14873,7 +14873,7 @@ GameObject:
   - component: {fileID: 9028000987456016071}
   - component: {fileID: 3768450138899512582}
   m_Layer: 0
-  m_Name: FX_Healing
+  m_Name: Fx_Healing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

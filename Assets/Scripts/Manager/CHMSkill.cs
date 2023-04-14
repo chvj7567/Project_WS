@@ -1,10 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using static Infomation;
+using static UnityEngine.ParticleSystem;
 
 public class CHMSkill
 {
+    GameObject roundAreaDecal = null;
+    GameObject roundTimingDecal = null;
+
     public void CreateAISkill(Transform _trCaster, Transform _trTarget, Defines.ESkillID _skill)
     {
         var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
@@ -29,24 +34,21 @@ public class CHMSkill
         if (skillInfo != null)
         {
             
-            foreach (var effect in skillInfo.liEffectInfo)
+            foreach (var effectInfo in skillInfo.liEffectInfo)
             {
-                // 스킬 시전 후 이펙트 딜레이 시간
-                if (effect.startTime > 0)
-                {
-                    await Task.Delay((int)(effect.startTime * 1000f));
-                }
+                // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
+                await CreateDecal(effectInfo, _trTarget, skillInfo.isTargeting);
 
                 List<Transform> liTarget = new List<Transform>();
 
-                switch (effect.eCollision)
+                switch (effectInfo.eCollision)
                 {
                     case Defines.ECollision.Sphere:
-                        switch (effect.eStandardPos)
+                        switch (effectInfo.eStandardPos)
                         {
                             case Defines.EStandardPos.Me:
                                 {
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, effect.eStandardPos, effect.eEffect);
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, effectInfo.eStandardPos, effectInfo.eEffect);
                                 }
                                 break;
                             case Defines.EStandardPos.TargetOne:
@@ -57,27 +59,27 @@ public class CHMSkill
                                     foreach (var target in liTarget)
                                     {
                                         var unit = target.GetComponent<UnitBase>();
-                                        unit.MinusHp(effect.damage);
+                                        unit.MinusHp(effectInfo.damage);
                                     }
                                     // Test
 
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effect.eStandardPos, effect.eEffect);
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo.eStandardPos, effectInfo.eEffect);
                                 }
                                 break;
                             case Defines.EStandardPos.TargetAll:
                                 {
-                                    var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(effect.eTargetMask), effect.sphereRadius, effect.angle);
+                                    var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(effectInfo.eTargetMask), effectInfo.sphereRadius, effectInfo.angle);
                                     liTarget = GetTargetTransformList(liTargetInfo);
 
                                     // Test
                                     foreach (var target in liTarget)
                                     {
                                         var unit = target.GetComponent<UnitBase>();
-                                        unit.MinusHp(effect.damage);
+                                        unit.MinusHp(effectInfo.damage);
                                     }
                                     // Test
 
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effect.eStandardPos, effect.eEffect);
+                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo.eStandardPos, effectInfo.eEffect);
                                 }
                                 break;
                             default:
@@ -86,7 +88,7 @@ public class CHMSkill
                         break;
                     case Defines.ECollision.Box:
                         {
-                            var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, GetTargetMask(effect.eTargetMask), new Vector3(effect.boxHalfX, effect.boxHalfY, effect.boxHalfZ), _trCaster.rotation);
+                            var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, GetTargetMask(effectInfo.eTargetMask), new Vector3(effectInfo.boxHalfX, effectInfo.boxHalfY, effectInfo.boxHalfZ), _trCaster.rotation);
                             liTarget = GetTargetTransformList(liTargetInfo);
                         }
                         break;
@@ -106,9 +108,9 @@ public class CHMSkill
             foreach (var effect in skillInfo.liEffectInfo)
             {
                 // 스킬 시전 후 이펙트 딜레이 시간
-                if (effect.startTime > 0)
+                if (effect.startDelay > 0)
                 {
-                    await Task.Delay((int)(effect.startTime * 1000f));
+                    await Task.Delay((int)(effect.startDelay * 1000f));
                 }
 
                 List<Transform> liTarget = new List<Transform>();
@@ -140,6 +142,163 @@ public class CHMSkill
         }
     }
 
+    public async Task CreateDecal(EffectInfo _effectInfo, Transform _trTarget, bool _isTargeting)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundAreaDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
+                        {
+                            roundAreaDecal = decal;
+                            roundAreaDecal.SetActive(false);
+                            roundAreaDecal.GetOrAddComponent<CHPoolable>();
+
+                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                    }
+
+                    objDecal.transform.position = _trTarget.position;
+                    objDecal.transform.forward = _trTarget.forward;
+
+                    if (_isTargeting)
+                    {
+                        objDecal.transform.SetParent(_trTarget.transform);
+                    }
+
+                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
+                    {
+                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius;
+                    }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
+        }
+
+        await CreateTargetingTimeDecal(_effectInfo, _trTarget, objDecal, _isTargeting);
+    }
+
+    public async Task CreateTargetingTimeDecal(EffectInfo _effectInfo, Transform _trTarget, GameObject _areaDecal, bool _isTargeting)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundTimingDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundTiming, (decal) =>
+                        {
+                            roundTimingDecal = decal;
+                            roundTimingDecal.SetActive(false);
+                            roundTimingDecal.GetOrAddComponent<CHPoolable>();
+
+                            objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
+                    }
+
+                    objDecal.transform.position = _trTarget.position;
+                    objDecal.transform.forward = _trTarget.forward;
+
+                    if (_isTargeting)
+                    {
+                        objDecal.transform.SetParent(_trTarget.transform);
+                    }
+
+                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
+                    {
+                        float time = 0;
+                        
+                        while (time <= _effectInfo.startDelay)
+                        {
+                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius, time / _effectInfo.startDelay);
+                            decalProjector.size = Vector3.one * curValue;
+                            time += Time.deltaTime;
+                            await Task.Delay((int)(Time.deltaTime * 1000f));
+                        }
+
+                        Debug.Log(time);
+
+                        CHMMain.Resource.Destroy(objDecal);
+                        CHMMain.Resource.Destroy(_areaDecal);
+                    }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
+        }
+
+        /*if (objDecal != null)
+        {
+            await Task.Delay((int)(_effectInfo.startTime * 1000));
+            CHMMain.Resource.Destroy(objDecal);
+        }*/
+    }
+
+    public void GetNoneTargetingDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundAreaDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
+                        {
+                            roundAreaDecal = decal;
+                            roundAreaDecal.SetActive(false);
+
+                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                    }
+
+                    objDecal.transform.position = _posDecal;
+                    objDecal.transform.forward = _dirDecal;
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
+                    {
+                        decalProjector.size = new Vector3(20, 20, 20);
+                    }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
+        }
+    }
+
     public List<TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
     {
         List<TargetInfo> targetInfoList = new List<TargetInfo>();
@@ -162,7 +321,7 @@ public class CHMSkill
                 {
                     targetInfoList.Add(new TargetInfo
                     {
-                        targetObj = target.gameObject,
+                        objTarget = target.gameObject,
                         direction = targetDir,
                         distance = targetDis,
                     });
@@ -213,7 +372,7 @@ public class CHMSkill
             {
                 targetInfoList.Add(new TargetInfo
                 {
-                    targetObj = target.gameObject,
+                    objTarget = target.gameObject,
                     direction = targetDir,
                     distance = targetDis,
                 });
@@ -252,7 +411,7 @@ public class CHMSkill
         List<Transform> targetTransformList = new List<Transform>();
         foreach (TargetInfo targetInfo in _liTargetInfo)
         {
-            targetTransformList.Add(targetInfo.targetObj.transform);
+            targetTransformList.Add(targetInfo.objTarget.transform);
         }
 
         return targetTransformList;
@@ -263,7 +422,7 @@ public class CHMSkill
         if (_targetInfo == null) return null;
 
         List<Transform> targetTransformList = new List<Transform>();
-        targetTransformList.Add(_targetInfo.targetObj.transform);
+        targetTransformList.Add(_targetInfo.objTarget.transform);
 
         return targetTransformList;
     }

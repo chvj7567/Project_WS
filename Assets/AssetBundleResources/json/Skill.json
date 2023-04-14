@@ -1,6 +1,6 @@
 [
     {
-        "skillID": "5",
+        "eSkillID": "4",
         "skillDesc": "-1",
 		"isTargeting": true,
 		"collTime": 2,
@@ -9,46 +9,14 @@
         "liEffectInfo":
 		[
             {
-                "eEffect": "5",
+                "eEffect": "4",
                 "eEffectType": "7",
                 "eStandardPos": "2",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
 				"eTargetMask": "2",
-				"startTime": 0,
-				"angle": 360,
-				"sphereRadius": 5,
-				"boxHalfX": -1,
-				"boxHalfY": -1,
-				"boxHalfZ": -1,
-                "damage": 50
-            },
-			{
-                "eEffect": "6",
-                "eEffectType": "7",
-                "eStandardPos": "1",
-                "eDamageState": "0",
-                "eDamageType": "0",
-				"eCollision": "0",
-				"eTargetMask": "2",
-				"startTime": 0.5,
-				"angle": 360,
-				"sphereRadius": 5,
-				"boxHalfX": -1,
-				"boxHalfY": -1,
-				"boxHalfZ": -1,
-                "damage": 50
-            },
-			{
-                "eEffect": "10",
-                "eEffectType": "7",
-                "eStandardPos": "0",
-                "eDamageState": "0",
-                "eDamageType": "0",
-				"eCollision": "0",
-				"eTargetMask": "2",
-				"startTime": 0.5,
+				"startDelay": 3,
 				"angle": 360,
 				"sphereRadius": 5,
 				"boxHalfX": -1,

@@ -6,8 +6,9 @@ public class Defines
     {
         None = -1,
 
-        Korea,
+        String,
         Skill,
+        Unit,
 
         Max
     }
@@ -31,6 +32,7 @@ public class Defines
         UI,
         Json,
         Effect,
+        Decal,
 
         Max
     }
@@ -61,18 +63,16 @@ public class Defines
 
         Curse, // 0
         Devil, // 1
-        Devil2, // 2
-        Electricity, // 3
-        Energy, // 4
-        Explosion, // 5
-        Explosion_Magic, // 6
-        Explosion_Magic2, // 7
-        Fire, // 8
-        Floor_splash, // 9
-        Healing, // 10
-        Iceflake, // 11
-        Poison, // 12
-        Slash, // 13
+        Electricity, // 2
+        Energy, // 3
+        Explosion, // 4
+        Explosion_Magic, // 5
+        Explosion_Magic2, // 6
+        Fire, // 7
+        Healing, // 8
+        Iceflake, // 9
+        Poison, // 10
+        Slash, // 11
 
         Max
     }
@@ -95,18 +95,19 @@ public class Defines
 
         FX_Curse, // 0
         FX_Devil, // 1
-        FX_Devil2, // 2
-        FX_Electricity, // 3
-        FX_Energy, // 4
-        FX_Explosion, // 5
-        FX_Explosion_Magic, // 6
-        FX_Explosion_Magic2, // 7
-        FX_Fire, // 8
-        FX_Floor_splash, // 9
-        FX_Healing, // 10
-        FX_Iceflake, // 11
-        FX_Poison, // 12
-        Slash, // 13
+        FX_Electricity, // 2
+        FX_Energy, // 3
+        FX_Explosion, // 4
+        FX_Explosion_Magic, // 5
+        FX_Explosion_Magic2, // 6
+        FX_Fire, // 7
+        FX_Healing, // 8
+        FX_Iceflake, // 9
+        FX_Poison, // 10
+        Slash, // 11
+        FX_Circe_Hit, // 12
+        FX_Circe_meteor, // 13
+        FX_Circe_ring, // 14
 
         Max
     }
@@ -224,6 +225,30 @@ public class Defines
         Player,
         Weapon,
         Bullet,
+
+        Max
+    }
+
+    public enum EUnitID
+    {
+        None = -1,
+
+        A, // 0
+        B, // 1
+        C, // 2
+        D, // 3
+        E, // 4
+
+        Max
+    }
+
+    public enum EDecal
+    {
+        None = -1,
+
+        RoundArea,
+        RoundTiming,
+        Box,
 
         Max
     }

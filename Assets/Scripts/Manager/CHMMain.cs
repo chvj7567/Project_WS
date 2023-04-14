@@ -46,7 +46,6 @@ public class CHMMain : MonoBehaviour
 
             m_instance.m_pool.Init();
             m_instance.m_json.Init();
-            m_instance.m_particle.Init();
         }
     }
 }

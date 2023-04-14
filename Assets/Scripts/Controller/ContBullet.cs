@@ -23,8 +23,6 @@ public class ContBullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        var particle = CHMMain.Particle.GetRandomParticleObject();
-        particle.transform.position = collision.contacts.First().point;
-        CHMMain.Resource.Destroy(gameObject);
+        
     }
 }

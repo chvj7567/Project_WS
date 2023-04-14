@@ -2,28 +2,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
+using static Infomation;
+using UnityEngine.Rendering.Universal;
 
 public class CHMParticle
 {
-    List<GameObject> liParticleObj = new List<GameObject>();
-    Dictionary<Defines.EEffect, float> dicParticleTime = new Dictionary<Defines.EEffect, float>();
-
-    public void Init()
-    {
-        liParticleObj.Clear();
-
-        for (int i = 0; i < (int)Defines.EEffect.Max; ++i)
-        {
-            CHMMain.Resource.InstantiateEffect((Defines.EEffect)i, (particle) =>
-            {
-                particle.SetActive(false);
-                particle.GetOrAddComponent<CHPoolable>();
-
-                liParticleObj.Add(particle);
-                dicParticleTime.Add((Defines.EEffect)i, GetParticleTime(particle));
-            });
-        }
-    }
+    Dictionary<Defines.EEffect, Infomation.ParticleInfo> dicParticleInfo = new Dictionary<Defines.EEffect, Infomation.ParticleInfo>();
 
     public void CreateTargetingParticle(Transform _trCaster, List<Transform> _liTarget, Defines.EStandardPos _eStandardPos, Defines.EEffect _particle, bool _autoDestory = true)
     {
@@ -120,27 +104,40 @@ public class CHMParticle
 
     public GameObject GetParticleObject(Defines.EEffect _particle, bool _autoDestory = true)
     {
-        var particleObj = CHMMain.Resource.Instantiate(liParticleObj[(int)_particle]);
+        GameObject objParticle = null;
 
-        if (_autoDestory)
+        if (dicParticleInfo.ContainsKey(_particle) == false)
         {
-            ParticleDestroy(_particle, particleObj);
+            CHMMain.Resource.InstantiateEffect(_particle, (particle) =>
+            {
+                particle.SetActive(false);
+                particle.GetOrAddComponent<CHPoolable>();
+
+                dicParticleInfo.Add(_particle, new Infomation.ParticleInfo
+                {
+                    objParticle = particle,
+                    time = GetParticleTime(particle)
+                });
+
+                objParticle = CHMMain.Resource.Instantiate(dicParticleInfo[_particle].objParticle);
+
+                if (_autoDestory)
+                {
+                    DestroyParticle(_particle, objParticle);
+                }
+            });
+        }
+        else
+        {
+            objParticle = CHMMain.Resource.Instantiate(dicParticleInfo[_particle].objParticle);
+
+            if (_autoDestory)
+            {
+                DestroyParticle(_particle, objParticle);
+            }
         }
 
-        return particleObj;
-    }
-
-    public GameObject GetRandomParticleObject(bool _autoDestory = true)
-    {
-        int randomIndex = UnityEngine.Random.Range(0, liParticleObj.Count);
-        var particleObj = CHMMain.Resource.Instantiate(liParticleObj[randomIndex]);
-         
-        if (_autoDestory)
-        {
-            ParticleDestroy((Defines.EEffect)randomIndex, particleObj);
-        }
-
-        return particleObj;
+        return objParticle;
     }
 
     public float GetParticleTime(GameObject _particleObj)
@@ -159,10 +156,10 @@ public class CHMParticle
 
     //-------------------------------------- private ------------------------------------------//
 
-    async void ParticleDestroy(Defines.EEffect _particle, GameObject _particleObj)
+    async void DestroyParticle(Defines.EEffect _particle, GameObject _objParticle)
     {
-        await Task.Delay((int)(dicParticleTime[_particle] * 1000));
+        await Task.Delay((int)(dicParticleInfo[_particle].time * 1000));
 
-        if (_particleObj) CHMMain.Resource.Destroy(_particleObj);
+        if (_objParticle) CHMMain.Resource.Destroy(_objParticle);
     }
 }

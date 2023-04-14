@@ -4,27 +4,36 @@ using UniRx;
 
 public class ContA : MonoBehaviour
 {
-    [SerializeField] float attackDistance;
-    [SerializeField] float attackDelay = 1f;
-    [SerializeField] float timeSinceLastAttack;
+    [SerializeField, ReadOnly] float attackDistance;
+    [SerializeField, ReadOnly] float attackDelay;
+    [SerializeField, ReadOnly] float timeSinceLastAttack;
 
     private void Start()
     {
-        var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
-
-        gameObject.UpdateAsObservable().Subscribe(_ =>
+        var unitInfo = gameObject.GetOrAddComponent<UnitA>();
+        if (unitInfo != null)
         {
-            Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
+            attackDistance = unitInfo.GetCurrentAttackDistance();
+            attackDelay = unitInfo.GetCurrentAttackDelay();
+        }
 
-            if (timeSinceLastAttack < attackDelay)
+        var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
+        if (targetTracker != null)
+        {
+            gameObject.UpdateAsObservable().Subscribe(_ =>
             {
-                timeSinceLastAttack += Time.deltaTime;
-            }
-            else if (mainTarget != null && mainTarget.distance <= attackDistance)
-            {
-                CHMMain.Skill.CreateAISkill(transform, mainTarget.targetObj.transform, Defines.ESkillID.Explosion);
-                timeSinceLastAttack = 0f;
-            }
-        });
+                Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
+
+                if (timeSinceLastAttack < attackDelay)
+                {
+                    timeSinceLastAttack += Time.deltaTime;
+                }
+                else if (mainTarget != null && mainTarget.distance <= attackDistance)
+                {
+                    CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, Defines.ESkillID.Explosion);
+                    timeSinceLastAttack = 0f;
+                }
+            });
+        }
     }
 }
