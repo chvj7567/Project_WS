@@ -73,6 +73,7 @@ public class Defines
         Iceflake, // 9
         Poison, // 10
         Slash, // 11
+        Defense, // 12
 
         Max
     }
@@ -109,6 +110,8 @@ public class Defines
         FX_Circle_ring, // 12
         FX_Circle_meteor, // 13
         FX_Circle_hit, // 14
+
+        FX_Defense, // 15
 
         Max
     }
@@ -250,6 +253,16 @@ public class Defines
         RoundArea,
         RoundTiming,
         Box,
+
+        Max
+    }
+
+    public enum EUnitAni
+    {
+        None = -1,
+
+        Run,
+        Attack1,
 
         Max
     }

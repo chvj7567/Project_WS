@@ -22,8 +22,11 @@ public class CHTargetTracker : MonoBehaviour
     public float approachDistance;
     // 에디터 상에서 시야각 확인 여부
     public bool viewEditor;
-    
+
+    [SerializeField] Animator animator;
+    [SerializeField] UnitBase unitBase;
     [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
+    
     float viewAngleOrigin;
     LayerMask targetMask;
 
@@ -51,8 +54,16 @@ public class CHTargetTracker : MonoBehaviour
 
                 Vector3 direction = closestTarget.objTarget.transform.position - transform.position;
 
-                LookAtTarget(direction);
-                FollowTarget(direction);
+                bool isAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
+                if (isAnimating == false)
+                {
+                    LookAtTarget(direction);
+
+                    if (closestTarget.distance > unitBase.GetOriginAttackDistance())
+                    {
+                        FollowTarget(direction);
+                    }
+                }
             }
             else
             {
@@ -67,6 +78,13 @@ public class CHTargetTracker : MonoBehaviour
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, range);
+
+            // 시야각의 경계선
+            Vector3 left = Angle(-viewAngle * 0.5f);
+            Vector3 right = Angle(viewAngle * 0.5f);
+
+            Debug.DrawRay(transform.position, left * range, Color.green);
+            Debug.DrawRay(transform.position, right * range, Color.green);
         }
     }
 
@@ -75,6 +93,13 @@ public class CHTargetTracker : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(_direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
+
+    Vector3 Angle(float angle)
+    {
+        angle += transform.eulerAngles.y;
+        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0f, Mathf.Cos(angle * Mathf.Deg2Rad));
+    }
+
 
     void FollowTarget(Vector3 _direction)
     {

@@ -153,7 +153,7 @@ public class CHMParticle
 
         foreach (var particle in arrParticle)
         {
-            time = Mathf.Max(time, particle.duration);
+            time = Mathf.Max(time, particle.main.duration);
         }
 
         return time;
@@ -175,18 +175,28 @@ public class CHMParticle
         {
             case Defines.EEffect.FX_Circle_ring:
                 {
-                    var psRing = _objParticle.GetComponent<ParticleSystem>();
-                    var psSmoke = _objParticle.transform.GetChild(0).GetComponent<ParticleSystem>();
+                    var psRingMain = _objParticle.GetComponent<ParticleSystem>().main;
+                    var psSmokeMain = _objParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
 
-                    psRing.startLifetime = _effectInfo.startDelay + GetParticleTime(_objParticle);
-                    psSmoke.startDelay = 1f;
-                    psSmoke.startLifetime = GetParticleTime(_objParticle) - 1f;
+                    psRingMain.startLifetime = _effectInfo.startDelay + GetParticleTime(_objParticle);
+                    psRingMain.startSize = _effectInfo.sphereRadius * 2f;
+                    psSmokeMain.startDelay = 1f;
+                    psSmokeMain.startLifetime = GetParticleTime(_objParticle) - 1f;
+                    psSmokeMain.startSize = _effectInfo.sphereRadius * 2f;
                 }
                 break;
             case Defines.EEffect.FX_Circle_meteor:
                 {
                     var posOrigin = _objParticle.transform.localPosition;
                     _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 5f, posOrigin.z);
+                }
+                break;
+            case Defines.EEffect.FX_Circle_hit:
+                {
+                    var psHitMain = _objParticle.GetComponent<ParticleSystem>().main;
+
+                    psHitMain.startSizeX = _effectInfo.sphereRadius;
+                    psHitMain.startSizeY = _effectInfo.sphereRadius;
                 }
                 break;
             default:

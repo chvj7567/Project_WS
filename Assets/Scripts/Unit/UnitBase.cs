@@ -5,10 +5,13 @@ using UnityEngine;
 
 public abstract class UnitBase : MonoBehaviour
 {
-    [SerializeField, ReadOnly] protected Infomation.UnitInfo unitInfoOrigin;
-    [SerializeField, ReadOnly] protected Infomation.UnitInfo unitInfoCurrent;
+    [SerializeField, ReadOnly] protected Infomation.UnitInfo unitInfo;
 
-    Subject<bool> subjectSetUnitInfo = new Subject<bool>();
+    [SerializeField, ReadOnly] protected Infomation.SkillInfo skill1Info;
+    [SerializeField, ReadOnly] protected Infomation.SkillInfo skill2Info;
+    [SerializeField, ReadOnly] protected Infomation.SkillInfo skill3Info;
+    [SerializeField, ReadOnly] protected Infomation.SkillInfo skill4Info;
+
     private void Awake()
     {
         Init();
@@ -16,55 +19,57 @@ public abstract class UnitBase : MonoBehaviour
 
     protected abstract void Init();
 
-    #region OriginUnitInfoGetter
-    public Defines.EUnitID GetOriginUnitID() { if (unitInfoOrigin == null) Init(); return unitInfoOrigin.eUnitID; }
-    public int GetOriginNameStringID() { if (unitInfoOrigin == null) Init(); return unitInfoOrigin.nameStringID; }
-    public float GetOriginHp() { if (unitInfoOrigin == null) Init(); return unitInfoOrigin.hp; }
-    public float GetOriginMp() { if (unitInfoOrigin == null) Init(); return unitInfoOrigin.mp; }
-    public float GetOriginAttackDelay() { if (unitInfoOrigin == null) Init(); return unitInfoOrigin.attackDelay; }
-    public float GetOriginAttackDistance() { if (unitInfoOrigin == null) Init(); return unitInfoOrigin.attackDistance; }
-    public float GetOriginMoveSpeed() { if (unitInfoOrigin == null) Init(); return unitInfoOrigin.moveSpeed; }
-    #endregion
-
-    #region CurrentUnitInfoGetter
-    public Defines.EUnitID GetCurrentUnitID() { if (unitInfoCurrent == null) Init(); return unitInfoOrigin.eUnitID; }
-    public int GetCurrentNameStringID() { if (unitInfoCurrent == null) Init(); return unitInfoOrigin.nameStringID; }
-    public float GetCurrentHp() { if (unitInfoCurrent == null) Init(); return unitInfoOrigin.hp; }
-    public float GetCurrentMp() { if (unitInfoCurrent == null) Init(); return unitInfoOrigin.mp; }
-    public float GetCurrentAttackDelay() { if (unitInfoCurrent == null) Init(); return unitInfoOrigin.attackDelay; }
-    public float GetCurrentAttackDistance() { if (unitInfoCurrent == null) Init(); return unitInfoOrigin.attackDistance; }
-    public float GetCurrentMoveSpeed() { if (unitInfoCurrent == null) Init(); return unitInfoOrigin.moveSpeed; }
+    #region UnitInfoGetter
+    public Defines.EUnitID GetOriginUnitID() { return unitInfo.eUnitID; }
+    public int GetOriginNameStringID() { return unitInfo.nameStringID; }
+    public float GetOriginHp() { return unitInfo.hp; }
+    public float GetOriginMp() { return unitInfo.mp; }
+    public float GetOriginAttackDelay() { return unitInfo.attackDelay; }
+    public float GetOriginAttackDistance() { return unitInfo.attackDistance; }
+    public float GetOriginMoveSpeed() { return unitInfo.moveSpeed; }
+    public Defines.ESkillID GetOriginSkill1() { return skill1Info.eSkillID; }
+    public Defines.ESkillID GetOriginSkill2() { return skill2Info.eSkillID; }
+    public Defines.ESkillID GetOriginSkill3() { return skill3Info.eSkillID; }
+    public Defines.ESkillID GetOriginSkill4() { return skill4Info.eSkillID; }
+    public float GetOriginSkill1CoolTime() { return skill1Info.coolTime; }
+    public float GetOriginSkill2CoolTime() { return skill2Info.coolTime; }
+    public float GetOriginSkill3CoolTime() { return skill3Info.coolTime; }
+    public float GetOriginSkill4CoolTime() { return skill4Info.coolTime; }
+    public float GetOriginSkill1Distance() { return skill1Info.distance; }
+    public float GetOriginSkill2Distance() { return skill2Info.distance; }
+    public float GetOriginSkill3Distance() { return skill3Info.distance; }
+    public float GetOriginSkill4Distance() { return skill4Info.distance; }
     #endregion
 
     public void PlusHp(float _value)
     {
-        if (unitInfoCurrent == null) Init();
+        if (unitInfo == null) Init();
 
-        Debug.Log($"Hp : {unitInfoCurrent.hp} -> Hp : {unitInfoCurrent.hp + _value}");
-        unitInfoCurrent.hp += _value;
+        Debug.Log($"Hp : {unitInfo.hp} -> Hp : {unitInfo.hp + _value}");
+        unitInfo.hp += _value;
     }
 
     public void MinusHp(float _value)
     {
-        if (unitInfoCurrent == null) Init();
+        if (unitInfo == null) Init();
 
-        Debug.Log($"Hp : {unitInfoCurrent.hp} -> Hp : {unitInfoCurrent.hp - _value}");
-        unitInfoCurrent.hp -= _value;
+        Debug.Log($"Hp : {unitInfo.hp} -> Hp : {unitInfo.hp - _value}");
+        unitInfo.hp -= _value;
     }
 
     public void PlusMp(float _value)
     {
-        if (unitInfoCurrent == null) Init();
+        if (unitInfo == null) Init();
 
-        Debug.Log($"Mp : {unitInfoCurrent.mp} -> Mp : {unitInfoCurrent.mp + _value}");
-        unitInfoCurrent.mp += _value;
+        Debug.Log($"Mp : {unitInfo.mp} -> Mp : {unitInfo.mp + _value}");
+        unitInfo.mp += _value;
     }
 
     public void MinusMp(float _value)
     {
-        if (unitInfoCurrent == null) Init();
+        if (unitInfo == null) Init();
 
-        Debug.Log($"Mp : {unitInfoCurrent.mp} -> Mp : {unitInfoCurrent.mp - _value}");
-        unitInfoCurrent.mp -= _value;
+        Debug.Log($"Mp : {unitInfo.mp} -> Mp : {unitInfo.mp - _value}");
+        unitInfo.mp -= _value;
     }
 }

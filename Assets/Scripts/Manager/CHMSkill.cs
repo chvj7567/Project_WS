@@ -351,8 +351,6 @@ public class CHMSkill
                             await Task.Delay((int)(Time.deltaTime * 1000f));
                         }
 
-                        Debug.Log(time);
-
                         CHMMain.Resource.Destroy(objDecal);
                         CHMMain.Resource.Destroy(_areaDecal);
                     }

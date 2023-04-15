@@ -39,7 +39,9 @@ public class CHMMain : MonoBehaviour
         {
             GameObject go = GameObject.Find("@CHMMain");
             if (go == null)
+            {
                 go = new GameObject { name = "@CHMMain" };
+            }
 
             DontDestroyOnLoad(go);
             m_instance = go.GetOrAddComponent<CHMMain>();

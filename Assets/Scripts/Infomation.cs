@@ -18,6 +18,7 @@ public class Infomation
         public ESkillID eSkillID = ESkillID.None;
         public int skillDesc = -1;
         public bool isTargeting = false;
+        public float distance = -1f;
         public float coolTime = -1f;
         public ESkillCost eSkillCost = ESkillCost.None;
         public float cost = -1f;
@@ -55,15 +56,10 @@ public class Infomation
         public float attackDistance = -1f;
         public float moveSpeed = -1f;
 
-        // ½ºÅ³
         public ESkillID eSkill1ID = ESkillID.None;
-        public float skill1CoolTime = -1f;
         public ESkillID eSkill2ID = ESkillID.None;
-        public float skill2CoolTime = -1f;
         public ESkillID eSkill3ID = ESkillID.None;
-        public float skill3CoolTime = -1f;
         public ESkillID eSkill4ID = ESkillID.None;
-        public float skill4CoolTime = -1f;
     }
 
     public class TargetInfo
