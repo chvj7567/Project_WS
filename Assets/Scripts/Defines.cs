@@ -122,19 +122,19 @@ public class Defines
         None = -1,
 
         // 대상자가 자기 자신일 때
-        MeHpUp, // 0
-        MeHpDown, // 1
-        MeAttackStatUp, // 2
-        MeAttackStatDown, // 3
-        MeDefenseStatUp, // 4
-        MeDefenseStatDown, // 5
+        Me_HpUp, // 0
+        Me_HpDown, // 1
+        Me_AttackStatUp, // 2
+        Me_AttackStatDown, // 3
+        Me_DefenseStatUp, // 4
+        Me_DefenseStatDown, // 5
         // 대상자가 적 또는 팀원일 때
-        TargetHpUp, // 6
-        TargetHpDown, // 7
-        TargetAttackStatUp, // 8
-        TargetAttackStatDown, // 9
-        TargetDefenseStatUp, // 10
-        TargetDefenseStatDown, // 11
+        Target_HpUp, // 6
+        Target_HpDown, // 7
+        Target_AttackStatUp, // 8
+        Target_AttackStatDown, // 9
+        Target_DefenseStatUp, // 10
+        Target_DefenseStatDown, // 11
 
         Max,
     }
@@ -154,8 +154,8 @@ public class Defines
         None = -1,
 
         Me, // 0
-        TargetOne, // 1
-        TargetAll, // 2
+        Target_One, // 1
+        Target_All, // 2
 
         Max
     }
@@ -179,8 +179,8 @@ public class Defines
     {
         None = -1,
 
-        AtOnce, // 한번에
-        Constantly, // 지속
+        AtOnce, // 0 : 한번에
+        Constantly_1Sec_3Count, // 1 : 1초동안 3번 지속 데미지
 
         Max
     }

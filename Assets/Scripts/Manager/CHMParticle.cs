@@ -52,7 +52,7 @@ public class CHMParticle
                     SetParticleValue(_effectInfo, objParticle);
                 }
                 break;
-            case Defines.EStandardPos.TargetOne:
+            case Defines.EStandardPos.Target_One:
                 {
                     var objParticle = liParticle.Last();
                     // 임시로 첫번째 적을 타겟으로 지정
@@ -66,7 +66,7 @@ public class CHMParticle
                     SetParticleValue(_effectInfo, objParticle);
                 }
                 break;
-            case Defines.EStandardPos.TargetAll:
+            case Defines.EStandardPos.Target_All:
                 for (int i = 0; i < liParticle.Count; ++i)
                 {
                     var objParticle = liParticle.ElementAtOrDefault(i);
@@ -180,8 +180,8 @@ public class CHMParticle
 
                     psRingMain.startLifetime = _effectInfo.startDelay + GetParticleTime(_objParticle);
                     psRingMain.startSize = _effectInfo.sphereRadius * 2f;
-                    psSmokeMain.startDelay = 1f;
-                    psSmokeMain.startLifetime = GetParticleTime(_objParticle) - 1f;
+                    psSmokeMain.startDelay = .5f;
+                    psSmokeMain.startLifetime = GetParticleTime(_objParticle) - .5f;
                     psSmokeMain.startSize = _effectInfo.sphereRadius * 2f;
                 }
                 break;

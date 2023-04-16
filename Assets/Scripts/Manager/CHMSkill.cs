@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Infomation;
+using static UnityEngine.GraphicsBuffer;
 
 public class CHMSkill
 {
@@ -15,6 +16,7 @@ public class CHMSkill
 
         if (skillInfo != null)
         {
+            // 타겟팅 스킬, 논타겟팅 스킬 구분
             if (skillInfo.isTargeting)
             {
                 CreateTargetingSkill(_trCaster, _trTarget, _skill);
@@ -46,7 +48,9 @@ public class CHMSkill
 
                 List<Transform> liTarget = new List<Transform>();
 
-                switch (effectInfo.eCollision)
+                // 스킬 충돌 범위 생성
+                CreateSkillCollision(_trCaster, _trTarget, effectInfo);
+                /*switch (effectInfo.eCollision)
                 {
                     case Defines.ECollision.Sphere:
                         switch (effectInfo.eStandardPos)
@@ -56,7 +60,7 @@ public class CHMSkill
                                     CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, effectInfo);
                                 }
                                 break;
-                            case Defines.EStandardPos.TargetOne:
+                            case Defines.EStandardPos.Target_One:
                                 {
                                     liTarget.Add(_trTarget);
 
@@ -64,14 +68,17 @@ public class CHMSkill
                                     foreach (var target in liTarget)
                                     {
                                         var unit = target.GetComponent<UnitBase>();
-                                        unit.MinusHp(effectInfo.damage);
+                                        if (unit != null)
+                                        {
+                                            unit.MinusHp(effectInfo.damage);
+                                        }
                                     }
                                     // Test
 
                                     CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo);
                                 }
                                 break;
-                            case Defines.EStandardPos.TargetAll:
+                            case Defines.EStandardPos.Target_All:
                                 {
                                     var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(effectInfo.eTargetMask), effectInfo.sphereRadius, effectInfo.angle);
                                     liTarget = GetTargetTransformList(liTargetInfo);
@@ -80,7 +87,10 @@ public class CHMSkill
                                     foreach (var target in liTarget)
                                     {
                                         var unit = target.GetComponent<UnitBase>();
-                                        unit.MinusHp(effectInfo.damage);
+                                        if (unit != null)
+                                        {
+                                            unit.MinusHp(effectInfo.damage);
+                                        }
                                     }
                                     // Test
 
@@ -104,7 +114,7 @@ public class CHMSkill
                             CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo);
                         }
                         break;
-                }
+                }*/
             }
         }
     }
@@ -140,7 +150,10 @@ public class CHMSkill
                             foreach (var target in liTarget)
                             {
                                 var unit = target.GetComponent<UnitBase>();
-                                unit.MinusHp(effectInfo.damage);
+                                if (unit != null)
+                                {
+                                    unit.MinusHp(effectInfo.damage);
+                                }
                             }
                             // Test
 
@@ -156,6 +169,106 @@ public class CHMSkill
                         break;
                 }
             }
+        }
+    }
+
+    void CreateSkillCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
+    {
+        // Collision 모양에 따라 구분
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    CreateSphereCollision(_trCaster, _trTarget, _effectInfo);
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                {
+                    // Collision이 없으면 해당 지점에 파티클만 생성
+                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                }
+                break;
+        }
+    }
+
+    void CreateSphereCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
+    {
+        List<Transform> liTarget = new List<Transform>();
+
+        // 스킬 시전 시 맞은 타겟들
+        var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
+        liTarget = GetTargetTransformList(liTargetInfo);
+
+        switch (_effectInfo.eDamageState)
+        {
+            case Defines.EDamageState.AtOnce:
+                {
+                    foreach (var target in liTarget)
+                    {
+                        var unit = target.GetComponent<UnitBase>();
+                        if (unit != null)
+                        {
+                            unit.MinusHp(_effectInfo.damage);
+                        }
+                    }
+                }
+                break;
+            case Defines.EDamageState.Constantly_1Sec_3Count:
+                {
+                    foreach (var target in liTarget)
+                    {
+                        var unit = target.GetComponent<UnitBase>();
+                        if (unit != null)
+                        {
+                            ConstantlyDamage(unit, 1f, 3f, _effectInfo.damage);
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        
+
+        // 파티클 생성 기준 위치에 따라 구분
+        switch (_effectInfo.eStandardPos)
+        {
+            case Defines.EStandardPos.Me:
+                {
+                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
+                }
+                break;
+            case Defines.EStandardPos.Target_One:
+                {
+                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                }
+                break;
+            case Defines.EStandardPos.Target_All:
+                {
+                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, _effectInfo);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    async void ConstantlyDamage(UnitBase _unit, float _time, float _count, float _damage)
+    {
+        float tickTime = _time / _count;
+
+        for (int i = 0; i < _count; ++i)
+        {
+            _unit.MinusHp(_damage);
+
+            if (i == _count - 1)
+            {
+                break;
+            }
+
+            await Task.Delay((int)(tickTime * 1000f));
         }
     }
 
@@ -193,7 +306,7 @@ public class CHMSkill
                     var decalProjector = objDecal.GetComponent<DecalProjector>();
                     if (decalProjector != null)
                     {
-                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius;
+                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius * 2f;
                     }
                 }
                 break;
@@ -244,7 +357,7 @@ public class CHMSkill
 
                         while (time <= _effectInfo.startDelay)
                         {
-                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius, time / _effectInfo.startDelay);
+                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2f, time / _effectInfo.startDelay);
                             decalProjector.size = Vector3.one * curValue;
                             time += Time.deltaTime;
                             await Task.Delay((int)(Time.deltaTime * 1000f));
