@@ -70,4 +70,9 @@ public static class CHUtil
 
         return transform.gameObject;
     }
+
+    public static float ReverseValue(float _value)
+    {
+        return -_value;
+    }
 }
