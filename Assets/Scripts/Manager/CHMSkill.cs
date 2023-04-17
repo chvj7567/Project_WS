@@ -46,10 +46,8 @@ public class CHMSkill
                     await Task.Delay((int)(effectInfo.startDelay * 1000f));
                 }
 
-                List<Transform> liTarget = new List<Transform>();
-
                 // 스킬 충돌 범위 생성
-                CreateSkillCollision(_trCaster, _trTarget, effectInfo);
+                CreateTargetingSkillCollision(_trCaster, _trTarget, effectInfo);
             }
         }
     }
@@ -72,49 +70,20 @@ public class CHMSkill
                     await Task.Delay((int)(effectInfo.startDelay * 1000f));
                 }
 
-                List<Transform> liTarget = new List<Transform>();
-
-                switch (effectInfo.eCollision)
-                {
-                    case Defines.ECollision.Sphere:
-                        {
-                            var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(effectInfo.eTargetMask), effectInfo.sphereRadius, effectInfo.angle);
-                            liTarget = GetTargetTransformList(liTargetInfo);
-
-                            // Test
-                            foreach (var target in liTarget)
-                            {
-                                var unit = target.GetComponent<UnitBase>();
-                                if (unit != null)
-                                {
-                                    unit.MinusHp(effectInfo.damage);
-                                }
-                            }
-                            // Test
-
-                            CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, effectInfo);
-                        }
-                        break;
-                    case Defines.ECollision.Box:
-                        break;
-                    default:
-                        {
-                            CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, effectInfo);
-                        }
-                        break;
-                }
+                // 스킬 충돌 범위 생성
+                CreateNoneTargetingSkillCollision(_posSkill, _dirSkill, effectInfo);
             }
         }
     }
 
-    void CreateSkillCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
+    void CreateTargetingSkillCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
     {
         // Collision 모양에 따라 구분
         switch (_effectInfo.eCollision)
         {
             case Defines.ECollision.Sphere:
                 {
-                    CreateSphereCollision(_trCaster, _trTarget, _effectInfo);
+                    CreateTargetingSphereCollision(_trCaster, _trTarget, _effectInfo);
                 }
                 break;
             case Defines.ECollision.Box:
@@ -128,7 +97,7 @@ public class CHMSkill
         }
     }
 
-    void CreateSphereCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
+    void CreateTargetingSphereCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
     {
         List<Transform> liTarget = new List<Transform>();
 
@@ -160,6 +129,42 @@ public class CHMSkill
             default:
                 break;
         }
+    }
+
+    void CreateNoneTargetingSkillCollision(Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    {
+        // Collision 모양에 따라 구분
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    CreateNoneTargetingSphereCollision(_posSkill, _dirSkill, _effectInfo);
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                {
+                    // Collision이 없으면 해당 지점에 파티클만 생성
+                    CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
+                }
+                break;
+        }
+    }
+
+    void CreateNoneTargetingSphereCollision(Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    {
+        List<Transform> liTarget = new List<Transform>();
+
+        // 스킬 시전 시 맞은 타겟들
+        var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
+        liTarget = GetTargetTransformList(liTargetInfo);
+
+        // 타겟에게 스킬 데미지
+        InflictDamageToTarget(liTargetInfo, _effectInfo);
+
+        // 논타겟팅 스킬은 파티클 생성 기준 위치에 상관없이 해당 위치에 파티클 생성 
+        CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
     }
 
     void InflictDamageToTarget(List<TargetInfo> liTargetInfo, EffectInfo _effectInfo)
