@@ -240,6 +240,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -290,6 +292,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -813,6 +817,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -863,6 +869,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -2267,6 +2275,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -2317,6 +2327,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -2477,6 +2489,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -2527,6 +2541,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -2663,6 +2679,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -2710,9 +2728,11 @@ MonoBehaviour:
     eUnitID: -1
     nameStringID: -1
     maxHp: -1
-    hp: -51
+    hp: -201
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -2990,6 +3010,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -3040,6 +3062,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -3212,6 +3236,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -3262,6 +3288,8 @@ MonoBehaviour:
     hp: -1
     maxMp: -1
     mp: -1
+    attackPower: 0
+    defensePower: 0
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
@@ -3390,7 +3418,7 @@ PrefabInstance:
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useAttack
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
@@ -3400,7 +3428,7 @@ PrefabInstance:
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useSkill2
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}

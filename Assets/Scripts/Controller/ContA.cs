@@ -14,7 +14,7 @@ public class ContA : ContBase
             {
                 Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
 
-                // 적이 범위 안에 없으면 즉시 공격할 수 있도록 설정
+                // 타겟이 범위 안에 없으면 타겟이 범위 안에 들어왔을때 즉시 공격할 수 있도록 설정
                 if (mainTarget == null)
                 {
                     timeSinceLastAttack = -1f;
@@ -26,7 +26,7 @@ public class ContA : ContBase
                     animator.SetBool(attackRange, false);
                     animator.SetBool(sightRange, false);
                 }
-                // 적이 범위 안에 있으면 즉시 공격 후 공격 딜레이 설정
+                // 타겟이 범위 안에 있으면 즉시 공격 후 공격 딜레이 설정
                 else
                 {
                     // 기본 공격
@@ -35,6 +35,8 @@ public class ContA : ContBase
                         if (timeSinceLastAttack >= 0f && timeSinceLastAttack < unitInfo.GetOriginAttackDelay())
                         {
                             timeSinceLastAttack += Time.deltaTime;
+                            animator.SetBool(sightRange, false);
+                            animator.SetBool(attackRange, false);
                         }
                         // 공격 사정거리 안인 경우
                         else if (mainTarget.distance <= unitInfo.GetOriginAttackDistance())
