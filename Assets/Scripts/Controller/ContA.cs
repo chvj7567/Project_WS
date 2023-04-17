@@ -10,6 +10,12 @@ public class ContA : ContBase
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
         if (unitInfo!= null && targetTracker != null)
         {
+            targetTracker.followSpeed = unitInfo.GetOriginMoveSpeed();
+            targetTracker.range = unitInfo.GetOriginAttackDistance() * 2f;
+            targetTracker.approachDistance = unitInfo.GetOriginAttackDistance();
+            targetTracker.viewAngle = unitInfo.GetOriginViewAngle();
+            targetTracker.ResetViewAngleOrigin();
+
             gameObject.UpdateAsObservable().Subscribe(_ =>
             {
                 Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();

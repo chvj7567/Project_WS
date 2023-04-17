@@ -173,30 +173,10 @@ public class CHMParticle
         // 각 이펙트 프리팹별로 세부 설정이 필요한 경우
         switch (_effectInfo.eEffect)
         {
-            case Defines.EEffect.FX_Circle_ring:
-                {
-                    var psRingMain = _objParticle.GetComponent<ParticleSystem>().main;
-                    var psSmokeMain = _objParticle.transform.GetChild(0).GetComponent<ParticleSystem>().main;
-
-                    //psRingMain.startLifetime = _effectInfo.startDelay + GetParticleTime(_objParticle);
-                    psRingMain.startSize = _effectInfo.sphereRadius * 2f;
-                    //psSmokeMain.startDelay = .5f;
-                    //psSmokeMain.startLifetime = GetParticleTime(_objParticle) - .5f;
-                    psSmokeMain.startSize = _effectInfo.sphereRadius * 2f * 7.66f/7f;
-                }
-                break;
             case Defines.EEffect.FX_Circle_meteor:
                 {
                     var posOrigin = _objParticle.transform.localPosition;
                     _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 20f, posOrigin.z);
-                }
-                break;
-            case Defines.EEffect.FX_Circle_hit:
-                {
-                    var psHitMain = _objParticle.GetComponent<ParticleSystem>().main;
-
-                    psHitMain.startSizeX = _effectInfo.sphereRadius;
-                    psHitMain.startSizeY = _effectInfo.sphereRadius;
                 }
                 break;
             default:

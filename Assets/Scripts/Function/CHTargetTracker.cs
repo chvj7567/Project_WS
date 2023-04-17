@@ -12,6 +12,8 @@ public class CHTargetTracker : MonoBehaviour
     public List<LayerMask> liTargetMask;
     // 타겟을 감지할 범위
     public float range;
+    // 타겟을 감지 후 늘어나는 시야 배수
+    public float rangeMulti;
     // 타겟을 감지할 시야각
     [Range(0, 360)] public float viewAngle;
     // 타겟을 바라보는 속도
@@ -26,14 +28,24 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] UnitBase unitBase;
     [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
-    
-    float viewAngleOrigin;
+
+    float orgRangeMulti;
+    float orgViewAngle;
     LayerMask targetMask;
+
+    public void ResetViewAngleOrigin()
+    {
+        orgViewAngle = viewAngle;
+    }
 
     private void Awake()
     {
+        // 늘어날 시야 배수 저장
+        orgRangeMulti = rangeMulti;
+        rangeMulti = 1f;
+
         // 시야각 저장
-        viewAngleOrigin = viewAngle;
+        orgViewAngle = viewAngle;
 
         foreach (LayerMask layerMask in liTargetMask)
         {
@@ -47,12 +59,14 @@ public class CHTargetTracker : MonoBehaviour
     {
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
-            closestTarget = CHMMain.Skill.GetClosestTargetInfo(transform.position, transform.forward, targetMask, range, viewAngle);
+            closestTarget = CHMMain.Skill.GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
 
             if (closestTarget != null)
             {
                 // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
                 viewAngle = 360f;
+                // 타겟 발견 시 시야 해당 배수만큼 증가
+                rangeMulti = orgRangeMulti;
 
                 Vector3 direction = closestTarget.objTarget.transform.position - transform.position;
 
@@ -70,7 +84,8 @@ public class CHTargetTracker : MonoBehaviour
             }
             else
             {
-                viewAngle = viewAngleOrigin;
+                viewAngle = orgViewAngle;
+                rangeMulti = 1f;
             }
         });
     }
@@ -80,7 +95,7 @@ public class CHTargetTracker : MonoBehaviour
         if (viewEditor)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, range);
+            Gizmos.DrawWireSphere(transform.position, range * rangeMulti);
 
             // 시야각의 경계선
             Vector3 left = Angle(-viewAngle * 0.5f);
