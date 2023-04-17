@@ -6,7 +6,7 @@ public class UnitPlayer : UnitBase
 {
     protected override void Init()
     {
-        orgUnitInfo = curUnitInfo = CHMMain.Json.GetUnitInfo(Defines.EUnitID.A);
+        orgUnitInfo = curUnitInfo = CHMMain.Json.GetUnitInfo(Defines.EUnitID.B);
 
         orgSkill1Info = curSkill1Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill1ID);
         orgSkill2Info = curSkill2Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill2ID);

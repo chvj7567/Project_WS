@@ -39,6 +39,8 @@ public class CHTargetTracker : MonoBehaviour
         {
             targetMask |= layerMask;
         }
+
+        approachDistance = unitBase.GetCurrentAttackDistance();
     }
 
     private void Start()
@@ -59,6 +61,7 @@ public class CHTargetTracker : MonoBehaviour
                 {
                     LookAtTarget(direction);
 
+                    // 공격 범위까지만 다가감
                     if (closestTarget.distance > unitBase.GetOriginAttackDistance())
                     {
                         FollowTarget(direction);
@@ -99,7 +102,6 @@ public class CHTargetTracker : MonoBehaviour
         angle += transform.eulerAngles.y;
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0f, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
-
 
     void FollowTarget(Vector3 _direction)
     {

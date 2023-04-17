@@ -1,9 +1,11 @@
+using Mono.Cecil;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Infomation;
 using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.Rendering.DebugUI;
 
 public class CHMSkill
 {
@@ -34,6 +36,12 @@ public class CHMSkill
 
         if (skillInfo != null)
         {
+            var casterUnit = _trCaster.GetComponent<UnitBase>();
+            if (casterUnit != null)
+            {
+                if (CanUseSkill(casterUnit, skillInfo) == false) return;
+            }
+
             foreach (var effectInfo in skillInfo.liEffectInfo)
             {
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
@@ -58,6 +66,12 @@ public class CHMSkill
 
         if (skillInfo != null)
         {
+            var casterUnit = _trCaster.GetComponent<UnitBase>();
+            if (casterUnit != null)
+            {
+                if (CanUseSkill(casterUnit, skillInfo) == false) return;
+            }
+
             foreach (var effectInfo in skillInfo.liEffectInfo)
             {
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
@@ -71,7 +85,7 @@ public class CHMSkill
                 }
 
                 // 스킬 충돌 범위 생성
-                CreateNoneTargetingSkillCollision(_posSkill, _dirSkill, effectInfo);
+                CreateNoneTargetingSkillCollision(_trCaster, _posSkill, _dirSkill, effectInfo);
             }
         }
     }
@@ -99,30 +113,38 @@ public class CHMSkill
 
     void CreateTargetingSphereCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
     {
-        List<Transform> liTarget = new List<Transform>();
-
-        // 스킬 시전 시 맞은 타겟들
-        var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
-        liTarget = GetTargetTransformList(liTargetInfo);
-
-        // 타겟에게 스킬 데미지
-        InflictDamageToTarget(liTargetInfo, _effectInfo);
-
         // 파티클 생성 기준 위치에 파티클 생성
         switch (_effectInfo.eStandardPos)
         {
             case Defines.EStandardPos.Me:
                 {
+                    // 타겟에게 스킬 적용
+                    ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
+
                     CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
                 }
                 break;
             case Defines.EStandardPos.Target_One:
                 {
+                    // 스킬 시전 시 맞은 타겟들
+                    var liTargetInfo = GetClosestTargetInfo(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
+                    var liTarget = GetTargetTransformList(liTargetInfo);
+
+                    // 타겟에게 스킬 적용
+                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
+
                     CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
                 }
                 break;
             case Defines.EStandardPos.Target_All:
                 {
+                    // 스킬 시전 시 맞은 타겟들
+                    var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
+                    var liTarget = GetTargetTransformList(liTargetInfo);
+
+                    // 타겟에게 스킬 적용
+                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
+
                     CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, _effectInfo);
                 }
                 break;
@@ -131,14 +153,14 @@ public class CHMSkill
         }
     }
 
-    void CreateNoneTargetingSkillCollision(Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    void CreateNoneTargetingSkillCollision(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
     {
         // Collision 모양에 따라 구분
         switch (_effectInfo.eCollision)
         {
             case Defines.ECollision.Sphere:
                 {
-                    CreateNoneTargetingSphereCollision(_posSkill, _dirSkill, _effectInfo);
+                    CreateNoneTargetingSphereCollision(_trCaster, _posSkill, _dirSkill, _effectInfo);
                 }
                 break;
             case Defines.ECollision.Box:
@@ -152,7 +174,7 @@ public class CHMSkill
         }
     }
 
-    void CreateNoneTargetingSphereCollision(Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    void CreateNoneTargetingSphereCollision(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
     {
         List<Transform> liTarget = new List<Transform>();
 
@@ -160,77 +182,178 @@ public class CHMSkill
         var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
         liTarget = GetTargetTransformList(liTargetInfo);
 
-        // 타겟에게 스킬 데미지
-        InflictDamageToTarget(liTargetInfo, _effectInfo);
+        // 타겟에게 스킬 값 적용
+        ApplySkillValue(_trCaster, liTarget, _effectInfo);
 
         // 논타겟팅 스킬은 파티클 생성 기준 위치에 상관없이 해당 위치에 파티클 생성 
         CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
     }
 
-    void InflictDamageToTarget(List<TargetInfo> liTargetInfo, EffectInfo _effectInfo)
+    void ApplySkillValue(Transform _trCaster, List<Transform> _liTarget, EffectInfo _effectInfo)
     {
-        // 데미지 상태에 따라 구분
-        switch (_effectInfo.eDamageState)
+        var casterUnit = _trCaster.GetComponent<UnitBase>();
+
+        foreach (var target in _liTarget)
         {
-            case Defines.EDamageState.AtOnce:
+            var targetUnit = target.GetComponent<UnitBase>();
+            if (targetUnit != null)
+            {
+                ApplyEffectType(casterUnit, targetUnit, _effectInfo);
+            }
+        }
+    }
+
+    void ApplyEffectType(UnitBase _casterUnit, UnitBase _targetUnit, EffectInfo _effectInfo)
+    {
+        if (_casterUnit == null || _targetUnit == null || _effectInfo == null) return;
+
+        float skillValue = CalculateSkillDamage(_casterUnit, _targetUnit, _effectInfo);
+
+        // 스킬 시전자 스탯
+        float casterAttackPower = _casterUnit.GetCurrentAttackPower();
+        float casterDefensePower = _casterUnit.GetCurrentDefensePower();
+        // 타겟 스탯
+        float targetAttackPower = _targetUnit.GetCurrentAttackPower();
+        float targetDefensePower = _targetUnit.GetCurrentDefensePower();
+
+        switch (_effectInfo.eEffectType)
+        {
+            case Defines.EEffectType.HpUp:
+                _targetUnit.ChangeHp(skillValue, _effectInfo.eDamageState);
+                break;
+            case Defines.EEffectType.HpDown:
                 {
-                    foreach (var target in liTargetInfo)
-                    {
-                        var unit = target.objTarget.GetComponent<UnitBase>();
-                        if (unit != null)
-                        {
-                            unit.MinusHp(InflictDamageCalculate(unit, _effectInfo));
-                        }
-                    }
+                    // 데미지 계산 : 스킬 데미지 + 스킬 시전자 공격력 - 타겟 방어력
+                    var totalValue = skillValue + casterAttackPower - targetDefensePower;
+                    Debug.Log($"HpDown : {totalValue} = {skillValue} + {casterAttackPower} - {targetDefensePower}");
+                    _targetUnit.ChangeHp(CHUtil.ReverseValue(totalValue), _effectInfo.eDamageState);
                 }
                 break;
-            case Defines.EDamageState.Constantly_1Sec_3Count:
-                {
-                    foreach (var target in liTargetInfo)
-                    {
-                        var unit = target.objTarget.GetComponent<UnitBase>();
-                        if (unit != null)
-                        {
-                            ConstantlyDamage(unit, 1f, 3f, InflictDamageCalculate(unit, _effectInfo));
-                        }
-                    }
-                }
+            case Defines.EEffectType.AttackPowerUp:
+                _targetUnit.ChangeAttackPower(skillValue, _effectInfo.eDamageState);
+                break;
+            case Defines.EEffectType.AttackPowerDown:
+                _targetUnit.ChangeAttackPower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
+                break;
+            case Defines.EEffectType.DefensePowerUp:
+                _targetUnit.ChangeDefensePower(skillValue, _effectInfo.eDamageState);
+                break;
+            case Defines.EEffectType.DefensePowerDown:
+                _targetUnit.ChangeDefensePower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
                 break;
             default:
                 break;
         }
     }
 
-    float InflictDamageCalculate(UnitBase _unit, EffectInfo _effectInfo)
+    float CalculateSkillDamage(UnitBase _casterUnit, UnitBase _targetUnit, EffectInfo _effectInfo)
     {
+        if (_casterUnit == null || _targetUnit == null || _effectInfo == null) return -1f;
+
         // 데미지 타입에 따라 구분
         switch (_effectInfo.eDamageType)
         {
             case Defines.EDamageType.Fixed:
                 return _effectInfo.damage;
-            case Defines.EDamageType.PercentMaxHp:
-                return _unit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
-            case Defines.EDamageType.PercentRemainHp:
-                return _unit.GetCurrentHp() * _effectInfo.damage / 100f;
+            case Defines.EDamageType.PercentMeMaxHp:
+                return _casterUnit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
+            case Defines.EDamageType.PercentMeRemainHp:
+                return _casterUnit.GetCurrentHp() * _effectInfo.damage / 100f;
+            case Defines.EDamageType.PercentTargetMaxHp:
+                return _targetUnit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
+            case Defines.EDamageType.PercentTargetRemainHp:
+                return _targetUnit.GetCurrentHp() * _effectInfo.damage / 100f;
             default:
                 return -1f;
         }
     }
 
-    async void ConstantlyDamage(UnitBase _unit, float _time, float _count, float _damage)
+    bool CanUseSkill(UnitBase _casterUnit, SkillInfo skillInfo)
     {
-        float tickTime = _time / _count;
-
-        for (int i = 0; i < _count; ++i)
+        switch (skillInfo.eSkillCost)
         {
-            _unit.MinusHp(_damage);
+            case Defines.ESkillCost.FixedHP:
+                {
+                    if (_casterUnit.GetCurrentHp() >= skillInfo.cost)
+                    {
+                        _casterUnit.ChangeHp(CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }    
+                }
+            case Defines.ESkillCost.PercentMaxHP:
+                {
+                    var costValue = _casterUnit.GetCurrentMaxHp() * skillInfo.cost / 100f;
 
-            if (i == _count - 1)
-            {
-                break;
-            }
+                    if (_casterUnit.GetCurrentHp() >= costValue)
+                    {
+                        _casterUnit.ChangeHp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.PercentRemainHP:
+                {
+                    var costValue = _casterUnit.GetCurrentHp() * skillInfo.cost / 100f;
 
-            await Task.Delay((int)(tickTime * 1000f));
+                    if (_casterUnit.GetCurrentHp() >= costValue)
+                    {
+                        _casterUnit.ChangeHp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.FixedMP:
+                {
+                    if (_casterUnit.GetCurrentMp() >= skillInfo.cost)
+                    {
+                        _casterUnit.ChangeMp(CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.PercentMaxMP:
+                {
+                    var costValue = _casterUnit.GetCurrentMaxMp() * skillInfo.cost / 100f;
+
+                    if (_casterUnit.GetCurrentMp() >= costValue)
+                    {
+                        _casterUnit.ChangeMp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.PercentRemainMP:
+                {
+                    var costValue = _casterUnit.GetCurrentMp() * skillInfo.cost / 100f;
+
+                    if (_casterUnit.GetCurrentMp() >= costValue)
+                    {
+                        _casterUnit.ChangeMp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            default:
+                return false;
         }
     }
 
@@ -620,6 +743,8 @@ public class CHMSkill
                 return LayerMask.GetMask(Defines.ETargetMask.Me.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
             case Defines.ETargetMask.Red_Blue:
                 return LayerMask.GetMask(Defines.ETargetMask.Red.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
+            case Defines.ETargetMask.Me_Red_Blue:
+                return LayerMask.GetMask(Defines.ETargetMask.Me.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Red.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
             default:
                 return -1;
         }

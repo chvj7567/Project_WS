@@ -54,6 +54,8 @@ public class Infomation
         public float hp = -1f;
         public float maxMp = -1f;
         public float mp = -1f;
+        public float attackPower = -1f;
+        public float defensePower = -1f;
         public float attackDelay = -1f;
         public float attackDistance = -1f;
         public float moveSpeed = -1f;

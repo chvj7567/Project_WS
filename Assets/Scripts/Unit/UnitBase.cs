@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using static Defines;
 
 public abstract class UnitBase : MonoBehaviour
 {
@@ -33,6 +36,8 @@ public abstract class UnitBase : MonoBehaviour
     public float GetOriginHp() { return orgUnitInfo.hp; }
     public float GetOriginMaxMp() { return orgUnitInfo.maxMp; }
     public float GetOriginMp() { return orgUnitInfo.mp; }
+    public float GetOriginAttackPower() { return orgUnitInfo.attackPower; }
+    public float GetOriginDefensePower() { return orgUnitInfo.defensePower; }
     public float GetOriginAttackDelay() { return orgUnitInfo.attackDelay; }
     public float GetOriginAttackDistance() { return orgUnitInfo.attackDistance; }
     public float GetOriginMoveSpeed() { return orgUnitInfo.moveSpeed; }
@@ -57,6 +62,8 @@ public abstract class UnitBase : MonoBehaviour
     public float GetCurrentHp() { return curUnitInfo.hp; }
     public float GetCurrentMaxMp() { return curUnitInfo.maxMp; }
     public float GetCurrentMp() { return curUnitInfo.mp; }
+    public float GetCurrentAttackPower() { return curUnitInfo.attackPower; }
+    public float GetCurrentDefensePower() { return curUnitInfo.defensePower; }
     public float GetCurrentAttackDelay() { return curUnitInfo.attackDelay; }
     public float GetCurrentAttackDistance() { return curUnitInfo.attackDistance; }
     public float GetCurrentMoveSpeed() { return curUnitInfo.moveSpeed; }
@@ -74,35 +81,228 @@ public abstract class UnitBase : MonoBehaviour
     public float GetCurrentSkill4Distance() { return curSkill4Info.distance; }
     #endregion
 
-    public void PlusHp(float _value)
+    public void ChangeHp(float _value, EDamageState eDamageState)
+    {
+        switch (eDamageState)
+        {
+            case EDamageState.AtOnce:
+                AtOnceChangeHp(_value);
+                break;
+            case EDamageState.Continuous_1Sec_3Count:
+                ContinuousChangeHp(1f, 3f, _value);
+                break;
+            default:
+                AtOnceChangeHp(_value);
+                break;
+        }
+    }
+
+    public void ChangeMp(float _value, EDamageState eDamageState)
+    {
+        switch (eDamageState)
+        {
+            case EDamageState.AtOnce:
+                AtOnceChangeMp(_value);
+                break;
+            case EDamageState.Continuous_1Sec_3Count:
+                ContinuousChangeMp(1f, 3f, _value);
+                break;
+            default:
+                AtOnceChangeMp(_value);
+                break;
+        }
+    }
+
+    public void ChangeAttackPower(float _value, EDamageState eDamageState)
     {
         if (orgUnitInfo == null) Init();
 
-        Debug.Log($"Hp : {curUnitInfo.hp} -> Hp : {curUnitInfo.hp + _value}");
+        switch (eDamageState)
+        {
+            case EDamageState.AtOnce:
+                AtOnceChangeAttackPower(_value);
+                break;
+            case EDamageState.Continuous_1Sec_3Count:
+                ContinuousChangeAttackPower(1f, 3f, _value);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void ChangeDefensePower(float _value, EDamageState eDamageState)
+    {
+        if (orgUnitInfo == null) Init();
+
+        switch (eDamageState)
+        {
+            case EDamageState.AtOnce:
+                AtOnceChangeDefensePower(_value);
+                break;
+            case EDamageState.Continuous_1Sec_3Count:
+                ContinuousChangeDefensePower(1f, 3f, _value);
+                break;
+            default:
+                break;
+        }
+    }
+
+    void AtOnceChangeHp(float _value)
+    {
+        float hpResult = curUnitInfo.hp + _value;
+        if (hpResult >= GetCurrentMaxHp())
+        {
+            hpResult = GetCurrentMaxHp();
+        }
+
+        Debug.Log($"{curUnitInfo.nameStringID} => Hp : {curUnitInfo.hp} -> Hp : {hpResult}");
         curUnitInfo.hp += _value;
     }
 
-    public void MinusHp(float _value)
+    void AtOnceChangeMp(float _value)
     {
-        if (orgUnitInfo == null) Init();
+        float mpResult = curUnitInfo.mp + _value;
+        if (mpResult >= GetCurrentMaxMp())
+        {
+            mpResult = GetCurrentMaxMp();
+        }
 
-        Debug.Log($"Hp : {curUnitInfo.hp} -> Hp : {curUnitInfo.hp - _value}");
-        curUnitInfo.hp -= _value;
-    }
-
-    public void PlusMp(float _value)
-    {
-        if (orgUnitInfo == null) Init();
-
-        Debug.Log($"Mp : {curUnitInfo.mp} -> Mp : {curUnitInfo.mp + _value}");
+        Debug.Log($"{curUnitInfo.nameStringID} => Mp : {curUnitInfo.mp} -> Mp : {mpResult}");
         curUnitInfo.mp += _value;
     }
 
-    public void MinusMp(float _value)
+    void AtOnceChangeAttackPower(float _value)
     {
-        if (orgUnitInfo == null) Init();
+        float attackPowerResult = curUnitInfo.attackPower + _value;
+        CheckMaxStatValue(EStat.AttackPower, ref attackPowerResult);
 
-        Debug.Log($"Mp : {curUnitInfo.mp} -> Mp : {curUnitInfo.mp - _value}");
-        curUnitInfo.mp -= _value;
+        Debug.Log($"{curUnitInfo.nameStringID} => AttackPower : {curUnitInfo.attackPower} -> AttackPower : {attackPowerResult}");
+        curUnitInfo.attackPower += _value;
+    }
+
+    void AtOnceChangeDefensePower(float _value)
+    {
+        float defensePowerResult = curUnitInfo.defensePower + _value;
+        CheckMaxStatValue(EStat.DefensePower, ref defensePowerResult);
+
+        Debug.Log($"{curUnitInfo.nameStringID} => DefensePower : {curUnitInfo.defensePower} -> DefensePower : {defensePowerResult}");
+        curUnitInfo.defensePower += _value;
+    }
+
+    async void ContinuousChangeHp(float _time, float _count, float _value)
+    {
+        float tickTime = _time / _count;
+
+        for (int i = 0; i < _count; ++i)
+        {
+            AtOnceChangeHp(_value);
+
+            if (i == _count - 1)
+            {
+                break;
+            }
+
+            await Task.Delay((int)(tickTime * 1000f));
+        }
+    }
+
+    async void ContinuousChangeMp(float _time, float _count, float _value)
+    {
+        float tickTime = _time / _count;
+
+        for (int i = 0; i < _count; ++i)
+        {
+            AtOnceChangeMp(_value);
+
+            if (i == _count - 1)
+            {
+                break;
+            }
+
+            await Task.Delay((int)(tickTime * 1000f));
+        }
+    }
+
+    async void ContinuousChangeAttackPower(float _time, float _count, float _value)
+    {
+        float tickTime = _time / _count;
+
+        for (int i = 0; i < _count; ++i)
+        {
+            AtOnceChangeAttackPower(_value);
+
+            if (i == _count - 1)
+            {
+                break;
+            }
+
+            await Task.Delay((int)(tickTime * 1000f));
+        }
+    }
+
+    async void ContinuousChangeDefensePower(float _time, float _count, float _value)
+    {
+        float tickTime = _time / _count;
+
+        for (int i = 0; i < _count; ++i)
+        {
+            AtOnceChangeDefensePower(_value);
+
+            if (i == _count - 1)
+            {
+                break;
+            }
+
+            await Task.Delay((int)(tickTime * 1000f));
+        }
+    }
+
+    public void CheckMaxStatValue(EStat _stat, ref float _value)
+    {
+        switch (_stat)
+        {
+            case EStat.Hp:
+                if (_value < 0f)
+                {
+                    _value = 0f;
+                }
+                else if (_value > 10000f)
+                {
+                    _value = 10000f;
+                }
+                break;
+            case EStat.Mp:
+                if (_value < 0f)
+                {
+                    _value = 0f;
+                }
+                else if (_value > 10000f)
+                {
+                    _value = 10000f;
+                }
+                break;
+            case EStat.AttackPower:
+                if (_value < 0f)
+                {
+                    _value = 0f;
+                }
+                else if (_value > 10000f)
+                {
+                    _value = 10000f;
+                }
+                break;
+            case EStat.DefensePower:
+                if (_value < 0f)
+                {
+                    _value = 0f;
+                }
+                else if (_value > 10000f)
+                {
+                    _value = 10000f;
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

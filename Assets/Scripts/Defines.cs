@@ -82,10 +82,12 @@ public class Defines
     {
         None = -1,
 
-        FixedHP,
-        PercentHP,
-        FixedMP,
-        PErcentMP,
+        FixedHP, // 0
+        PercentMaxHP, // 1
+        PercentRemainHP, // 2
+        FixedMP, // 3
+        PercentMaxMP, // 4
+        PercentRemainMP, // 5
 
         Max
     }
@@ -121,20 +123,12 @@ public class Defines
     {
         None = -1,
 
-        // 대상자가 자기 자신일 때
-        Me_HpUp, // 0
-        Me_HpDown, // 1
-        Me_AttackStatUp, // 2
-        Me_AttackStatDown, // 3
-        Me_DefenseStatUp, // 4
-        Me_DefenseStatDown, // 5
-        // 대상자가 적 또는 팀원일 때
-        Target_HpUp, // 6
-        Target_HpDown, // 7
-        Target_AttackStatUp, // 8
-        Target_AttackStatDown, // 9
-        Target_DefenseStatUp, // 10
-        Target_DefenseStatDown, // 11
+        HpUp, // 0
+        HpDown, // 1
+        AttackPowerUp, // 2
+        AttackPowerDown, // 3
+        DefensePowerUp, // 4
+        DefensePowerDown, // 5
 
         Max,
     }
@@ -164,13 +158,13 @@ public class Defines
     {
         None = -1,
 
-        Me,
-        Red,
-        Blue,
-        Me_Red,
-        Me_Blue,
-        Red_Blue,
-        Me_Red_Blue,
+        Me, // 0
+        Red, // 1
+        Blue, // 2
+        Me_Red, // 3
+        Me_Blue, // 4
+        Red_Blue, // 5
+        Me_Red_Blue, // 6
 
         Max
     }
@@ -180,7 +174,7 @@ public class Defines
         None = -1,
 
         AtOnce, // 0 : 한번에
-        Constantly_1Sec_3Count, // 1 : 1초동안 3번 지속 데미지
+        Continuous_1Sec_3Count, // 1 : 1초동안 3번 지속 데미지
 
         Max
     }
@@ -189,11 +183,13 @@ public class Defines
     {
         None = -1,
 
-        Fixed, // 고정 데미지
-        PercentMaxHp, // 전체 Hp 퍼센트 데미지
-        PercentRemainHp, // 남은 Hp 퍼센트 데미지
+        Fixed, // 0 : 고정 데미지
+        PercentMeMaxHp, // 1 : 나의 전체 Hp 퍼센트 데미지
+        PercentMeRemainHp, // 2 : 나의 남은 Hp 퍼센트 데미지
+        PercentTargetMaxHp, // 3 : 타겟의 전체 Hp 퍼센트 데미지
+        PercentTargetRemainHp, // 4 : 타겟의 남은 Hp 퍼센트 데미지
 
-        Max,
+        Max
     }
 
     public enum EGunType
@@ -263,6 +259,18 @@ public class Defines
 
         Run,
         Attack1,
+
+        Max
+    }
+
+    public enum EStat
+    {
+        None = -1,
+
+        Hp,
+        Mp,
+        AttackPower,
+        DefensePower,
 
         Max
     }

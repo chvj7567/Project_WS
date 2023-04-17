@@ -233,10 +233,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitInfo:
+  orgUnitInfo:
     eUnitID: -1
     nameStringID: -1
+    maxHp: -1
     hp: -1
+    maxMp: -1
     mp: -1
     attackDelay: -1
     attackDistance: -1
@@ -245,7 +247,7 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  skill1Info:
+  orgSkill1Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -254,7 +256,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill2Info:
+  orgSkill2Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -263,7 +265,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill3Info:
+  orgSkill3Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -272,7 +274,57 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill4Info:
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    maxMp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -754,10 +806,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitInfo:
+  orgUnitInfo:
     eUnitID: -1
     nameStringID: -1
+    maxHp: -1
     hp: -1
+    maxMp: -1
     mp: -1
     attackDelay: -1
     attackDistance: -1
@@ -766,7 +820,7 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  skill1Info:
+  orgSkill1Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -775,7 +829,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill2Info:
+  orgSkill2Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -784,7 +838,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill3Info:
+  orgSkill3Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -793,7 +847,57 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill4Info:
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    maxMp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2156,10 +2260,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitInfo:
+  orgUnitInfo:
     eUnitID: -1
     nameStringID: -1
+    maxHp: -1
     hp: -1
+    maxMp: -1
     mp: -1
     attackDelay: -1
     attackDistance: -1
@@ -2168,7 +2274,7 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  skill1Info:
+  orgSkill1Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2177,7 +2283,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill2Info:
+  orgSkill2Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2186,7 +2292,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill3Info:
+  orgSkill3Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2195,7 +2301,57 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill4Info:
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    maxMp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2314,10 +2470,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitInfo:
+  orgUnitInfo:
     eUnitID: -1
     nameStringID: -1
+    maxHp: -1
     hp: -1
+    maxMp: -1
     mp: -1
     attackDelay: -1
     attackDistance: -1
@@ -2326,7 +2484,7 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  skill1Info:
+  orgSkill1Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2335,7 +2493,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill2Info:
+  orgSkill2Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2344,7 +2502,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill3Info:
+  orgSkill3Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2353,7 +2511,57 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill4Info:
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    maxMp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2448,10 +2656,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be9107ef795b3049a170e6c2ee2a9f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitInfo:
+  orgUnitInfo:
     eUnitID: -1
     nameStringID: -1
-    hp: -151
+    maxHp: -1
+    hp: -1
+    maxMp: -1
     mp: -1
     attackDelay: -1
     attackDistance: -1
@@ -2460,7 +2670,7 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  skill1Info:
+  orgSkill1Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2469,7 +2679,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill2Info:
+  orgSkill2Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2478,7 +2688,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill3Info:
+  orgSkill3Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2487,7 +2697,57 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill4Info:
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -51
+    maxMp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2502,7 +2762,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28304
+  m_Name: pb_Mesh28660
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2723,10 +2983,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitInfo:
+  orgUnitInfo:
     eUnitID: -1
     nameStringID: -1
+    maxHp: -1
     hp: -1
+    maxMp: -1
     mp: -1
     attackDelay: -1
     attackDistance: -1
@@ -2735,7 +2997,7 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  skill1Info:
+  orgSkill1Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2744,7 +3006,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill2Info:
+  orgSkill2Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2753,7 +3015,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill3Info:
+  orgSkill3Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2762,7 +3024,57 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill4Info:
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    maxMp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2893,10 +3205,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitInfo:
+  orgUnitInfo:
     eUnitID: -1
     nameStringID: -1
+    maxHp: -1
     hp: -1
+    maxMp: -1
     mp: -1
     attackDelay: -1
     attackDistance: -1
@@ -2905,7 +3219,7 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  skill1Info:
+  orgSkill1Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2914,7 +3228,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill2Info:
+  orgSkill2Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2923,7 +3237,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill3Info:
+  orgSkill3Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -2932,7 +3246,57 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  skill4Info:
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    maxMp: -1
+    mp: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
     eSkillID: -1
     skillDesc: -1
     isTargeting: 0
@@ -3036,7 +3400,7 @@ PrefabInstance:
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useSkill2
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
@@ -3052,6 +3416,11 @@ PrefabInstance:
         type: 3}
       propertyPath: attackDelay
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2376815556044339870, guid: 12c9eeb2678a30243b5fb12fbc659057,
+        type: 3}
+      propertyPath: range
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2376815556044339870, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
