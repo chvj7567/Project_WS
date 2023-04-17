@@ -50,7 +50,9 @@ public class Infomation
     {
         public EUnitID eUnitID = EUnitID.None;
         public int nameStringID = -1;
+        public float maxHp = -1f;
         public float hp = -1f;
+        public float maxMp = -1f;
         public float mp = -1f;
         public float attackDelay = -1f;
         public float attackDistance = -1f;

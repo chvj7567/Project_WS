@@ -2,7 +2,9 @@
 	{
 		"eUnitID": 0,
 		"nameStringID": -1,
+		"maxHp": 3000,
 		"hp": 3000,
+		"maxMp": 1000,
 		"mp": 1000,
 		"attackDelay": 6,
 		"attackDistance": 5,
@@ -15,7 +17,9 @@
 	{
 		"eUnitID": 1,
 		"nameStringID": -1,
+		"maxHp": 3000,
 		"hp": 3000,
+		"maxMp": 1000,
 		"mp": 1000,
 		"attackDelay": 6,
 		"attackDistance": 5,

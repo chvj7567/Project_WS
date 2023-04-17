@@ -50,71 +50,6 @@ public class CHMSkill
 
                 // 스킬 충돌 범위 생성
                 CreateSkillCollision(_trCaster, _trTarget, effectInfo);
-                /*switch (effectInfo.eCollision)
-                {
-                    case Defines.ECollision.Sphere:
-                        switch (effectInfo.eStandardPos)
-                        {
-                            case Defines.EStandardPos.Me:
-                                {
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, effectInfo);
-                                }
-                                break;
-                            case Defines.EStandardPos.Target_One:
-                                {
-                                    liTarget.Add(_trTarget);
-
-                                    // Test
-                                    foreach (var target in liTarget)
-                                    {
-                                        var unit = target.GetComponent<UnitBase>();
-                                        if (unit != null)
-                                        {
-                                            unit.MinusHp(effectInfo.damage);
-                                        }
-                                    }
-                                    // Test
-
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo);
-                                }
-                                break;
-                            case Defines.EStandardPos.Target_All:
-                                {
-                                    var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(effectInfo.eTargetMask), effectInfo.sphereRadius, effectInfo.angle);
-                                    liTarget = GetTargetTransformList(liTargetInfo);
-
-                                    // Test
-                                    foreach (var target in liTarget)
-                                    {
-                                        var unit = target.GetComponent<UnitBase>();
-                                        if (unit != null)
-                                        {
-                                            unit.MinusHp(effectInfo.damage);
-                                        }
-                                    }
-                                    // Test
-
-                                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo);
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case Defines.ECollision.Box:
-                        {
-                            var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, GetTargetMask(effectInfo.eTargetMask), new Vector3(effectInfo.boxHalfX, effectInfo.boxHalfY, effectInfo.boxHalfZ), _trCaster.rotation);
-                            liTarget = GetTargetTransformList(liTargetInfo);
-                        }
-                        break;
-                    default:
-                        {
-                            liTarget.Add(_trTarget);
-
-                            CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, effectInfo);
-                        }
-                        break;
-                }*/
             }
         }
     }
@@ -201,38 +136,10 @@ public class CHMSkill
         var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
         liTarget = GetTargetTransformList(liTargetInfo);
 
-        switch (_effectInfo.eDamageState)
-        {
-            case Defines.EDamageState.AtOnce:
-                {
-                    foreach (var target in liTarget)
-                    {
-                        var unit = target.GetComponent<UnitBase>();
-                        if (unit != null)
-                        {
-                            unit.MinusHp(_effectInfo.damage);
-                        }
-                    }
-                }
-                break;
-            case Defines.EDamageState.Constantly_1Sec_3Count:
-                {
-                    foreach (var target in liTarget)
-                    {
-                        var unit = target.GetComponent<UnitBase>();
-                        if (unit != null)
-                        {
-                            ConstantlyDamage(unit, 1f, 3f, _effectInfo.damage);
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-        
+        // 타겟에게 스킬 데미지
+        InflictDamageToTarget(liTargetInfo, _effectInfo);
 
-        // 파티클 생성 기준 위치에 따라 구분
+        // 파티클 생성 기준 위치에 파티클 생성
         switch (_effectInfo.eStandardPos)
         {
             case Defines.EStandardPos.Me:
@@ -252,6 +159,56 @@ public class CHMSkill
                 break;
             default:
                 break;
+        }
+    }
+
+    void InflictDamageToTarget(List<TargetInfo> liTargetInfo, EffectInfo _effectInfo)
+    {
+        // 데미지 상태에 따라 구분
+        switch (_effectInfo.eDamageState)
+        {
+            case Defines.EDamageState.AtOnce:
+                {
+                    foreach (var target in liTargetInfo)
+                    {
+                        var unit = target.objTarget.GetComponent<UnitBase>();
+                        if (unit != null)
+                        {
+                            unit.MinusHp(InflictDamageCalculate(unit, _effectInfo));
+                        }
+                    }
+                }
+                break;
+            case Defines.EDamageState.Constantly_1Sec_3Count:
+                {
+                    foreach (var target in liTargetInfo)
+                    {
+                        var unit = target.objTarget.GetComponent<UnitBase>();
+                        if (unit != null)
+                        {
+                            ConstantlyDamage(unit, 1f, 3f, InflictDamageCalculate(unit, _effectInfo));
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    float InflictDamageCalculate(UnitBase _unit, EffectInfo _effectInfo)
+    {
+        // 데미지 타입에 따라 구분
+        switch (_effectInfo.eDamageType)
+        {
+            case Defines.EDamageType.Fixed:
+                return _effectInfo.damage;
+            case Defines.EDamageType.PercentMaxHp:
+                return _unit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
+            case Defines.EDamageType.PercentRemainHp:
+                return _unit.GetCurrentHp() * _effectInfo.damage / 100f;
+            default:
+                return -1f;
         }
     }
 
@@ -362,8 +319,6 @@ public class CHMSkill
                             time += Time.deltaTime;
                             await Task.Delay((int)(Time.deltaTime * 1000f));
                         }
-
-                        Debug.Log(time);
 
                         CHMMain.Resource.Destroy(objDecal);
                         CHMMain.Resource.Destroy(_areaDecal);

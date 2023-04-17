@@ -13,8 +13,8 @@
                 "eEffect": "4",
                 "eEffectType": "7",
                 "eStandardPos": "2",
-                "eDamageState": "1",
-                "eDamageType": "0",
+                "eDamageState": "0",
+                "eDamageType": "1",
 				"eCollision": "0",
 				"eTargetMask": "2",
 				"onDecal": true,
@@ -131,13 +131,13 @@
         "liEffectInfo":
 		[
 			{
-                "eEffect": "15",
+                "eEffect": "11",
                 "eEffectType": "-1",
                 "eStandardPos": "0",
                 "eDamageState": "-1",
                 "eDamageType": "-1",
-				"eCollision": "-1",
-				"eTargetMask": "-1",
+				"eCollision": "0",
+				"eTargetMask": "7",
 				"onDecal": false,
 				"startDelay": 0,
 				"angle": 360,
@@ -151,18 +151,18 @@
                 "eEffect": "10",
                 "eEffectType": "-1",
                 "eStandardPos": "1",
-                "eDamageState": "-1",
+                "eDamageState": "1",
                 "eDamageType": "-1",
-				"eCollision": "-1",
+				"eCollision": "0",
 				"eTargetMask": "-1",
 				"onDecal": false,
-				"startDelay": 0,
+				"startDelay": 0.5,
 				"angle": 360,
 				"sphereRadius": 3,
 				"boxHalfX": -1,
 				"boxHalfY": -1,
 				"boxHalfZ": -1,
-                "damage": 0
+                "damage": 10
             }
         ]
     }

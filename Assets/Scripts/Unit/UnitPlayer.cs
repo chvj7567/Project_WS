@@ -6,11 +6,11 @@ public class UnitPlayer : UnitBase
 {
     protected override void Init()
     {
-        unitInfo = unitInfo= CHMMain.Json.GetUnitInfo(Defines.EUnitID.B);
+        orgUnitInfo = curUnitInfo = CHMMain.Json.GetUnitInfo(Defines.EUnitID.A);
 
-        skill1Info = CHMMain.Json.GetSkillInfo(unitInfo.eSkill1ID);
-        skill2Info = CHMMain.Json.GetSkillInfo(unitInfo.eSkill2ID);
-        skill3Info = CHMMain.Json.GetSkillInfo(unitInfo.eSkill3ID);
-        skill4Info = CHMMain.Json.GetSkillInfo(unitInfo.eSkill4ID);
+        orgSkill1Info = curSkill1Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill1ID);
+        orgSkill2Info = curSkill2Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill2ID);
+        orgSkill3Info = curSkill3Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill3ID);
+        orgSkill4Info = curSkill4Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill4ID);
     }
 }
