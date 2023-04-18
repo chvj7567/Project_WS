@@ -2,7 +2,7 @@ using UniRx.Triggers;
 using UnityEngine;
 using UniRx;
 
-public class ContGun : MonoBehaviour
+public class CHContGun : MonoBehaviour
 {
     [SerializeField] GameObject objBullet;
     [SerializeField] Transform trBulletSpawnPoint;
@@ -42,7 +42,7 @@ public class ContGun : MonoBehaviour
         bullet.transform.up = trBulletSpawnPoint.transform.up;
 
         // 총알을 스폰 지점의 방향으로 힘을 가해 발사
-        bullet.GetOrAddComponent<ContBullet>().Init(transform.forward, bulletForce);
+        bullet.GetOrAddComponent<CHContBullet>().Init(transform.forward, bulletForce);
 
         // 딜레이 초기화
         timeSinceLastFire = 0f;

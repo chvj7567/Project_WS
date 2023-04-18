@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class ContBullet : MonoBehaviour
+public class CHContBullet : MonoBehaviour
 {
     Rigidbody rbHit;
     Vector3 v3Direct;

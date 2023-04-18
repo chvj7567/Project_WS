@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContBase : MonoBehaviour
+public class CHContBase : MonoBehaviour
 {
     [SerializeField] protected bool useAttack = true;
     [SerializeField] protected bool useSkill1 = true;
@@ -18,8 +18,8 @@ public class ContBase : MonoBehaviour
 
     [SerializeField] protected Animator animator;
 
-    [SerializeField, ReadOnly] protected int attackRange = Animator.StringToHash("TargetInAttackRange");
-    [SerializeField, ReadOnly] protected int sightRange = Animator.StringToHash("TargetInSightRange");
+    [SerializeField, ReadOnly] public int attackRange = Animator.StringToHash("TargetInAttackRange");
+    [SerializeField, ReadOnly] public int sightRange = Animator.StringToHash("TargetInSightRange");
     public float GetTimeSinceLastAttack() { return timeSinceLastAttack; }
     public float GetTimeSinceLastSkill1() { return timeSinceLastSkill1; }
     public float GetTimeSinceLastSkill2() { return timeSinceLastSkill2; }

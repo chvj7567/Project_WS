@@ -1,7 +1,7 @@
 using Unity.Collections;
 using UnityEngine;
 
-public class UIBase : MonoBehaviour
+public class CHUIBase : MonoBehaviour
 {
     [ReadOnly]
     public Defines.EUI eUIType;
@@ -17,7 +17,7 @@ public class UIBase : MonoBehaviour
         }
     }
 
-    public virtual void InitUI(UIArg _uiArg) { }
+    public virtual void InitUI(CHUIArg _uiArg) { }
 
     public virtual void CloseUI() { }
 }

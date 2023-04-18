@@ -52,8 +52,10 @@ public class Infomation
         public int nameStringID = -1;
         public float maxHp = -1f;
         public float hp = -1f;
+        public float hpRegenPerSecond = -1f;
         public float maxMp = -1f;
         public float mp = -1f;
+        public float mpRegenPerSecond = -1f;
         public float attackPower = -1f;
         public float defensePower = -1f;
         public float attackDelay = -1f;

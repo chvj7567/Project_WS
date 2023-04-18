@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitPlayer : UnitBase
+public class CHUnitPlayer : CHUnitBase
 {
     protected override void Init()
     {

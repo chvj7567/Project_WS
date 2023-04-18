@@ -2,11 +2,11 @@ using UniRx.Triggers;
 using UnityEngine;
 using UniRx;
 
-public class ContA : ContBase
+public class CHContA : CHContBase
 {
     private void Start()
     {
-        var unitInfo = gameObject.GetOrAddComponent<UnitA>();
+        var unitInfo = gameObject.GetOrAddComponent<CHUnitA>();
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
         if (unitInfo!= null && targetTracker != null)
         {

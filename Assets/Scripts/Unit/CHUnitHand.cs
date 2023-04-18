@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitHand : MonoBehaviour
+public class CHUnitHand : MonoBehaviour
 {
     public enum EHandState
     {

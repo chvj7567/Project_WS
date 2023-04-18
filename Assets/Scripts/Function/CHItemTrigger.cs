@@ -23,12 +23,12 @@ public class CHItemTrigger : MonoBehaviour
     {
         if (other.transform.gameObject.tag == Defines.ETag.Player.ToString())
         {
-            var controller = other.GetComponent<ContPlayer>();
+            var controller = other.GetComponent<CHContPlayer>();
 
             if (controller)
             {
                 var leftHand = controller.GetLeftHand();
-                if (leftHand.handState == UnitHand.EHandState.None)
+                if (leftHand.handState == CHUnitHand.EHandState.None)
                 {
                     transform.SetParent(leftHand.transform);
                     transform.localPosition = Vector3.zero;
@@ -37,7 +37,7 @@ public class CHItemTrigger : MonoBehaviour
                     return;
                 }
                 var rightHand = controller.GetRightHand();
-                if (rightHand.handState == UnitHand.EHandState.None)
+                if (rightHand.handState == CHUnitHand.EHandState.None)
                 {
                     transform.SetParent(rightHand.transform);
                     transform.localPosition = Vector3.zero;

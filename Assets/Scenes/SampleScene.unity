@@ -238,8 +238,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -291,8 +293,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -608,8 +612,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -661,8 +667,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -888,8 +896,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -941,8 +951,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -1168,8 +1180,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -1221,8 +1235,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -1657,8 +1673,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -1710,8 +1728,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3117,8 +3137,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3170,8 +3192,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3333,8 +3357,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3386,8 +3412,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3525,8 +3553,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3578,8 +3608,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -301
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3858,8 +3890,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3911,8 +3945,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -3959,6 +3995,18 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
+--- !u!114 &1921647006 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
+    type: 3}
+  m_PrefabInstance: {fileID: 2376815556681563159}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921646999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67053243d1851654787f1fd703826205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1928722826 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5647053999831503512, guid: c128ac5951f1f594f94f7aac78606c46,
@@ -4086,8 +4134,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -4139,8 +4189,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -4366,8 +4418,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -4419,8 +4473,10 @@ MonoBehaviour:
     nameStringID: -1
     maxHp: -1
     hp: -1
+    hpRegenPerSecond: -1
     maxMp: -1
     mp: -1
+    mpRegenPerSecond: -1
     attackPower: 0
     defensePower: 0
     attackDelay: -1
@@ -4591,6 +4647,11 @@ PrefabInstance:
       objectReference: {fileID: 1921647004}
     - target: {fileID: 2376815556044339870, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
+      propertyPath: contBase
+      value: 
+      objectReference: {fileID: 1921647006}
+    - target: {fileID: 2376815556044339870, guid: 12c9eeb2678a30243b5fb12fbc659057,
+        type: 3}
       propertyPath: trOrigin
       value: 
       objectReference: {fileID: 851444431}
@@ -4717,6 +4778,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5647054000804174668, guid: c128ac5951f1f594f94f7aac78606c46,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5647054000804174668, guid: c128ac5951f1f594f94f7aac78606c46,
         type: 3}

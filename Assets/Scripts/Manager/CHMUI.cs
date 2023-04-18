@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIArg
+public class CHUIArg
 {
-    public static readonly UIArg empty = new UIArg();
+    public static readonly CHUIArg empty = new CHUIArg();
 }
 
-public class UIWaitData
+public class CHUIWaitData
 {
     public int uid;
     public Defines.EUI uiType;
-    public UIArg uiArg;
+    public CHUIArg uiArg;
     public bool showCurrentBackground;
 }
 
@@ -20,7 +20,7 @@ public class CHMUI
     static List<GameObject> activeUI = new List<GameObject>();
     static List<int> activeUID = new List<int>();
 
-    static List<UIWaitData> waitActiveUI = new List<UIWaitData>();
+    static List<CHUIWaitData> waitActiveUI = new List<CHUIWaitData>();
     static List<GameObject> waitCloseUI = new List<GameObject>();
 
     static int uid = 0;
@@ -54,9 +54,9 @@ public class CHMUI
         }
     }
 
-    public int ShowUI(Defines.EUI _uiType, UIArg _uiArg, bool _bCurrentBackground = true)
+    public int ShowUI(Defines.EUI _uiType, CHUIArg _uiArg, bool _bCurrentBackground = true)
     {
-        var uiWateData = new UIWaitData
+        var uiWateData = new CHUIWaitData
         {
             uid = uid,
             uiType = _uiType,
@@ -70,7 +70,7 @@ public class CHMUI
         return uid++;
     }
 
-    void ShowUI(UIWaitData _uiWaitData)
+    void ShowUI(CHUIWaitData _uiWaitData)
     {
         GameObject uiCanvas = null;
 
@@ -125,7 +125,7 @@ public class CHMUI
                 if (uiObj)
                 {
                     activeUI.Add(uiObj);
-                    var script = uiObj.GetComponent<UIBase>();
+                    var script = uiObj.GetComponent<CHUIBase>();
                     script.eUIType = _uiWaitData.uiType;
                     script.uid = _uiWaitData.uid;
                     script.InitUI(_uiWaitData.uiArg);
@@ -158,7 +158,7 @@ public class CHMUI
     {
         if (_uiObj)
         {
-            var popup = _uiObj.GetComponent<UIBase>();
+            var popup = _uiObj.GetComponent<CHUIBase>();
             popup.CloseUI();
             waitCloseUI.Add(_uiObj);
         }
@@ -169,7 +169,7 @@ public class CHMUI
         activeUI = activeUI.FindAll(_ => _ != null);
         foreach (var obj in activeUI)
         {
-            var ui = obj.GetComponent<UIBase>();
+            var ui = obj.GetComponent<CHUIBase>();
             if (ui.eUIType == _uiType)
             {
                 ui.CloseUI();

@@ -33,7 +33,7 @@ public class CHMSkill
 
         if (skillInfo != null)
         {
-            var casterUnit = _trCaster.GetComponent<UnitBase>();
+            var casterUnit = _trCaster.GetComponent<CHUnitBase>();
             if (casterUnit != null)
             {
                 if (CanUseSkill(casterUnit, skillInfo) == false) return;
@@ -63,7 +63,7 @@ public class CHMSkill
 
         if (skillInfo != null)
         {
-            var casterUnit = _trCaster.GetComponent<UnitBase>();
+            var casterUnit = _trCaster.GetComponent<CHUnitBase>();
             if (casterUnit != null)
             {
                 if (CanUseSkill(casterUnit, skillInfo) == false) return;
@@ -84,515 +84,6 @@ public class CHMSkill
                 // 스킬 충돌 범위 생성
                 CreateNoneTargetingSkillCollision(_trCaster, _posSkill, _dirSkill, effectInfo);
             }
-        }
-    }
-
-    void CreateTargetingSkillCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
-    {
-        // Collision 모양에 따라 구분
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    CreateTargetingSphereCollision(_trCaster, _trTarget, _effectInfo);
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                {
-                    // Collision이 없으면 해당 지점에 파티클만 생성
-                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                }
-                break;
-        }
-    }
-
-    void CreateTargetingSphereCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
-    {
-        // 파티클 생성 기준 위치에 파티클 생성
-        switch (_effectInfo.eStandardPos)
-        {
-            case Defines.EStandardPos.Me:
-                {
-                    // 타겟에게 스킬 적용
-                    ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
-
-                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
-                }
-                break;
-            case Defines.EStandardPos.Target_One:
-                {
-                    // 스킬 시전 시 맞은 타겟들
-                    var liTargetInfo = GetClosestTargetInfo(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
-                    var liTarget = GetTargetTransformList(liTargetInfo);
-
-                    // 타겟에게 스킬 적용
-                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
-
-                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                }
-                break;
-            case Defines.EStandardPos.Target_All:
-                {
-                    // 스킬 시전 시 맞은 타겟들
-                    var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
-                    var liTarget = GetTargetTransformList(liTargetInfo);
-
-                    // 타겟에게 스킬 적용
-                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
-
-                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, _effectInfo);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    void CreateNoneTargetingSkillCollision(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
-    {
-        // Collision 모양에 따라 구분
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    CreateNoneTargetingSphereCollision(_trCaster, _posSkill, _dirSkill, _effectInfo);
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                {
-                    // Collision이 없으면 해당 지점에 파티클만 생성
-                    CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
-                }
-                break;
-        }
-    }
-
-    void CreateNoneTargetingSphereCollision(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
-    {
-        List<Transform> liTarget = new List<Transform>();
-
-        // 스킬 시전 시 맞은 타겟들
-        var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
-        liTarget = GetTargetTransformList(liTargetInfo);
-
-        // 타겟에게 스킬 값 적용
-        ApplySkillValue(_trCaster, liTarget, _effectInfo);
-
-        // 논타겟팅 스킬은 파티클 생성 기준 위치에 상관없이 해당 위치에 파티클 생성 
-        CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
-    }
-
-    void ApplySkillValue(Transform _trCaster, List<Transform> _liTarget, EffectInfo _effectInfo)
-    {
-        var casterUnit = _trCaster.GetComponent<UnitBase>();
-
-        foreach (var target in _liTarget)
-        {
-            var targetUnit = target.GetComponent<UnitBase>();
-            if (targetUnit != null)
-            {
-                ApplyEffectType(casterUnit, targetUnit, _effectInfo);
-            }
-        }
-    }
-
-    void ApplyEffectType(UnitBase _casterUnit, UnitBase _targetUnit, EffectInfo _effectInfo)
-    {
-        if (_casterUnit == null || _targetUnit == null || _effectInfo == null) return;
-
-        float skillValue = CalculateSkillDamage(_casterUnit, _targetUnit, _effectInfo);
-
-        // 스킬 시전자 스탯
-        float casterAttackPower = _casterUnit.GetCurrentAttackPower();
-        float casterDefensePower = _casterUnit.GetCurrentDefensePower();
-        // 타겟 스탯
-        float targetAttackPower = _targetUnit.GetCurrentAttackPower();
-        float targetDefensePower = _targetUnit.GetCurrentDefensePower();
-
-        switch (_effectInfo.eEffectType)
-        {
-            case Defines.EEffectType.HpUp:
-                _targetUnit.ChangeHp(skillValue, _effectInfo.eDamageState);
-                break;
-            case Defines.EEffectType.HpDown:
-                {
-                    // 데미지 계산 : 스킬 데미지 + 스킬 시전자 공격력 - 타겟 방어력
-                    var totalValue = skillValue + casterAttackPower - targetDefensePower;
-                    Debug.Log($"HpDown : {totalValue} = {skillValue} + {casterAttackPower} - {targetDefensePower}");
-                    _targetUnit.ChangeHp(CHUtil.ReverseValue(totalValue), _effectInfo.eDamageState);
-                }
-                break;
-            case Defines.EEffectType.AttackPowerUp:
-                _targetUnit.ChangeAttackPower(skillValue, _effectInfo.eDamageState);
-                break;
-            case Defines.EEffectType.AttackPowerDown:
-                _targetUnit.ChangeAttackPower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
-                break;
-            case Defines.EEffectType.DefensePowerUp:
-                _targetUnit.ChangeDefensePower(skillValue, _effectInfo.eDamageState);
-                break;
-            case Defines.EEffectType.DefensePowerDown:
-                _targetUnit.ChangeDefensePower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
-                break;
-            default:
-                break;
-        }
-    }
-
-    float CalculateSkillDamage(UnitBase _casterUnit, UnitBase _targetUnit, EffectInfo _effectInfo)
-    {
-        if (_casterUnit == null || _targetUnit == null || _effectInfo == null) return -1f;
-
-        // 데미지 타입에 따라 구분
-        switch (_effectInfo.eDamageType)
-        {
-            case Defines.EDamageType.Fixed:
-                return _effectInfo.damage;
-            case Defines.EDamageType.PercentMeMaxHp:
-                return _casterUnit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
-            case Defines.EDamageType.PercentMeRemainHp:
-                return _casterUnit.GetCurrentHp() * _effectInfo.damage / 100f;
-            case Defines.EDamageType.PercentTargetMaxHp:
-                return _targetUnit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
-            case Defines.EDamageType.PercentTargetRemainHp:
-                return _targetUnit.GetCurrentHp() * _effectInfo.damage / 100f;
-            default:
-                return -1f;
-        }
-    }
-
-    bool CanUseSkill(UnitBase _casterUnit, SkillInfo skillInfo)
-    {
-        switch (skillInfo.eSkillCost)
-        {
-            case Defines.ESkillCost.FixedHP:
-                {
-                    if (_casterUnit.GetCurrentHp() >= skillInfo.cost)
-                    {
-                        _casterUnit.ChangeHp(CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }    
-                }
-            case Defines.ESkillCost.PercentMaxHP:
-                {
-                    var costValue = _casterUnit.GetCurrentMaxHp() * skillInfo.cost / 100f;
-
-                    if (_casterUnit.GetCurrentHp() >= costValue)
-                    {
-                        _casterUnit.ChangeHp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            case Defines.ESkillCost.PercentRemainHP:
-                {
-                    var costValue = _casterUnit.GetCurrentHp() * skillInfo.cost / 100f;
-
-                    if (_casterUnit.GetCurrentHp() >= costValue)
-                    {
-                        _casterUnit.ChangeHp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            case Defines.ESkillCost.FixedMP:
-                {
-                    if (_casterUnit.GetCurrentMp() >= skillInfo.cost)
-                    {
-                        _casterUnit.ChangeMp(CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            case Defines.ESkillCost.PercentMaxMP:
-                {
-                    var costValue = _casterUnit.GetCurrentMaxMp() * skillInfo.cost / 100f;
-
-                    if (_casterUnit.GetCurrentMp() >= costValue)
-                    {
-                        _casterUnit.ChangeMp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            case Defines.ESkillCost.PercentRemainMP:
-                {
-                    var costValue = _casterUnit.GetCurrentMp() * skillInfo.cost / 100f;
-
-                    if (_casterUnit.GetCurrentMp() >= costValue)
-                    {
-                        _casterUnit.ChangeMp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            default:
-                return false;
-        }
-    }
-
-    public async Task CreateTargetingDecal(EffectInfo _effectInfo, Transform _trTarget)
-    {
-        GameObject objDecal = null;
-
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    if (roundAreaDecal == null)
-                    {
-                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
-                        {
-                            roundAreaDecal = decal;
-                            roundAreaDecal.SetActive(false);
-                            roundAreaDecal.GetOrAddComponent<CHPoolable>();
-
-                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
-                        });
-                    }
-                    else
-                    {
-                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
-                    }
-
-                    objDecal.transform.position = _trTarget.position;
-                    objDecal.transform.forward = _trTarget.forward;
-
-                    objDecal.transform.SetParent(_trTarget.transform);
-
-                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-
-                    var decalProjector = objDecal.GetComponent<DecalProjector>();
-                    if (decalProjector != null)
-                    {
-                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius * 2f;
-                    }
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                break;
-        }
-
-        await CreateTargetingTimeDecal(_effectInfo, _trTarget, objDecal);
-    }
-
-    public async Task CreateTargetingTimeDecal(EffectInfo _effectInfo, Transform _trTarget, GameObject _areaDecal)
-    {
-        GameObject objDecal = null;
-
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    if (roundTimingDecal == null)
-                    {
-                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundTiming, (decal) =>
-                        {
-                            roundTimingDecal = decal;
-                            roundTimingDecal.SetActive(false);
-                            roundTimingDecal.GetOrAddComponent<CHPoolable>();
-
-                            objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
-                        });
-                    }
-                    else
-                    {
-                        objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
-                    }
-
-                    objDecal.transform.position = _trTarget.position;
-                    objDecal.transform.forward = _trTarget.forward;
-
-                    objDecal.transform.SetParent(_trTarget.transform);
-
-                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-
-                    var decalProjector = objDecal.GetComponent<DecalProjector>();
-                    if (decalProjector != null)
-                    {
-                        float time = 0;
-
-                        while (time <= _effectInfo.startDelay)
-                        {
-                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2f, time / _effectInfo.startDelay);
-                            decalProjector.size = Vector3.one * curValue;
-                            time += Time.deltaTime;
-                            await Task.Delay((int)(Time.deltaTime * 1000f));
-                        }
-
-                        CHMMain.Resource.Destroy(objDecal);
-                        CHMMain.Resource.Destroy(_areaDecal);
-                    }
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                break;
-        }
-    }
-
-    public async Task CreateNoneTargetingDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal)
-    {
-        GameObject objDecal = null;
-
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    if (roundAreaDecal == null)
-                    {
-                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
-                        {
-                            roundAreaDecal = decal;
-                            roundAreaDecal.SetActive(false);
-                            roundAreaDecal.GetOrAddComponent<CHPoolable>();
-
-                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
-                        });
-                    }
-                    else
-                    {
-                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
-                    }
-
-                    objDecal.transform.position = _posDecal;
-                    objDecal.transform.forward = _dirDecal;
-
-                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-
-                    var decalProjector = objDecal.GetComponent<DecalProjector>();
-                    if (decalProjector != null)
-                    {
-                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius;
-                    }
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                break;
-        }
-
-        await CreateNoneTargetingTimeDecal(_effectInfo, _posDecal, _dirDecal, objDecal);
-    }
-
-    public async Task CreateNoneTargetingTimeDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal, GameObject _areaDecal)
-    {
-        GameObject objDecal = null;
-
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    if (roundTimingDecal == null)
-                    {
-                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundTiming, (decal) =>
-                        {
-                            roundTimingDecal = decal;
-                            roundTimingDecal.SetActive(false);
-                            roundTimingDecal.GetOrAddComponent<CHPoolable>();
-
-                            objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
-                        });
-                    }
-                    else
-                    {
-                        objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
-                    }
-
-                    objDecal.transform.position = _posDecal;
-                    objDecal.transform.forward = _dirDecal;
-
-                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-
-                    var decalProjector = objDecal.GetComponent<DecalProjector>();
-                    if (decalProjector != null)
-                    {
-                        float time = 0;
-                        
-                        while (time <= _effectInfo.startDelay)
-                        {
-                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius, time / _effectInfo.startDelay);
-                            decalProjector.size = Vector3.one * curValue;
-                            time += Time.deltaTime;
-                            await Task.Delay((int)(Time.deltaTime * 1000f));
-                        }
-
-                        CHMMain.Resource.Destroy(objDecal);
-                        CHMMain.Resource.Destroy(_areaDecal);
-                    }
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void GetNoneTargetingDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal)
-    {
-        GameObject objDecal = null;
-
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    if (roundAreaDecal == null)
-                    {
-                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
-                        {
-                            roundAreaDecal = decal;
-                            roundAreaDecal.SetActive(false);
-
-                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
-                        });
-                    }
-                    else
-                    {
-                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
-                    }
-
-                    objDecal.transform.position = _posDecal;
-                    objDecal.transform.forward = _dirDecal;
-
-                    var decalProjector = objDecal.GetComponent<DecalProjector>();
-                    if (decalProjector != null)
-                    {
-                        decalProjector.size = new Vector3(20, 20, 20);
-                    }
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                break;
         }
     }
 
@@ -744,6 +235,477 @@ public class CHMSkill
                 return LayerMask.GetMask(Defines.ETargetMask.Me.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Red.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
             default:
                 return -1;
+        }
+    }
+
+    //-------------------------------------- private ------------------------------------------//
+
+    void CreateTargetingSkillCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
+    {
+        // Collision 모양에 따라 구분
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    CreateTargetingSphereCollision(_trCaster, _trTarget, _effectInfo);
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                {
+                    // Collision이 없으면 해당 지점에 파티클만 생성
+                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                }
+                break;
+        }
+    }
+
+    void CreateTargetingSphereCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
+    {
+        // 파티클 생성 기준 위치에 파티클 생성
+        switch (_effectInfo.eStandardPos)
+        {
+            case Defines.EStandardPos.Me:
+                {
+                    // 타겟에게 스킬 적용
+                    ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
+
+                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
+                }
+                break;
+            case Defines.EStandardPos.Target_One:
+                {
+                    // 스킬 시전 시 맞은 타겟들
+                    var liTargetInfo = GetClosestTargetInfo(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
+                    var liTarget = GetTargetTransformList(liTargetInfo);
+
+                    // 타겟에게 스킬 적용
+                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
+
+                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                }
+                break;
+            case Defines.EStandardPos.Target_All:
+                {
+                    // 스킬 시전 시 맞은 타겟들
+                    var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
+                    var liTarget = GetTargetTransformList(liTargetInfo);
+
+                    // 타겟에게 스킬 적용
+                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
+
+                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, _effectInfo);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    void CreateNoneTargetingSkillCollision(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    {
+        // Collision 모양에 따라 구분
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    CreateNoneTargetingSphereCollision(_trCaster, _posSkill, _dirSkill, _effectInfo);
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                {
+                    // Collision이 없으면 해당 지점에 파티클만 생성
+                    CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
+                }
+                break;
+        }
+    }
+
+    void CreateNoneTargetingSphereCollision(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    {
+        List<Transform> liTarget = new List<Transform>();
+
+        // 스킬 시전 시 맞은 타겟들
+        var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
+        liTarget = GetTargetTransformList(liTargetInfo);
+
+        // 타겟에게 스킬 값 적용
+        ApplySkillValue(_trCaster, liTarget, _effectInfo);
+
+        // 논타겟팅 스킬은 파티클 생성 기준 위치에 상관없이 해당 위치에 파티클 생성 
+        CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
+    }
+
+    void ApplySkillValue(Transform _trCaster, List<Transform> _liTarget, EffectInfo _effectInfo)
+    {
+        var casterUnit = _trCaster.GetComponent<CHUnitBase>();
+
+        foreach (var target in _liTarget)
+        {
+            var targetUnit = target.GetComponent<CHUnitBase>();
+            if (targetUnit != null)
+            {
+                ApplyEffectType(casterUnit, targetUnit, _effectInfo);
+            }
+        }
+    }
+
+    void ApplyEffectType(CHUnitBase _casterUnit, CHUnitBase _targetUnit, EffectInfo _effectInfo)
+    {
+        if (_casterUnit == null || _targetUnit == null || _effectInfo == null) return;
+
+        float skillValue = CalculateSkillDamage(_casterUnit, _targetUnit, _effectInfo);
+
+        // 스킬 시전자 스탯
+        float casterAttackPower = _casterUnit.GetCurrentAttackPower();
+        float casterDefensePower = _casterUnit.GetCurrentDefensePower();
+        // 타겟 스탯
+        float targetAttackPower = _targetUnit.GetCurrentAttackPower();
+        float targetDefensePower = _targetUnit.GetCurrentDefensePower();
+
+        switch (_effectInfo.eEffectType)
+        {
+            case Defines.EEffectType.HpUp:
+                _targetUnit.ChangeHp(skillValue, _effectInfo.eDamageState);
+                break;
+            case Defines.EEffectType.HpDown:
+                {
+                    // 데미지 계산 : 스킬 데미지 + 스킬 시전자 공격력 - 타겟 방어력
+                    var totalValue = skillValue + casterAttackPower - targetDefensePower;
+                    Debug.Log($"HpDown : {totalValue} = {skillValue} + {casterAttackPower} - {targetDefensePower}");
+                    _targetUnit.ChangeHp(CHUtil.ReverseValue(totalValue), _effectInfo.eDamageState);
+                }
+                break;
+            case Defines.EEffectType.AttackPowerUp:
+                _targetUnit.ChangeAttackPower(skillValue, _effectInfo.eDamageState);
+                break;
+            case Defines.EEffectType.AttackPowerDown:
+                _targetUnit.ChangeAttackPower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
+                break;
+            case Defines.EEffectType.DefensePowerUp:
+                _targetUnit.ChangeDefensePower(skillValue, _effectInfo.eDamageState);
+                break;
+            case Defines.EEffectType.DefensePowerDown:
+                _targetUnit.ChangeDefensePower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
+                break;
+            default:
+                break;
+        }
+    }
+
+    float CalculateSkillDamage(CHUnitBase _casterUnit, CHUnitBase _targetUnit, EffectInfo _effectInfo)
+    {
+        if (_casterUnit == null || _targetUnit == null || _effectInfo == null) return -1f;
+
+        // 데미지 타입에 따라 구분
+        switch (_effectInfo.eDamageType)
+        {
+            case Defines.EDamageType.Fixed:
+                return _effectInfo.damage;
+            case Defines.EDamageType.PercentMeMaxHp:
+                return _casterUnit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
+            case Defines.EDamageType.PercentMeRemainHp:
+                return _casterUnit.GetCurrentHp() * _effectInfo.damage / 100f;
+            case Defines.EDamageType.PercentTargetMaxHp:
+                return _targetUnit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
+            case Defines.EDamageType.PercentTargetRemainHp:
+                return _targetUnit.GetCurrentHp() * _effectInfo.damage / 100f;
+            default:
+                return -1f;
+        }
+    }
+
+    bool CanUseSkill(CHUnitBase _casterUnit, SkillInfo skillInfo)
+    {
+        switch (skillInfo.eSkillCost)
+        {
+            case Defines.ESkillCost.FixedHP:
+                {
+                    if (_casterUnit.GetCurrentHp() >= skillInfo.cost)
+                    {
+                        _casterUnit.ChangeHp(CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.PercentMaxHP:
+                {
+                    var costValue = _casterUnit.GetCurrentMaxHp() * skillInfo.cost / 100f;
+
+                    if (_casterUnit.GetCurrentHp() >= costValue)
+                    {
+                        _casterUnit.ChangeHp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.PercentRemainHP:
+                {
+                    var costValue = _casterUnit.GetCurrentHp() * skillInfo.cost / 100f;
+
+                    if (_casterUnit.GetCurrentHp() >= costValue)
+                    {
+                        _casterUnit.ChangeHp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.FixedMP:
+                {
+                    if (_casterUnit.GetCurrentMp() >= skillInfo.cost)
+                    {
+                        _casterUnit.ChangeMp(CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.PercentMaxMP:
+                {
+                    var costValue = _casterUnit.GetCurrentMaxMp() * skillInfo.cost / 100f;
+
+                    if (_casterUnit.GetCurrentMp() >= costValue)
+                    {
+                        _casterUnit.ChangeMp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case Defines.ESkillCost.PercentRemainMP:
+                {
+                    var costValue = _casterUnit.GetCurrentMp() * skillInfo.cost / 100f;
+
+                    if (_casterUnit.GetCurrentMp() >= costValue)
+                    {
+                        _casterUnit.ChangeMp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            default:
+                return false;
+        }
+    }
+
+    async Task CreateTargetingDecal(EffectInfo _effectInfo, Transform _trTarget)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundAreaDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
+                        {
+                            roundAreaDecal = decal;
+                            roundAreaDecal.SetActive(false);
+                            roundAreaDecal.GetOrAddComponent<CHPoolable>();
+
+                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                    }
+
+                    objDecal.transform.position = _trTarget.position;
+                    objDecal.transform.forward = _trTarget.forward;
+
+                    objDecal.transform.SetParent(_trTarget.transform);
+
+                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
+                    {
+                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius * 2f;
+                    }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
+        }
+
+        await CreateTargetingTimeDecal(_effectInfo, _trTarget, objDecal);
+    }
+
+    async Task CreateTargetingTimeDecal(EffectInfo _effectInfo, Transform _trTarget, GameObject _areaDecal)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundTimingDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundTiming, (decal) =>
+                        {
+                            roundTimingDecal = decal;
+                            roundTimingDecal.SetActive(false);
+                            roundTimingDecal.GetOrAddComponent<CHPoolable>();
+
+                            objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
+                    }
+
+                    objDecal.transform.position = _trTarget.position;
+                    objDecal.transform.forward = _trTarget.forward;
+
+                    objDecal.transform.SetParent(_trTarget.transform);
+
+                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
+                    {
+                        float time = 0;
+
+                        while (time <= _effectInfo.startDelay)
+                        {
+                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2f, time / _effectInfo.startDelay);
+                            decalProjector.size = Vector3.one * curValue;
+                            time += Time.deltaTime;
+                            await Task.Delay((int)(Time.deltaTime * 1000f));
+                        }
+
+                        CHMMain.Resource.Destroy(objDecal);
+                        CHMMain.Resource.Destroy(_areaDecal);
+                    }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
+        }
+    }
+
+    async Task CreateNoneTargetingDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundAreaDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
+                        {
+                            roundAreaDecal = decal;
+                            roundAreaDecal.SetActive(false);
+                            roundAreaDecal.GetOrAddComponent<CHPoolable>();
+
+                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
+                    }
+
+                    objDecal.transform.position = _posDecal;
+                    objDecal.transform.forward = _dirDecal;
+
+                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
+                    {
+                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius;
+                    }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
+        }
+
+        await CreateNoneTargetingTimeDecal(_effectInfo, _posDecal, _dirDecal, objDecal);
+    }
+
+    async Task CreateNoneTargetingTimeDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal, GameObject _areaDecal)
+    {
+        GameObject objDecal = null;
+
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    if (roundTimingDecal == null)
+                    {
+                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundTiming, (decal) =>
+                        {
+                            roundTimingDecal = decal;
+                            roundTimingDecal.SetActive(false);
+                            roundTimingDecal.GetOrAddComponent<CHPoolable>();
+
+                            objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
+                        });
+                    }
+                    else
+                    {
+                        objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
+                    }
+
+                    objDecal.transform.position = _posDecal;
+                    objDecal.transform.forward = _dirDecal;
+
+                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    var decalProjector = objDecal.GetComponent<DecalProjector>();
+                    if (decalProjector != null)
+                    {
+                        float time = 0;
+
+                        while (time <= _effectInfo.startDelay)
+                        {
+                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius, time / _effectInfo.startDelay);
+                            decalProjector.size = Vector3.one * curValue;
+                            time += Time.deltaTime;
+                            await Task.Delay((int)(Time.deltaTime * 1000f));
+                        }
+
+                        CHMMain.Resource.Destroy(objDecal);
+                        CHMMain.Resource.Destroy(_areaDecal);
+                    }
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                break;
         }
     }
 }

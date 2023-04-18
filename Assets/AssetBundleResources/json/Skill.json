@@ -4,9 +4,9 @@
         "skillDesc": "-1",
 		"isTargeting": true,
 		"distance": 5,
-		"coolTime": 2,
+		"coolTime": 1,
 		"eSkillCost": 0,
-		"cost": 10,
+		"cost": 100,
         "liEffectInfo":
 		[
             {

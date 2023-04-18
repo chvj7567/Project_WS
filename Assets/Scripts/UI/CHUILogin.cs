@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UILogin : UIBase
+public class CHUILogin : UIBase
 {
     public TMP_InputField emailField;
     public TMP_InputField passwardField;

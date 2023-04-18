@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class ContPlayer : MonoBehaviour
+public class CHContPlayer : MonoBehaviour
 {
     [SerializeField] Rigidbody rbPlayer;
     [SerializeField] Camera camPlayer;
-    [SerializeField] UnitHand csLeftHand;
-    [SerializeField] UnitHand csRightHand;
+    [SerializeField] CHUnitHand csLeftHand;
+    [SerializeField] CHUnitHand csRightHand;
 
     [SerializeField] float maxSpeed = 10f;
     [SerializeField] float mouseSensitivity = 200f;
@@ -19,8 +19,8 @@ public class ContPlayer : MonoBehaviour
     [SerializeField] public float tempHp = 100f;
     
 
-    public UnitHand GetLeftHand() { return csLeftHand; }
-    public UnitHand GetRightHand() { return csRightHand; }
+    public CHUnitHand GetLeftHand() { return csLeftHand; }
+    public CHUnitHand GetRightHand() { return csRightHand; }
 
     private void Start()
     {

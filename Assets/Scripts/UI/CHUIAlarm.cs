@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class UIAlarmArg : UIArg
+public class CHUIAlarmArg : CHUIArg
 {
     public int descStringID;
 }
 
-public class UIAlarm : UIBase
+public class CHUIAlarm : CHUIBase
 {
-    UIAlarmArg arg;
+    CHUIAlarmArg arg;
 
     public CHTMPro textDesc;
 
-    public override void InitUI(UIArg _uiArg)
+    public override void InitUI(CHUIArg _uiArg)
     {
-        arg = _uiArg as UIAlarmArg;
+        arg = _uiArg as CHUIAlarmArg;
     }
 
     private void Start()

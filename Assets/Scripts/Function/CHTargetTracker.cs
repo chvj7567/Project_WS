@@ -26,7 +26,8 @@ public class CHTargetTracker : MonoBehaviour
     public bool viewEditor;
 
     [SerializeField] Animator animator;
-    [SerializeField] UnitBase unitBase;
+    [SerializeField] CHUnitBase unitBase;
+    [SerializeField] CHContBase contBase;
     [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
 
     float orgRangeMulti;
@@ -79,6 +80,7 @@ public class CHTargetTracker : MonoBehaviour
                     if (closestTarget.distance > unitBase.GetOriginAttackDistance())
                     {
                         FollowTarget(direction);
+                        animator.SetBool(contBase.sightRange, true);
                     }
                 }
             }
