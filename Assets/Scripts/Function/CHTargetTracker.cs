@@ -30,13 +30,18 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField] CHContBase contBase;
     [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
 
-    float orgRangeMulti;
-    float orgViewAngle;
-    LayerMask targetMask;
+    float orgRangeMulti = -1f;
+    float orgViewAngle = -1f;
+    LayerMask targetMask = -1;
 
     public void ResetViewAngleOrigin()
     {
         orgViewAngle = viewAngle;
+    }
+
+    public LayerMask GetTargetMask()
+    {
+        return targetMask;
     }
 
     private void Awake()

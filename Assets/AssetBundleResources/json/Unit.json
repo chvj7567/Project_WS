@@ -10,10 +10,10 @@
 		"mpRegenPerSecond": 100,
 		"attackPower": 100,
 		"defensePower": 50,
-		"attackDelay": 3,
-		"attackDistance": 3,
+		"attackDelay": 1,
+		"attackDistance": 5,
 		"moveSpeed": 5,
-		"viewAngle" : 180,
+		"viewAngle" : 360,
 		"eSkill1ID": 0,
 		"eSkill2ID": 1,
 		"eSkill3ID": 2,
@@ -30,13 +30,13 @@
 		"mpRegenPerSecond": 100,
 		"attackPower": 50,
 		"defensePower": 150,
-		"attackDelay": 6,
-		"attackDistance": 5,
+		"attackDelay": 1,
+		"attackDistance": 10,
 		"moveSpeed": 5,
-		"viewAngle" : 180,
+		"viewAngle" : 360,
 		"eSkill1ID": 4,
-		"eSkill2ID": 0,
-		"eSkill3ID": 4,
-		"eSkill4ID": 0
+		"eSkill2ID": 5,
+		"eSkill3ID": 6,
+		"eSkill4ID": 7
 	}
 ]

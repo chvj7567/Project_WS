@@ -16,7 +16,7 @@
                 "eDamageState": "0",
                 "eDamageType": "1",
 				"eCollision": "0",
-				"eTargetMask": "6",
+				"eTargetMask": "1",
 				"onDecal": true,
 				"startDelay": 1,
 				"angle": 360,
@@ -33,7 +33,174 @@
         "skillDesc": "-1",
 		"isTargeting": false,
 		"distance": 20,
-		"coolTime": 0.5,
+		"coolTime": 5,
+		"eSkillCost": 4,
+		"cost": 0,
+        "liEffectInfo":
+		[
+			{
+                "eEffect": "12",
+                "eEffectType": "-1",
+                "eStandardPos": "1",
+                "eDamageState": "-1",
+                "eDamageType": "-1",
+				"eCollision": "-1",
+				"eTargetMask": "-1",
+				"onDecal": false,
+				"startDelay": 0,
+				"angle": 360,
+				"sphereRadius": 5,
+				"boxHalfX": -1,
+				"boxHalfY": -1,
+				"boxHalfZ": -1,
+                "damage": 0
+            },
+			{
+                "eEffect": "13",
+                "eEffectType": "-1",
+                "eStandardPos": "1",
+                "eDamageState": "-1",
+                "eDamageType": "-1",
+				"eCollision": "-1",
+				"eTargetMask": "-1",
+				"onDecal": false,
+				"startDelay": 1.15,
+				"angle": 360,
+				"sphereRadius": 5,
+				"boxHalfX": -1,
+				"boxHalfY": -1,
+				"boxHalfZ": -1,
+                "damage": 0
+            },
+			{
+                "eEffect": "14",
+                "eEffectType": "1",
+                "eStandardPos": "2",
+                "eDamageState": "0",
+                "eDamageType": "0",
+				"eCollision": "0",
+				"eTargetMask": "1",
+				"onDecal": true,
+				"startDelay": 0.35,
+				"angle": 360,
+				"sphereRadius": 7,
+				"boxHalfX": -1,
+				"boxHalfY": -1,
+				"boxHalfZ": -1,
+                "damage": 50
+            }
+        ]
+    },
+	{
+        "eSkillID": "2",
+        "skillDesc": "-1",
+		"isTargeting": true,
+		"distance": 5,
+		"coolTime": 3,
+		"eSkillCost": 0,
+		"cost": 10,
+        "liEffectInfo":
+		[
+			{
+                "eEffect": "8",
+                "eEffectType": "0",
+                "eStandardPos": "0",
+                "eDamageState": "1",
+                "eDamageType": "0",
+				"eCollision": "0",
+				"eTargetMask": "1",
+				"onDecal": false,
+				"startDelay": 0,
+				"angle": 360,
+				"sphereRadius": 3,
+				"boxHalfX": -1,
+				"boxHalfY": -1,
+				"boxHalfZ": -1,
+                "damage": 10
+            }
+        ]
+    },
+	{
+        "eSkillID": "3",
+        "skillDesc": "-1",
+		"isTargeting": true,
+		"distance": 5,
+		"coolTime": 4,
+		"eSkillCost": 0,
+		"cost": 10,
+        "liEffectInfo":
+		[
+			{
+                "eEffect": "11",
+                "eEffectType": "-1",
+                "eStandardPos": "0",
+                "eDamageState": "-1",
+                "eDamageType": "-1",
+				"eCollision": "0",
+				"eTargetMask": "1",
+				"onDecal": false,
+				"startDelay": 0,
+				"angle": 360,
+				"sphereRadius": 3,
+				"boxHalfX": -1,
+				"boxHalfY": -1,
+				"boxHalfZ": -1,
+                "damage": 0
+            },
+			{
+                "eEffect": "10",
+                "eEffectType": "-1",
+                "eStandardPos": "1",
+                "eDamageState": "1",
+                "eDamageType": "-1",
+				"eCollision": "0",
+				"eTargetMask": "1",
+				"onDecal": false,
+				"startDelay": 0.5,
+				"angle": 360,
+				"sphereRadius": 3,
+				"boxHalfX": -1,
+				"boxHalfY": -1,
+				"boxHalfZ": -1,
+                "damage": 10
+            }
+        ]
+    },
+	{
+        "eSkillID": "4",
+        "skillDesc": "-1",
+		"isTargeting": true,
+		"distance": 5,
+		"coolTime": 1,
+		"eSkillCost": 0,
+		"cost": 100,
+        "liEffectInfo":
+		[
+            {
+                "eEffect": "4",
+                "eEffectType": "1",
+                "eStandardPos": "2",
+                "eDamageState": "0",
+                "eDamageType": "1",
+				"eCollision": "0",
+				"eTargetMask": "2",
+				"onDecal": true,
+				"startDelay": 1,
+				"angle": 360,
+				"sphereRadius": 5,
+				"boxHalfX": -1,
+				"boxHalfY": -1,
+				"boxHalfZ": -1,
+                "damage": 50
+            }
+        ]
+    },
+	{
+        "eSkillID": "5",
+        "skillDesc": "-1",
+		"isTargeting": false,
+		"distance": 20,
+		"coolTime": 3,
 		"eSkillCost": 4,
 		"cost": 0,
         "liEffectInfo":
@@ -92,7 +259,7 @@
         ]
     },
 	{
-        "eSkillID": "2",
+        "eSkillID": "6",
         "skillDesc": "-1",
 		"isTargeting": true,
 		"distance": 5,
@@ -108,7 +275,7 @@
                 "eDamageState": "1",
                 "eDamageType": "0",
 				"eCollision": "0",
-				"eTargetMask": "1",
+				"eTargetMask": "2",
 				"onDecal": false,
 				"startDelay": 0,
 				"angle": 360,
@@ -121,7 +288,7 @@
         ]
     },
 	{
-        "eSkillID": "3",
+        "eSkillID": "7",
         "skillDesc": "-1",
 		"isTargeting": true,
 		"distance": 5,
@@ -137,7 +304,7 @@
                 "eDamageState": "-1",
                 "eDamageType": "-1",
 				"eCollision": "0",
-				"eTargetMask": "7",
+				"eTargetMask": "2",
 				"onDecal": false,
 				"startDelay": 0,
 				"angle": 360,
@@ -154,7 +321,7 @@
                 "eDamageState": "1",
                 "eDamageType": "-1",
 				"eCollision": "0",
-				"eTargetMask": "-1",
+				"eTargetMask": "2",
 				"onDecal": false,
 				"startDelay": 0.5,
 				"angle": 360,
