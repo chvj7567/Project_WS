@@ -32,7 +32,7 @@ public class CHTargetTracker : MonoBehaviour
 
     float orgRangeMulti = -1f;
     float orgViewAngle = -1f;
-    LayerMask targetMask = -1;
+    LayerMask targetMask;
 
     public void ResetViewAngleOrigin()
     {
