@@ -16,10 +16,12 @@ public class CHContBase : MonoBehaviour
     [SerializeField, ReadOnly] protected float timeSinceLastSkill3 = -1f;
     [SerializeField, ReadOnly] protected float timeSinceLastSkill4 = -1f;
 
-    [SerializeField] protected Animator animator;
+    [SerializeField] public Animator animator;
 
-    [SerializeField, ReadOnly] public int attackRange = Animator.StringToHash("TargetInAttackRange");
-    [SerializeField, ReadOnly] public int sightRange = Animator.StringToHash("TargetInSightRange");
+    [SerializeField, ReadOnly] public int attackRange = Animator.StringToHash("AttackRange");
+    [SerializeField, ReadOnly] public int sightRange = Animator.StringToHash("SightRange");
+    [SerializeField, ReadOnly] public int isDeath = Animator.StringToHash("IsDeath");
+
     public float GetTimeSinceLastAttack() { return timeSinceLastAttack; }
     public float GetTimeSinceLastSkill1() { return timeSinceLastSkill1; }
     public float GetTimeSinceLastSkill2() { return timeSinceLastSkill2; }

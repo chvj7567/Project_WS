@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CHTargetTracker : MonoBehaviour
@@ -28,7 +29,7 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] CHUnitBase unitBase;
     [SerializeField] CHContBase contBase;
-    [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
+    [SerializeField] Infomation.TargetInfo closestTarget;
 
     float orgRangeMulti = -1f;
     float orgViewAngle = -1f;
@@ -65,41 +66,59 @@ public class CHTargetTracker : MonoBehaviour
     {
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
-            closestTarget = CHMMain.Skill.GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
-
-            if (closestTarget != null)
+            // 자기가 살아있을 때만 타겟 감지
+            if (unitBase.GetIsDeath() == false)
             {
-                // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
-                viewAngle = 360f;
-                // 타겟 발견 시 시야 해당 배수만큼 증가
-                rangeMulti = orgRangeMulti;
+                // 시야 범위 안에드 들어온 타겟 중 제일 가까운 타겟 감지
+                closestTarget = CHMMain.Skill.GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
 
-                Vector3 direction = closestTarget.objTarget.transform.position - transform.position;
-
-                bool isAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
-                if (isAnimating == false)
+                if (closestTarget != null)
                 {
-                    LookAtTarget(direction);
-
-                    // 공격 범위까지만 다가감
-                    if (closestTarget.distance > unitBase.GetOriginAttackDistance())
+                    // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
+                    viewAngle = 360f;
+                    // 타겟 발견 시 시야 해당 배수만큼 증가
+                    rangeMulti = orgRangeMulti;
+                    // 공격 중일 때는 안 움직이도록
+                    bool isAttackAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
+                    if (isAttackAnimating == false)
                     {
-                        FollowTarget(direction);
-                        animator.SetBool(contBase.sightRange, true);
+                        LookAtTarget(closestTarget.direction);
+
+                        // 공격 범위까지만 다가감
+                        if (closestTarget.distance > unitBase.GetOriginAttackDistance())
+                        {
+                            animator.SetBool(contBase.sightRange, true);
+
+                            // 달리기 애니메이션 중 일때 움직이도록
+                            bool isRunAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Run.ToString());
+                            if (isRunAnimating)
+                            {
+                                FollowTarget(closestTarget.direction);
+                            }
+                        }
+                        else
+                        {
+                            animator.SetBool(contBase.sightRange, false);
+                        }
                     }
+                }
+                else
+                {
+                    viewAngle = orgViewAngle;
+                    rangeMulti = 1f;
+                    animator.SetBool(contBase.sightRange, false);
                 }
             }
             else
             {
-                viewAngle = orgViewAngle;
-                rangeMulti = 1f;
+                animator.SetBool(contBase.sightRange, false);
             }
-        });
+        }).AddTo(this);
     }
 
     void OnDrawGizmos()
     {
-        if (viewEditor)
+        if (viewEditor && unitBase.GetIsDeath() == false)
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, range * rangeMulti);
@@ -127,12 +146,7 @@ public class CHTargetTracker : MonoBehaviour
 
     void FollowTarget(Vector3 _direction)
     {
-        float distance = Vector3.Distance(transform.position, closestTarget.objTarget.transform.position);
-
-        if (distance > approachDistance)
-        {
-            transform.position += _direction.normalized * followSpeed * Time.deltaTime;
-        }
+        transform.position += _direction.normalized * followSpeed * Time.deltaTime;
     }
 
     public Infomation.TargetInfo GetClosestTargetInfo()

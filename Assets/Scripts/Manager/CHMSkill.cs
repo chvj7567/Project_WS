@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Infomation;
@@ -13,7 +14,10 @@ public class CHMSkill
     {
         var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
 
-        if (skillInfo != null)
+        // 스킬 시전자가 죽었으면 스킬 발동 X
+        var isDeath = _trCaster.GetComponent<CHUnitBase>().GetIsDeath();
+
+        if (skillInfo != null && isDeath == false)
         {
             // 타겟팅 스킬, 논타겟팅 스킬 구분
             if (skillInfo.isTargeting)
@@ -107,12 +111,16 @@ public class CHMSkill
                 // 장애물이 있는지 확인
                 if (Physics.Raycast(_originPos, targetDir, targetDis, ~_lmTarget) == false)
                 {
-                    targetInfoList.Add(new TargetInfo
+                    // 타겟이 살아있으면 타겟으로 지정
+                    if (target.GetComponent<CHUnitBase>().GetIsDeath() == false)
                     {
-                        objTarget = target.gameObject,
-                        direction = targetDir,
-                        distance = targetDis,
-                    });
+                        targetInfoList.Add(new TargetInfo
+                        {
+                            objTarget = target.gameObject,
+                            direction = targetDir,
+                            distance = targetDis,
+                        });
+                    }
                 }
             }
         }
@@ -280,6 +288,12 @@ public class CHMSkill
                     var liTargetInfo = GetClosestTargetInfo(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
                     var liTarget = GetTargetTransformList(liTargetInfo);
 
+                    if (liTarget == null)
+                    {
+                        Debug.Log("No Target");
+                        return;
+                    }
+
                     // 타겟에게 스킬 적용
                     ApplySkillValue(_trCaster, liTarget, _effectInfo);
 
@@ -291,6 +305,12 @@ public class CHMSkill
                     // 스킬 시전 시 맞은 타겟들
                     var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
                     var liTarget = GetTargetTransformList(liTargetInfo);
+
+                    if (liTarget == null)
+                    {
+                        Debug.Log("No Target");
+                        return;
+                    }
 
                     // 타겟에게 스킬 적용
                     ApplySkillValue(_trCaster, liTarget, _effectInfo);
@@ -331,6 +351,12 @@ public class CHMSkill
         // 스킬 시전 시 맞은 타겟들
         var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
         liTarget = GetTargetTransformList(liTargetInfo);
+
+        if (liTarget == null)
+        {
+            Debug.Log("No Target");
+            return;
+        }
 
         // 타겟에게 스킬 값 적용
         ApplySkillValue(_trCaster, liTarget, _effectInfo);

@@ -30,7 +30,6 @@ public class CHContA : CHContBase
                     timeSinceLastSkill4 = -1f;
 
                     animator.SetBool(attackRange, false);
-                    animator.SetBool(sightRange, false);
                 }
                 // 타겟이 범위 안에 있으면 즉시 공격 후 공격 딜레이 설정
                 else
@@ -41,19 +40,16 @@ public class CHContA : CHContBase
                         if (timeSinceLastAttack >= 0f && timeSinceLastAttack < unitInfo.GetOriginAttackDelay())
                         {
                             timeSinceLastAttack += Time.deltaTime;
-                            animator.SetBool(sightRange, false);
                             animator.SetBool(attackRange, false);
                         }
                         // 공격 사정거리 안인 경우
                         else if (mainTarget.distance <= unitInfo.GetOriginAttackDistance())
                         {
-                            animator.SetBool(sightRange, false);
                             animator.SetBool(attackRange, true);
                             timeSinceLastAttack = 0.00001f;
                         }
                         else
                         {
-                            animator.SetBool(sightRange, true);
                             animator.SetBool(attackRange, false);
                         }
                     }
@@ -62,12 +58,10 @@ public class CHContA : CHContBase
                         // 공격 사정거리 안인 경우
                         if (mainTarget.distance <= unitInfo.GetOriginAttackDistance())
                         {
-                            animator.SetBool(sightRange, false);
                             animator.SetBool(attackRange, false);
                         }
                         else
                         {
-                            animator.SetBool(sightRange, true);
                             animator.SetBool(attackRange, false);
                         }
 

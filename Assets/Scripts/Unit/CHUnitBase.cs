@@ -22,6 +22,8 @@ public abstract class CHUnitBase : MonoBehaviour
     [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill3Info;
     [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill4Info;
 
+    [SerializeField, ReadOnly] bool isDeath = false;
+
     private void Awake()
     {
         Init();
@@ -33,8 +35,11 @@ public abstract class CHUnitBase : MonoBehaviour
             .ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
         {
-            ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
-            ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);
+            if (isDeath == false)
+            {
+                ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
+                ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);
+            }
         });
     }
 
@@ -98,65 +103,82 @@ public abstract class CHUnitBase : MonoBehaviour
     public float GetCurrentSkill4Distance() { return curSkill4Info.distance; }
     #endregion
 
+    public bool GetIsDeath()
+    {
+        return isDeath;
+    }
+
     public void ChangeHp(float _value, Defines.EDamageState eDamageState)
     {
-        switch (eDamageState)
+        if (isDeath == false)
         {
-            case Defines.EDamageState.AtOnce:
-                AtOnceChangeHp(_value);
-                break;
-            case Defines.EDamageState.Continuous_1Sec_3Count:
-                ContinuousChangeHp(1f, 3f, _value);
-                break;
-            default:
-                AtOnceChangeHp(_value);
-                break;
+            switch (eDamageState)
+            {
+                case Defines.EDamageState.AtOnce:
+                    AtOnceChangeHp(_value);
+                    break;
+                case Defines.EDamageState.Continuous_1Sec_3Count:
+                    ContinuousChangeHp(1f, 3f, _value);
+                    break;
+                default:
+                    AtOnceChangeHp(_value);
+                    break;
+            }
         }
     }
 
     public void ChangeMp(float _value, Defines.EDamageState eDamageState)
     {
-        switch (eDamageState)
+        if (isDeath == false)
         {
-            case Defines.EDamageState.AtOnce:
-                AtOnceChangeMp(_value);
-                break;
-            case Defines.EDamageState.Continuous_1Sec_3Count:
-                ContinuousChangeMp(1f, 3f, _value);
-                break;
-            default:
-                AtOnceChangeMp(_value);
-                break;
+            switch (eDamageState)
+            {
+                case Defines.EDamageState.AtOnce:
+                    AtOnceChangeMp(_value);
+                    break;
+                case Defines.EDamageState.Continuous_1Sec_3Count:
+                    ContinuousChangeMp(1f, 3f, _value);
+                    break;
+                default:
+                    AtOnceChangeMp(_value);
+                    break;
+            }
         }
     }
 
     public void ChangeAttackPower(float _value, Defines.EDamageState eDamageState)
     {
-        switch (eDamageState)
+        if (isDeath == false)
         {
-            case Defines.EDamageState.AtOnce:
-                AtOnceChangeAttackPower(_value);
-                break;
-            case Defines.EDamageState.Continuous_1Sec_3Count:
-                ContinuousChangeAttackPower(1f, 3f, _value);
-                break;
-            default:
-                break;
+            switch (eDamageState)
+            {
+                case Defines.EDamageState.AtOnce:
+                    AtOnceChangeAttackPower(_value);
+                    break;
+                case Defines.EDamageState.Continuous_1Sec_3Count:
+                    ContinuousChangeAttackPower(1f, 3f, _value);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     public void ChangeDefensePower(float _value, Defines.EDamageState eDamageState)
     {
-        switch (eDamageState)
+        if (isDeath == false)
         {
-            case Defines.EDamageState.AtOnce:
-                AtOnceChangeDefensePower(_value);
-                break;
-            case Defines.EDamageState.Continuous_1Sec_3Count:
-                ContinuousChangeDefensePower(1f, 3f, _value);
-                break;
-            default:
-                break;
+            switch (eDamageState)
+            {
+                case Defines.EDamageState.AtOnce:
+                    AtOnceChangeDefensePower(_value);
+                    break;
+                case Defines.EDamageState.Continuous_1Sec_3Count:
+                    ContinuousChangeDefensePower(1f, 3f, _value);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -166,6 +188,20 @@ public abstract class CHUnitBase : MonoBehaviour
         if (hpResult >= GetCurrentMaxHp())
         {
             hpResult = GetCurrentMaxHp();
+        }
+
+        if (hpResult <= 0.00001f)
+        {
+            hpResult = 0f;
+            isDeath = true;
+            
+            var unitBase = GetComponent<CHContBase>();
+            if (unitBase != null)
+            {
+                unitBase.animator.SetBool(unitBase.isDeath, true);
+            }
+
+            return;
         }
 
         curUnitInfo.hp = hpResult;
@@ -178,6 +214,10 @@ public abstract class CHUnitBase : MonoBehaviour
         if (mpResult >= GetCurrentMaxMp())
         {
             mpResult = GetCurrentMaxMp();
+        }
+        else if (mpResult < 0)
+        {
+            mpResult = 0f;
         }
 
         curUnitInfo.mp = mpResult;
