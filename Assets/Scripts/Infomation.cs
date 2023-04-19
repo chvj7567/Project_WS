@@ -30,11 +30,12 @@ public class Infomation
     {
         public EEffect eEffect = EEffect.None;
         public EEffectType eEffectType = EEffectType.None;
+        public EEffectPos eEffectPos = EEffectPos.None;
         public EDamageState eDamageState = EDamageState.None;
         public EDamageType eDamageType = EDamageType.None;
         public ECollision eCollision = ECollision.None;
-        public EStandardPos eStandardPos = EStandardPos.None;
         public ETargetMask eTargetMask = ETargetMask.None;
+        public bool duplication = false;
         public bool onDecal = false;
         public float startDelay = -1f;
         public float angle = -1f;

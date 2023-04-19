@@ -77,7 +77,7 @@ public class CHContB : CHContBase
                         }
                         else if (mainTarget.distance <= unitInfo.GetOriginSkill1Distance())
                         {
-                            CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, unitInfo.GetOriginSkill1());
+                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, mainTarget.objTarget.transform.forward, unitInfo.GetOriginSkill1());
                             timeSinceLastSkill1 = 0.00001f;
                         }
                     }
@@ -95,7 +95,7 @@ public class CHContB : CHContBase
                         }
                         else if (mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
                         {
-                            CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, unitInfo.GetOriginSkill2());
+                            //CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, unitInfo.GetOriginSkill2());
                             timeSinceLastSkill2 = 0.00001f;
                         }
                     }
@@ -113,7 +113,7 @@ public class CHContB : CHContBase
                         }
                         else if (mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
                         {
-                            CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, unitInfo.GetOriginSkill3());
+                            //CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, unitInfo.GetOriginSkill3());
                             timeSinceLastSkill3 = 0.00001f;
                         }
                     }
@@ -131,7 +131,7 @@ public class CHContB : CHContBase
                         }
                         else if (mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
                         {
-                            CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, unitInfo.GetOriginSkill4());
+                            //CHMMain.Skill.CreateAISkill(transform, mainTarget.objTarget.transform, unitInfo.GetOriginSkill4());
                             timeSinceLastSkill4 = 0.00001f;
                         }
                     }

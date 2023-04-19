@@ -15,7 +15,7 @@
 		"moveSpeed": 5,
 		"viewAngle" : 360,
 		"eSkill1ID": 0,
-		"eSkill2ID": 1,
+		"eSkill2ID": 8,
 		"eSkill3ID": 2,
 		"eSkill4ID": 3
 	},
@@ -34,7 +34,7 @@
 		"attackDistance": 30,
 		"moveSpeed": 5,
 		"viewAngle" : 360,
-		"eSkill1ID": 4,
+		"eSkill1ID": 0,
 		"eSkill2ID": 5,
 		"eSkill3ID": 6,
 		"eSkill4ID": 7

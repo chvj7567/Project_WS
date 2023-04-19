@@ -81,12 +81,12 @@ public class Defines
     {
         None = -1,
 
-        FixedHP, // 0
-        PercentMaxHP, // 1
-        PercentRemainHP, // 2
-        FixedMP, // 3
-        PercentMaxMP, // 4
-        PercentRemainMP, // 5
+        Fixed_HP, // 0
+        Percent_MaxHP, // 1
+        Percent_RemainHP, // 2
+        Fixed_MP, // 3
+        Percent_MaxMP, // 4
+        Percent_RemainMP, // 5
 
         Max
     }
@@ -113,6 +113,8 @@ public class Defines
         FX_Circle_hit, // 14
 
         FX_Defense, // 15
+        
+        FX_Tornado, // 16
 
         Max
     }
@@ -122,12 +124,12 @@ public class Defines
     {
         None = -1,
 
-        HpUp, // 0
-        HpDown, // 1
-        AttackPowerUp, // 2
-        AttackPowerDown, // 3
-        DefensePowerUp, // 4
-        DefensePowerDown, // 5
+        Hp_Up, // 0
+        Hp_Down, // 1
+        AttackPower_Up, // 2
+        AttackPower_Down, // 3
+        DefensePower_Up, // 4
+        DefensePower_Down, // 5
 
         Max,
     }
@@ -142,13 +144,13 @@ public class Defines
         Max
     }
 
-    public enum EStandardPos
+    public enum EEffectPos
     {
         None = -1,
 
         Me, // 0
-        Target_One, // 1
-        Target_All, // 2
+        TargetOne, // 1
+        TargetAll, // 2
 
         Max
     }
@@ -158,12 +160,9 @@ public class Defines
         None = -1,
 
         Me, // 0
-        Red, // 1
-        Blue, // 2
-        Me_Red, // 3
-        Me_Blue, // 4
-        Red_Blue, // 5
-        Me_Red_Blue, // 6
+        MyTeam, // 1
+        Enemy, // 2
+        MyTeam_Enemy, // 3
 
         Max
     }
@@ -183,10 +182,10 @@ public class Defines
         None = -1,
 
         Fixed, // 0 : 고정 데미지
-        PercentMeMaxHp, // 1 : 나의 전체 Hp 퍼센트 데미지
-        PercentMeRemainHp, // 2 : 나의 남은 Hp 퍼센트 데미지
-        PercentTargetMaxHp, // 3 : 타겟의 전체 Hp 퍼센트 데미지
-        PercentTargetRemainHp, // 4 : 타겟의 남은 Hp 퍼센트 데미지
+        Percent_Me_MaxHp, // 1 : 나의 전체 Hp 퍼센트 데미지
+        Percent_Me_RemainHp, // 2 : 나의 남은 Hp 퍼센트 데미지
+        Percent_Target_MaxHp, // 3 : 타겟의 전체 Hp 퍼센트 데미지
+        Percent_Target_RemainHp, // 4 : 타겟의 남은 Hp 퍼센트 데미지
 
         Max
     }

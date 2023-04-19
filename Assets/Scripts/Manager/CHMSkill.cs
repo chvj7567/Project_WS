@@ -4,39 +4,28 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Infomation;
+using static UnityEngine.GraphicsBuffer;
 
 public class CHMSkill
 {
     GameObject roundAreaDecal = null;
     GameObject roundTimingDecal = null;
 
-    public void CreateAISkill(Transform _trCaster, Transform _trTarget, Defines.ESkillID _skill)
+    public async void CreateSkill(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, Defines.ESkillID _skill)
     {
-        var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
-
         // 스킬 시전자가 죽었으면 스킬 발동 X
         var isDeath = _trCaster.GetComponent<CHUnitBase>().GetIsDeath();
+        if (isDeath) return;
 
-        if (skillInfo != null && isDeath == false)
-        {
-            // 타겟팅 스킬, 논타겟팅 스킬 구분
-            if (skillInfo.isTargeting)
-            {
-                CreateTargetingSkill(_trCaster, _trTarget, _skill);
-            }
-            else
-            {
-                CreateNoneTargetingSkill(_trCaster, _trTarget.position, _trTarget.position - _trCaster.position, _skill);
-            }
-        }
-    }
-
-    public async void CreateTargetingSkill(Transform _trCaster, Transform _trTarget, Defines.ESkillID _skill)
-    {
         var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
-
         if (skillInfo != null)
         {
+            // 논타겟 스킬은 타겟을 강제로 삭제
+            if (skillInfo.isTargeting == false)
+            {
+                _trTarget = null;
+            }
+
             var casterUnit = _trCaster.GetComponent<CHUnitBase>();
             if (casterUnit != null)
             {
@@ -46,9 +35,9 @@ public class CHMSkill
             foreach (var effectInfo in skillInfo.liEffectInfo)
             {
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
-                if (effectInfo.onDecal)
+                if (effectInfo.onDecal || (Mathf.Approximately(effectInfo.startDelay, 0f) == false))
                 {
-                    await CreateTargetingDecal(effectInfo, _trTarget);
+                    await CreateDecal(effectInfo, _trTarget, _posSkill, _dirSkill);
                 }
                 else
                 {
@@ -56,37 +45,7 @@ public class CHMSkill
                 }
 
                 // 스킬 충돌 범위 생성
-                CreateTargetingSkillCollision(_trCaster, _trTarget, effectInfo);
-            }
-        }
-    }
-
-    public async void CreateNoneTargetingSkill(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, Defines.ESkillID _skill)
-    {
-        var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
-
-        if (skillInfo != null)
-        {
-            var casterUnit = _trCaster.GetComponent<CHUnitBase>();
-            if (casterUnit != null)
-            {
-                if (CanUseSkill(casterUnit, skillInfo) == false) return;
-            }
-
-            foreach (var effectInfo in skillInfo.liEffectInfo)
-            {
-                // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
-                if (effectInfo.onDecal)
-                {
-                    await CreateNoneTargetingDecal(effectInfo, _posSkill, _dirSkill);
-                }
-                else
-                {
-                    await Task.Delay((int)(effectInfo.startDelay * 1000f));
-                }
-
-                // 스킬 충돌 범위 생성
-                CreateNoneTargetingSkillCollision(_trCaster, _posSkill, _dirSkill, effectInfo);
+                CreateSkillCollision(_trCaster, _trTarget, _posSkill, _dirSkill, effectInfo);
             }
         }
     }
@@ -223,24 +182,27 @@ public class CHMSkill
         return targetTransformList;
     }
 
-    public int GetTargetMask(Defines.ETargetMask _targetMask)
+    public LayerMask GetTargetMask(LayerMask _myLayerMask, Defines.ETargetMask _targetMask)
     {
+        LayerMask enemyLayerMask;
+        if (LayerMask.LayerToName(_myLayerMask) == "Red")
+        {
+            enemyLayerMask = LayerMask.GetMask("Blue");
+        }
+        else
+        {
+            enemyLayerMask = LayerMask.GetMask("Red");
+        }
+
         switch (_targetMask)
         {
             case Defines.ETargetMask.Me:
-                return LayerMask.GetMask(Defines.ETargetMask.Me.ToString());
-            case Defines.ETargetMask.Red:
-                return LayerMask.GetMask(Defines.ETargetMask.Red.ToString());
-            case Defines.ETargetMask.Blue:
-                return LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
-            case Defines.ETargetMask.Me_Red:
-                return LayerMask.GetMask(Defines.ETargetMask.Me.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Red.ToString());
-            case Defines.ETargetMask.Me_Blue:
-                return LayerMask.GetMask(Defines.ETargetMask.Me.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
-            case Defines.ETargetMask.Red_Blue:
-                return LayerMask.GetMask(Defines.ETargetMask.Red.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
-            case Defines.ETargetMask.Me_Red_Blue:
-                return LayerMask.GetMask(Defines.ETargetMask.Me.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Red.ToString()) | LayerMask.GetMask(Defines.ETargetMask.Blue.ToString());
+            case Defines.ETargetMask.MyTeam:
+                return _myLayerMask;
+            case Defines.ETargetMask.Enemy:
+                return enemyLayerMask;
+            case Defines.ETargetMask.MyTeam_Enemy:
+                return _myLayerMask | enemyLayerMask;
             default:
                 return -1;
         }
@@ -248,129 +210,115 @@ public class CHMSkill
 
     //-------------------------------------- private ------------------------------------------//
 
-    void CreateTargetingSkillCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
+    void CreateSphereCollision(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
     {
-        // Collision 모양에 따라 구분
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    CreateTargetingSphereCollision(_trCaster, _trTarget, _effectInfo);
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                {
-                    // Collision이 없으면 해당 지점에 파티클만 생성
-                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                }
-                break;
-        }
-    }
-
-    void CreateTargetingSphereCollision(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
-    {
-        // 파티클 생성 기준 위치에 파티클 생성
-        switch (_effectInfo.eStandardPos)
-        {
-            case Defines.EStandardPos.Me:
-                {
-                    // 타겟에게 스킬 적용
-                    ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
-
-                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
-                }
-                break;
-            case Defines.EStandardPos.Target_One:
-                {
-                    // 스킬 시전 시 맞은 타겟들
-                    var liTargetInfo = GetClosestTargetInfo(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
-                    var liTarget = GetTargetTransformList(liTargetInfo);
-
-                    if (liTarget == null)
-                    {
-                        Debug.Log("No Target");
-                        return;
-                    }
-
-                    // 타겟에게 스킬 적용
-                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
-
-                    CHMMain.Particle.CreateTargetingParticle(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                }
-                break;
-            case Defines.EStandardPos.Target_All:
-                {
-                    // 스킬 시전 시 맞은 타겟들
-                    var liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.position - _trCaster.position, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
-                    var liTarget = GetTargetTransformList(liTargetInfo);
-
-                    if (liTarget == null)
-                    {
-                        Debug.Log("No Target");
-                        return;
-                    }
-
-                    // 타겟에게 스킬 적용
-                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
-
-                    CHMMain.Particle.CreateTargetingParticle(_trCaster, liTarget, _effectInfo);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    void CreateNoneTargetingSkillCollision(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
-    {
-        // Collision 모양에 따라 구분
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    CreateNoneTargetingSphereCollision(_trCaster, _posSkill, _dirSkill, _effectInfo);
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                {
-                    // Collision이 없으면 해당 지점에 파티클만 생성
-                    CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
-                }
-                break;
-        }
-    }
-
-    void CreateNoneTargetingSphereCollision(Transform _trCaster, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
-    {
-        List<Transform> liTarget = new List<Transform>();
+        LayerMask targetMask = GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
 
         // 스킬 시전 시 맞은 타겟들
-        var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, GetTargetMask(_effectInfo.eTargetMask), _effectInfo.sphereRadius, _effectInfo.angle);
-        liTarget = GetTargetTransformList(liTargetInfo);
+        var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.angle);
+        var liTarget = GetTargetTransformList(liTargetInfo);
 
-        if (liTarget == null)
+        // 파티클 위치에 따라 파티클 생성
+        switch (_effectInfo.eEffectPos)
         {
-            Debug.Log("No Target");
-            return;
+            case Defines.EEffectPos.Me:
+                {
+                    // 맞은 타겟 수 만큼 파티클 중복 여부
+                    if (_effectInfo.duplication)
+                    {
+                        foreach (var target in liTarget)
+                        {
+                            ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _trCaster.position }, new List<Vector3> { _dirSkill }, _effectInfo);
+                        }
+                    }
+                    else
+                    {
+                        ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _trCaster.position }, new List<Vector3> { _dirSkill }, _effectInfo);
+                    }
+                }
+                break;
+            case Defines.EEffectPos.TargetOne:
+                {
+                    // 맞은 타겟 수 만큼 파티클 중복 여부
+                    if (_effectInfo.duplication)
+                    {
+                        foreach (var target in liTarget)
+                        {
+                            ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _trTarget.position }, new List<Vector3> { _dirSkill }, _effectInfo);
+                        }
+                    }
+                    else
+                    {
+                        ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _trTarget.position }, new List<Vector3> { _dirSkill }, _effectInfo);
+                    }
+                }
+                break;
+            case Defines.EEffectPos.TargetAll:
+                {
+                    List<Vector3> liParticlePos = new List<Vector3>();
+                    List<Vector3> liParticleDir = new List<Vector3>();
+
+                    for (int i = 0; i < liTarget.Count; ++i)
+                    {
+                        liParticlePos.Add(liTarget[i].position);
+                        liParticleDir.Add((liTarget[i].position - _trCaster.position).normalized);
+                    }
+
+                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
+
+                    if (_trTarget == null)
+                    {
+                        CHMMain.Particle.CreateParticle(_trCaster, null, liParticlePos, liParticleDir, _effectInfo);
+                    }
+                    else
+                    {
+                        CHMMain.Particle.CreateParticle(_trCaster, liTarget, liParticlePos, liParticleDir, _effectInfo);
+                    }
+                }
+                break;
+            default:
+                {
+                    CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                }
+                break;
         }
+    }
 
-        // 타겟에게 스킬 값 적용
-        ApplySkillValue(_trCaster, liTarget, _effectInfo);
-
-        // 논타겟팅 스킬은 파티클 생성 기준 위치에 상관없이 해당 위치에 파티클 생성 
-        CHMMain.Particle.CreateNoneTargetingParticle(_posSkill, _dirSkill, _effectInfo);
+    void CreateSkillCollision(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    {
+        // Collision 모양에 따라 구분
+        switch (_effectInfo.eCollision)
+        {
+            case Defines.ECollision.Sphere:
+                {
+                    CreateSphereCollision(_trCaster, _trTarget, _posSkill, _dirSkill, _effectInfo);
+                }
+                break;
+            case Defines.ECollision.Box:
+                break;
+            default:
+                {
+                    // Collision이 없으면 해당 지점에 파티클만 생성
+                    CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                }
+                break;
+        }
     }
 
     void ApplySkillValue(Transform _trCaster, List<Transform> _liTarget, EffectInfo _effectInfo)
     {
+        // 스킬 값들을(데미지나, 힐 등) _liTarget 적용
+
         var casterUnit = _trCaster.GetComponent<CHUnitBase>();
 
         foreach (var target in _liTarget)
         {
+            if (target == null) continue;
+
             var targetUnit = target.GetComponent<CHUnitBase>();
             if (targetUnit != null)
             {
@@ -394,10 +342,10 @@ public class CHMSkill
 
         switch (_effectInfo.eEffectType)
         {
-            case Defines.EEffectType.HpUp:
+            case Defines.EEffectType.Hp_Up:
                 _targetUnit.ChangeHp(skillValue, _effectInfo.eDamageState);
                 break;
-            case Defines.EEffectType.HpDown:
+            case Defines.EEffectType.Hp_Down:
                 {
                     // 데미지 계산 : 스킬 데미지 + 스킬 시전자 공격력 - 타겟 방어력
                     var totalValue = skillValue + casterAttackPower - targetDefensePower;
@@ -405,16 +353,16 @@ public class CHMSkill
                     _targetUnit.ChangeHp(CHUtil.ReverseValue(totalValue), _effectInfo.eDamageState);
                 }
                 break;
-            case Defines.EEffectType.AttackPowerUp:
+            case Defines.EEffectType.AttackPower_Up:
                 _targetUnit.ChangeAttackPower(skillValue, _effectInfo.eDamageState);
                 break;
-            case Defines.EEffectType.AttackPowerDown:
+            case Defines.EEffectType.AttackPower_Down:
                 _targetUnit.ChangeAttackPower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
                 break;
-            case Defines.EEffectType.DefensePowerUp:
+            case Defines.EEffectType.DefensePower_Up:
                 _targetUnit.ChangeDefensePower(skillValue, _effectInfo.eDamageState);
                 break;
-            case Defines.EEffectType.DefensePowerDown:
+            case Defines.EEffectType.DefensePower_Down:
                 _targetUnit.ChangeDefensePower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
                 break;
             default:
@@ -431,13 +379,13 @@ public class CHMSkill
         {
             case Defines.EDamageType.Fixed:
                 return _effectInfo.damage;
-            case Defines.EDamageType.PercentMeMaxHp:
+            case Defines.EDamageType.Percent_Me_MaxHp:
                 return _casterUnit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
-            case Defines.EDamageType.PercentMeRemainHp:
+            case Defines.EDamageType.Percent_Me_RemainHp:
                 return _casterUnit.GetCurrentHp() * _effectInfo.damage / 100f;
-            case Defines.EDamageType.PercentTargetMaxHp:
+            case Defines.EDamageType.Percent_Target_MaxHp:
                 return _targetUnit.GetCurrentMaxHp() * _effectInfo.damage / 100f;
-            case Defines.EDamageType.PercentTargetRemainHp:
+            case Defines.EDamageType.Percent_Target_RemainHp:
                 return _targetUnit.GetCurrentHp() * _effectInfo.damage / 100f;
             default:
                 return -1f;
@@ -448,7 +396,7 @@ public class CHMSkill
     {
         switch (skillInfo.eSkillCost)
         {
-            case Defines.ESkillCost.FixedHP:
+            case Defines.ESkillCost.Fixed_HP:
                 {
                     if (_casterUnit.GetCurrentHp() >= skillInfo.cost)
                     {
@@ -460,7 +408,7 @@ public class CHMSkill
                         return false;
                     }
                 }
-            case Defines.ESkillCost.PercentMaxHP:
+            case Defines.ESkillCost.Percent_MaxHP:
                 {
                     var costValue = _casterUnit.GetCurrentMaxHp() * skillInfo.cost / 100f;
 
@@ -474,7 +422,7 @@ public class CHMSkill
                         return false;
                     }
                 }
-            case Defines.ESkillCost.PercentRemainHP:
+            case Defines.ESkillCost.Percent_RemainHP:
                 {
                     var costValue = _casterUnit.GetCurrentHp() * skillInfo.cost / 100f;
 
@@ -488,7 +436,7 @@ public class CHMSkill
                         return false;
                     }
                 }
-            case Defines.ESkillCost.FixedMP:
+            case Defines.ESkillCost.Fixed_MP:
                 {
                     if (_casterUnit.GetCurrentMp() >= skillInfo.cost)
                     {
@@ -500,7 +448,7 @@ public class CHMSkill
                         return false;
                     }
                 }
-            case Defines.ESkillCost.PercentMaxMP:
+            case Defines.ESkillCost.Percent_MaxMP:
                 {
                     var costValue = _casterUnit.GetCurrentMaxMp() * skillInfo.cost / 100f;
 
@@ -514,7 +462,7 @@ public class CHMSkill
                         return false;
                     }
                 }
-            case Defines.ESkillCost.PercentRemainMP:
+            case Defines.ESkillCost.Percent_RemainMP:
                 {
                     var costValue = _casterUnit.GetCurrentMp() * skillInfo.cost / 100f;
 
@@ -533,110 +481,7 @@ public class CHMSkill
         }
     }
 
-    async Task CreateTargetingDecal(EffectInfo _effectInfo, Transform _trTarget)
-    {
-        GameObject objDecal = null;
-
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    if (roundAreaDecal == null)
-                    {
-                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundArea, (decal) =>
-                        {
-                            roundAreaDecal = decal;
-                            roundAreaDecal.SetActive(false);
-                            roundAreaDecal.GetOrAddComponent<CHPoolable>();
-
-                            objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
-                        });
-                    }
-                    else
-                    {
-                        objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
-                    }
-
-                    objDecal.transform.position = _trTarget.position;
-                    objDecal.transform.forward = _trTarget.forward;
-
-                    objDecal.transform.SetParent(_trTarget.transform);
-
-                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-
-                    var decalProjector = objDecal.GetComponent<DecalProjector>();
-                    if (decalProjector != null)
-                    {
-                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius * 2f;
-                    }
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                break;
-        }
-
-        await CreateTargetingTimeDecal(_effectInfo, _trTarget, objDecal);
-    }
-
-    async Task CreateTargetingTimeDecal(EffectInfo _effectInfo, Transform _trTarget, GameObject _areaDecal)
-    {
-        GameObject objDecal = null;
-
-        switch (_effectInfo.eCollision)
-        {
-            case Defines.ECollision.Sphere:
-                {
-                    if (roundTimingDecal == null)
-                    {
-                        CHMMain.Resource.InstantiateDecal(Defines.EDecal.RoundTiming, (decal) =>
-                        {
-                            roundTimingDecal = decal;
-                            roundTimingDecal.SetActive(false);
-                            roundTimingDecal.GetOrAddComponent<CHPoolable>();
-
-                            objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
-                        });
-                    }
-                    else
-                    {
-                        objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
-                    }
-
-                    objDecal.transform.position = _trTarget.position;
-                    objDecal.transform.forward = _trTarget.forward;
-
-                    objDecal.transform.SetParent(_trTarget.transform);
-
-                    objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-
-                    var decalProjector = objDecal.GetComponent<DecalProjector>();
-                    if (decalProjector != null)
-                    {
-                        float time = 0;
-
-                        while (time <= _effectInfo.startDelay)
-                        {
-                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2f, time / _effectInfo.startDelay);
-                            decalProjector.size = Vector3.one * curValue;
-                            time += Time.deltaTime;
-                            await Task.Delay((int)(Time.deltaTime * 1000f));
-                        }
-
-                        CHMMain.Resource.Destroy(objDecal);
-                        CHMMain.Resource.Destroy(_areaDecal);
-                    }
-                }
-                break;
-            case Defines.ECollision.Box:
-                break;
-            default:
-                break;
-        }
-    }
-
-    async Task CreateNoneTargetingDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal)
+    async Task CreateDecal(EffectInfo _effectInfo, Transform _trTarget, Vector3 _posDecal, Vector3 _dirDecal)
     {
         GameObject objDecal = null;
 
@@ -662,6 +507,11 @@ public class CHMSkill
 
                     objDecal.transform.position = _posDecal;
                     objDecal.transform.forward = _dirDecal;
+
+                    if (_trTarget != null)
+                    {
+                        objDecal.transform.SetParent(_trTarget.transform);
+                    }
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
 
@@ -678,10 +528,10 @@ public class CHMSkill
                 break;
         }
 
-        await CreateNoneTargetingTimeDecal(_effectInfo, _posDecal, _dirDecal, objDecal);
+        await CreateTimeDecal(_effectInfo, _trTarget, _posDecal, _dirDecal, objDecal);
     }
 
-    async Task CreateNoneTargetingTimeDecal(EffectInfo _effectInfo, Vector3 _posDecal, Vector3 _dirDecal, GameObject _areaDecal)
+    async Task CreateTimeDecal(EffectInfo _effectInfo, Transform _trTarget, Vector3 _posDecal, Vector3 _dirDecal, GameObject _areaDecal)
     {
         GameObject objDecal = null;
 
@@ -707,6 +557,11 @@ public class CHMSkill
 
                     objDecal.transform.position = _posDecal;
                     objDecal.transform.forward = _dirDecal;
+
+                    if (_trTarget != null)
+                    {
+                        objDecal.transform.SetParent(_trTarget.transform);
+                    }
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
 
