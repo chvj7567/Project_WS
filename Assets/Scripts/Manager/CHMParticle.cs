@@ -38,6 +38,18 @@ public class CHMParticle
 
                 liParticle.Add(tempParticle);
             }
+
+            for (int i = 0; i < liParticle.Count; ++i)
+            {
+                var objParticle = liParticle.ElementAtOrDefault(i);
+                var posParticle = _liParticlePos.ElementAtOrDefault(i);
+                var dirParticle = _liParticleDir.ElementAtOrDefault(i);
+
+                objParticle.transform.position = posParticle;
+                objParticle.transform.forward = dirParticle;
+
+                SetParticleValue(_trCaster, null, posParticle, dirParticle, objParticle, _effectInfo);
+            }
         }
         else
         {
@@ -54,25 +66,19 @@ public class CHMParticle
 
                 liParticle.Add(tempParticle);
             }
-        }
 
-        for (int i = 0; i < liParticle.Count; ++i)
-        {
-            var objParticle = liParticle.ElementAtOrDefault(i);
-            var posParticle = _liParticlePos.ElementAtOrDefault(i);
-            var dirParticle = _liParticleDir.ElementAtOrDefault(i);
-
-            Transform trTarget = null;
-            if (_liTarget != null)
+            for (int i = 0; i < liParticle.Count; ++i)
             {
-                trTarget = _liTarget.ElementAtOrDefault(i);
+                var objParticle = liParticle.ElementAtOrDefault(i);
+                var trTarget = _liTarget.ElementAtOrDefault(i);
+
+                objParticle.transform.position = trTarget.position;
+                objParticle.transform.forward = trTarget.forward;
+
                 objParticle.transform.SetParent(trTarget);
+
+                SetParticleValue(_trCaster, trTarget, Vector3.zero, Vector3.zero, objParticle, _effectInfo);
             }
-
-            objParticle.transform.position = posParticle;
-            objParticle.transform.forward = dirParticle;
-
-            SetParticleValue(_trCaster, trTarget, posParticle, dirParticle, objParticle, _effectInfo);
         }
     }
 

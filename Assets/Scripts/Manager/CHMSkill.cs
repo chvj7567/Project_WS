@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Infomation;
-using static UnityEngine.GraphicsBuffer;
 
 public class CHMSkill
 {
@@ -35,7 +33,7 @@ public class CHMSkill
             foreach (var effectInfo in skillInfo.liEffectInfo)
             {
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
-                if (effectInfo.onDecal || (Mathf.Approximately(effectInfo.startDelay, 0f) == false))
+                if (effectInfo.onDecal)
                 {
                     await CreateDecal(effectInfo, _trTarget, _posSkill, _dirSkill);
                 }
@@ -70,8 +68,9 @@ public class CHMSkill
                 // 장애물이 있는지 확인
                 if (Physics.Raycast(_originPos, targetDir, targetDis, ~_lmTarget) == false)
                 {
+                    var unitBase = target.GetComponent<CHUnitBase>();
                     // 타겟이 살아있으면 타겟으로 지정
-                    if (target.GetComponent<CHUnitBase>().GetIsDeath() == false)
+                    if (unitBase != null && unitBase.GetIsDeath() == false)
                     {
                         targetInfoList.Add(new TargetInfo
                         {
@@ -214,13 +213,41 @@ public class CHMSkill
     {
         LayerMask targetMask = GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
 
-        // 스킬 시전 시 맞은 타겟들
-        var liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.angle);
-        var liTarget = GetTargetTransformList(liTargetInfo);
+        List<TargetInfo> liTargetInfo = new List<TargetInfo>();
+        List<Transform> liTarget = new List<Transform>();
+
+        // 스킬 시작 시 해당 위치에 콜리젼 생성
+        if (_trTarget == null)
+        {
+            // 논타겟팅 스킬
+            liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.angle);
+            liTarget = GetTargetTransformList(liTargetInfo);
+
+            // 논타겟팅 스킬은 생성 시에 타겟이 없을 수도 있음
+            if (liTargetInfo == null || liTargetInfo.Count <= 0)
+            {
+                // 파티클만 생성
+                CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                return;
+            }
+        }
+        else
+        {
+            // 타겟팅 스킬
+            liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.angle);
+            liTarget = GetTargetTransformList(liTargetInfo);
+
+            if (liTargetInfo == null || liTargetInfo.Count <= 0)
+            {
+                Debug.Log("Targeting Skil : No Target Error");
+                return;
+            }
+        }
 
         // 파티클 위치에 따라 파티클 생성
         switch (_effectInfo.eEffectPos)
         {
+            // 자기 위치에 파티클 생성(자기가 효과 보는 스킬)
             case Defines.EEffectPos.Me:
                 {
                     // 맞은 타겟 수 만큼 파티클 중복 여부
@@ -228,17 +255,38 @@ public class CHMSkill
                     {
                         foreach (var target in liTarget)
                         {
-                            ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _trCaster.position }, new List<Vector3> { _dirSkill }, _effectInfo);
+                            ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
+
+                            if (_trTarget == null)
+                            {
+                                // 논타겟팅 스킬
+                                CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
+                            }
+                            else
+                            {
+                                // 타겟팅 스킬
+                                CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
+                            }
                         }
                     }
                     else
                     {
-                        ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _trCaster.position }, new List<Vector3> { _dirSkill }, _effectInfo);
+                        ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
+
+                        if (_trTarget == null)
+                        {
+                            // 논타겟팅 스킬
+                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
+                        }
+                        else
+                        {
+                            // 타겟팅 스킬
+                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
+                        }
                     }
                 }
                 break;
+            // 타겟 한 명에게만 파티클 생성(타겟 한 명만 효과 적용)
             case Defines.EEffectPos.TargetOne:
                 {
                     // 맞은 타겟 수 만큼 파티클 중복 여부
@@ -247,16 +295,37 @@ public class CHMSkill
                         foreach (var target in liTarget)
                         {
                             ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _trTarget.position }, new List<Vector3> { _dirSkill }, _effectInfo);
+                            
+                            if (_trTarget == null)
+                            {
+                                // 논타겟팅 스킬
+                                CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                            }
+                            else
+                            {
+                                // 타겟팅 스킬
+                                CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
+                            }
                         }
                     }
                     else
                     {
                         ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _trTarget.position }, new List<Vector3> { _dirSkill }, _effectInfo);
+
+                        if (_trTarget == null)
+                        {
+                            // 논타겟팅 스킬
+                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                        }
+                        else
+                        {
+                            // 타겟팅 스킬
+                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
+                        }
                     }
                 }
                 break;
+            // 타겟 전부에게 파티클 생성(타겟 전부에게 효과 적용)
             case Defines.EEffectPos.TargetAll:
                 {
                     List<Vector3> liParticlePos = new List<Vector3>();
@@ -272,11 +341,13 @@ public class CHMSkill
 
                     if (_trTarget == null)
                     {
+                        // 논타겟팅 스킬
                         CHMMain.Particle.CreateParticle(_trCaster, null, liParticlePos, liParticleDir, _effectInfo);
                     }
                     else
                     {
-                        CHMMain.Particle.CreateParticle(_trCaster, liTarget, liParticlePos, liParticleDir, _effectInfo);
+                        // 타겟팅 스킬
+                        CHMMain.Particle.CreateParticle(_trCaster, liTarget, null, null, _effectInfo);
                     }
                 }
                 break;
@@ -301,10 +372,6 @@ public class CHMSkill
             case Defines.ECollision.Box:
                 break;
             default:
-                {
-                    // Collision이 없으면 해당 지점에 파티클만 생성
-                    CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
-                }
                 break;
         }
     }
@@ -518,7 +585,7 @@ public class CHMSkill
                     var decalProjector = objDecal.GetComponent<DecalProjector>();
                     if (decalProjector != null)
                     {
-                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius;
+                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius * 2f;
                     }
                 }
                 break;
@@ -572,7 +639,7 @@ public class CHMSkill
 
                         while (time <= _effectInfo.startDelay)
                         {
-                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius, time / _effectInfo.startDelay);
+                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2f, time / _effectInfo.startDelay);
                             decalProjector.size = Vector3.one * curValue;
                             time += Time.deltaTime;
                             await Task.Delay((int)(Time.deltaTime * 1000f));

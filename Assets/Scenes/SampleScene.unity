@@ -3898,7 +3898,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28418
+  m_Name: pb_Mesh29552
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6546,12 +6546,12 @@ PrefabInstance:
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useSkill2
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useSkill3
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2376815556044339865, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
