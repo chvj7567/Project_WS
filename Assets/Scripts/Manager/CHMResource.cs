@@ -93,18 +93,13 @@ public class CHMResource
         CHPoolable poolable = _object.GetComponent<CHPoolable>();
         if (poolable != null)
         {
-            if (poolable.GetIsUse())
-            {
-                return CHMMain.Pool.Pop(_object, _parent).gameObject;
-            }
-            else
-            {
-                return GameObject.Instantiate(_object, _parent);
-            }
+            return CHMMain.Pool.Pop(_object, _parent).gameObject;
         }
         else
         {
-            return GameObject.Instantiate(_object, _parent);
+            GameObject go = GameObject.Instantiate(_object, _parent);
+            go.SetActive(true);
+            return go;
         }
     }
 
@@ -113,7 +108,7 @@ public class CHMResource
         if (_object == null) return;
 
         CHPoolable poolable = _object.GetComponent<CHPoolable>();
-        if (poolable != null && poolable.GetIsUse())
+        if (poolable != null)
         {
             CHMMain.Pool.Push(poolable);
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CHMPool
@@ -37,6 +38,7 @@ public class CHMPool
             if (_poolable == null) return;
 
             _poolable.transform.parent = Root;
+            _poolable.isUse = false;
             _poolable.gameObject.SetActive(false);
 
             stPool.Push(_poolable);
@@ -55,7 +57,14 @@ public class CHMPool
                 poolable = Create();
             }
 
+            if (poolable.isUse == true)
+            {
+                stPool.Push(poolable);
+                Pop(_parent);
+            }
+
             poolable.transform.parent = _parent;
+            poolable.isUse = true;
             poolable.gameObject.SetActive(true);
 
             return poolable;
