@@ -6,7 +6,7 @@
 		"distance": 50,
 		"coolTime": 1,
 		"eSkillCost": 0,
-		"cost": 100,
+		"cost": 0,
         "liEffectInfo":
 		[
             {
@@ -39,7 +39,7 @@
 				"onDecal": false,
 				"startDelay": 0,
 				"angle": 360,
-				"sphereRadius": 2,
+				"sphereRadius": 5,
 				"boxHalfX": -1,
 				"boxHalfY": -1,
 				"boxHalfZ": -1,
@@ -52,7 +52,7 @@
         "skillDesc": "-1",
 		"isTargeting": false,
 		"distance": 50,
-		"coolTime": 5,
+		"coolTime": 1,
 		"eSkillCost": 4,
 		"cost": 0,
         "liEffectInfo":
@@ -120,7 +120,7 @@
 		"distance": 50,
 		"coolTime": 3,
 		"eSkillCost": 0,
-		"cost": 10,
+		"cost": 0,
         "liEffectInfo":
 		[
 			{
@@ -150,7 +150,7 @@
 		"distance": 50,
 		"coolTime": 4,
 		"eSkillCost": 0,
-		"cost": 10,
+		"cost": 0,
         "liEffectInfo":
 		[
 			{
@@ -163,7 +163,7 @@
 				"eTargetMask": "2",
 				"duplication": false,
 				"onDecal": true,
-				"startDelay": 0,
+				"startDelay": 0.1,
 				"angle": 360,
 				"sphereRadius": 3,
 				"boxHalfX": -1,
@@ -192,11 +192,11 @@
         ]
     },
 	{
-        "eSkillID": "8",
+        "eSkillID": "4",
         "skillDesc": "-1",
 		"isTargeting": false,
 		"distance": 50,
-		"coolTime": 3,
+		"coolTime": 1,
 		"eSkillCost": 0,
 		"cost": 0,
         "liEffectInfo":
@@ -204,16 +204,16 @@
             {
                 "eEffect": "16",
                 "eEffectType": "1",
-                "eEffectPos": "2",
+                "eEffectPos": "1",
                 "eDamageState": "0",
-                "eDamageType": "1",
+                "eDamageType": "0",
 				"eCollision": "0",
 				"eTargetMask": "2",
 				"duplication": true,
-				"onDecal": false,
-				"startDelay": 0,
+				"onDecal": true,
+				"startDelay": 2,
 				"angle": 360,
-				"sphereRadius": 10,
+				"sphereRadius": 5,
 				"boxHalfX": -1,
 				"boxHalfY": -1,
 				"boxHalfZ": -1,

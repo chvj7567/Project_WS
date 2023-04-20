@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class CHLookAtCamera : MonoBehaviour
 {
-    [SerializeField] Camera camera;
+    [SerializeField] Camera uiCamera;
 
     private void Start()
     {
-        if (camera != null)
+        if (uiCamera != null)
         {
-            transform.forward = -(camera.transform.position - transform.position);
+            transform.forward = -(uiCamera.transform.position - transform.position);
         }
     }
 }

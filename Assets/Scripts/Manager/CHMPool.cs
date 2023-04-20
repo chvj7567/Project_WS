@@ -57,12 +57,6 @@ public class CHMPool
                 poolable = Create();
             }
 
-            if (poolable.isUse == true)
-            {
-                stPool.Push(poolable);
-                Pop(_parent);
-            }
-
             poolable.transform.parent = _parent;
             poolable.isUse = true;
             poolable.gameObject.SetActive(true);

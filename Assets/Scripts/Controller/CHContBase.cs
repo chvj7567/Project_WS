@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -25,8 +26,6 @@ public class CHContBase : MonoBehaviour
     [SerializeField, ReadOnly] public int sightRange = Animator.StringToHash("SightRange");
     [SerializeField, ReadOnly] public int isDeath = Animator.StringToHash("IsDeath");
 
-    [SerializeField, ReadOnly] public Subject<bool> isCollide = new Subject<bool>();
-
     private void Start()
     {
         Init();
@@ -34,7 +33,7 @@ public class CHContBase : MonoBehaviour
 
     public virtual void Init()
     {
-        var unitInfo = gameObject.GetOrAddComponent<CHUnitA>();
+        var unitInfo = gameObject.GetOrAddComponent<CHUnitBase>();
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
         if (unitInfo != null && targetTracker != null)
         {
@@ -44,6 +43,12 @@ public class CHContBase : MonoBehaviour
             targetTracker.viewAngle = unitInfo.GetOriginViewAngle();
             targetTracker.ResetViewAngleOrigin();
 
+            timeSinceLastAttack = -1f;
+            timeSinceLastSkill1 = -1f;
+            timeSinceLastSkill2 = -1f;
+            timeSinceLastSkill3 = -1f;
+            timeSinceLastSkill4 = -1f;
+
             gameObject.UpdateAsObservable().Subscribe(_ =>
             {
                 Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
@@ -51,12 +56,6 @@ public class CHContBase : MonoBehaviour
                 // 타겟이 범위 안에 없으면 타겟이 범위 안에 들어왔을때 즉시 공격할 수 있도록 설정
                 if (mainTarget == null)
                 {
-                    timeSinceLastAttack = -1f;
-                    timeSinceLastSkill1 = -1f;
-                    timeSinceLastSkill2 = -1f;
-                    timeSinceLastSkill3 = -1f;
-                    timeSinceLastSkill4 = -1f;
-
                     animator.SetBool(attackRange, false);
                 }
                 // 타겟이 범위 안에 있으면 즉시 공격 후 공격 딜레이 설정

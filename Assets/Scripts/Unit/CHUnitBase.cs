@@ -37,8 +37,8 @@ public abstract class CHUnitBase : MonoBehaviour
         {
             if (isDeath == false)
             {
-                ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
-                ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);
+                /*ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
+                ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);*/
             }
         });
     }
@@ -184,6 +184,7 @@ public abstract class CHUnitBase : MonoBehaviour
 
     void AtOnceChangeHp(float _value)
     {
+        float hpOrigin = curUnitInfo.hp;
         float hpResult = curUnitInfo.hp + _value;
         if (hpResult >= GetCurrentMaxHp())
         {
@@ -205,11 +206,12 @@ public abstract class CHUnitBase : MonoBehaviour
         }
 
         curUnitInfo.hp = hpResult;
-        Debug.Log($"{curUnitInfo.nameStringID} => Hp : {curUnitInfo.hp} -> Hp : {hpResult}");
+        Debug.Log($"{curUnitInfo.nameStringID} => Hp : {hpOrigin} -> Hp : {hpResult}");
     }
 
     void AtOnceChangeMp(float _value)
     {
+        float mpOrigin = curUnitInfo.mp;
         float mpResult = curUnitInfo.mp + _value;
         if (mpResult >= GetCurrentMaxMp())
         {
@@ -221,25 +223,27 @@ public abstract class CHUnitBase : MonoBehaviour
         }
 
         curUnitInfo.mp = mpResult;
-        Debug.Log($"{curUnitInfo.nameStringID} => Mp : {curUnitInfo.mp} -> Mp : {mpResult}");
+        Debug.Log($"{curUnitInfo.nameStringID} => Mp : {mpOrigin} -> Mp : {mpResult}");
     }
 
     void AtOnceChangeAttackPower(float _value)
     {
+        float attackPowerOrigin = curUnitInfo.attackPower;
         float attackPowerResult = curUnitInfo.attackPower + _value;
         CheckMaxStatValue(Defines.EStat.AttackPower, ref attackPowerResult);
 
         curUnitInfo.attackPower = attackPowerResult;
-        Debug.Log($"{curUnitInfo.nameStringID} => AttackPower : {curUnitInfo.attackPower} -> AttackPower : {attackPowerResult}");
+        Debug.Log($"{curUnitInfo.nameStringID} => AttackPower : {attackPowerOrigin} -> AttackPower : {attackPowerResult}");
     }
 
     void AtOnceChangeDefensePower(float _value)
     {
+        float defensePowerOrigin = curUnitInfo.defensePower;
         float defensePowerResult = curUnitInfo.defensePower + _value;
         CheckMaxStatValue(Defines.EStat.DefensePower, ref defensePowerResult);
 
         curUnitInfo.attackPower = defensePowerResult;
-        Debug.Log($"{curUnitInfo.nameStringID} => DefensePower : {curUnitInfo.defensePower} -> DefensePower : {defensePowerResult}");
+        Debug.Log($"{curUnitInfo.nameStringID} => DefensePower : {defensePowerOrigin} -> DefensePower : {defensePowerResult}");
     }
 
     async void ContinuousChangeHp(float _time, float _count, float _value)

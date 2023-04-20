@@ -33,7 +33,7 @@ public class CHMSkill
             foreach (var effectInfo in skillInfo.liEffectInfo)
             {
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
-                if (effectInfo.onDecal)
+                if (effectInfo.onDecal && (Mathf.Approximately(0f, effectInfo.startDelay) == false))
                 {
                     await CreateDecal(effectInfo, _trTarget, _posSkill, _dirSkill);
                 }
@@ -65,47 +65,21 @@ public class CHMSkill
             {
                 float targetDis = Vector3.Distance(_originPos, targetTr.position);
 
-                // 장애물이 있는지 확인
-                if (Physics.Raycast(_originPos, targetDir, targetDis, ~_lmTarget) == false)
+                var unitBase = target.GetComponent<CHUnitBase>();
+                // 타겟이 살아있으면 타겟으로 지정
+                if (unitBase != null && unitBase.GetIsDeath() == false)
                 {
-                    var unitBase = target.GetComponent<CHUnitBase>();
-                    // 타겟이 살아있으면 타겟으로 지정
-                    if (unitBase != null && unitBase.GetIsDeath() == false)
+                    targetInfoList.Add(new TargetInfo
                     {
-                        targetInfoList.Add(new TargetInfo
-                        {
-                            objTarget = target.gameObject,
-                            direction = targetDir,
-                            distance = targetDis,
-                        });
-                    }
+                        objTarget = target.gameObject,
+                        direction = targetDir,
+                        distance = targetDis,
+                    });
                 }
             }
         }
 
         return targetInfoList;
-    }
-
-    public TargetInfo GetClosestTargetInfo(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
-    {
-        TargetInfo closestTargetInfo = null;
-        List<TargetInfo> targetInfoList = GetTargetInfoListInRange(_originPos, _direction, _lmTarget, _range, _viewAngle);
-
-        if (targetInfoList.Count > 0)
-        {
-            float minDis = Mathf.Infinity;
-
-            foreach (TargetInfo targetInfo in targetInfoList)
-            {
-                if (targetInfo.distance < minDis)
-                {
-                    minDis = targetInfo.distance;
-                    closestTargetInfo = targetInfo;
-                }
-            }
-        }
-
-        return closestTargetInfo;
     }
 
     public List<TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, LayerMask _lmTarget, Vector3 _size, Quaternion _quater)
@@ -136,28 +110,6 @@ public class CHMSkill
         return targetInfoList;
     }
 
-    public TargetInfo GetClosestTargetInfo(Vector3 _originPos, LayerMask _lmTarget, Vector3 _size, Quaternion _quater)
-    {
-        TargetInfo closestTargetInfo = null;
-        List<TargetInfo> targetInfoList = GetTargetInfoListInRange(_originPos, _lmTarget, _size, _quater);
-
-        if (targetInfoList.Count > 0)
-        {
-            float minDis = Mathf.Infinity;
-
-            foreach (TargetInfo targetInfo in targetInfoList)
-            {
-                if (targetInfo.distance < minDis)
-                {
-                    minDis = targetInfo.distance;
-                    closestTargetInfo = targetInfo;
-                }
-            }
-        }
-
-        return closestTargetInfo;
-    }
-
     public List<Transform> GetTargetTransformList(List<TargetInfo> _liTargetInfo)
     {
         if (_liTargetInfo == null) return null;
@@ -181,8 +133,30 @@ public class CHMSkill
         return targetTransformList;
     }
 
-    public LayerMask GetTargetMask(LayerMask _myLayerMask, Defines.ETargetMask _targetMask)
+    public void ApplySkillValue(Transform _trCaster, List<Transform> _liTarget, EffectInfo _effectInfo)
     {
+        // 스킬 값들을(데미지나, 힐 등) _liTarget 적용
+
+        var casterUnit = _trCaster.GetComponent<CHUnitBase>();
+
+        foreach (var target in _liTarget)
+        {
+            if (target == null) continue;
+
+            var targetUnit = target.GetComponent<CHUnitBase>();
+            if (targetUnit != null)
+            {
+                ApplyEffectType(casterUnit, targetUnit, _effectInfo);
+            }
+        }
+    }
+
+    //-------------------------------------- private ------------------------------------------//
+
+    LayerMask GetTargetMask(LayerMask _myLayerMask, Defines.ETargetMask _targetMask)
+    {
+        LayerMask ignoreMask = 2;
+
         LayerMask enemyLayerMask;
         if (LayerMask.LayerToName(_myLayerMask) == "Red")
         {
@@ -197,17 +171,15 @@ public class CHMSkill
         {
             case Defines.ETargetMask.Me:
             case Defines.ETargetMask.MyTeam:
-                return _myLayerMask;
+                return ignoreMask | _myLayerMask;
             case Defines.ETargetMask.Enemy:
-                return enemyLayerMask;
+                return ignoreMask | enemyLayerMask;
             case Defines.ETargetMask.MyTeam_Enemy:
-                return _myLayerMask | enemyLayerMask;
+                return ignoreMask | _myLayerMask | enemyLayerMask;
             default:
                 return -1;
         }
     }
-
-    //-------------------------------------- private ------------------------------------------//
 
     void CreateSphereCollision(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
     {
@@ -372,25 +344,20 @@ public class CHMSkill
             case Defines.ECollision.Box:
                 break;
             default:
+                {
+                    if (_trTarget == null)
+                    {
+                        Debug.Log("@@" + _trCaster.name);
+                        // 논타겟팅 스킬
+                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
+                    }
+                    else
+                    {
+                        // 타겟팅 스킬
+                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
+                    }
+                }
                 break;
-        }
-    }
-
-    void ApplySkillValue(Transform _trCaster, List<Transform> _liTarget, EffectInfo _effectInfo)
-    {
-        // 스킬 값들을(데미지나, 힐 등) _liTarget 적용
-
-        var casterUnit = _trCaster.GetComponent<CHUnitBase>();
-
-        foreach (var target in _liTarget)
-        {
-            if (target == null) continue;
-
-            var targetUnit = target.GetComponent<CHUnitBase>();
-            if (targetUnit != null)
-            {
-                ApplyEffectType(casterUnit, targetUnit, _effectInfo);
-            }
         }
     }
 
@@ -415,8 +382,13 @@ public class CHMSkill
             case Defines.EEffectType.Hp_Down:
                 {
                     // 데미지 계산 : 스킬 데미지 + 스킬 시전자 공격력 - 타겟 방어력
-                    var totalValue = skillValue + casterAttackPower - targetDefensePower;
-                    Debug.Log($"HpDown : {totalValue} = {skillValue} + {casterAttackPower} - {targetDefensePower}");
+                    float totalValue = skillValue + casterAttackPower - targetDefensePower;
+                    // 데미지가 -이면 데미지를 줄 수 없다는 뜻
+                    if (totalValue < 0)
+                    {
+                        totalValue = 0f;
+                    }
+                    Debug.Log($"HpDown : {totalValue}");
                     _targetUnit.ChangeHp(CHUtil.ReverseValue(totalValue), _effectInfo.eDamageState);
                 }
                 break;

@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
 using static Infomation;
-using UnityEngine.Rendering.Universal;
-using static UnityEngine.GraphicsBuffer;
+using UniRx;
 
 public class CHMParticle
 {
@@ -29,7 +28,12 @@ public class CHMParticle
             for (int i = 0; i < _liParticlePos.Count; ++i)
             {
                 var tempParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestory);
-
+                var sphereCollision = tempParticle.GetOrAddComponent<CHSphereCollision>();
+                sphereCollision.Init(_effectInfo.sphereRadius, sphereCollision.OnEnter.Subscribe(_ =>
+                {
+                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+                }));
+                
                 if (tempParticle == null)
                 {
                     Debug.Log("No Particle");
@@ -91,7 +95,10 @@ public class CHMParticle
             CHMMain.Resource.InstantiateEffect(_eEffect, (particle) =>
             {
                 particle.SetActive(false);
-                particle.GetOrAddComponent<CHPoolable>();
+                if (IsPoolableEffect(_eEffect) == true)
+                {
+                    particle.GetOrAddComponent<CHPoolable>();
+                }
 
                 dicParticleInfo.Add(_eEffect, new Infomation.ParticleInfo
                 {
@@ -143,6 +150,18 @@ public class CHMParticle
         if (_objParticle) CHMMain.Resource.Destroy(_objParticle);
     }
 
+    bool IsPoolableEffect(Defines.EEffect _eEffect)
+    {
+        switch (_eEffect)
+        {
+            // 움직이는 애들은 풀링 사용시 순간이동하는 이슈가 있음
+            case Defines.EEffect.FX_Tornado:
+                return false;
+            default:
+                return true;
+        }
+    }
+
     async void SetParticleValue(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, GameObject _objParticle, EffectInfo _effectInfo)
     {
         // 각 이펙트별로 세부 설정이 필요한 경우
@@ -159,12 +178,15 @@ public class CHMParticle
                 {
                     // 자기 위치에서 파티클 시간 만큼 스킬 위치 방향으로 나아가게 설정
                     var effectTime = dicParticleInfo[_effectInfo.eEffect].time;
-                    var posOrigin = _trCaster.position;
-                    _objParticle.transform.position = posOrigin;
+                    var posOrigin = _objParticle.transform.position;
 
                     float time = 0;
                     while (time <= effectTime)
                     {
+                        if (_objParticle == null)
+                        {
+                            break;
+                        }
                         _objParticle.transform.position = posOrigin + _dirSkill.normalized * 10f * time;
                         time += Time.deltaTime;
                         await Task.Delay((int)(Time.deltaTime * 1000f));
