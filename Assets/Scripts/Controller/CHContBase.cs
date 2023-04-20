@@ -20,7 +20,7 @@ public class CHContBase : MonoBehaviour
     [SerializeField, ReadOnly] protected float timeSinceLastSkill3 = -1f;
     [SerializeField, ReadOnly] protected float timeSinceLastSkill4 = -1f;
 
-    [SerializeField] public Animator animator;
+    [SerializeField, ReadOnly] Animator animator;
 
     [SerializeField, ReadOnly] public int attackRange = Animator.StringToHash("AttackRange");
     [SerializeField, ReadOnly] public int sightRange = Animator.StringToHash("SightRange");
@@ -33,6 +33,7 @@ public class CHContBase : MonoBehaviour
 
     public virtual void Init()
     {
+        animator = GetComponent<Animator>();
         var unitInfo = gameObject.GetOrAddComponent<CHUnitBase>();
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
         if (unitInfo != null && targetTracker != null)
@@ -56,7 +57,7 @@ public class CHContBase : MonoBehaviour
                 // 타겟이 범위 안에 없으면 타겟이 범위 안에 들어왔을때 즉시 공격할 수 있도록 설정
                 if (mainTarget == null)
                 {
-                    animator.SetBool(attackRange, false);
+                    animator?.SetBool(attackRange, false);
                 }
                 // 타겟이 범위 안에 있으면 즉시 공격 후 공격 딜레이 설정
                 else
@@ -67,17 +68,17 @@ public class CHContBase : MonoBehaviour
                         if (timeSinceLastAttack >= 0f && timeSinceLastAttack < unitInfo.GetOriginAttackDelay())
                         {
                             timeSinceLastAttack += Time.deltaTime;
-                            animator.SetBool(attackRange, false);
+                            animator?.SetBool(attackRange, false);
                         }
                         // 공격 사정거리 안인 경우
                         else if (mainTarget.distance <= unitInfo.GetOriginAttackDistance())
                         {
-                            animator.SetBool(attackRange, true);
+                            animator?.SetBool(attackRange, true);
                             timeSinceLastAttack = 0.00001f;
                         }
                         else
                         {
-                            animator.SetBool(attackRange, false);
+                            animator?.SetBool(attackRange, false);
                         }
                     }
                     else
@@ -85,11 +86,11 @@ public class CHContBase : MonoBehaviour
                         // 공격 사정거리 안인 경우
                         if (mainTarget.distance <= unitInfo.GetOriginAttackDistance())
                         {
-                            animator.SetBool(attackRange, false);
+                            animator?.SetBool(attackRange, false);
                         }
                         else
                         {
-                            animator.SetBool(attackRange, false);
+                            animator?.SetBool(attackRange, false);
                         }
 
                         timeSinceLastAttack = -1f;
@@ -169,6 +170,11 @@ public class CHContBase : MonoBehaviour
                 }
             });
         }
+    }
+
+    public Animator GetAnimator()
+    {
+        return animator;
     }
 
     public float GetTimeSinceLastAttack() { return timeSinceLastAttack; }

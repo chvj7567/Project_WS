@@ -199,7 +199,11 @@ public abstract class CHUnitBase : MonoBehaviour
             var unitBase = GetComponent<CHContBase>();
             if (unitBase != null)
             {
-                unitBase.animator.SetBool(unitBase.isDeath, true);
+                var animator = unitBase.GetAnimator();
+                if (animator != null)
+                {
+                    animator.SetBool(unitBase.isDeath, true);
+                }
             }
 
             return;
