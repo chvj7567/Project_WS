@@ -20,7 +20,7 @@ public class CHTargetTracker : MonoBehaviour
     // 타겟을 바라보는 속도
     public float rotateSpeed;
     // 타겟을 따라가는 속도
-    public float followSpeed;
+    public float moveSpeed;
     // 타겟을 따라갈 때 유지할 거리
     public float approachDistance;
     // 에디터 상에서 시야각 확인 여부
@@ -60,18 +60,12 @@ public class CHTargetTracker : MonoBehaviour
 
     private void Start()
     {
-        if (unitBase != null)
-        {
-            approachDistance = unitBase.GetCurrentAttackDistance();
-        }
+        if (unitBase) approachDistance = unitBase.GetCurrentAttackDistance();
 
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
             bool isDead = false;
-            if (unitBase != null)
-            {
-                isDead = unitBase.GetIsDeath();
-            }
+            if (unitBase) isDead = unitBase.GetIsDeath();
 
             // 자기가 살아있을 때만 타겟 감지
             if (isDead == false)
@@ -83,7 +77,7 @@ public class CHTargetTracker : MonoBehaviour
                 {
                     viewAngle = orgViewAngle;
                     rangeMulti = 1f;
-                    animator?.SetBool(contBase.sightRange, false);
+                    if (animator && contBase) animator.SetBool(contBase.sightRange, false);
                 }
                 else
                 {
@@ -93,32 +87,25 @@ public class CHTargetTracker : MonoBehaviour
                     rangeMulti = orgRangeMulti;
                     // 공격 중일 때는 안 움직이도록
                     bool isAttackAnimating = false;
-                    if (animator != null)
-                    {
-                        isAttackAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
-                    }
+                    if (animator) isAttackAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
+
                     
                     if (isAttackAnimating == false)
                     {
                         LookAtTarget(closestTarget.direction);
 
                         bool isAttackDistance = true;
-                        if (unitBase != null)
-                        {
-                            isAttackDistance = closestTarget.distance > unitBase.GetOriginAttackDistance();
-                        }
+                        if (unitBase) isAttackDistance = closestTarget.distance > unitBase.GetOriginAttackDistance();
 
                         // 공격 범위까지만 다가감
                         if (isAttackDistance)
                         {
-                            animator?.SetBool(contBase.sightRange, true);
+                            if (animator && contBase) animator.SetBool(contBase.sightRange, true);
 
                             // 달리기 애니메이션 중 일때 움직이도록
                             bool isRunAnimating = true;
-                            if (animator != null)
-                            {
-                                isAttackAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
-                            }
+
+                            if (animator) isAttackAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
 
                             if (isRunAnimating)
                             {
@@ -127,14 +114,14 @@ public class CHTargetTracker : MonoBehaviour
                         }
                         else
                         {
-                            animator?.SetBool(contBase.sightRange, false);
+                            if (animator) animator.SetBool(contBase.sightRange, false);
                         }
                     }
                 }
             }
             else
             {
-                animator?.SetBool(contBase.sightRange, false);
+                if (animator) animator.SetBool(contBase.sightRange, false);
             }
         }).AddTo(this);
     }
@@ -142,10 +129,7 @@ public class CHTargetTracker : MonoBehaviour
     void OnDrawGizmos()
     {
         bool isDead = false;
-        if (unitBase != null)
-        {
-            isDead = unitBase.GetIsDeath();
-        }
+        if (unitBase) isDead = unitBase.GetIsDeath();
 
         if (viewEditor && isDead == false)
         {
@@ -175,7 +159,7 @@ public class CHTargetTracker : MonoBehaviour
 
     void FollowTarget(Vector3 _direction)
     {
-        transform.position += _direction.normalized * followSpeed * Time.deltaTime;
+        transform.position += _direction.normalized * moveSpeed * Time.deltaTime;
     }
 
     public Infomation.TargetInfo GetClosestTargetInfo()
@@ -192,16 +176,16 @@ public class CHTargetTracker : MonoBehaviour
 
         foreach (Collider target in targets)
         {
-            Transform targetTr = target.transform;
-            Vector3 targetDir = (targetTr.position - _originPos).normalized;
+            Transform trTarget = target.transform;
+            Vector3 dirTarget = (trTarget.position - _originPos).normalized;
 
             // 시야각에 걸리는지 확인
-            if (Vector3.Angle(_direction, targetDir) < _viewAngle / 2)
+            if (Vector3.Angle(_direction, dirTarget) < _viewAngle / 2)
             {
-                float targetDis = Vector3.Distance(_originPos, targetTr.position);
+                float targetDis = Vector3.Distance(_originPos, trTarget.position);
 
                 // 장애물이 있는지 확인
-                if (Physics.Raycast(_originPos, targetDir, targetDis, ~(_lmTarget | ignoreMask)) == false)
+                if (Physics.Raycast(_originPos, dirTarget, targetDis, ~(_lmTarget | ignoreMask)) == false)
                 {
                     var unitBase = target.GetComponent<CHUnitBase>();
                     // 타겟이 살아있으면 타겟으로 지정
@@ -210,7 +194,7 @@ public class CHTargetTracker : MonoBehaviour
                         targetInfoList.Add(new TargetInfo
                         {
                             objTarget = target.gameObject,
-                            direction = targetDir,
+                            direction = dirTarget,
                             distance = targetDis,
                         });
                     }

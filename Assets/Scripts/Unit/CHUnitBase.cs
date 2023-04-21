@@ -59,6 +59,7 @@ public abstract class CHUnitBase : MonoBehaviour
     public float GetOriginAttackDelay() { return orgUnitInfo.attackDelay; }
     public float GetOriginAttackDistance() { return orgUnitInfo.attackDistance; }
     public float GetOriginMoveSpeed() { return orgUnitInfo.moveSpeed; }
+    public float GetOriginRotateSpeed() { return orgUnitInfo.rotateSpeed; }
     public float GetOriginViewAngle() { return orgUnitInfo.viewAngle; }
     public Defines.ESkillID GetOriginSkill1() { return orgSkill1Info.eSkillID; }
     public Defines.ESkillID GetOriginSkill2() { return orgSkill2Info.eSkillID; }
@@ -88,6 +89,7 @@ public abstract class CHUnitBase : MonoBehaviour
     public float GetCurrentAttackDelay() { return curUnitInfo.attackDelay; }
     public float GetCurrentAttackDistance() { return curUnitInfo.attackDistance; }
     public float GetCurrentMoveSpeed() { return curUnitInfo.moveSpeed; }
+    public float GetCurrentRotateSpeed() { return curUnitInfo.rotateSpeed; }
     public float GetCurrentViewAngle() { return orgUnitInfo.viewAngle; }
     public Defines.ESkillID GetCurrentSkill1() { return curSkill1Info.eSkillID; }
     public Defines.ESkillID GetCurrentSkill2() { return curSkill2Info.eSkillID; }

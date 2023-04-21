@@ -62,6 +62,7 @@ public class Infomation
         public float attackDelay = -1f;
         public float attackDistance = -1f;
         public float moveSpeed = -1f;
+        public float rotateSpeed = -1f;
         public float viewAngle = -1f;
         public ESkillID eSkill1ID = ESkillID.None;
         public ESkillID eSkill2ID = ESkillID.None;
