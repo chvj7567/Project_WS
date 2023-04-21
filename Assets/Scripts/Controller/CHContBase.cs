@@ -55,7 +55,51 @@ public class CHContBase : MonoBehaviour
             {
                 Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
 
-                // 타겟이 범위 안에 없으면 타겟이 범위 안에 들어왔을때 즉시 공격할 수 있도록 설정
+                if (timeSinceLastAttack >= 0f && timeSinceLastAttack < unitInfo.GetOriginAttackDelay())
+                {
+                    timeSinceLastAttack += Time.deltaTime;
+                }
+                else
+                {
+                    timeSinceLastAttack = -1f;
+                }
+
+                if (timeSinceLastSkill1 >= 0f && timeSinceLastSkill1 < unitInfo.GetOriginSkill1CoolTime())
+                {
+                    timeSinceLastSkill1 += Time.deltaTime;
+                }
+                else
+                {
+                    timeSinceLastSkill1 = -1f;
+                }
+
+                if (timeSinceLastSkill2 >= 0f && timeSinceLastSkill2 < unitInfo.GetOriginSkill2CoolTime())
+                {
+                    timeSinceLastSkill2 += Time.deltaTime;
+                }
+                else
+                {
+                    timeSinceLastSkill2 = -1f;
+                }
+
+                if (timeSinceLastSkill3 >= 0f && timeSinceLastSkill3 < unitInfo.GetOriginSkill3CoolTime())
+                {
+                    timeSinceLastSkill3 += Time.deltaTime;
+                }
+                else
+                {
+                    timeSinceLastSkill3 = -1f;
+                }
+
+                if (timeSinceLastSkill4 >= 0f && timeSinceLastSkill4 < unitInfo.GetOriginSkill4CoolTime())
+                {
+                    timeSinceLastSkill4 += Time.deltaTime;
+                }
+                else
+                {
+                    timeSinceLastSkill4 = -1f;
+                }
+
                 if (mainTarget == null)
                 {
                     if (animator) animator.SetBool(attackRange, false);
@@ -66,13 +110,7 @@ public class CHContBase : MonoBehaviour
                     // 기본 공격
                     if (useAttack)
                     {
-                        if (timeSinceLastAttack >= 0f && timeSinceLastAttack < unitInfo.GetOriginAttackDelay())
-                        {
-                            timeSinceLastAttack += Time.deltaTime;
-                            if (animator) animator.SetBool(attackRange, false);
-                        }
-                        // 공격 사정거리 안인 경우
-                        else if (mainTarget.distance <= unitInfo.GetOriginAttackDistance())
+                        if (timeSinceLastAttack < 0f && mainTarget.distance <= unitInfo.GetOriginAttackDistance())
                         {
                             if (animator) animator.SetBool(attackRange, true);
                             timeSinceLastAttack = 0.00001f;
@@ -93,80 +131,46 @@ public class CHContBase : MonoBehaviour
                         {
                             if (animator) animator.SetBool(attackRange, false);
                         }
-
-                        timeSinceLastAttack = -1f;
                     }
 
                     // 1번 스킬
                     if (useSkill1)
                     {
-                        if (timeSinceLastSkill1 >= 0f && timeSinceLastSkill1 < unitInfo.GetOriginSkill1CoolTime())
-                        {
-                            timeSinceLastSkill1 += Time.deltaTime;
-                        }
-                        else if (mainTarget.distance <= unitInfo.GetOriginSkill1Distance())
+                        if (timeSinceLastSkill1 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill1Distance())
                         {
                             CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, transform.forward, unitInfo.GetOriginSkill1());
-                            timeSinceLastSkill1 = 0.00001f;
+                            timeSinceLastSkill1 = 0.0001f;
                         }
-                    }
-                    else
-                    {
-                        timeSinceLastSkill1 = -1f;
                     }
 
                     // 2번 스킬
                     if (useSkill2)
                     {
-                        if (timeSinceLastSkill2 >= 0f && timeSinceLastSkill2 < unitInfo.GetOriginSkill2CoolTime())
-                        {
-                            timeSinceLastSkill2 += Time.deltaTime;
-                        }
-                        else if (mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
+                        if (timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
                         {
                             CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, transform.forward, unitInfo.GetOriginSkill2());
-                            timeSinceLastSkill2 = 0.00001f;
+                            timeSinceLastSkill2 = 0.0001f;
                         }
-                    }
-                    else
-                    {
-                        timeSinceLastSkill2 = -1f;
                     }
 
                     // 3번 스킬
                     if (useSkill3)
                     {
-                        if (timeSinceLastSkill3 >= 0f && timeSinceLastSkill3 < unitInfo.GetOriginSkill3CoolTime())
-                        {
-                            timeSinceLastSkill3 += Time.deltaTime;
-                        }
-                        else if (mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
+                        if (timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
                         {
                             CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, transform.forward, unitInfo.GetOriginSkill3());
-                            timeSinceLastSkill3 = 0.00001f;
+                            timeSinceLastSkill3 = 0.0001f;
                         }
-                    }
-                    else
-                    {
-                        timeSinceLastSkill3 = -1f;
                     }
 
                     // 4번 스킬
                     if (useSkill4)
                     {
-                        if (timeSinceLastSkill4 >= 0f && timeSinceLastSkill4 < unitInfo.GetOriginSkill4CoolTime())
-                        {
-                            timeSinceLastSkill4 += Time.deltaTime;
-                        }
-                        else if (mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
+                        if (timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
                         {
                             CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, transform.forward, unitInfo.GetOriginSkill4());
-                            timeSinceLastSkill4 = 0.00001f;
+                            timeSinceLastSkill4 = 0.0001f;
                         }
-                    }
-                    else
-                    {
-                        timeSinceLastSkill4 = -1f;
                     }
                 }
             });
