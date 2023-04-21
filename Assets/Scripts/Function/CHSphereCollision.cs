@@ -120,7 +120,6 @@ public class CHSphereCollision : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("aa");
         var unitBase = other.gameObject.GetComponent<CHUnitBase>();
         if (unitBase != null)
         {

@@ -21,7 +21,7 @@
 				"onDecal": false,
 				"moveToPos": true,
 				"moveSpeed": 200,
-				"offsetToTarget": -5,
+				"offsetToTarget": 0,
 				"triggerEnter": false,
 				"triggerExit": false,
 				"stayTickTime": -1,

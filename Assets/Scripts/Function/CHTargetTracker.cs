@@ -176,13 +176,15 @@ public class CHTargetTracker : MonoBehaviour
 
         foreach (Collider target in targets)
         {
-            Transform trTarget = target.transform;
-            Vector3 dirTarget = (trTarget.position - _originPos).normalized;
+            Vector3 posTarget = target.transform.position;
+            posTarget.y = 0f;
+            _originPos.y = 0f;
+            Vector3 dirTarget = (posTarget - _originPos).normalized;
 
             // 시야각에 걸리는지 확인
             if (Vector3.Angle(_direction, dirTarget) < _viewAngle / 2)
             {
-                float targetDis = Vector3.Distance(_originPos, trTarget.position);
+                float targetDis = Vector3.Distance(_originPos, posTarget);
 
                 // 장애물이 있는지 확인
                 if (Physics.Raycast(_originPos, dirTarget, targetDis, ~(_lmTarget | ignoreMask)) == false)

@@ -22,8 +22,7 @@ public abstract class CHUnitBase : MonoBehaviour
     [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill3Info;
     [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill4Info;
 
-    [SerializeField, ReadOnly] bool isDeath = false;
-
+    [SerializeField, ReadOnly] Defines.EUnitState unitState = Defines.EUnitState.None;
     private void Awake()
     {
         Init();
@@ -33,14 +32,14 @@ public abstract class CHUnitBase : MonoBehaviour
     {
         gameObject.UpdateAsObservable()
             .ThrottleFirst(TimeSpan.FromSeconds(1))
-            .Subscribe(_ =>
+            .Subscribe((Action<Unit>)(_ =>
         {
-            if (isDeath == false)
+            if (GetIsDeath() == false)
             {
                 /*ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
                 ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);*/
             }
-        });
+        }));
     }
 
     protected abstract void Init();
@@ -107,12 +106,29 @@ public abstract class CHUnitBase : MonoBehaviour
 
     public bool GetIsDeath()
     {
-        return isDeath;
+        return (unitState & Defines.EUnitState.IsDead) != 0;
+    }
+
+    public bool GetIsAirborne()
+    {
+        return (unitState & Defines.EUnitState.IsAirborne) != 0;
+    }
+
+    public void SetIsAirborne(bool _airborne)
+    {
+        if (_airborne)
+        {
+            unitState |= Defines.EUnitState.IsAirborne;
+        }
+        else
+        {
+            unitState &= ~Defines.EUnitState.IsAirborne;
+        }
     }
 
     public void ChangeHp(float _value, Defines.EDamageState eDamageState)
     {
-        if (isDeath == false)
+        if (GetIsDeath() == false)
         {
             switch (eDamageState)
             {
@@ -131,7 +147,7 @@ public abstract class CHUnitBase : MonoBehaviour
 
     public void ChangeMp(float _value, Defines.EDamageState eDamageState)
     {
-        if (isDeath == false)
+        if (GetIsDeath() == false)
         {
             switch (eDamageState)
             {
@@ -150,7 +166,7 @@ public abstract class CHUnitBase : MonoBehaviour
 
     public void ChangeAttackPower(float _value, Defines.EDamageState eDamageState)
     {
-        if (isDeath == false)
+        if (GetIsDeath() == false)
         {
             switch (eDamageState)
             {
@@ -168,7 +184,7 @@ public abstract class CHUnitBase : MonoBehaviour
 
     public void ChangeDefensePower(float _value, Defines.EDamageState eDamageState)
     {
-        if (isDeath == false)
+        if (GetIsDeath() == false)
         {
             switch (eDamageState)
             {
@@ -196,7 +212,7 @@ public abstract class CHUnitBase : MonoBehaviour
         if (hpResult <= 0.00001f)
         {
             hpResult = 0f;
-            isDeath = true;
+            unitState |= Defines.EUnitState.IsDead;
             
             var unitBase = GetComponent<CHContBase>();
             if (unitBase != null)

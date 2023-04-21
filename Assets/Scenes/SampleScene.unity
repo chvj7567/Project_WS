@@ -213,6 +213,302 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0deef52185419b140911c6198c276997, type: 3}
+--- !u!1 &145727367
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 145727375}
+  - component: {fileID: 145727374}
+  - component: {fileID: 145727373}
+  - component: {fileID: 145727372}
+  - component: {fileID: 145727371}
+  - component: {fileID: 145727370}
+  - component: {fileID: 145727369}
+  - component: {fileID: 145727368}
+  m_Layer: 6
+  m_Name: Sphere (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!54 &145727368
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145727367}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &145727369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145727367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67053243d1851654787f1fd703826205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useAttack: 0
+  useSkill1: 0
+  useSkill2: 0
+  useSkill3: 0
+  useSkill4: 0
+  timeSinceLastAttack: -1
+  timeSinceLastSkill1: -1
+  timeSinceLastSkill2: -1
+  timeSinceLastSkill3: -1
+  timeSinceLastSkill4: -1
+  animator: {fileID: 0}
+  attackRange: 2128890732
+  sightRange: 667485285
+  isDeath: 569220492
+--- !u!114 &145727370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145727367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orgUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    hpRegenPerSecond: -1
+    maxMp: -1
+    mp: -1
+    mpRegenPerSecond: -1
+    attackPower: -1
+    defensePower: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    rotateSpeed: -1
+    viewAngle: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  orgSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  orgSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  orgSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    hpRegenPerSecond: -1
+    maxMp: -1
+    mp: -1
+    mpRegenPerSecond: -1
+    attackPower: -1
+    defensePower: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    rotateSpeed: -1
+    viewAngle: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  unitState: 0
+--- !u!114 &145727371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145727367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fceb511969a8426418f521fc82d7423b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 128
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 196
+  range: 0
+  rangeMulti: 0
+  viewAngle: 0
+  rotateSpeed: 0
+  moveSpeed: 0
+  approachDistance: 0
+  viewEditor: 1
+  animator: {fileID: 0}
+  unitBase: {fileID: 0}
+  contBase: {fileID: 0}
+--- !u!135 &145727372
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145727367}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &145727373
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145727367}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &145727374
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145727367}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &145727375
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145727367}
+  m_LocalRotation: {x: -0, y: 0.9279207, z: -0, w: 0.37277773}
+  m_LocalPosition: {x: 65.43, y: 0, z: -8.25}
+  m_LocalScale: {x: 1, y: 1, z: 3.2784}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 136.226, z: 0}
 --- !u!43 &498522973
 Mesh:
   m_ObjectHideFlags: 0
@@ -1040,7 +1336,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  isDeath: 0
+  unitState: 0
 --- !u!114 &1157944667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1058,7 +1354,7 @@ MonoBehaviour:
     m_Bits: 128
   ignoreMask:
     serializedVersion: 2
-    m_Bits: 4
+    m_Bits: 196
   range: 0
   rangeMulti: 0
   viewAngle: 0
@@ -1158,8 +1454,8 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2520,7 +2816,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  isDeath: 0
+  unitState: 0
 --- !u!1 &1713448141
 GameObject:
   m_ObjectHideFlags: 0
@@ -2696,7 +2992,7 @@ MonoBehaviour:
     eSkillCost: -1
     cost: -1
     liEffectInfo: []
-  isDeath: 0
+  unitState: 0
 --- !u!114 &1713448144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2812,8 +3108,8 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2868,6 +3164,302 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c3133ecbb2134c46a2a611fbdc66f0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2097494717
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2097494725}
+  - component: {fileID: 2097494724}
+  - component: {fileID: 2097494723}
+  - component: {fileID: 2097494722}
+  - component: {fileID: 2097494721}
+  - component: {fileID: 2097494720}
+  - component: {fileID: 2097494719}
+  - component: {fileID: 2097494718}
+  m_Layer: 6
+  m_Name: Sphere (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!54 &2097494718
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097494717}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &2097494719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097494717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67053243d1851654787f1fd703826205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useAttack: 0
+  useSkill1: 0
+  useSkill2: 0
+  useSkill3: 0
+  useSkill4: 0
+  timeSinceLastAttack: -1
+  timeSinceLastSkill1: -1
+  timeSinceLastSkill2: -1
+  timeSinceLastSkill3: -1
+  timeSinceLastSkill4: -1
+  animator: {fileID: 0}
+  attackRange: 2128890732
+  sightRange: 667485285
+  isDeath: 569220492
+--- !u!114 &2097494720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097494717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orgUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    hpRegenPerSecond: -1
+    maxMp: -1
+    mp: -1
+    mpRegenPerSecond: -1
+    attackPower: -1
+    defensePower: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    rotateSpeed: -1
+    viewAngle: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  orgSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  orgSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  orgSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  orgSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curUnitInfo:
+    eUnitID: -1
+    nameStringID: -1
+    maxHp: -1
+    hp: -1
+    hpRegenPerSecond: -1
+    maxMp: -1
+    mp: -1
+    mpRegenPerSecond: -1
+    attackPower: -1
+    defensePower: -1
+    attackDelay: -1
+    attackDistance: -1
+    moveSpeed: -1
+    rotateSpeed: -1
+    viewAngle: -1
+    eSkill1ID: -1
+    eSkill2ID: -1
+    eSkill3ID: -1
+    eSkill4ID: -1
+  curSkill1Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill2Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill3Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  curSkill4Info:
+    eSkillID: -1
+    skillDesc: -1
+    isTargeting: 0
+    distance: -1
+    coolTime: -1
+    eSkillCost: -1
+    cost: -1
+    liEffectInfo: []
+  unitState: 0
+--- !u!114 &2097494721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097494717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fceb511969a8426418f521fc82d7423b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 128
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 196
+  range: 0
+  rangeMulti: 0
+  viewAngle: 0
+  rotateSpeed: 0
+  moveSpeed: 0
+  approachDistance: 0
+  viewEditor: 1
+  animator: {fileID: 0}
+  unitBase: {fileID: 0}
+  contBase: {fileID: 0}
+--- !u!135 &2097494722
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097494717}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &2097494723
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097494717}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &2097494724
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097494717}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &2097494725
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097494717}
+  m_LocalRotation: {x: -0, y: 0.8658586, z: -0, w: 0.5002887}
+  m_LocalPosition: {x: 59.06, y: 0, z: -3.28}
+  m_LocalScale: {x: 1, y: 1, z: 3.2784}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 119.962, z: 0}
 --- !u!1001 &5647054001790340986
 PrefabInstance:
   m_ObjectHideFlags: 0

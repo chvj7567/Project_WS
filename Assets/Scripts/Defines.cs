@@ -1,4 +1,6 @@
 
+using System;
+
 public class Defines
 {
     public enum EJsonType
@@ -271,5 +273,13 @@ public class Defines
         DefensePower,
 
         Max
+    }
+
+    [Flags]
+    public enum EUnitState
+    {
+        None = 0,
+        IsDead = 1 << 0,
+        IsAirborne = 1 << 1
     }
 }

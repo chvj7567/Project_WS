@@ -40,6 +40,8 @@ public class CHMParticle
                         if ((1 << _.gameObject.layer & targetMask.value) != 0)
                         {
                             CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+
+                            SetParticleTriggerValue(_, _effectInfo);
                         }
                     }));
                 }
@@ -222,6 +224,52 @@ public class CHMParticle
                         }
                         _objParticle.transform.position = posOrigin + _dirSkill.normalized * 10f * time;
                         time += Time.deltaTime;
+                        await Task.Delay((int)(Time.deltaTime * 1000f));
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    async void SetParticleTriggerValue(Transform _trTarget, EffectInfo _effectInfo)
+    {
+        // 각 이펙트에 트리거 된 타겟들 처리
+        switch (_effectInfo.eEffect)
+        {
+            case Defines.EEffect.FX_Tornado:
+                {
+                    // 에어본 되도록 처리
+                    var unitBase = _trTarget.GetComponent<CHUnitBase>();
+                    float airborneHeight = 2f;
+                    float airborneTime = 0.5f;
+                    float gravity = -2 * airborneHeight / Mathf.Pow(airborneTime, 2);
+                    float airborneVelocity = -gravity * airborneTime;
+                    Vector3 startPos = _trTarget.position;
+
+                    float time = 0f;
+
+                    while (time <= airborneTime)
+                    {
+                        unitBase.SetIsAirborne(true);
+                        float height = startPos.y + (airborneVelocity * time) + (0.5f * gravity * Mathf.Pow(time, 2));
+                        _trTarget.position = new Vector3(_trTarget.position.x, height, _trTarget.position.z);
+                        time += Time.deltaTime;
+                        await Task.Delay((int)(Time.deltaTime * 1000f));
+                    }
+
+                    unitBase.SetIsAirborne(false);
+                    float fallSpeed = 9.8f;
+                    float groundLevel = 0f;
+                    Vector3 fallVector = Vector3.zero;
+
+                    time = 0f;
+                    while (_trTarget.position.y > groundLevel)
+                    {
+                        if (unitBase.GetIsAirborne()) break;
+                        fallVector.y -= fallSpeed * Time.deltaTime;
+                        _trTarget.position += fallVector * Time.deltaTime;
                         await Task.Delay((int)(Time.deltaTime * 1000f));
                     }
                 }
