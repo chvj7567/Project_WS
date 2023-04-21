@@ -22,7 +22,7 @@
 				"moveToPos": true,
 				"moveSpeed": 200,
 				"offsetToTarget": 0,
-				"triggerEnter": false,
+				"triggerEnter": true,
 				"triggerExit": false,
 				"stayTickTime": -1,
 				"startDelay": 1,
