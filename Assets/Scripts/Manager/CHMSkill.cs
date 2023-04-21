@@ -172,9 +172,7 @@ public class CHMSkill
         }
     }
 
-    //-------------------------------------- private ------------------------------------------//
-
-    LayerMask GetTargetMask(LayerMask _myLayerMask, Defines.ETargetMask _targetMask)
+    public LayerMask GetTargetMask(LayerMask _myLayerMask, Defines.ETargetMask _targetMask)
     {
         LayerMask ignoreMask = 2;
 
@@ -201,6 +199,8 @@ public class CHMSkill
                 return -1;
         }
     }
+
+    //-------------------------------------- private ------------------------------------------//
 
     void CreateSphereCollision(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
     {

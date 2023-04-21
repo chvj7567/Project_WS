@@ -15,38 +15,41 @@ public class Infomation
     [Serializable]
     public class SkillInfo
     {
-        public ESkillID eSkillID = ESkillID.None;
-        public int skillDesc = -1;
-        public bool isTargeting = false;
-        public float distance = -1f;
-        public float coolTime = -1f;
-        public ESkillCost eSkillCost = ESkillCost.None;
-        public float cost = -1f;
+        public ESkillID eSkillID = ESkillID.None; // 스킬 아이디
+        public int skillDesc = -1; // 스킬 설명
+        public bool isTargeting = false; // 타겟팅 or 논타겟팅
+        public float distance = -1f; // 사정거리
+        public float coolTime = -1f; // 쿨타임
+        public ESkillCost eSkillCost = ESkillCost.None; // 스킬 비용을 뭘로 지불할지
+        public float cost = -1f; // 스킬 비용
         public List<EffectInfo> liEffectInfo = new List<EffectInfo>(); // 스킬 그 자체
     }
 
     [Serializable]
     public class EffectInfo
     {
-        public EEffect eEffect = EEffect.None;
-        public EEffectType eEffectType = EEffectType.None;
-        public EEffectPos eEffectPos = EEffectPos.None;
-        public EDamageState eDamageState = EDamageState.None;
-        public EDamageType eDamageType = EDamageType.None;
-        public ECollision eCollision = ECollision.None;
-        public ETargetMask eTargetMask = ETargetMask.None;
-        public bool duplication = false;
-        public bool onDecal = false;
+        public EEffect eEffect = EEffect.None; // 이펙트 종류
+        public EEffectType eEffectType = EEffectType.None; // 이펙트 타입
+        public EEffectPos eEffectPos = EEffectPos.None; // 이펙트 위치
+        public EDamageState eDamageState = EDamageState.None; // 데미지 상태
+        public EDamageType eDamageType = EDamageType.None; // 데미지 타입
+        public ECollision eCollision = ECollision.None; // 충돌체 모양
+        public ETargetMask eTargetMask = ETargetMask.None; // 스킬 대상
+        public bool duplication = false; // 스킬 중복 여부
+        public bool onDecal = false; // 데칼 표시 여부
         public bool moveToPos = false; // true인 경우 moveSpeed에 따라 startDelay는 자동 계산
-        public float moveSpeed = -1f;
-        public float offsetToTarget = -1f;
-        public float startDelay = -1f;
-        public float angle = -1f;
-        public float sphereRadius = -1f;
-        public float boxHalfX = -1f;
-        public float boxHalfY = -1f;
-        public float boxHalfZ = -1f;
-        public float damage = -1f;
+        public float moveSpeed = -1f; // moveToPos가 true인 경우만 사용, 움직일 속도
+        public float offsetToTarget = -1f; // moveToPos가 true인 경우만 사용, 타겟과의 거리를 얼마나 둘지
+        public bool triggerEnter = false; // 이펙트 Trigger에 닿았을 때 데미지를 넣을 것인지 여부
+        public bool triggerExit = false; // 이펙트 Trigger에서 벗어났을 때 데미지를 넣을 것인지 여부
+        public float stayTickTime = -1f; // 이펙트 Trigger에서 머물고 있을 때 데미지를 넣을 때 틱 타입(음수이면 데미지 안 넣음)
+        public float startDelay = -1f; // 스킬 시전 후 이펙트 나오는 시간, 여러 개일 경우 누적 시간
+        public float angle = -1f; // 충돌 여부 결정할 때 각도
+        public float sphereRadius = -1f; // 구 모양의 충돌체일 경우 구의 반지름
+        public float boxHalfX = -1f; // 박스 모양의 충돌체일 경우 X 크기의 반
+        public float boxHalfY = -1f; // 박스 모양의 충돌체일 경우 Y 크기의 반
+        public float boxHalfZ = -1f; // 박스 모양의 충돌체일 경우 Z 크기의 반
+        public float damage = -1f; // 데미지
     }
 
     [Serializable]

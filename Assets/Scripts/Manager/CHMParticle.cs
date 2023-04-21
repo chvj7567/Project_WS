@@ -29,11 +29,44 @@ public class CHMParticle
             {
                 var tempParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestory);
                 var sphereCollision = tempParticle.GetOrAddComponent<CHSphereCollision>();
-                sphereCollision.Init(_effectInfo.sphereRadius, sphereCollision.OnEnter.Subscribe(_ =>
+                sphereCollision.Init(_effectInfo.sphereRadius, _effectInfo.stayTickTime);
+
+                if (_effectInfo.triggerEnter)
                 {
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+                    sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(_ =>
+                    {
+                        var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
+                        
+                        if ((1 << _.gameObject.layer & targetMask.value) != 0)
+                        {
+                            CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+                        }
+                    }));
+                }
+
+                if (_effectInfo.triggerExit)
+                {
+                    sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(_ =>
+                    {
+                        var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
+
+                        if ((1 << _.gameObject.layer & targetMask.value) != 0)
+                        {
+                            CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+                        }
+                    }));
+                }
+
+                sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(_ =>
+                {
+                    var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
+
+                    if ((1 << _.gameObject.layer & targetMask.value) != 0)
+                    {
+                        CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+                    }
                 }));
-                
+
                 if (tempParticle == null)
                 {
                     Debug.Log("No Particle");
