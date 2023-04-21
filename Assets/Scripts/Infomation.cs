@@ -37,6 +37,9 @@ public class Infomation
         public ETargetMask eTargetMask = ETargetMask.None;
         public bool duplication = false;
         public bool onDecal = false;
+        public bool moveToPos = false; // true인 경우 moveSpeed에 따라 startDelay는 자동 계산
+        public float moveSpeed = -1f;
+        public float offsetToTarget = -1f;
         public float startDelay = -1f;
         public float angle = -1f;
         public float sphereRadius = -1f;

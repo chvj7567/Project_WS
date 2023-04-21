@@ -507,22 +507,22 @@ PrefabInstance:
     - target: {fileID: -7272946533663279021, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useSkill1
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7272946533663279021, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useSkill2
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7272946533663279021, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useSkill3
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7272946533663279021, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
       propertyPath: useSkill4
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2376815555908959892, guid: 12c9eeb2678a30243b5fb12fbc659057,
         type: 3}
@@ -696,22 +696,22 @@ PrefabInstance:
     - target: {fileID: 3760039833043681241, guid: 4b2885a828a4dd645a1d21ca36cbd9f9,
         type: 3}
       propertyPath: useSkill1
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3760039833043681241, guid: 4b2885a828a4dd645a1d21ca36cbd9f9,
         type: 3}
       propertyPath: useSkill2
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3760039833043681241, guid: 4b2885a828a4dd645a1d21ca36cbd9f9,
         type: 3}
       propertyPath: useSkill3
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3760039833043681241, guid: 4b2885a828a4dd645a1d21ca36cbd9f9,
         type: 3}
       propertyPath: useSkill4
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b2885a828a4dd645a1d21ca36cbd9f9, type: 3}
@@ -901,11 +901,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67053243d1851654787f1fd703826205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useAttack: 1
-  useSkill1: 1
-  useSkill2: 1
-  useSkill3: 1
-  useSkill4: 1
+  useAttack: 0
+  useSkill1: 0
+  useSkill2: 0
+  useSkill3: 0
+  useSkill4: 0
   timeSinceLastAttack: -1
   timeSinceLastSkill1: -1
   timeSinceLastSkill2: -1
@@ -941,6 +941,7 @@ MonoBehaviour:
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
+    rotateSpeed: -1
     viewAngle: -1
     eSkill1ID: -1
     eSkill2ID: -1
@@ -996,6 +997,7 @@ MonoBehaviour:
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
+    rotateSpeed: -1
     viewAngle: -1
     eSkill1ID: -1
     eSkill2ID: -1
@@ -1060,7 +1062,7 @@ MonoBehaviour:
   rangeMulti: 0
   viewAngle: 0
   rotateSpeed: 0
-  followSpeed: 0
+  moveSpeed: 0
   approachDistance: 0
   viewEditor: 1
   animator: {fileID: 0}
@@ -2420,6 +2422,7 @@ MonoBehaviour:
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
+    rotateSpeed: -1
     viewAngle: -1
     eSkill1ID: -1
     eSkill2ID: -1
@@ -2475,6 +2478,7 @@ MonoBehaviour:
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
+    rotateSpeed: -1
     viewAngle: -1
     eSkill1ID: -1
     eSkill2ID: -1
@@ -2561,7 +2565,7 @@ MonoBehaviour:
   rangeMulti: 0
   viewAngle: 0
   rotateSpeed: 0
-  followSpeed: 0
+  moveSpeed: 0
   approachDistance: 0
   viewEditor: 1
   animator: {fileID: 0}
@@ -2593,6 +2597,7 @@ MonoBehaviour:
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
+    rotateSpeed: -1
     viewAngle: -1
     eSkill1ID: -1
     eSkill2ID: -1
@@ -2648,6 +2653,7 @@ MonoBehaviour:
     attackDelay: -1
     attackDistance: -1
     moveSpeed: -1
+    rotateSpeed: -1
     viewAngle: -1
     eSkill1ID: -1
     eSkill2ID: -1
@@ -2702,11 +2708,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49a4011377803a45a8b260b87eeb7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useAttack: 1
-  useSkill1: 1
-  useSkill2: 1
-  useSkill3: 1
-  useSkill4: 1
+  useAttack: 0
+  useSkill1: 0
+  useSkill2: 0
+  useSkill3: 0
+  useSkill4: 0
   timeSinceLastAttack: -1
   timeSinceLastSkill1: -1
   timeSinceLastSkill2: -1
@@ -2787,7 +2793,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713448141}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 33.6, y: 0, z: 17.6}
   m_LocalScale: {x: 1, y: 1, z: 3.3855}
   m_ConstrainProportionsScale: 0
   m_Children: []

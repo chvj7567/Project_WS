@@ -32,14 +32,35 @@ public class CHMSkill
 
             foreach (var effectInfo in skillInfo.liEffectInfo)
             {
+                // 해당 위치로 움직일지 여부
+                if (effectInfo.moveToPos)
+                {
+                    float distance = Vector3.Distance(_trCaster.position, _posSkill);
+                    effectInfo.startDelay = (distance + effectInfo.offsetToTarget) / effectInfo.moveSpeed;
+                }
+                
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
                 if (effectInfo.onDecal && (Mathf.Approximately(0f, effectInfo.startDelay) == false))
                 {
-                    await CreateDecal(effectInfo, _trTarget, _posSkill, _dirSkill);
+                    await CreateDecal(_trCaster, _trTarget, _posSkill, _dirSkill, effectInfo);
                 }
                 else
                 {
-                    await Task.Delay((int)(effectInfo.startDelay * 1000f));
+                    if (effectInfo.moveToPos)
+                    {
+                        float time = 0f;
+                        while (time <= effectInfo.startDelay)
+                        {
+                            _trCaster.position += _dirSkill.normalized * effectInfo.moveSpeed * Time.deltaTime;
+
+                            time += Time.deltaTime;
+                            await Task.Delay((int)(Time.deltaTime * 1000f));
+                        }
+                    }
+                    else
+                    {
+                        await Task.Delay((int)(effectInfo.startDelay * 1000f));
+                    }
                 }
 
                 // 스킬 충돌 범위 생성
@@ -520,7 +541,7 @@ public class CHMSkill
         }
     }
 
-    async Task CreateDecal(EffectInfo _effectInfo, Transform _trTarget, Vector3 _posDecal, Vector3 _dirDecal)
+    async Task CreateDecal(Transform _trCaster, Transform _trTarget, Vector3 _posDecal, Vector3 _dirDecal, EffectInfo _effectInfo)
     {
         GameObject objDecal = null;
 
@@ -567,10 +588,10 @@ public class CHMSkill
                 break;
         }
 
-        await CreateTimeDecal(_effectInfo, _trTarget, _posDecal, _dirDecal, objDecal);
+        await CreateTimeDecal(_trCaster, _trTarget, _posDecal, _dirDecal, objDecal, _effectInfo);
     }
 
-    async Task CreateTimeDecal(EffectInfo _effectInfo, Transform _trTarget, Vector3 _posDecal, Vector3 _dirDecal, GameObject _areaDecal)
+    async Task CreateTimeDecal(Transform _trCaster, Transform _trTarget, Vector3 _posDecal, Vector3 _dirDecal, GameObject _areaDecal, EffectInfo _effectInfo)
     {
         GameObject objDecal = null;
 
@@ -608,12 +629,17 @@ public class CHMSkill
                     if (decalProjector != null)
                     {
                         float time = 0;
-
                         while (time <= _effectInfo.startDelay)
                         {
                             var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2f, time / _effectInfo.startDelay);
                             decalProjector.size = Vector3.one * curValue;
                             time += Time.deltaTime;
+
+                            if (_effectInfo.moveToPos)
+                            {
+                                _trCaster.position += _dirDecal.normalized * _effectInfo.moveSpeed * Time.deltaTime;
+                            }
+
                             await Task.Delay((int)(Time.deltaTime * 1000f));
                         }
 
