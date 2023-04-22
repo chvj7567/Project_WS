@@ -20,6 +20,7 @@ public class Defines
 
         GlobalVolume,
         Player,
+        GaugeBar,
 
         Max
     }

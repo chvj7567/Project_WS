@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using static Defines;
 
 public abstract class CHUnitBase : MonoBehaviour
 {
+    [SerializeField] CapsuleCollider collider;
+
     // 기본 유닛 정보
     [SerializeField, ReadOnly] protected Infomation.UnitInfo orgUnitInfo;
     [SerializeField, ReadOnly] protected Infomation.SkillInfo orgSkill1Info;
@@ -23,6 +26,9 @@ public abstract class CHUnitBase : MonoBehaviour
     [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill4Info;
 
     [SerializeField, ReadOnly] Defines.EUnitState unitState = Defines.EUnitState.None;
+
+    CHGaugeBar hpGaugeBar;
+
     private void Awake()
     {
         Init();
@@ -40,6 +46,21 @@ public abstract class CHUnitBase : MonoBehaviour
                 ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);*/
             }
         }));
+
+        CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, (gaugeBar) =>
+        {
+            if (gaugeBar)
+            {
+                gaugeBar.transform.SetParent(transform);
+                gaugeBar.transform.localPosition = Vector3.zero;
+
+                hpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
+                if (hpGaugeBar)
+                {
+                    hpGaugeBar.Init(collider.height);
+                }
+            }
+        });
     }
 
     protected abstract void Init();
@@ -209,11 +230,14 @@ public abstract class CHUnitBase : MonoBehaviour
             hpResult = GetCurrentMaxHp();
         }
 
+        curUnitInfo.hp = hpResult;
+        if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), hpResult);
+        Debug.Log($"{curUnitInfo.nameStringID} => Hp : {hpOrigin} -> Hp : {hpResult}");
+
         if (hpResult <= 0.00001f)
         {
             hpResult = 0f;
-            unitState |= Defines.EUnitState.IsDead;
-            
+
             var unitBase = GetComponent<CHContBase>();
             if (unitBase != null)
             {
@@ -224,11 +248,8 @@ public abstract class CHUnitBase : MonoBehaviour
                 }
             }
 
-            return;
+            unitState |= Defines.EUnitState.IsDead;
         }
-
-        curUnitInfo.hp = hpResult;
-        Debug.Log($"{curUnitInfo.nameStringID} => Hp : {hpOrigin} -> Hp : {hpResult}");
     }
 
     void AtOnceChangeMp(float _value)

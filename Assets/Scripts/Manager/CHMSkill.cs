@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Infomation;
+using static UnityEngine.GraphicsBuffer;
 
 public class CHMSkill
 {
@@ -285,17 +287,25 @@ public class CHMSkill
                     // 맞은 타겟 수 만큼 파티클 중복 여부
                     if (_effectInfo.duplication)
                     {
+                        Transform targetOne = null;
                         foreach (var target in liTarget)
                         {
-                            ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-                            
                             if (_trTarget == null)
                             {
+                                if (targetOne == null)
+                                {
+                                    targetOne = target;
+                                }
+
+                                ApplySkillValue(_trCaster, new List<Transform> { targetOne }, _effectInfo);
+
                                 // 논타겟팅 스킬
                                 CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
                             }
                             else
                             {
+                                ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+
                                 // 타겟팅 스킬
                                 CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
                             }
@@ -303,15 +313,17 @@ public class CHMSkill
                     }
                     else
                     {
-                        ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
-
                         if (_trTarget == null)
                         {
+                            ApplySkillValue(_trCaster, new List<Transform> { liTarget.First() }, _effectInfo);
+
                             // 논타겟팅 스킬
                             CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
                         }
                         else
                         {
+                            ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+
                             // 타겟팅 스킬
                             CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
                         }
@@ -368,14 +380,13 @@ public class CHMSkill
                 {
                     if (_trTarget == null)
                     {
-                        Debug.Log("@@" + _trCaster.name);
                         // 논타겟팅 스킬
-                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
+                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
                     }
                     else
                     {
                         // 타겟팅 스킬
-                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
+                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
                     }
                 }
                 break;

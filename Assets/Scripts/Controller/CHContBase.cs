@@ -107,6 +107,12 @@ public class CHContBase : MonoBehaviour
                 // 타겟이 범위 안에 있으면 즉시 공격 후 공격 딜레이 설정
                 else
                 {
+                    var posMainTarget = mainTarget.objTarget.transform.position;
+                    var posMy = transform.position;
+                    posMainTarget.y = 0f;
+                    posMy.y = 0f;
+                    var dirMainTarget = posMainTarget - posMy;
+
                     // 기본 공격
                     if (useAttack)
                     {
@@ -138,7 +144,7 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill1 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill1Distance())
                         {
-                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, transform.forward, unitInfo.GetOriginSkill1());
+                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, posMainTarget, dirMainTarget, unitInfo.GetOriginSkill1());
                             timeSinceLastSkill1 = 0.0001f;
                         }
                     }
@@ -148,7 +154,7 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
                         {
-                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, transform.forward, unitInfo.GetOriginSkill2());
+                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, posMainTarget, dirMainTarget, unitInfo.GetOriginSkill2());
                             timeSinceLastSkill2 = 0.0001f;
                         }
                     }
@@ -158,7 +164,7 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
                         {
-                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, transform.forward, unitInfo.GetOriginSkill3());
+                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, posMainTarget, dirMainTarget, unitInfo.GetOriginSkill3());
                             timeSinceLastSkill3 = 0.0001f;
                         }
                     }
@@ -168,7 +174,7 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
                         {
-                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, mainTarget.objTarget.transform.position, transform.forward, unitInfo.GetOriginSkill4());
+                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, posMainTarget, dirMainTarget, unitInfo.GetOriginSkill4());
                             timeSinceLastSkill4 = 0.0001f;
                         }
                     }
