@@ -250,7 +250,7 @@ public class CHMSkill
                     {
                         foreach (var target in liTarget)
                         {
-                            ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
+                            //ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectInfo);
 
                             if (_trTarget == null)
                             {
@@ -297,14 +297,14 @@ public class CHMSkill
                                     targetOne = target;
                                 }
 
-                                ApplySkillValue(_trCaster, new List<Transform> { targetOne }, _effectInfo);
+                                //ApplySkillValue(_trCaster, new List<Transform> { targetOne }, _effectInfo);
 
                                 // 논타겟팅 스킬
                                 CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
                             }
                             else
                             {
-                                ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                                //ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
 
                                 // 타겟팅 스킬
                                 CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
@@ -315,14 +315,14 @@ public class CHMSkill
                     {
                         if (_trTarget == null)
                         {
-                            ApplySkillValue(_trCaster, new List<Transform> { liTarget.First() }, _effectInfo);
+                            //ApplySkillValue(_trCaster, new List<Transform> { liTarget.First() }, _effectInfo);
 
                             // 논타겟팅 스킬
                             CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
                         }
                         else
                         {
-                            ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
+                            //ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectInfo);
 
                             // 타겟팅 스킬
                             CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
@@ -342,7 +342,7 @@ public class CHMSkill
                         liParticleDir.Add((liTarget[i].position - _trCaster.position).normalized);
                     }
 
-                    ApplySkillValue(_trCaster, liTarget, _effectInfo);
+                    //ApplySkillValue(_trCaster, liTarget, _effectInfo);
 
                     if (_trTarget == null)
                     {
@@ -643,6 +643,9 @@ public class CHMSkill
                         while (time <= _effectInfo.startDelay)
                         {
                             var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2f, time / _effectInfo.startDelay);
+
+                            if (decalProjector == null) break;
+
                             decalProjector.size = Vector3.one * curValue;
                             time += Time.deltaTime;
 

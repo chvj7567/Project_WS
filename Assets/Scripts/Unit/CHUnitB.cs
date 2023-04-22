@@ -6,11 +6,18 @@ public class CHUnitB : CHUnitBase
 {
     protected override void Init()
     {
-        orgUnitInfo = curUnitInfo = CHMMain.Json.GetUnitInfo(Defines.EUnitID.B);
+        orgUnitInfo = CHMMain.Json.GetUnitInfo(Defines.EUnitID.B);
 
-        orgSkill1Info = curSkill1Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill1ID);
-        orgSkill2Info = curSkill2Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill2ID);
-        orgSkill3Info = curSkill3Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill3ID);
-        orgSkill4Info = curSkill4Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill4ID);
+        curUnitInfo = orgUnitInfo.Copy();
+
+        orgSkill1Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill1ID);
+        orgSkill2Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill2ID);
+        orgSkill3Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill3ID);
+        orgSkill4Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill4ID);
+
+        curSkill1Info = orgSkill1Info.Clone();
+        curSkill1Info = orgSkill2Info.Clone();
+        curSkill1Info = orgSkill3Info.Clone();
+        curSkill1Info = orgSkill4Info.Clone();
     }
 }

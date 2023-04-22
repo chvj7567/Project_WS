@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal.Internal;
 using static Defines;
 
 public class Infomation
@@ -23,6 +24,26 @@ public class Infomation
         public ESkillCost eSkillCost = ESkillCost.None; // 스킬 비용을 뭘로 지불할지
         public float cost = -1f; // 스킬 비용
         public List<EffectInfo> liEffectInfo = new List<EffectInfo>(); // 스킬 그 자체
+
+        public SkillInfo Clone()
+        {
+            SkillInfo skill = new SkillInfo();
+            skill.eSkillID = this.eSkillID;
+            skill.skillDesc = this.skillDesc;
+            skill.isTargeting = this.isTargeting;
+            skill.distance = this.distance;
+            skill.coolTime = this.coolTime;
+            skill.eSkillCost = this.eSkillCost;
+            skill.cost = this.cost;
+
+            // EffectInfo 리스트의 값을 복사하기 위해 반복문 사용
+            foreach (EffectInfo effect in liEffectInfo)
+            {
+                skill.liEffectInfo.Add(effect.Clone());
+            }
+
+            return skill;
+        }
     }
 
     [Serializable]
@@ -50,6 +71,35 @@ public class Infomation
         public float boxHalfY = -1f; // 박스 모양의 충돌체일 경우 Y 크기의 반
         public float boxHalfZ = -1f; // 박스 모양의 충돌체일 경우 Z 크기의 반
         public float damage = -1f; // 데미지
+
+        public EffectInfo Clone()
+        {
+            EffectInfo effect = new EffectInfo();
+            effect.eEffect = this.eEffect;
+            effect.eEffectType = this.eEffectType;
+            effect.eEffectPos = this.eEffectPos;
+            effect.eDamageState = this.eDamageState;
+            effect.eDamageType = this.eDamageType;
+            effect.eCollision = this.eCollision;
+            effect.eTargetMask = this.eTargetMask;
+            effect.duplication = this.duplication;
+            effect.onDecal = this.onDecal;
+            effect.moveToPos = this.moveToPos;
+            effect.moveSpeed = this.moveSpeed;
+            effect.offsetToTarget = this.offsetToTarget;
+            effect.triggerEnter = this.triggerEnter;
+            effect.triggerExit = this.triggerExit;
+            effect.stayTickTime = this.stayTickTime;
+            effect.startDelay = this.startDelay;
+            effect.angle = this.angle;
+            effect.sphereRadius = this.sphereRadius;
+            effect.boxHalfX = this.boxHalfX;
+            effect.boxHalfY = this.boxHalfY;
+            effect.boxHalfZ = this.boxHalfZ;
+            effect.damage = this.damage;
+
+            return effect;
+        }
     }
 
     [Serializable]
@@ -74,6 +124,33 @@ public class Infomation
         public ESkillID eSkill2ID = ESkillID.None;
         public ESkillID eSkill3ID = ESkillID.None;
         public ESkillID eSkill4ID = ESkillID.None;
+
+        public UnitInfo Copy()
+        {
+            UnitInfo newUnitInfo = new UnitInfo();
+
+            newUnitInfo.eUnitID = this.eUnitID;
+            newUnitInfo.nameStringID = this.nameStringID;
+            newUnitInfo.maxHp = this.maxHp;
+            newUnitInfo.hp = this.hp;
+            newUnitInfo.hpRegenPerSecond = this.hpRegenPerSecond;
+            newUnitInfo.maxMp = this.maxMp;
+            newUnitInfo.mp = this.mp;
+            newUnitInfo.mpRegenPerSecond = this.mpRegenPerSecond;
+            newUnitInfo.attackPower = this.attackPower;
+            newUnitInfo.defensePower = this.defensePower;
+            newUnitInfo.attackDelay = this.attackDelay;
+            newUnitInfo.attackDistance = this.attackDistance;
+            newUnitInfo.moveSpeed = this.moveSpeed;
+            newUnitInfo.rotateSpeed = this.rotateSpeed;
+            newUnitInfo.viewAngle = this.viewAngle;
+            newUnitInfo.eSkill1ID = this.eSkill1ID;
+            newUnitInfo.eSkill2ID = this.eSkill2ID;
+            newUnitInfo.eSkill3ID = this.eSkill3ID;
+            newUnitInfo.eSkill4ID = this.eSkill4ID;
+
+            return newUnitInfo;
+        }
     }
 
     public class TargetInfo

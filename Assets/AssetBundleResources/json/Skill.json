@@ -250,7 +250,7 @@
             {
                 "eEffect": "16",
                 "eEffectType": "1",
-                "eEffectPos": "1",
+                "eEffectPos": "2",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
@@ -262,7 +262,7 @@
 				"offsetToTarget": -1,
 				"triggerEnter": true,
 				"triggerExit": true,
-				"stayTickTime": 2.5,
+				"stayTickTime": -1,
 				"startDelay": 2,
 				"angle": 360,
 				"sphereRadius": 5,

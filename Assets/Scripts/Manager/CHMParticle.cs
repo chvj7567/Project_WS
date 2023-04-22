@@ -39,6 +39,7 @@ public class CHMParticle
                         
                         if ((1 << _.gameObject.layer & targetMask.value) != 0)
                         {
+                            Debug.Log($"TriggerEnter : {_.name}");
                             CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
 
                             SetParticleTriggerValue(_, _effectInfo);
@@ -54,6 +55,7 @@ public class CHMParticle
 
                         if ((1 << _.gameObject.layer & targetMask.value) != 0)
                         {
+                            Debug.Log($"TriggerExit : {_.name}");
                             CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
                         }
                     }));
@@ -65,6 +67,7 @@ public class CHMParticle
 
                     if ((1 << _.gameObject.layer & targetMask.value) != 0)
                     {
+                        Debug.Log($"TriggerStay : {_.name}");
                         CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
                     }
                 }));
@@ -264,8 +267,11 @@ public class CHMParticle
 
         float time = 0f;
 
+        // 위로 떠오르는 코드
         while (time <= _airborneTime)
         {
+            if (unitBase.GetIsDeath()) break;
+
             unitBase.SetIsAirborne(true);
             float height = startPos.y + (airborneVelocity * time) + (0.5f * gravity * Mathf.Pow(time, 2));
             _trTarget.position = new Vector3(_trTarget.position.x, height, _trTarget.position.z);
@@ -278,10 +284,10 @@ public class CHMParticle
         float groundLevel = 0f;
         Vector3 fallVector = Vector3.zero;
 
-        time = 0f;
+        // 아래로 떨어지는 코드
         while (_trTarget.position.y > groundLevel)
         {
-            if (unitBase.GetIsAirborne()) break;
+            if (unitBase.GetIsAirborne() || unitBase.GetIsDeath()) break;
             fallVector.y -= fallSpeed * Time.deltaTime;
             _trTarget.position += fallVector * Time.deltaTime;
             await Task.Delay((int)(Time.deltaTime * 1000f));
