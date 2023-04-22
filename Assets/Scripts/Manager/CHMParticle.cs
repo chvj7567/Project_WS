@@ -292,5 +292,7 @@ public class CHMParticle
             _trTarget.position += fallVector * Time.deltaTime;
             await Task.Delay((int)(Time.deltaTime * 1000f));
         }
+
+        _trTarget.position = new Vector3(_trTarget.position.x, 0f, _trTarget.position.z);
     }
 }
