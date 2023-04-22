@@ -128,7 +128,7 @@
 				"moveToPos": false,
 				"moveSpeed": -1,
 				"offsetToTarget": -1,
-				"triggerEnter": false,
+				"triggerEnter": true,
 				"triggerExit": false,
 				"stayTickTime": -1,
 				"startDelay": 0.35,
