@@ -232,7 +232,7 @@ public abstract class CHUnitBase : MonoBehaviour
 
         curUnitInfo.hp = hpResult;
         if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), hpResult);
-        Debug.Log($"{curUnitInfo.nameStringID} => Hp : {hpOrigin} -> Hp : {hpResult}");
+        Debug.Log($"{curUnitInfo.nameStringID}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
 
         if (hpResult <= 0.00001f)
         {
