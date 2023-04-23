@@ -42,8 +42,8 @@ public abstract class CHUnitBase : MonoBehaviour
         {
             if (GetIsDeath() == false)
             {
-                ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
-                ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);
+                /*ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
+                ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);*/
             }
         }));
 
