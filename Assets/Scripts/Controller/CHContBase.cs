@@ -114,7 +114,7 @@ public class CHContBase : MonoBehaviour
                     var dirMainTarget = posMainTarget - posMy;
 
                     // 기본 공격
-                    if (useAttack)
+                    if (useAttack && unitInfo.CanAttack())
                     {
                         if (timeSinceLastAttack < 0f && mainTarget.distance <= unitInfo.GetOriginAttackDistance())
                         {
@@ -140,7 +140,7 @@ public class CHContBase : MonoBehaviour
                     }
 
                     // 1번 스킬
-                    if (useSkill1)
+                    if (useSkill1 && unitInfo.CanAttack())
                     {
                         if (timeSinceLastSkill1 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill1Distance())
                         {
@@ -150,7 +150,7 @@ public class CHContBase : MonoBehaviour
                     }
 
                     // 2번 스킬
-                    if (useSkill2)
+                    if (useSkill2 && unitInfo.CanAttack())
                     {
                         if (timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
                         {
@@ -160,7 +160,7 @@ public class CHContBase : MonoBehaviour
                     }
 
                     // 3번 스킬
-                    if (useSkill3)
+                    if (useSkill3 && unitInfo.CanAttack())
                     {
                         if (timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
                         {
@@ -170,7 +170,7 @@ public class CHContBase : MonoBehaviour
                     }
 
                     // 4번 스킬
-                    if (useSkill4)
+                    if (useSkill4 && unitInfo.CanAttack())
                     {
                         if (timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
                         {

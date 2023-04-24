@@ -265,21 +265,23 @@ public class CHMParticle
         float airborneVelocity = -gravity * _airborneTime;
         Vector3 startPos = _trTarget.position;
 
-        float time = 0f;
+        // 타겟 유닛 에어본 상태 체크
+        unitBase.SetIsAirborne(true);
+        unitBase.IsFalling = false;
 
+        float time = 0f;
         // 위로 떠오르는 코드
         while (time <= _airborneTime)
         {
             if (unitBase.GetIsDeath()) break;
-
-            unitBase.SetIsAirborne(true);
             float height = startPos.y + (airborneVelocity * time) + (0.5f * gravity * Mathf.Pow(time, 2));
             _trTarget.position = new Vector3(_trTarget.position.x, height, _trTarget.position.z);
             time += Time.deltaTime;
             await Task.Delay((int)(Time.deltaTime * 1000f));
         }
 
-        unitBase.SetIsAirborne(false);
+        unitBase.IsFalling = true;
+
         float fallSpeed = 9.8f;
         float groundLevel = 0f;
         Vector3 fallVector = Vector3.zero;
@@ -287,12 +289,17 @@ public class CHMParticle
         // 아래로 떨어지는 코드
         while (_trTarget.position.y > groundLevel)
         {
-            if (unitBase.GetIsAirborne() || unitBase.GetIsDeath()) break;
+            if (unitBase.IsFalling == false) break;
             fallVector.y -= fallSpeed * Time.deltaTime;
             _trTarget.position += fallVector * Time.deltaTime;
             await Task.Delay((int)(Time.deltaTime * 1000f));
         }
 
-        _trTarget.position = new Vector3(_trTarget.position.x, 0f, _trTarget.position.z);
+        if (unitBase.IsFalling)
+        {
+            unitBase.IsFalling = false;
+            unitBase.SetIsAirborne(false);
+            _trTarget.position = new Vector3(_trTarget.position.x, 0f, _trTarget.position.z);
+        }
     }
 }
