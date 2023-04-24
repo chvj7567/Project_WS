@@ -9,7 +9,7 @@ using static Defines;
 
 public abstract class CHUnitBase : MonoBehaviour
 {
-    [SerializeField] Collider collider;
+    [SerializeField] Collider unitCollider;
 
     // 기본 유닛 정보
     [SerializeField, ReadOnly] protected Infomation.UnitInfo orgUnitInfo;
@@ -57,7 +57,12 @@ public abstract class CHUnitBase : MonoBehaviour
                 hpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
                 if (hpGaugeBar)
                 {
-                    hpGaugeBar.Init(collider.bounds.size.y);
+                    if (unitCollider == null)
+                    {
+                        unitCollider = gameObject.GetOrAddComponent<Collider>();
+                    }
+
+                    hpGaugeBar.Init(unitCollider.bounds.size.y);
                 }
             }
         });

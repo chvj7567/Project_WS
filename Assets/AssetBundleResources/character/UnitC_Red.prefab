@@ -477,7 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44acec6a43f540e4bb8e85d55bc5b2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 2376815556044339868}
+  unitCollider: {fileID: 2376815556044339868}
   orgUnitInfo:
     eUnitID: -1
     nameStringID: -1

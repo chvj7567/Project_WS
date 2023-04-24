@@ -70,6 +70,8 @@ public class CHTargetTracker : MonoBehaviour
             // 자기가 살아있을 때만 타겟 감지
             if (isDead == false)
             {
+                bool isRunAnim = false;
+
                 // 시야 범위 안에 들어온 타겟 중 제일 가까운 타겟 감지
                 closestTarget = GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
 
@@ -77,7 +79,6 @@ public class CHTargetTracker : MonoBehaviour
                 {
                     viewAngle = orgViewAngle;
                     rangeMulti = 1f;
-                    if (animator && contBase) animator.SetBool(contBase.sightRange, false);
                 }
                 else
                 {
@@ -87,41 +88,30 @@ public class CHTargetTracker : MonoBehaviour
                     rangeMulti = orgRangeMulti;
                     // 공격 중일 때는 안 움직이도록
                     bool isAttackAnimating = false;
+
                     if (animator) isAttackAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
 
-                    
                     if (isAttackAnimating == false)
                     {
                         LookAtTarget(closestTarget.direction);
 
-                        bool isAttackDistance = true;
-                        if (unitBase) isAttackDistance = closestTarget.distance > unitBase.GetOriginAttackDistance();
+                        bool isAttackDistance = false;
+                        if (unitBase) isAttackDistance = closestTarget.distance <= unitBase.GetOriginAttackDistance();
 
                         // 공격 범위까지만 다가감
-                        if (isAttackDistance)
+                        if (isAttackDistance == false)
                         {
-                            if (animator && contBase) animator.SetBool(contBase.sightRange, true);
-
-                            // 달리기 애니메이션 중 일때 움직이도록
-                            bool isRunAnimating = true;
-
-                            if (animator) isAttackAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
-
-                            if (isRunAnimating)
-                            {
-                                FollowTarget(closestTarget.direction);
-                            }
-                        }
-                        else
-                        {
-                            if (animator) animator.SetBool(contBase.sightRange, false);
+                            isRunAnim = true;
+                            IsRunAnim(true);
+                            FollowTarget(closestTarget.direction);
                         }
                     }
                 }
-            }
-            else
-            {
-                if (animator) animator.SetBool(contBase.sightRange, false);
+
+                if (isRunAnim == false)
+                {
+                    IsRunAnim(false);
+                }
             }
         }).AddTo(this);
     }
@@ -143,6 +133,11 @@ public class CHTargetTracker : MonoBehaviour
             Debug.DrawRay(transform.position, left * range, Color.green);
             Debug.DrawRay(transform.position, right * range, Color.green);
         }
+    }
+    
+    void IsRunAnim(bool _isRun)
+    {
+        if (animator && contBase) animator.SetBool(contBase.sightRange, _isRun);
     }
 
     void LookAtTarget(Vector3 _direction)

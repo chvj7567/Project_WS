@@ -19,7 +19,7 @@
 				"eTargetMask": "2",
 				"duplication": false,
 				"onDecal": false,
-				"moveToPos": false,
+				"moveToPos": true,
 				"moveSpeed": 100,
 				"offsetToTarget": -1,
 				"triggerEnter": true,

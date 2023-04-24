@@ -200,7 +200,7 @@ public class CHMParticle
         }
     }
 
-    async void SetParticleValue(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, GameObject _objParticle, EffectInfo _effectInfo)
+    void SetParticleValue(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, GameObject _objParticle, EffectInfo _effectInfo)
     {
         // 각 이펙트별로 세부 설정이 필요한 경우
         switch (_effectInfo.eEffect)
