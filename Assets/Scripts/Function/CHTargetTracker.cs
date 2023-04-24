@@ -23,6 +23,8 @@ public class CHTargetTracker : MonoBehaviour
     public float moveSpeed;
     // 타겟을 따라갈 때 유지할 거리
     public float approachDistance;
+    // 가야할 방향
+    public Vector3 direction;
     // 에디터 상에서 시야각 확인 여부
     public bool viewEditor;
 
@@ -79,6 +81,11 @@ public class CHTargetTracker : MonoBehaviour
                 {
                     viewAngle = orgViewAngle;
                     rangeMulti = 1f;
+
+                    isRunAnim = true;
+                    IsRunAnim(true);
+                    LookAtDirection(direction.normalized);
+                    FollowDirection(direction.normalized);
                 }
                 else
                 {
@@ -93,7 +100,7 @@ public class CHTargetTracker : MonoBehaviour
 
                     if (isAttackAnimating == false)
                     {
-                        LookAtTarget(closestTarget.direction);
+                        LookAtDirection(closestTarget.direction);
 
                         bool isAttackDistance = false;
                         if (unitBase) isAttackDistance = closestTarget.distance <= unitBase.GetOriginAttackDistance();
@@ -103,7 +110,7 @@ public class CHTargetTracker : MonoBehaviour
                         {
                             isRunAnim = true;
                             IsRunAnim(true);
-                            FollowTarget(closestTarget.direction);
+                            FollowDirection(closestTarget.direction);
                         }
                     }
                 }
@@ -140,7 +147,7 @@ public class CHTargetTracker : MonoBehaviour
         if (animator && contBase) animator.SetBool(contBase.sightRange, _isRun);
     }
 
-    void LookAtTarget(Vector3 _direction)
+    void LookAtDirection(Vector3 _direction)
     {
         Quaternion targetRotation = Quaternion.LookRotation(_direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
@@ -152,7 +159,7 @@ public class CHTargetTracker : MonoBehaviour
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0f, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
 
-    void FollowTarget(Vector3 _direction)
+    void FollowDirection(Vector3 _direction)
     {
         transform.position += _direction.normalized * moveSpeed * Time.deltaTime;
     }

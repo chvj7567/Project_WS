@@ -119,6 +119,8 @@ public class Infomation
         public float attackDistance = -1f;
         public float moveSpeed = -1f;
         public float rotateSpeed = -1f;
+        public float range = -1f;
+        public float rangeMulti = -1f;
         public float viewAngle = -1f;
         public ESkillID eSkill1ID = ESkillID.None;
         public ESkillID eSkill2ID = ESkillID.None;
@@ -143,6 +145,8 @@ public class Infomation
             newUnitInfo.attackDistance = this.attackDistance;
             newUnitInfo.moveSpeed = this.moveSpeed;
             newUnitInfo.rotateSpeed = this.rotateSpeed;
+            newUnitInfo.range = this.range;
+            newUnitInfo.rangeMulti = this.rangeMulti;
             newUnitInfo.viewAngle = this.viewAngle;
             newUnitInfo.eSkill1ID = this.eSkill1ID;
             newUnitInfo.eSkill2ID = this.eSkill2ID;

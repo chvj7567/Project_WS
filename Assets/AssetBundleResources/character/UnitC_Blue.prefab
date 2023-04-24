@@ -435,6 +435,7 @@ MonoBehaviour:
   rotateSpeed: 5
   moveSpeed: 0
   approachDistance: 5
+  direction: {x: 1, y: 0, z: 0}
   viewEditor: 1
   animator: {fileID: 2376815555899428180}
   unitBase: {fileID: 6232622705768865320}

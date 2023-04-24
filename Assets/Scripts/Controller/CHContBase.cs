@@ -40,7 +40,8 @@ public class CHContBase : MonoBehaviour
         {
             targetTracker.moveSpeed = unitInfo.GetCurrentMoveSpeed();
             targetTracker.rotateSpeed = unitInfo.GetCurrentRotateSpeed();
-            targetTracker.range = unitInfo.GetCurrentAttackDistance() * 2f;
+            targetTracker.range = unitInfo.GetCurrentRange();
+            targetTracker.rangeMulti = unitInfo.GetCurrentRangeMulti();
             targetTracker.approachDistance = unitInfo.GetCurrentAttackDistance();
             targetTracker.viewAngle = unitInfo.GetCurrentViewAngle();
             targetTracker.ResetViewAngleOrigin();
