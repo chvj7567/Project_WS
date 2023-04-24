@@ -84,7 +84,7 @@ public class CHTargetTracker : MonoBehaviour
                     viewAngle = orgViewAngle;
                     rangeMulti = 1f;
 
-                    if (trDestination) agent.SetDestination(trDestination.position);
+                    if (trDestination && agent.enabled) agent.SetDestination(trDestination.position);
                     PlayRunAnim();
                 }
                 else
@@ -94,7 +94,7 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
 
-                    agent.SetDestination(closestTarget.objTarget.transform.position);
+                    if (agent.enabled) agent.SetDestination(closestTarget.objTarget.transform.position);
 
                     if (closestTarget.distance > unitBase.GetCurrentAttackDistance())
                     {
