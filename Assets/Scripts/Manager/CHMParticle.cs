@@ -5,6 +5,7 @@ using System.Linq;
 using static Infomation;
 using UniRx;
 using UnityEngine.AI;
+using System;
 
 public class CHMParticle
 {
@@ -301,11 +302,18 @@ public class CHMParticle
         // 위로 떠오르는 코드
         while (time <= _airborneTime)
         {
-            if (unitBase.GetIsDeath()) break;
-            float height = startPos.y + (airborneVelocity * time) + (0.5f * gravity * Mathf.Pow(time, 2));
-            _trTarget.position = new Vector3(_trTarget.position.x, height, _trTarget.position.z);
-            time += Time.deltaTime;
-            await Task.Delay((int)(Time.deltaTime * 1000f));
+            try
+            {
+                if (unitBase.GetIsDeath()) break;
+                float height = startPos.y + (airborneVelocity * time) + (0.5f * gravity * Mathf.Pow(time, 2));
+                _trTarget.position = new Vector3(_trTarget.position.x, height, _trTarget.position.z);
+                time += Time.deltaTime;
+                await Task.Delay((int)(Time.deltaTime * 1000f));
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         unitBase.IsFalling = true;
@@ -317,10 +325,17 @@ public class CHMParticle
         // 아래로 떨어지는 코드
         while (_trTarget.position.y > groundLevel)
         {
-            if (unitBase.IsFalling == false) break;
-            fallVector.y -= fallSpeed * Time.deltaTime;
-            _trTarget.position += fallVector * Time.deltaTime;
-            await Task.Delay((int)(Time.deltaTime * 1000f));
+            try
+            {
+                if (unitBase.IsFalling == false) break;
+                fallVector.y -= fallSpeed * Time.deltaTime;
+                _trTarget.position += fallVector * Time.deltaTime;
+                await Task.Delay((int)(Time.deltaTime * 1000f));
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         if (unitBase.IsFalling)

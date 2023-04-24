@@ -63,6 +63,8 @@ public class CHMSkill
                     }
                 }
 
+                if (_trCaster == null) return;
+
                 // 스킬 충돌 범위 생성
                 CreateSkillCollision(_trCaster, _trTarget, _posSkill, _dirSkill, effectInfo);
             }

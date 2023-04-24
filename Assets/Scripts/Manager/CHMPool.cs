@@ -1,7 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class CHMPool
@@ -76,7 +73,7 @@ public class CHMPool
         {
             root = new GameObject { name = "@PoolRoot" }.transform;
 
-            if (EditorApplication.isPlaying)
+            if (Application.isPlaying)
             {
                 Object.DontDestroyOnLoad(root);
             }
