@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Defines;
 
 public abstract class CHUnitBase : MonoBehaviour
 {
-    [SerializeField] Collider unitCollider;
+    [SerializeField, ReadOnly] protected Collider unitCollider;
 
     // 기본 유닛 정보
     [SerializeField, ReadOnly] protected Infomation.UnitInfo orgUnitInfo;
@@ -25,12 +26,27 @@ public abstract class CHUnitBase : MonoBehaviour
     [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill3Info;
     [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill4Info;
 
-    [SerializeField, ReadOnly] Defines.EUnitState unitState = Defines.EUnitState.None;
+    [SerializeField, ReadOnly] protected Defines.EUnitState unitState = Defines.EUnitState.None;
 
     // 떨어지는 상태인지 확인(에어본과 별도 확인)
     public bool IsFalling { get; set; }
 
-    CHGaugeBar hpGaugeBar;
+    protected CHGaugeBar hpGaugeBar;
+
+    public void Reset()
+    {
+        unitState = 0;
+
+        curUnitInfo = orgUnitInfo.Clone();
+        curSkill1Info = orgSkill1Info.Clone();
+        curSkill1Info = orgSkill2Info.Clone();
+        curSkill1Info = orgSkill3Info.Clone();
+        curSkill1Info = orgSkill4Info.Clone();
+
+        unitCollider.enabled = true;
+
+        hpGaugeBar.ResetGaugeBar();
+    }
 
     private void Awake()
     {
@@ -41,14 +57,14 @@ public abstract class CHUnitBase : MonoBehaviour
     {
         gameObject.UpdateAsObservable()
             .ThrottleFirst(TimeSpan.FromSeconds(1))
-            .Subscribe((Action<Unit>)(_ =>
+            .Subscribe(_ =>
         {
             if (GetIsDeath() == false)
             {
                 /*ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
                 ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);*/
             }
-        }));
+        });
 
         CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, (gaugeBar) =>
         {
@@ -251,6 +267,7 @@ public abstract class CHUnitBase : MonoBehaviour
         if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), hpResult);
         Debug.Log($"{curUnitInfo.nameStringID}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
 
+        // 죽음 Die
         if (hpResult <= 0.00001f)
         {
             hpResult = 0f;
@@ -261,11 +278,17 @@ public abstract class CHUnitBase : MonoBehaviour
                 var animator = unitBase.GetAnimator();
                 if (animator != null)
                 {
+                    animator.SetBool(unitBase.attackRange, false);
+                    animator.SetBool(unitBase.sightRange, false);
                     animator.SetBool(unitBase.isDeath, true);
                 }
             }
 
             unitState |= Defines.EUnitState.IsDead;
+
+            unitCollider.enabled = false;
+
+            CHMMain.Resource.Destroy(gameObject, 3f);
         }
     }
 

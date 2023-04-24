@@ -5,6 +5,7 @@ using UniRx;
 using System;
 using Unity.VisualScripting;
 using static UnityEngine.UI.Image;
+using System.Threading.Tasks;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -98,18 +99,18 @@ public class CHMResource
         else
         {
             GameObject go = GameObject.Instantiate(_object, _parent);
-            go.SetActive(true);
             return go;
         }
     }
 
-    public void Destroy(GameObject _object, float _time = 0)
+    public async void Destroy(GameObject _object, float _time = 0)
     {
         if (_object == null) return;
 
         CHPoolable poolable = _object.GetComponent<CHPoolable>();
         if (poolable != null)
         {
+            await Task.Delay((int)(_time * 1000f));
             CHMMain.Pool.Push(poolable);
         }
         else

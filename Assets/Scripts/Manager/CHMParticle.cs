@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using static Infomation;
 using UniRx;
+using UnityEngine.AI;
 
 public class CHMParticle
 {
@@ -42,7 +43,7 @@ public class CHMParticle
                             Debug.Log($"TriggerEnter : {_.name}");
                             CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
 
-                            SetParticleTriggerValue(_, _effectInfo);
+                            SetParticleTriggerValue(_trCaster, _, _effectInfo);
                         }
                     }));
                 }
@@ -57,6 +58,8 @@ public class CHMParticle
                         {
                             Debug.Log($"TriggerExit : {_.name}");
                             CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+
+                            SetParticleTriggerValue(_trCaster, _, _effectInfo);
                         }
                     }));
                 }
@@ -69,6 +72,8 @@ public class CHMParticle
                     {
                         Debug.Log($"TriggerStay : {_.name}");
                         CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+
+                        SetParticleTriggerValue(_trCaster, _, _effectInfo);
                     }
                 }));
 
@@ -86,6 +91,9 @@ public class CHMParticle
                 var objParticle = liParticle.ElementAtOrDefault(i);
                 var posParticle = _liParticlePos.ElementAtOrDefault(i);
                 var dirParticle = _liParticleDir.ElementAtOrDefault(i);
+
+                posParticle.y = 0f;
+                dirParticle.y = 0f;
 
                 objParticle.transform.position = posParticle;
                 objParticle.transform.forward = dirParticle;
@@ -114,13 +122,21 @@ public class CHMParticle
                 var objParticle = liParticle.ElementAtOrDefault(i);
                 var trTarget = _liTarget.ElementAtOrDefault(i);
 
-                objParticle.transform.position = trTarget.position;
-                objParticle.transform.forward = trTarget.forward;
+                var posParticle = trTarget.position;
+                var dirParticle = _trCaster.forward;
+
+                posParticle.y = 0f;
+                dirParticle.y = 0f;
+
+                objParticle.transform.position = posParticle;
+                objParticle.transform.forward = dirParticle;
 
                 objParticle.transform.SetParent(trTarget);
 
                 SetParticleValue(_trCaster, trTarget, Vector3.zero, Vector3.zero, objParticle, _effectInfo);
             }
+
+            CHMMain.Skill.ApplySkillValue(_trCaster, _liTarget, _effectInfo);
         }
     }
 
@@ -161,6 +177,8 @@ public class CHMParticle
                 DestroyParticle(_eEffect, objParticle);
             }
         }
+
+        objParticle.SetActive(true);
 
         return objParticle;
     }
@@ -214,7 +232,7 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    Move(_objParticle, _dirSkill, 10f, dicParticleInfo[_effectInfo.eEffect].time);
+                    ParticleMove(_objParticle, _dirSkill, 10f, dicParticleInfo[_effectInfo.eEffect].time);
                 }
                 break;
             default:
@@ -222,19 +240,22 @@ public class CHMParticle
         }
     }
 
-    void SetParticleTriggerValue(Transform _trTarget, EffectInfo _effectInfo)
+    void SetParticleTriggerValue(Transform _trCaster, Transform _trTarget, EffectInfo _effectInfo)
     {
         // 각 이펙트에 트리거 된 타겟들 처리
         switch (_effectInfo.eEffect)
         {
             case Defines.EEffect.FX_Tornado:
                 {
-                    Airborne(_trTarget, 2, 0.5f);
+                    TargetAirborne(_trTarget, 2, 0.5f);
                 }
                 break;
-            case Defines.EEffect.FX_Explosion:
+            case Defines.EEffect.FX_Explosion_Magic:
                 {
-                    Airborne(_trTarget, 5, 0.5f);
+                    TargetAirborne(_trTarget, 5, 0.5f);
+
+                    var objParticle = GetParticleObject(Defines.EEffect.FX_Healing);
+                    objParticle.transform.position = _trCaster.position;
                 }
                 break;
             default:
@@ -242,7 +263,7 @@ public class CHMParticle
         }
     }
 
-    async void Move(GameObject _objParticle, Vector3 _direction, float _speed, float _effectTime)
+    async void ParticleMove(GameObject _objParticle, Vector3 _direction, float _speed, float _effectTime)
     {
         var posOrigin = _objParticle.transform.position;
 
@@ -258,12 +279,19 @@ public class CHMParticle
             await Task.Delay((int)(Time.deltaTime * 1000f));
         }
     }
-    async void Airborne(Transform _trTarget, float _airborneHeight, float _airborneTime)
+
+    async void TargetAirborne(Transform _trTarget, float _airborneHeight, float _airborneTime)
     {
         var unitBase = _trTarget.GetComponent<CHUnitBase>();
         float gravity = -2 * _airborneHeight / Mathf.Pow(_airborneTime, 2);
         float airborneVelocity = -gravity * _airborneTime;
         Vector3 startPos = _trTarget.position;
+
+        var agent = _trTarget.GetComponent<NavMeshAgent>();
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
 
         // 타겟 유닛 에어본 상태 체크
         unitBase.SetIsAirborne(true);
@@ -300,6 +328,11 @@ public class CHMParticle
             unitBase.IsFalling = false;
             unitBase.SetIsAirborne(false);
             _trTarget.position = new Vector3(_trTarget.position.x, 0f, _trTarget.position.z);
+
+            if(agent != null)
+            {
+                agent.enabled = true;
+            }
         }
     }
 }

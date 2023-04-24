@@ -56,6 +56,7 @@ public class Infomation
         public EDamageType eDamageType = EDamageType.None; // 데미지 타입
         public ECollision eCollision = ECollision.None; // 충돌체 모양
         public ETargetMask eTargetMask = ETargetMask.None; // 스킬 대상
+        public bool isTargeting = false; // 이펙트 타겟팅 여부
         public bool duplication = false; // 스킬 중복 여부
         public bool onDecal = false; // 데칼 표시 여부
         public bool moveToPos = false; // true인 경우 moveSpeed에 따라 startDelay는 자동 계산
@@ -127,7 +128,7 @@ public class Infomation
         public ESkillID eSkill3ID = ESkillID.None;
         public ESkillID eSkill4ID = ESkillID.None;
 
-        public UnitInfo Copy()
+        public UnitInfo Clone()
         {
             UnitInfo newUnitInfo = new UnitInfo();
 

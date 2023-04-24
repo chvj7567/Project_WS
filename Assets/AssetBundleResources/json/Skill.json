@@ -4,22 +4,22 @@
         "skillDesc": "-1",
 		"isTargeting": false,
 		"distance": 50,
-		"coolTime": 10,
+		"coolTime": 3,
 		"eSkillCost": 0,
 		"cost": 0,
         "liEffectInfo":
 		[
             {
-                "eEffect": "4",
+                "eEffect": "5",
                 "eEffectType": "1",
-                "eEffectPos": "1",
+                "eEffectPos": "0",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
 				"eTargetMask": "2",
 				"duplication": false,
-				"onDecal": false,
-				"moveToPos": true,
+				"onDecal": true,
+				"moveToPos": false,
 				"moveSpeed": 100,
 				"offsetToTarget": -1,
 				"triggerEnter": true,
@@ -31,12 +31,12 @@
 				"boxHalfX": -1,
 				"boxHalfY": -1,
 				"boxHalfZ": -1,
-                "damage": 10
+                "damage": 0
             },
 			{
                 "eEffect": "7",
                 "eEffectType": "1",
-                "eEffectPos": "2",
+                "eEffectPos": "1",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
@@ -64,7 +64,7 @@
         "skillDesc": "-1",
 		"isTargeting": false,
 		"distance": 50,
-		"coolTime": 1,
+		"coolTime": 5,
 		"eSkillCost": 4,
 		"cost": 0,
         "liEffectInfo":
@@ -118,7 +118,7 @@
 			{
                 "eEffect": "14",
                 "eEffectType": "1",
-                "eEffectPos": "1",
+                "eEffectPos": "0",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
@@ -137,7 +137,7 @@
 				"boxHalfX": -1,
 				"boxHalfY": -1,
 				"boxHalfZ": -1,
-                "damage": 50
+                "damage": 100
             }
         ]
     },
@@ -164,7 +164,7 @@
 				"moveToPos": false,
 				"moveSpeed": -1,
 				"offsetToTarget": -1,
-				"triggerEnter": false,
+				"triggerEnter": true,
 				"triggerExit": false,
 				"stayTickTime": -1,
 				"startDelay": 1,
@@ -173,7 +173,7 @@
 				"boxHalfX": -1,
 				"boxHalfY": -1,
 				"boxHalfZ": -1,
-                "damage": 10
+                "damage": 20
             }
         ]
     },
@@ -214,7 +214,7 @@
 			{
                 "eEffect": "10",
                 "eEffectType": "1",
-                "eEffectPos": "1",
+                "eEffectPos": "0",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
@@ -250,7 +250,7 @@
             {
                 "eEffect": "16",
                 "eEffectType": "1",
-                "eEffectPos": "2",
+                "eEffectPos": "1",
                 "eDamageState": "0",
                 "eDamageType": "0",
 				"eCollision": "0",
@@ -261,7 +261,7 @@
 				"moveSpeed": -1,
 				"offsetToTarget": -1,
 				"triggerEnter": true,
-				"triggerExit": true,
+				"triggerExit": false,
 				"stayTickTime": -1,
 				"startDelay": 2,
 				"angle": 360,

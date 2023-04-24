@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Rendering;
 
 public class CHContBase : MonoBehaviour
@@ -21,6 +22,7 @@ public class CHContBase : MonoBehaviour
     [SerializeField, ReadOnly] protected float timeSinceLastSkill4 = -1f;
 
     [SerializeField, ReadOnly] Animator animator;
+    [SerializeField, ReadOnly] NavMeshAgent agent;
 
     [SerializeField, ReadOnly] public int attackRange = Animator.StringToHash("AttackRange");
     [SerializeField, ReadOnly] public int sightRange = Animator.StringToHash("SightRange");
@@ -33,18 +35,13 @@ public class CHContBase : MonoBehaviour
 
     public virtual void Init()
     {
+        agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         var unitInfo = gameObject.GetOrAddComponent<CHUnitBase>();
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
         if (unitInfo != null && targetTracker != null)
         {
-            targetTracker.moveSpeed = unitInfo.GetCurrentMoveSpeed();
-            targetTracker.rotateSpeed = unitInfo.GetCurrentRotateSpeed();
-            targetTracker.range = unitInfo.GetCurrentRange();
-            targetTracker.rangeMulti = unitInfo.GetCurrentRangeMulti();
-            targetTracker.approachDistance = unitInfo.GetCurrentAttackDistance();
-            targetTracker.viewAngle = unitInfo.GetCurrentViewAngle();
-            targetTracker.ResetViewAngleOrigin();
+            targetTracker.ResetValue(unitInfo);
 
             timeSinceLastAttack = -1f;
             timeSinceLastSkill1 = -1f;
@@ -54,6 +51,12 @@ public class CHContBase : MonoBehaviour
 
             gameObject.UpdateAsObservable().Subscribe(_ =>
             {
+                if (unitInfo.GetIsDeath())
+                {
+                    agent.ResetPath();
+                    return;
+                }
+
                 Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
 
                 if (timeSinceLastAttack >= 0f && timeSinceLastAttack < unitInfo.GetOriginAttackDelay())

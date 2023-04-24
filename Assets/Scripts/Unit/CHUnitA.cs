@@ -8,7 +8,7 @@ public class CHUnitA : CHUnitBase
     {
         orgUnitInfo = CHMMain.Json.GetUnitInfo(Defines.EUnitID.A);
 
-        curUnitInfo = orgUnitInfo.Copy();
+        curUnitInfo = orgUnitInfo.Clone();
 
         orgSkill1Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill1ID);
         orgSkill2Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill2ID);

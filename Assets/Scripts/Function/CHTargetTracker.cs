@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UIElements;
 using static Infomation;
 
 public class CHTargetTracker : MonoBehaviour
@@ -17,33 +20,38 @@ public class CHTargetTracker : MonoBehaviour
     public float rangeMulti;
     // 타겟을 감지할 시야각
     [Range(0, 360)] public float viewAngle;
-    // 타겟을 바라보는 속도
-    public float rotateSpeed;
-    // 타겟을 따라가는 속도
-    public float moveSpeed;
-    // 타겟을 따라갈 때 유지할 거리
-    public float approachDistance;
-    // 가야할 방향
-    public Vector3 direction;
+    // 가야할 위치
+    public Transform trDestination;
     // 에디터 상에서 시야각 확인 여부
     public bool viewEditor;
 
-    [SerializeField, ReadOnly] Animator animator;
+    [SerializeField, ReadOnly] NavMeshAgent agent;
     [SerializeField, ReadOnly] CHUnitBase unitBase;
+    [SerializeField, ReadOnly] Animator animator;
     [SerializeField, ReadOnly] CHContBase contBase;
     [SerializeField, ReadOnly] TargetInfo closestTarget;
 
-    float orgRangeMulti = -1f;
-    float orgViewAngle = -1f;
+    [SerializeField, ReadOnly] float orgRangeMulti = -1f;
+    [SerializeField, ReadOnly] float orgViewAngle = -1f;
 
-    public void ResetViewAngleOrigin()
+    public void ResetValue(CHUnitBase _unitBase)
     {
+        unitBase = _unitBase;
+
+        range = unitBase.GetCurrentRange();
+        rangeMulti = unitBase.GetCurrentRangeMulti();
+        orgRangeMulti = rangeMulti;
+        rangeMulti = 1f;
+
+        viewAngle = unitBase.GetCurrentViewAngle();
         orgViewAngle = viewAngle;
-    }
 
-    public LayerMask GetTargetMask()
-    {
-        return targetMask;
+        if (agent)
+        {
+            agent.speed = unitBase.GetCurrentMoveSpeed();
+            agent.angularSpeed = unitBase.GetCurrentRotateSpeed();
+            agent.stoppingDistance = unitBase.GetCurrentAttackDistance();
+        }
     }
 
     private void Awake()
@@ -55,15 +63,11 @@ public class CHTargetTracker : MonoBehaviour
         // 시야각 저장
         orgViewAngle = viewAngle;
 
-        animator = GetComponent<Animator>();
-        unitBase = GetComponent<CHUnitBase>();
-        contBase = GetComponent<CHContBase>();
+        agent = gameObject.GetOrAddComponent<NavMeshAgent>();
     }
 
     private void Start()
     {
-        if (unitBase) approachDistance = unitBase.GetCurrentAttackDistance();
-
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
             bool isDead = false;
@@ -72,8 +76,6 @@ public class CHTargetTracker : MonoBehaviour
             // 자기가 살아있을 때만 타겟 감지
             if (isDead == false)
             {
-                bool isRunAnim = false;
-
                 // 시야 범위 안에 들어온 타겟 중 제일 가까운 타겟 감지
                 closestTarget = GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
 
@@ -82,10 +84,8 @@ public class CHTargetTracker : MonoBehaviour
                     viewAngle = orgViewAngle;
                     rangeMulti = 1f;
 
-                    isRunAnim = true;
-                    IsRunAnim(true);
-                    LookAtDirection(direction.normalized);
-                    FollowDirection(direction.normalized);
+                    if (trDestination) agent.SetDestination(trDestination.position);
+                    PlayRunAnim();
                 }
                 else
                 {
@@ -93,31 +93,17 @@ public class CHTargetTracker : MonoBehaviour
                     viewAngle = 360f;
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
-                    // 공격 중일 때는 안 움직이도록
-                    bool isAttackAnimating = false;
 
-                    if (animator) isAttackAnimating = animator.GetCurrentAnimatorStateInfo(0).IsName(Defines.EUnitAni.Attack1.ToString());
+                    agent.SetDestination(closestTarget.objTarget.transform.position);
 
-                    if (isAttackAnimating == false)
+                    if (closestTarget.distance > unitBase.GetCurrentAttackDistance())
                     {
-                        LookAtDirection(closestTarget.direction);
-
-                        bool isAttackDistance = false;
-                        if (unitBase) isAttackDistance = closestTarget.distance <= unitBase.GetOriginAttackDistance();
-
-                        // 공격 범위까지만 다가감
-                        if (isAttackDistance == false)
-                        {
-                            isRunAnim = true;
-                            IsRunAnim(true);
-                            FollowDirection(closestTarget.direction);
-                        }
+                        PlayRunAnim();
                     }
-                }
-
-                if (isRunAnim == false)
-                {
-                    IsRunAnim(false);
+                    else
+                    {
+                        StopRunAnim();
+                    }
                 }
             }
         }).AddTo(this);
@@ -141,16 +127,21 @@ public class CHTargetTracker : MonoBehaviour
             Debug.DrawRay(transform.position, right * range, Color.green);
         }
     }
-    
-    void IsRunAnim(bool _isRun)
+
+    void PlayRunAnim()
     {
-        if (animator && contBase) animator.SetBool(contBase.sightRange, _isRun);
+        if (contBase && animator)
+        {
+            animator.SetBool(contBase.sightRange, true);
+        }
     }
 
-    void LookAtDirection(Vector3 _direction)
+    void StopRunAnim()
     {
-        Quaternion targetRotation = Quaternion.LookRotation(_direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+        if (contBase && animator)
+        {
+            animator.SetBool(contBase.sightRange, false);
+        }
     }
 
     Vector3 Angle(float angle)
@@ -159,12 +150,7 @@ public class CHTargetTracker : MonoBehaviour
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0f, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
 
-    void FollowDirection(Vector3 _direction)
-    {
-        transform.position += _direction.normalized * moveSpeed * Time.deltaTime;
-    }
-
-    public Infomation.TargetInfo GetClosestTargetInfo()
+    public TargetInfo GetClosestTargetInfo()
     {
         return closestTarget;
     }
@@ -229,78 +215,5 @@ public class CHTargetTracker : MonoBehaviour
         }
 
         return closestTargetInfo;
-    }
-
-    public List<TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, LayerMask _lmTarget, Vector3 _size, Quaternion _quater)
-    {
-        List<TargetInfo> targetInfoList = new List<TargetInfo>();
-
-        // 범위내에 있는 타겟들 확인
-        Collider[] targets = Physics.OverlapBox(_originPos, _size / 2f, _quater, _lmTarget);
-
-        foreach (Collider target in targets)
-        {
-            Transform targetTr = target.transform;
-            Vector3 targetDir = (targetTr.position - _originPos).normalized;
-            float targetDis = Vector3.Distance(_originPos, targetTr.position);
-
-            // 장애물이 있는지 확인
-            if (Physics.Raycast(_originPos, targetDir, targetDis, ~_lmTarget) == false)
-            {
-                targetInfoList.Add(new TargetInfo
-                {
-                    objTarget = target.gameObject,
-                    direction = targetDir,
-                    distance = targetDis,
-                });
-            }
-        }
-
-        return targetInfoList;
-    }
-
-    public TargetInfo GetClosestTargetInfo(Vector3 _originPos, LayerMask _lmTarget, Vector3 _size, Quaternion _quater)
-    {
-        TargetInfo closestTargetInfo = null;
-        List<TargetInfo> targetInfoList = GetTargetInfoListInRange(_originPos, _lmTarget, _size, _quater);
-
-        if (targetInfoList.Count > 0)
-        {
-            float minDis = Mathf.Infinity;
-
-            foreach (TargetInfo targetInfo in targetInfoList)
-            {
-                if (targetInfo.distance < minDis)
-                {
-                    minDis = targetInfo.distance;
-                    closestTargetInfo = targetInfo;
-                }
-            }
-        }
-
-        return closestTargetInfo;
-    }
-
-    public List<Transform> GetTargetTransformList(List<TargetInfo> _liTargetInfo)
-    {
-        if (_liTargetInfo == null) return null;
-
-        List<Transform> targetTransformList = new List<Transform>();
-        foreach (TargetInfo targetInfo in _liTargetInfo)
-        {
-            targetTransformList.Add(targetInfo.objTarget.transform);
-        }
-
-        return targetTransformList;
-    }
-
-    public List<Transform> GetTargetTransformList(TargetInfo _targetInfo)
-    {
-        if (_targetInfo == null) return null;
-
-        List<Transform> targetTransformList = new List<Transform>();
-        targetTransformList.Add(_targetInfo.objTarget.transform);
-
-        return targetTransformList;
     }
 }

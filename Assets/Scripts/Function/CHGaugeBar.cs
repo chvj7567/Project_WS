@@ -24,4 +24,10 @@ public class CHGaugeBar : MonoBehaviour
         if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, 1.5f);
         if (imgGaugeBar) imgGaugeBar.DOFillAmount(_curValue / _maxValue, 1f);
     }
+
+    public void ResetGaugeBar()
+    {
+        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(1f, 0.1f);
+        if (imgGaugeBar) imgGaugeBar.DOFillAmount(1f, 0.1f);
+    }
 }

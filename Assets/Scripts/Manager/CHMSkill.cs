@@ -240,41 +240,6 @@ public class CHMSkill
         // 파티클 위치에 따라 파티클 생성
         switch (_effectInfo.eEffectPos)
         {
-            // 자기 위치에 파티클 생성(자기가 효과 보는 스킬)
-            case Defines.EEffectPos.Me:
-                {
-                    // 맞은 타겟 수 만큼 파티클 중복 여부
-                    if (_effectInfo.duplication)
-                    {
-                        foreach (var target in liTarget)
-                        {
-                            if (_trTarget == null)
-                            {
-                                // 논타겟팅 스킬
-                                CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
-                            }
-                            else
-                            {
-                                // 타겟팅 스킬
-                                CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (_trTarget == null)
-                        {
-                            // 논타겟팅 스킬
-                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
-                        }
-                        else
-                        {
-                            // 타겟팅 스킬
-                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
-                        }
-                    }
-                }
-                break;
             // 타겟 한 명에게만 파티클 생성(타겟 한 명만 효과 적용)
             case Defines.EEffectPos.TargetOne:
                 {

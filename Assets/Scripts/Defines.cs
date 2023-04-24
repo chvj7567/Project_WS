@@ -151,9 +151,8 @@ public class Defines
     {
         None = -1,
 
-        Me, // 0
-        TargetOne, // 1
-        TargetAll, // 2
+        TargetOne, // 0
+        TargetAll, // 1
 
         Max
     }
