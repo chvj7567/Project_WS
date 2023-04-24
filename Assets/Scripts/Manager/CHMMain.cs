@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class CHMMain : MonoBehaviour
@@ -43,7 +44,11 @@ public class CHMMain : MonoBehaviour
                 go = new GameObject { name = "@CHMMain" };
             }
 
-            DontDestroyOnLoad(go);
+            if (EditorApplication.isPlaying)
+            {
+                DontDestroyOnLoad(go);
+            }
+
             m_instance = go.GetOrAddComponent<CHMMain>();
 
             m_instance.m_pool.Init();
