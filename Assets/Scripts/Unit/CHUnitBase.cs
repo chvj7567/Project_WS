@@ -271,7 +271,7 @@ public abstract class CHUnitBase : MonoBehaviour
         }
 
         curUnitInfo.hp = hpResult;
-        if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), hpResult);
+        if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), hpResult, hpResult - hpOrigin);
         Debug.Log($"{curUnitInfo.nameStringID}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
 
         // Á×À½ Die

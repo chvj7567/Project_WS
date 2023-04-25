@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using Unity.VisualScripting;
@@ -33,7 +34,7 @@ public class CHTargetTracker : MonoBehaviour
 
     [SerializeField, ReadOnly] float orgRangeMulti = -1f;
     [SerializeField, ReadOnly] float orgViewAngle = -1f;
-
+    [SerializeField, ReadOnly] bool expensionRange = false;
     public void ResetValue(CHUnitBase _unitBase)
     {
         unitBase = _unitBase;
@@ -81,10 +82,18 @@ public class CHTargetTracker : MonoBehaviour
 
                 if (closestTarget == null)
                 {
-                    viewAngle = orgViewAngle;
-                    rangeMulti = 1f;
+                    if (expensionRange == false)
+                    {
+                        viewAngle = orgViewAngle;
+                        rangeMulti = 1f;
+                    }
+                    else
+                    {
+                        viewAngle = 360f;
+                        rangeMulti = orgRangeMulti;
+                    }
 
-                    if (trDestination && agent.enabled) agent.SetDestination(trDestination.position);
+                    if (trDestination && unitBase.IsNormalState()) agent.SetDestination(trDestination.position);
 
                     if (unitBase.IsNormalState())
                     {
@@ -102,7 +111,7 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
 
-                    if (agent.enabled) agent.SetDestination(closestTarget.objTarget.transform.position);
+                    if (unitBase.IsNormalState()) agent.SetDestination(closestTarget.objTarget.transform.position);
 
                     if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState())
                     {
@@ -164,6 +173,16 @@ public class CHTargetTracker : MonoBehaviour
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0f, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
 
+    public async void ExpensionRange()
+    {
+        expensionRange = true;
+
+        // 1초 동안 감지 범위 확장
+        await Task.Delay(1000);
+
+        expensionRange = false;
+    }
+
     public TargetInfo GetClosestTargetInfo()
     {
         return closestTarget;
@@ -198,7 +217,6 @@ public class CHTargetTracker : MonoBehaviour
                         targetInfoList.Add(new TargetInfo
                         {
                             objTarget = target.gameObject,
-                            direction = dirTarget,
                             distance = targetDis,
                         });
                     }

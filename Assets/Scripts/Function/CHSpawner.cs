@@ -67,7 +67,7 @@ public class CHSpawner : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
+    private void OnDestroy()
     {
         StopSpawn();
     }

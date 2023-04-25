@@ -7,13 +7,14 @@ using System;
 [RequireComponent(typeof(TMP_Text))]
 public class CHTMPro : MonoBehaviour
 {
-    public int stringID = -1;
-    public TMP_Text text;
-    [ReadOnly]
-    public object[] argArr;
+    [SerializeField] int stringID = -1;
+    [SerializeField] public RectTransform rtText;
+    [SerializeField] public TMP_Text text;
+    [ReadOnly] object[] argArr;
 
     private void Awake()
     {
+        rtText = GetComponent<RectTransform>();
         text = GetComponent<TMP_Text>();
 
         if (text)
@@ -31,6 +32,14 @@ public class CHTMPro : MonoBehaviour
         if (text)
         {
             text.text = string.Format(CHMMain.String.GetString(stringID), _arrArg);
+        }
+    }
+
+    public void SetColor(Color _color)
+    {
+        if (text)
+        {
+            text.color = _color;
         }
     }
 

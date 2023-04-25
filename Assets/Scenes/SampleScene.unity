@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &58871066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,7 +287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &346889613
 Transform:
   m_ObjectHideFlags: 0
@@ -336,7 +336,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &415633777
 Transform:
   m_ObjectHideFlags: 0
@@ -385,7 +385,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &501085616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -720,7 +720,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1033560877
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -923,6 +923,7 @@ MonoBehaviour:
   contBase: {fileID: 0}
   orgRangeMulti: -1
   orgViewAngle: -1
+  expensionRange: 0
 --- !u!135 &1033560881
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1017,7 +1018,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1096288288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1066,7 +1067,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1097043558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1115,7 +1116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1135125471
 Transform:
   m_ObjectHideFlags: 0
@@ -1170,7 +1171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1157944665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1357,6 +1358,7 @@ MonoBehaviour:
   contBase: {fileID: 0}
   orgRangeMulti: -1
   orgViewAngle: -1
+  expensionRange: 0
 --- !u!135 &1157944668
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1473,7 +1475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1289282962
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1676,6 +1678,7 @@ MonoBehaviour:
   contBase: {fileID: 0}
   orgRangeMulti: -1
   orgViewAngle: -1
+  expensionRange: 0
 --- !u!135 &1289282966
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2997,7 +3000,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1549133700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3188,7 +3191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1643749100
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3391,6 +3394,7 @@ MonoBehaviour:
   contBase: {fileID: 0}
   orgRangeMulti: -1
   orgViewAngle: -1
+  expensionRange: 0
 --- !u!135 &1643749104
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3491,7 +3495,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1713448142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3521,6 +3525,7 @@ MonoBehaviour:
   contBase: {fileID: 0}
   orgRangeMulti: -1
   orgViewAngle: -1
+  expensionRange: 0
 --- !u!114 &1713448143
 MonoBehaviour:
   m_ObjectHideFlags: 0

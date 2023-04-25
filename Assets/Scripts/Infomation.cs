@@ -161,7 +161,6 @@ public class Infomation
     public class TargetInfo
     {
         public GameObject objTarget = null;
-        public Vector3 direction = Vector3.zero;
         public float distance = -1f;
     }
 

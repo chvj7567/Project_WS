@@ -1,7 +1,7 @@
 [
   {
     "stringID": "1",
-    "value": "aaa{0}"
+    "value": "{0}"
   },
   {
     "stringID": "2",
