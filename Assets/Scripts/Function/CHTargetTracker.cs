@@ -110,6 +110,12 @@ public class CHTargetTracker : MonoBehaviour
                     }
                     else
                     {
+                        var posTarget = closestTarget.objTarget.transform.position;
+                        var myTarget = transform.position;
+                        posTarget.y = 0f;
+                        myTarget.y = 0f;
+
+                        transform.forward = posTarget - myTarget;
                         StopRunAnim();
                     }
                 }

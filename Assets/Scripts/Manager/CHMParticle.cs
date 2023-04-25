@@ -13,7 +13,7 @@ public class MyEvent : UnityEvent { }
 
 public class CHMParticle
 {
-    Dictionary<Defines.EEffect, Infomation.ParticleInfo> dicParticleInfo = new Dictionary<Defines.EEffect, Infomation.ParticleInfo>();
+    Dictionary<Defines.EEffect, ParticleInfo> dicParticleInfo = new Dictionary<Defines.EEffect, Infomation.ParticleInfo>();
 
     MyEvent OnApplicationQuitEvent = new MyEvent();
     CancellationTokenSource cts;
