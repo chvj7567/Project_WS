@@ -19,9 +19,8 @@ public class CHSpawner : MonoBehaviour
     private void Start()
     {
         cts = new CancellationTokenSource();
-        CancellationToken token = cts.Token;
 
-        StartSpawn(token);
+        StartSpawn(cts.Token);
     }
 
     public void SetSpawnDelay(float _value)
@@ -29,12 +28,12 @@ public class CHSpawner : MonoBehaviour
         spawnDelay = _value;
     }
 
-    public async void StartSpawn(CancellationToken cancellationToken)
+    public async void StartSpawn(CancellationToken _token)
     {
         isSpawn = true;
-        cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts = CancellationTokenSource.CreateLinkedTokenSource(_token);
 
-        while (!cancellationToken.IsCancellationRequested && isSpawn)
+        while (!_token.IsCancellationRequested && isSpawn)
         {
             try
             {
@@ -54,7 +53,7 @@ public class CHSpawner : MonoBehaviour
             }
             catch (TaskCanceledException)
             {
-                
+                Debug.Log("스폰 도중 종료");
             }
         }
     }

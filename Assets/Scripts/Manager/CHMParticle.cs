@@ -2,14 +2,36 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
-using static Infomation;
 using UniRx;
 using UnityEngine.AI;
-using System;
+using UnityEngine.Events;
+using System.Threading;
+using static Infomation;
+
+
+public class MyEvent : UnityEvent { }
 
 public class CHMParticle
 {
     Dictionary<Defines.EEffect, Infomation.ParticleInfo> dicParticleInfo = new Dictionary<Defines.EEffect, Infomation.ParticleInfo>();
+
+    MyEvent OnApplicationQuitEvent = new MyEvent();
+    CancellationTokenSource cts;
+
+    public void Init()
+    {
+        cts = new CancellationTokenSource();
+
+        OnApplicationQuitEvent.AddListener(OnApplicationQuitHandler);
+    }
+
+    void OnApplicationQuitHandler()
+    {
+        if (cts != null && !cts.IsCancellationRequested)
+        {
+            cts.Cancel();
+        }
+    }
 
     public void CreateParticle(Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, EffectInfo _effectInfo, bool _autoDestory = true)
     {
@@ -248,12 +270,12 @@ public class CHMParticle
         {
             case Defines.EEffect.FX_Tornado:
                 {
-                    TargetAirborne(_trTarget, 2, 0.5f);
+                    TargetAirborne(cts.Token, _trTarget, 2, 0.5f);
                 }
                 break;
             case Defines.EEffect.FX_Explosion_Magic:
                 {
-                    TargetAirborne(_trTarget, 5, 0.5f);
+                    TargetAirborne(cts.Token, _trTarget, 5, 0.5f);
 
                     var objParticle = GetParticleObject(Defines.EEffect.FX_Healing);
                     objParticle.transform.position = _trCaster.position;
@@ -281,7 +303,7 @@ public class CHMParticle
         }
     }
 
-    async void TargetAirborne(Transform _trTarget, float _airborneHeight, float _airborneTime)
+    async void TargetAirborne(CancellationToken _token, Transform _trTarget, float _airborneHeight, float _airborneTime)
     {
         var unitBase = _trTarget.GetComponent<CHUnitBase>();
         float gravity = -2 * _airborneHeight / Mathf.Pow(_airborneTime, 2);
@@ -300,19 +322,19 @@ public class CHMParticle
 
         float time = 0f;
         // 위로 떠오르는 코드
-        while (time <= _airborneTime)
+        while (!_token.IsCancellationRequested && time <= _airborneTime)
         {
             try
             {
-                if (unitBase.GetIsDeath()) break;
+                if (_trTarget == null || unitBase.GetIsDeath()) break;
                 float height = startPos.y + (airborneVelocity * time) + (0.5f * gravity * Mathf.Pow(time, 2));
                 _trTarget.position = new Vector3(_trTarget.position.x, height, _trTarget.position.z);
                 time += Time.deltaTime;
                 await Task.Delay((int)(Time.deltaTime * 1000f));
             }
-            catch (Exception)
+            catch (TaskCanceledException)
             {
-
+                Debug.Log("에어본 떠오르는 도중 종료");
             }
         }
 
@@ -323,7 +345,7 @@ public class CHMParticle
         Vector3 fallVector = Vector3.zero;
 
         // 아래로 떨어지는 코드
-        while (_trTarget.position.y > groundLevel)
+        while (!_token.IsCancellationRequested && _trTarget != null && _trTarget.position.y > groundLevel)
         {
             try
             {
@@ -332,13 +354,13 @@ public class CHMParticle
                 _trTarget.position += fallVector * Time.deltaTime;
                 await Task.Delay((int)(Time.deltaTime * 1000f));
             }
-            catch (Exception)
+            catch (TaskCanceledException)
             {
-
+                Debug.Log("에어본 떨어지는 도중 종료");
             }
         }
 
-        if (unitBase.IsFalling)
+        if (_trTarget != null && unitBase != null && unitBase.IsFalling)
         {
             unitBase.IsFalling = false;
             unitBase.SetIsAirborne(false);
