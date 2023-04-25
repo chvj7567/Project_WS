@@ -154,8 +154,10 @@ public class Defines
         Me_Only, // 0 : 스킬 위치 지정없이 무조건 자기한테 쓰는 스킬
         Me_Targeting, // 1 : 스킬 위치 지정 후 자기한테 타겟팅으로 쓰는 스킬
         Me_NoneTargeting, // 2 : 스킬 위치 지정 후 자기한테 논타겟팅으로 쓰는 스킬
-        Target_One, // 3 : 스킬 위치 지정 후 타겟 한명한테만 쓰는 스킬
-        Target_All, // 4 : 스킬 위치 지정 후 타겟 모두에게 쓰는 스킬
+        Target_One_Targeting, // 3 : 스킬 위치 지정 후 타겟 한명한테만 타겟팅으로 쓰는 스킬
+        Target_One_NoneTargeting, // 4 : 스킬 위치 지정 후 타겟 한명한테만 논타겟팅으로 쓰는 스킬
+        Target_All_Targeting, // 5 : 스킬 위치 지정 후 타겟 모두에게 타겟팅으로 쓰는 스킬
+        Target_All_NoneTargeting, // 6 : 스킬 위치 지정 후 타겟 모두에게 논타겟팅으로 쓰는 스킬
 
         Max
     }

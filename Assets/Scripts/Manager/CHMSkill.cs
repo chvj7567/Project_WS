@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -287,47 +288,48 @@ public class CHMSkill
                     }
                 }
                 break;
-            case Defines.EEffectPos.Target_One:
+            case Defines.EEffectPos.Target_One_Targeting:
                 {
+                    Transform targetOne = liTarget.First();
+
                     // 맞은 타겟 수 만큼 파티클 중복 여부
                     if (_effectInfo.duplication)
                     {
-                        Transform targetOne = null;
                         foreach (var target in liTarget)
                         {
-                            if (_trTarget == null)
-                            {
-                                if (targetOne == null)
-                                {
-                                    targetOne = target;
-                                }
-
-                                // 논타겟팅 스킬
-                                CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
-                            }
-                            else
-                            {
-                                // 타겟팅 스킬
-                                CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
-                            }
+                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { targetOne }, null, null, _effectInfo);
                         }
                     }
                     else
                     {
-                        if (_trTarget == null)
-                        {
-                            // 논타겟팅 스킬
-                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
-                        }
-                        else
-                        {
-                            // 타겟팅 스킬
-                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
-                        }
+                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { targetOne }, null, null, _effectInfo);
                     }
                 }
                 break;
-            case Defines.EEffectPos.Target_All:
+            case Defines.EEffectPos.Target_One_NoneTargeting:
+                {
+                    Transform targetOne = liTarget.First();
+
+                    // 맞은 타겟 수 만큼 파티클 중복 여부
+                    if (_effectInfo.duplication)
+                    {
+                        foreach (var target in liTarget)
+                        {
+                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                        }
+                    }
+                    else
+                    {
+                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                    }
+                }
+                break;
+            case Defines.EEffectPos.Target_All_Targeting:
+                {
+                    CHMMain.Particle.CreateParticle(_trCaster, liTarget, null, null, _effectInfo);
+                }
+                break;
+            case Defines.EEffectPos.Target_All_NoneTargeting:
                 {
                     List<Vector3> liParticlePos = new List<Vector3>();
                     List<Vector3> liParticleDir = new List<Vector3>();
@@ -338,16 +340,7 @@ public class CHMSkill
                         liParticleDir.Add((liTarget[i].position - _trCaster.position).normalized);
                     }
 
-                    if (_trTarget == null)
-                    {
-                        // 논타겟팅 스킬
-                        CHMMain.Particle.CreateParticle(_trCaster, null, liParticlePos, liParticleDir, _effectInfo);
-                    }
-                    else
-                    {
-                        // 타겟팅 스킬
-                        CHMMain.Particle.CreateParticle(_trCaster, liTarget, null, null, _effectInfo);
-                    }
+                    CHMMain.Particle.CreateParticle(_trCaster, null, liParticlePos, liParticleDir, _effectInfo);
                 }
                 break;
             default:

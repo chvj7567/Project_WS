@@ -71,11 +71,15 @@ public class CHMPool
     {
         if (root == null)
         {
-            root = new GameObject { name = "@PoolRoot" }.transform;
+            GameObject go = GameObject.Find("@CHMPool");
+            if (go == null)
+            {
+                go = new GameObject { name = "@CHMPool" };
+            }
 
             if (Application.isPlaying)
             {
-                Object.DontDestroyOnLoad(root);
+                Object.DontDestroyOnLoad(go);
             }
         }
     }
