@@ -85,7 +85,15 @@ public class CHTargetTracker : MonoBehaviour
                     rangeMulti = 1f;
 
                     if (trDestination && agent.enabled) agent.SetDestination(trDestination.position);
-                    PlayRunAnim();
+
+                    if (unitBase.IsNormalState())
+                    {
+                        PlayRunAnim();
+                    }
+                    else
+                    {
+                        StopRunAnim();
+                    }
                 }
                 else
                 {
@@ -96,7 +104,7 @@ public class CHTargetTracker : MonoBehaviour
 
                     if (agent.enabled) agent.SetDestination(closestTarget.objTarget.transform.position);
 
-                    if (closestTarget.distance > unitBase.GetCurrentAttackDistance())
+                    if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState())
                     {
                         PlayRunAnim();
                     }

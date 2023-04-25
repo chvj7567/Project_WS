@@ -153,7 +153,7 @@ public abstract class CHUnitBase : MonoBehaviour
     public float GetCurrentSkill4Distance() { return curSkill4Info.distance; }
     #endregion
 
-    public bool CanAttack()
+    public bool IsNormalState()
     {
         return unitState == 0;
     }
