@@ -7,6 +7,7 @@ using UniRx.Triggers;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Defines;
+using static Infomation;
 
 public abstract class CHUnitBase : MonoBehaviour
 {
@@ -180,17 +181,23 @@ public abstract class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeHp(float _value, Defines.EDamageState eDamageState)
+    public void ChangeHp(CHUnitBase _attackUnit, float _value, Defines.EDamageState eDamageState)
     {
         if (GetIsDeath() == false)
         {
+            var targetTracker = GetComponent<CHTargetTracker>();
+            if (targetTracker != null)
+            {
+                targetTracker.ExpensionRange();
+            }
+
             switch (eDamageState)
             {
                 case Defines.EDamageState.AtOnce:
                     AtOnceChangeHp(_value);
                     break;
                 case Defines.EDamageState.Continuous_1Sec_3Count:
-                    ContinuousChangeHp(1f, 3f, _value);
+                    ContinuousChangeHp(1f, 3, _value);
                     break;
                 default:
                     AtOnceChangeHp(_value);
@@ -199,7 +206,7 @@ public abstract class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeMp(float _value, Defines.EDamageState eDamageState)
+    public void ChangeMp(CHUnitBase _attackUnit, float _value, Defines.EDamageState eDamageState)
     {
         if (GetIsDeath() == false)
         {
@@ -209,7 +216,7 @@ public abstract class CHUnitBase : MonoBehaviour
                     AtOnceChangeMp(_value);
                     break;
                 case Defines.EDamageState.Continuous_1Sec_3Count:
-                    ContinuousChangeMp(1f, 3f, _value);
+                    ContinuousChangeMp(1f, 3, _value);
                     break;
                 default:
                     AtOnceChangeMp(_value);
@@ -218,7 +225,7 @@ public abstract class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeAttackPower(float _value, Defines.EDamageState eDamageState)
+    public void ChangeAttackPower(CHUnitBase _attackUnit, float _value, Defines.EDamageState eDamageState)
     {
         if (GetIsDeath() == false)
         {
@@ -228,7 +235,7 @@ public abstract class CHUnitBase : MonoBehaviour
                     AtOnceChangeAttackPower(_value);
                     break;
                 case Defines.EDamageState.Continuous_1Sec_3Count:
-                    ContinuousChangeAttackPower(1f, 3f, _value);
+                    ContinuousChangeAttackPower(1f, 3, _value);
                     break;
                 default:
                     break;
@@ -236,7 +243,7 @@ public abstract class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeDefensePower(float _value, Defines.EDamageState eDamageState)
+    public void ChangeDefensePower(CHUnitBase _attackUnit, float _value, Defines.EDamageState eDamageState)
     {
         if (GetIsDeath() == false)
         {
@@ -246,7 +253,7 @@ public abstract class CHUnitBase : MonoBehaviour
                     AtOnceChangeDefensePower(_value);
                     break;
                 case Defines.EDamageState.Continuous_1Sec_3Count:
-                    ContinuousChangeDefensePower(1f, 3f, _value);
+                    ContinuousChangeDefensePower(1f, 3, _value);
                     break;
                 default:
                     break;
@@ -329,9 +336,9 @@ public abstract class CHUnitBase : MonoBehaviour
         Debug.Log($"{curUnitInfo.nameStringID} => DefensePower : {defensePowerOrigin} -> DefensePower : {defensePowerResult}");
     }
 
-    async void ContinuousChangeHp(float _time, float _count, float _value)
+    async void ContinuousChangeHp(float _time, int _count, float _value)
     {
-        float tickTime = _time / _count;
+        float tickTime = _time / (_count - 1);
 
         for (int i = 0; i < _count; ++i)
         {
@@ -346,9 +353,9 @@ public abstract class CHUnitBase : MonoBehaviour
         }
     }
 
-    async void ContinuousChangeMp(float _time, float _count, float _value)
+    async void ContinuousChangeMp(float _time, int _count, float _value)
     {
-        float tickTime = _time / _count;
+        float tickTime = _time / (_count - 1);
 
         for (int i = 0; i < _count; ++i)
         {
@@ -363,9 +370,9 @@ public abstract class CHUnitBase : MonoBehaviour
         }
     }
 
-    async void ContinuousChangeAttackPower(float _time, float _count, float _value)
+    async void ContinuousChangeAttackPower(float _time, int _count, float _value)
     {
-        float tickTime = _time / _count;
+        float tickTime = _time / (_count - 1);
 
         for (int i = 0; i < _count; ++i)
         {
@@ -380,9 +387,9 @@ public abstract class CHUnitBase : MonoBehaviour
         }
     }
 
-    async void ContinuousChangeDefensePower(float _time, float _count, float _value)
+    async void ContinuousChangeDefensePower(float _time, int _count, float _value)
     {
-        float tickTime = _time / _count;
+        float tickTime = _time / (_count - 1);
 
         for (int i = 0; i < _count; ++i)
         {

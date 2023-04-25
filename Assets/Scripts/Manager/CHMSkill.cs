@@ -94,7 +94,6 @@ public class CHMSkill
                     targetInfoList.Add(new TargetInfo
                     {
                         objTarget = target.gameObject,
-                        direction = targetDir,
                         distance = targetDis,
                     });
                 }
@@ -123,7 +122,6 @@ public class CHMSkill
                 targetInfoList.Add(new TargetInfo
                 {
                     objTarget = target.gameObject,
-                    direction = targetDir,
                     distance = targetDis,
                 });
             }
@@ -365,15 +363,29 @@ public class CHMSkill
                 break;
             default:
                 {
-                    if (_trTarget == null)
+                    if (_effectInfo.eEffectPos == Defines.EEffectPos.Me_Only)
                     {
-                        // 논타겟팅 스킬
-                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                        if (_trTarget == null)
+                        {
+                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
+                        }
+                        else
+                        {
+                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
+                        }
                     }
                     else
                     {
-                        // 타겟팅 스킬
-                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
+                        if (_trTarget == null)
+                        {
+                            // 논타겟팅 스킬
+                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                        }
+                        else
+                        {
+                            // 타겟팅 스킬
+                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
+                        }
                     }
                 }
                 break;
@@ -397,7 +409,7 @@ public class CHMSkill
         {
             case Defines.EEffectType.Hp_Up:
                 Debug.Log($"HpUp : {skillValue}");
-                _targetUnit.ChangeHp(skillValue, _effectInfo.eDamageState);
+                _targetUnit.ChangeHp(_casterUnit, skillValue, _effectInfo.eDamageState);
                 break;
             case Defines.EEffectType.Hp_Down:
                 {
@@ -409,20 +421,20 @@ public class CHMSkill
                         totalValue = 0f;
                     }
                     Debug.Log($"HpDown : {totalValue}");
-                    _targetUnit.ChangeHp(CHUtil.ReverseValue(totalValue), _effectInfo.eDamageState);
+                    _targetUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(totalValue), _effectInfo.eDamageState);
                 }
                 break;
             case Defines.EEffectType.AttackPower_Up:
-                _targetUnit.ChangeAttackPower(skillValue, _effectInfo.eDamageState);
+                _targetUnit.ChangeAttackPower(_casterUnit, skillValue, _effectInfo.eDamageState);
                 break;
             case Defines.EEffectType.AttackPower_Down:
-                _targetUnit.ChangeAttackPower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
+                _targetUnit.ChangeAttackPower(_casterUnit, CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
                 break;
             case Defines.EEffectType.DefensePower_Up:
-                _targetUnit.ChangeDefensePower(skillValue, _effectInfo.eDamageState);
+                _targetUnit.ChangeDefensePower(_casterUnit, skillValue, _effectInfo.eDamageState);
                 break;
             case Defines.EEffectType.DefensePower_Down:
-                _targetUnit.ChangeDefensePower(CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
+                _targetUnit.ChangeDefensePower(_casterUnit, CHUtil.ReverseValue(skillValue), _effectInfo.eDamageState);
                 break;
             default:
                 break;
@@ -459,7 +471,7 @@ public class CHMSkill
                 {
                     if (_casterUnit.GetCurrentHp() >= skillInfo.cost)
                     {
-                        _casterUnit.ChangeHp(CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
+                        _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
                         return true;
                     }
                     else
@@ -473,7 +485,7 @@ public class CHMSkill
 
                     if (_casterUnit.GetCurrentHp() >= costValue)
                     {
-                        _casterUnit.ChangeHp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
                         return true;
                     }
                     else
@@ -487,7 +499,7 @@ public class CHMSkill
 
                     if (_casterUnit.GetCurrentHp() >= costValue)
                     {
-                        _casterUnit.ChangeHp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
                         return true;
                     }
                     else
@@ -499,7 +511,7 @@ public class CHMSkill
                 {
                     if (_casterUnit.GetCurrentMp() >= skillInfo.cost)
                     {
-                        _casterUnit.ChangeMp(CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
+                        _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageState.None);
                         return true;
                     }
                     else
@@ -513,7 +525,7 @@ public class CHMSkill
 
                     if (_casterUnit.GetCurrentMp() >= costValue)
                     {
-                        _casterUnit.ChangeMp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
                         return true;
                     }
                     else
@@ -527,7 +539,7 @@ public class CHMSkill
 
                     if (_casterUnit.GetCurrentMp() >= costValue)
                     {
-                        _casterUnit.ChangeMp(CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
+                        _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageState.None);
                         return true;
                     }
                     else
