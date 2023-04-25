@@ -93,10 +93,9 @@ public class CHTargetTracker : MonoBehaviour
                         rangeMulti = orgRangeMulti;
                     }
 
-                    if (trDestination && unitBase.IsNormalState()) agent.SetDestination(trDestination.position);
-
-                    if (unitBase.IsNormalState())
+                    if (unitBase.IsNormalState() && trDestination && agent.isOnNavMesh)
                     {
+                        agent.SetDestination(trDestination.position);
                         PlayRunAnim();
                     }
                     else
@@ -111,10 +110,9 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
 
-                    if (unitBase.IsNormalState()) agent.SetDestination(closestTarget.objTarget.transform.position);
-
-                    if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState())
+                    if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState() && agent.isOnNavMesh)
                     {
+                        agent.SetDestination(closestTarget.objTarget.transform.position);
                         PlayRunAnim();
                     }
                     else

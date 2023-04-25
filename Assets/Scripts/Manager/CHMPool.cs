@@ -65,21 +65,21 @@ public class CHMPool
     #endregion
 
     Dictionary<string, CHPool> poolDic = new Dictionary<string, CHPool>();
-    Transform root;
+    GameObject rootObject;
 
     public void Init()
     {
-        if (root == null)
+        if (rootObject == null)
         {
-            GameObject go = GameObject.Find("@CHMPool");
-            if (go == null)
+            rootObject = GameObject.Find("@CHMPool");
+            if (rootObject == null)
             {
-                go = new GameObject { name = "@CHMPool" };
+                rootObject = new GameObject { name = "@CHMPool" };
             }
 
             if (Application.isPlaying)
             {
-                Object.DontDestroyOnLoad(go);
+                Object.DontDestroyOnLoad(rootObject);
             }
         }
     }
@@ -88,7 +88,7 @@ public class CHMPool
     {
         CHPool pool = new CHPool();
         pool.Init(_original, _count);
-        pool.Root.parent = root;
+        pool.Root.parent = rootObject.transform;
 
         poolDic.Add(_original.name, pool);
     }
@@ -121,7 +121,7 @@ public class CHMPool
 
     public void Clear()
     {
-        foreach (Transform child in root)
+        foreach (Transform child in rootObject.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
