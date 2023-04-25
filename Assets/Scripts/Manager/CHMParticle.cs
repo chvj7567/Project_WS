@@ -273,14 +273,6 @@ public class CHMParticle
                     TargetAirborne(cts.Token, _trTarget, 2, 0.5f);
                 }
                 break;
-            case Defines.EEffect.FX_Explosion_Magic:
-                {
-                    TargetAirborne(cts.Token, _trTarget, 5, 0.5f);
-
-                    var objParticle = GetParticleObject(Defines.EEffect.FX_Healing);
-                    objParticle.transform.position = _trCaster.position;
-                }
-                break;
             default:
                 break;
         }
