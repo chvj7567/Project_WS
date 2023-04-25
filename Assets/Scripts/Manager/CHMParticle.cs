@@ -273,6 +273,11 @@ public class CHMParticle
                     TargetAirborne(cts.Token, _trTarget, 2, 0.5f);
                 }
                 break;
+            case Defines.EEffect.FX_Explosion:
+                {
+                    TargetAirborne(cts.Token, _trTarget, 10, 2f);
+                }
+                break;
             default:
                 break;
         }

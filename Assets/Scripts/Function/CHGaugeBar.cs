@@ -53,6 +53,7 @@ public class CHGaugeBar : MonoBehaviour
         {
             var copyTextDamage = CHMMain.Resource.Instantiate(textDamage.gameObject, transform).GetComponent<CHTMPro>();
             copyTextDamage.gameObject.SetActive(true);
+            copyTextDamage.transform.localPosition = Vector3.zero;
             copyTextDamage.SetText(_damage);
 
             if (_damage < 0)

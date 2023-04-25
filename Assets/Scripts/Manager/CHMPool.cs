@@ -35,7 +35,7 @@ public class CHMPool
         {
             if (_poolable == null) return;
 
-            _poolable.transform.parent = Root;
+            _poolable.transform.SetParent(Root, false);
             _poolable.isUse = false;
             _poolable.gameObject.SetActive(false);
 
@@ -55,7 +55,7 @@ public class CHMPool
                 poolable = Create();
             }
 
-            poolable.transform.parent = _parent;
+            poolable.transform.SetParent(_parent, false);
             poolable.isUse = true;
             poolable.gameObject.SetActive(true);
 

@@ -93,13 +93,22 @@ public class CHTargetTracker : MonoBehaviour
                         rangeMulti = orgRangeMulti;
                     }
 
-                    if (unitBase.IsNormalState() && trDestination && agent.isOnNavMesh)
+                    if (unitBase.IsNormalState() && trDestination)
                     {
-                        agent.SetDestination(trDestination.position);
+                        if (agent.isOnNavMesh)
+                        {
+                            agent.SetDestination(trDestination.position);
+                        }
+                        
                         PlayRunAnim();
                     }
                     else
                     {
+                        if (agent.isOnNavMesh)
+                        {
+                            agent.ResetPath();
+                        }
+
                         StopRunAnim();
                     }
                 }
@@ -110,9 +119,13 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
 
-                    if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState() && agent.isOnNavMesh)
+                    if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState())
                     {
-                        agent.SetDestination(closestTarget.objTarget.transform.position);
+                        if (agent.isOnNavMesh)
+                        {
+                            agent.SetDestination(closestTarget.objTarget.transform.position);
+                        }
+
                         PlayRunAnim();
                     }
                     else
@@ -123,6 +136,11 @@ public class CHTargetTracker : MonoBehaviour
                         myTarget.y = 0f;
 
                         transform.forward = posTarget - myTarget;
+                        if (agent.isOnNavMesh)
+                        {
+                            agent.ResetPath();
+                        }
+                        
                         StopRunAnim();
                     }
                 }
