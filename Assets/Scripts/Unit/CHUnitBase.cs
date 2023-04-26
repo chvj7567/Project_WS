@@ -82,7 +82,8 @@ public abstract class CHUnitBase : MonoBehaviour
                         unitCollider = gameObject.GetOrAddComponent<Collider>();
                     }
 
-                    hpGaugeBar.Init(unitCollider.bounds.size.y);
+                    hpGaugeBar.Init(unitCollider.bounds.size.y / 2);
+                    hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), GetCurrentHp(), 0f);
                 }
             }
         });
@@ -198,6 +199,9 @@ public abstract class CHUnitBase : MonoBehaviour
                     break;
                 case Defines.EDamageState.Continuous_1Sec_3Count:
                     ContinuousChangeHp(1f, 3, _value);
+                    break;
+                case Defines.EDamageState.Continuous_Dot1Sec_10Count:
+                    ContinuousChangeHp(.1f, 10, _value);
                     break;
                 default:
                     AtOnceChangeHp(_value);

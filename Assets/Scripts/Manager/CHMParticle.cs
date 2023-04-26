@@ -274,10 +274,11 @@ public class CHMParticle
         switch (_effectInfo.eEffect)
         {
             case Defines.EEffect.FX_Circle_meteor:
+            case Defines.EEffect.FX_Arrow_impact2:
                 {
-                    // y축으로 20 이동
+                    // y축으로 23 이동
                     var posOrigin = _objParticle.transform.localPosition;
-                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 20f, posOrigin.z);
+                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 23f, posOrigin.z);
                 }
                 break;
             case Defines.EEffect.FX_Arrow_impact:
