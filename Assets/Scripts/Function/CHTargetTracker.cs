@@ -159,8 +159,8 @@ public class CHTargetTracker : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, range * rangeMulti);
 
             // 시야각의 경계선
-            Vector3 left = Angle(-viewAngle * 0.5f);
-            Vector3 right = Angle(viewAngle * 0.5f);
+            Vector3 left = transform.Angle(-viewAngle * 0.5f);
+            Vector3 right = transform.Angle(viewAngle * 0.5f);
 
             Debug.DrawRay(transform.position, left * range, Color.green);
             Debug.DrawRay(transform.position, right * range, Color.green);
@@ -183,18 +183,12 @@ public class CHTargetTracker : MonoBehaviour
         }
     }
 
-    Vector3 Angle(float angle)
-    {
-        angle += transform.eulerAngles.y;
-        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0f, Mathf.Cos(angle * Mathf.Deg2Rad));
-    }
-
     public async void ExpensionRange()
     {
         expensionRange = true;
 
-        // 1초 동안 감지 범위 확장
-        await Task.Delay(1000);
+        // 10초 동안 감지 범위 확장
+        await Task.Delay(10000);
 
         expensionRange = false;
     }

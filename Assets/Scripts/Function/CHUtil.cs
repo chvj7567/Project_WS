@@ -6,14 +6,14 @@ public class ReadOnlyAttribute : PropertyAttribute {}
 
 public static class CHUtil
 {
-    public static bool IsNullOrEmpty<T>(this List<T> list)
+    public static bool IsNullOrEmpty<T>(this List<T> _list)
     {
-        if (list == null)
+        if (_list == null)
         {
             return true;
         }
 
-        if (list.Count <= 0)
+        if (_list.Count <= 0)
         {
             return true;
         }
@@ -21,27 +21,27 @@ public static class CHUtil
         return false;
     }
 
-    public static T GetOrAddComponent<T>(this GameObject go) where T : UnityEngine.Component
+    public static T GetOrAddComponent<T>(this GameObject _obj) where T : UnityEngine.Component
     {
-        T component = go.GetComponent<T>();
+        T component = _obj.GetComponent<T>();
         if (component == null)
-            component = go.AddComponent<T>();
+            component = _obj.AddComponent<T>();
         return component;
     }
 
     // 자식 게임오브젝트 중에 T에 해당하는 컴포넌트를 가져온다.
     // 자식들의 그 아래 자식들까지 찾으려면 recursive에 true로 체크하여 재귀적으로 찾는다.
-    public static T FindChild<T>(this GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
+    public static T FindChild<T>(this GameObject _obj, string _name = null, bool _recursive = false) where T : UnityEngine.Object
     {
-        if (go == null)
+        if (_obj == null)
             return null;
 
-        if (recursive == false)
+        if (_recursive == false)
         {
-            for (int i = 0; i < go.transform.childCount; i++)
+            for (int i = 0; i < _obj.transform.childCount; i++)
             {
-                Transform transform = go.transform.GetChild(i);
-                if (string.IsNullOrEmpty(name) || transform.name == name)
+                Transform transform = _obj.transform.GetChild(i);
+                if (string.IsNullOrEmpty(_name) || transform.name == _name)
                 {
                     T component = transform.GetComponent<T>();
                     if (component != null)
@@ -51,9 +51,9 @@ public static class CHUtil
         }
         else
         {
-            foreach (T component in go.GetComponentsInChildren<T>())
+            foreach (T component in _obj.GetComponentsInChildren<T>())
             {
-                if (string.IsNullOrEmpty(name) || component.name == name)
+                if (string.IsNullOrEmpty(_name) || component.name == _name)
                     return component;
             }
         }
@@ -62,9 +62,9 @@ public static class CHUtil
     }
 
     // 게임 오브젝트를 찾는 경우 제네릭 형식이 아닌 일반 형식으로 호출할 수 있게 오버라이딩한다.
-    public static GameObject FindChild(this GameObject go, string name = null, bool recursive = false)
+    public static GameObject FindChild(this GameObject _obj, string _name = null, bool _recursive = false)
     {
-        Transform transform = FindChild<Transform>(go, name, recursive);
+        Transform transform = FindChild<Transform>(_obj, _name, _recursive);
         if (transform == null)
             return null;
 
@@ -74,5 +74,11 @@ public static class CHUtil
     public static float ReverseValue(float _value)
     {
         return -_value;
+    }
+
+    public static Vector3 Angle(this Transform _tr, float _angle)
+    {
+        _angle += _tr.eulerAngles.y;
+        return new Vector3(Mathf.Sin(_angle * Mathf.Deg2Rad), 0f, Mathf.Cos(_angle * Mathf.Deg2Rad));
     }
 }

@@ -215,7 +215,7 @@ public class CHMSkill
             if (_trTarget == null)
             {
                 // 논타겟팅 스킬
-                liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.angle);
+                liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
                 liTarget = GetTargetTransformList(liTargetInfo);
 
                 // 논타겟팅 스킬은 생성 시에 타겟이 없을 수도 있음
@@ -233,7 +233,7 @@ public class CHMSkill
             else
             {
                 // 타겟팅 스킬
-                liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.angle);
+                liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
                 liTarget = GetTargetTransformList(liTargetInfo);
 
                 if (liTargetInfo == null || liTargetInfo.Count <= 0)

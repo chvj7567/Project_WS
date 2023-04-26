@@ -56,6 +56,7 @@ public class Infomation
         public EDamageType eDamageType = EDamageType.None; // 데미지 타입
         public ECollision eCollision = ECollision.None; // 충돌체 모양
         public ETargetMask eTargetMask = ETargetMask.None; // 스킬 대상
+        public float effectAngle = -1f; // 이펙트 각도
         public bool isTargeting = false; // 이펙트 타겟팅 여부
         public bool duplication = false; // 스킬 중복 여부
         public bool onDecal = false; // 데칼 표시 여부
@@ -66,7 +67,7 @@ public class Infomation
         public bool triggerExit = false; // 이펙트 Trigger에서 벗어났을 때 데미지를 넣을 것인지 여부
         public float stayTickTime = -1f; // 이펙트 Trigger에서 머물고 있을 때 데미지를 넣을 때 틱 타입(음수이면 데미지 안 넣음)
         public float startDelay = -1f; // 스킬 시전 후 이펙트 나오는 시간, 여러 개일 경우 누적 시간
-        public float angle = -1f; // 충돌 여부 결정할 때 각도
+        public float collisionAngle = -1f; // 충돌 여부 결정할 때 각도
         public float sphereRadius = -1f; // 구 모양의 충돌체일 경우 구의 반지름
         public float boxHalfX = -1f; // 박스 모양의 충돌체일 경우 X 크기의 반
         public float boxHalfY = -1f; // 박스 모양의 충돌체일 경우 Y 크기의 반
@@ -92,7 +93,7 @@ public class Infomation
             effect.triggerExit = this.triggerExit;
             effect.stayTickTime = this.stayTickTime;
             effect.startDelay = this.startDelay;
-            effect.angle = this.angle;
+            effect.collisionAngle = this.collisionAngle;
             effect.sphereRadius = this.sphereRadius;
             effect.boxHalfX = this.boxHalfX;
             effect.boxHalfY = this.boxHalfY;

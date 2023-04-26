@@ -40,6 +40,11 @@ public class CHSphereCollision : MonoBehaviour
         }
     }
 
+    public void SetCollisionCenter(float _x, float _y, float _z)
+    {
+        sphereCollider.center = new Vector3(_x, _y, _z);
+    }
+
     private void Update()
     {
         if (useStay)

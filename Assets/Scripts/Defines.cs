@@ -120,7 +120,8 @@ public class Defines
         FX_Tornado, // 16
 
         FX_Arrow_impact, // 17
-        FX_Arrow_impact2, // 18
+        FX_Arrow_impact_sub, // 18
+        FX_Arrow_impact2, // 19
 
         Max
     }

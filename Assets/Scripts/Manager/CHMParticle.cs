@@ -75,6 +75,7 @@ public class CHMParticle
 
                 objParticle.transform.position = posParticle;
                 objParticle.transform.forward = dirParticle;
+                objParticle.transform.forward = objParticle.transform.Angle(_effectInfo.effectAngle);
 
                 SetParticleValue(_trCaster, null, posParticle, dirParticle, objParticle, _effectInfo);
             }
@@ -110,6 +111,7 @@ public class CHMParticle
 
                 objParticle.transform.position = posParticle;
                 objParticle.transform.forward = dirParticle;
+                objParticle.transform.forward = objParticle.transform.Angle(_effectInfo.effectAngle);
 
                 objParticle.transform.SetParent(trTarget);
 
@@ -124,16 +126,6 @@ public class CHMParticle
     {
         switch (_effectInfo.eEffect)
         {
-            case Defines.EEffect.FX_Arrow_impact:
-                {
-                    // 나뉘어진 파티클 각각에다가 파티클을 붙여야 하는 경우
-                    for (int i = 0; i < _objParticle.transform.childCount; ++i)
-                    {
-                        var trChild = _objParticle.transform.GetChild(i);
-                        ApplyShereCollision(_trCaster, _effectInfo, trChild.gameObject);
-                    }
-                }
-                break;
             default:
                 {
                     // 일반적으로 파티클 부모 오브젝트에만 콜리젼을 적용
@@ -141,13 +133,13 @@ public class CHMParticle
                 }
                 break;
         }
-        
     }
 
     void ApplyShereCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
     {
         var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
         sphereCollision.Init(_effectInfo.sphereRadius, _effectInfo.stayTickTime);
+        SetCollisionCenter(sphereCollision, _effectInfo);
 
         if (_effectInfo.triggerEnter)
         {
@@ -194,6 +186,20 @@ public class CHMParticle
             }
         }));
     }
+
+    void SetCollisionCenter(CHSphereCollision _collision, EffectInfo _effectInfo)
+    {
+        switch (_effectInfo.eEffect)
+        {
+            case Defines.EEffect.FX_Arrow_impact:
+                _collision.SetCollisionCenter(0f, 4f, 0f);
+                break;
+            default:
+                _collision.SetCollisionCenter(0f, 0f, 0f);
+                break;
+        }
+    }
+
     public GameObject GetParticleObject(Defines.EEffect _eEffect, bool _autoDestory = true)
     {
         GameObject objParticle = null;
@@ -284,9 +290,24 @@ public class CHMParticle
                     _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 20f, posOrigin.z);
                 }
                 break;
+            case Defines.EEffect.FX_Arrow_impact:
+                {
+                    // y축으로 -3 이동
+                    var posOrigin = _objParticle.transform.localPosition;
+                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y - 3f, posOrigin.z);
+                    ParticleMove(_trCaster, _trTarget, 30f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                }
+                break;
+            case Defines.EEffect.FX_Arrow_impact_sub:
+                {
+                    // y축으로 -3 이동
+                    var posOrigin = _objParticle.transform.localPosition;
+                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y - 3f, posOrigin.z);
+                }
+                break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    ParticleMove(_objParticle, _dirSkill, 10f, dicParticleInfo[_effectInfo.eEffect].time);
+                    ParticleMove(_trCaster, _trTarget, 10f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
                 }
                 break;
             default:
@@ -314,20 +335,38 @@ public class CHMParticle
         }
     }
 
-    async void ParticleMove(GameObject _objParticle, Vector3 _direction, float _speed, float _effectTime)
+    async void ParticleMove(Transform _trCaster, Transform _trTarget, float _speed, float _effectTime, GameObject _objParticle)
     {
-        var posOrigin = _objParticle.transform.position;
+        Vector3 posOrigin = _objParticle.transform.localPosition;
+        Vector3 direction = _objParticle.transform.forward;
 
         float time = 0;
-        while (time <= _effectTime)
+        
+        if (_trTarget == null)
         {
-            if (_objParticle == null)
+            while (time <= _effectTime)
             {
-                break;
+                if (_objParticle == null)
+                {
+                    break;
+                }
+                _objParticle.transform.localPosition = posOrigin + direction.normalized * _speed * time;
+                time += Time.deltaTime;
+                await Task.Delay((int)(Time.deltaTime * 1000f));
             }
-            _objParticle.transform.position = posOrigin + _direction.normalized * _speed * time;
-            time += Time.deltaTime;
-            await Task.Delay((int)(Time.deltaTime * 1000f));
+        }
+        else
+        {
+            while (time <= _effectTime)
+            {
+                if (_objParticle == null)
+                {
+                    break;
+                }
+                _objParticle.transform.localPosition = posOrigin + (_trTarget.position - _trCaster.position).normalized * _speed * time;
+                time += Time.deltaTime;
+                await Task.Delay((int)(Time.deltaTime * 1000f));
+            }
         }
     }
 

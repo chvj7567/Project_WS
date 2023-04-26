@@ -35,7 +35,7 @@ public class CHGaugeBar : MonoBehaviour
         if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, 1.5f);
         if (imgGaugeBar) imgGaugeBar.DOFillAmount(_curValue / _maxValue, 1f);
 
-        ShowDamageText(_damage);
+        ShowDamageText(_damage, 2f);
     }
 
     public void ResetGaugeBar()
@@ -44,7 +44,7 @@ public class CHGaugeBar : MonoBehaviour
         if (imgGaugeBar) imgGaugeBar.DOFillAmount(1f, 0.1f);
     }
 
-    void ShowDamageText(float _damage)
+    void ShowDamageText(float _damage, float _time)
     {
         cts = new CancellationTokenSource();
         CancellationToken token = cts.Token;
@@ -69,15 +69,12 @@ public class CHGaugeBar : MonoBehaviour
                 copyTextDamage.SetColor(Color.gray);
             }
 
-            copyTextDamage.text.DOFade(0, 2f).OnComplete(() =>
-            {
-                Debug.Log("@@ Fade end");
-            });
+            copyTextDamage.text.DOFade(0, _time);
 
             var rtTextDamage = copyTextDamage.GetComponent<RectTransform>();
             if (rtTextDamage)
             {
-                rtTextDamage.DOAnchorPosY(originPosYText + 10f, 1.5f).OnComplete(() =>
+                rtTextDamage.DOAnchorPosY(originPosYText + 10f, _time).OnComplete(() =>
                 {
                     copyTextDamage.text.alpha = 1f;
                     rtTextDamage.anchoredPosition = new Vector2(rtTextDamage.anchoredPosition.x, originPosYText);
