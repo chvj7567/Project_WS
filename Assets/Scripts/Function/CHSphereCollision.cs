@@ -60,7 +60,8 @@ public class CHSphereCollision : MonoBehaviour
         // 풀링 사용시 구독 중독 방지
         if (disposeEnter != null)
         {
-            _disposable.Dispose();
+            disposeEnter.Dispose();
+            disposeEnter = _disposable;
         }
         else
         {
@@ -73,7 +74,8 @@ public class CHSphereCollision : MonoBehaviour
         // 풀링 사용시 구독 중독 방지
         if (disposeStay != null)
         {
-            _disposable.Dispose();
+            disposeStay.Dispose();
+            disposeStay = _disposable;
         }
         else
         {
@@ -86,7 +88,8 @@ public class CHSphereCollision : MonoBehaviour
         // 풀링 사용시 구독 중독 방지
         if (disposeExit != null)
         {
-            _disposable.Dispose();
+            disposeExit.Dispose();
+            disposeExit = _disposable;
         }
         else
         {

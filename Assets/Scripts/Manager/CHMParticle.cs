@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using System.Threading;
 using static Infomation;
-
+using Unity.VisualScripting;
 
 public class MyEvent : UnityEvent { }
 
@@ -33,7 +33,7 @@ public class CHMParticle
         }
     }
 
-    public void CreateParticle(Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, EffectInfo _effectInfo, bool _autoDestory = true)
+    public void CreateParticle(Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, EffectInfo _effectInfo, bool _autoDestroy = true)
     {
         if (_trCaster == null)
         {
@@ -51,62 +51,17 @@ public class CHMParticle
             // 타겟 생성할 위치 수 만큼 파티클 생성 
             for (int i = 0; i < _liParticlePos.Count; ++i)
             {
-                var tempParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestory);
-                var sphereCollision = tempParticle.GetOrAddComponent<CHSphereCollision>();
-                sphereCollision.Init(_effectInfo.sphereRadius, _effectInfo.stayTickTime);
+                var objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestroy);
 
-                if (_effectInfo.triggerEnter)
-                {
-                    sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(_ =>
-                    {
-                        var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
-                        
-                        if ((1 << _.gameObject.layer & targetMask.value) != 0)
-                        {
-                            Debug.Log($"TriggerEnter : {_.name}");
-                            CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+                SetParticleCollision(_trCaster, _effectInfo, objParticle);
 
-                            SetParticleTriggerValue(_trCaster, _, _effectInfo);
-                        }
-                    }));
-                }
-
-                if (_effectInfo.triggerExit)
-                {
-                    sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(_ =>
-                    {
-                        var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
-
-                        if ((1 << _.gameObject.layer & targetMask.value) != 0)
-                        {
-                            Debug.Log($"TriggerExit : {_.name}");
-                            CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
-
-                            SetParticleTriggerValue(_trCaster, _, _effectInfo);
-                        }
-                    }));
-                }
-
-                sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(_ =>
-                {
-                    var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
-
-                    if ((1 << _.gameObject.layer & targetMask.value) != 0)
-                    {
-                        Debug.Log($"TriggerStay : {_.name}");
-                        CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
-
-                        SetParticleTriggerValue(_trCaster, _, _effectInfo);
-                    }
-                }));
-
-                if (tempParticle == null)
+                if (objParticle == null)
                 {
                     Debug.Log("No Particle");
                     return;
                 }
 
-                liParticle.Add(tempParticle);
+                liParticle.Add(objParticle);
             }
 
             for (int i = 0; i < liParticle.Count; ++i)
@@ -129,15 +84,17 @@ public class CHMParticle
             // 타겟의 수 만큼 파티클 생성 
             for (int i = 0; i < _liTarget.Count; ++i)
             {
-                var tempParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestory);
+                var objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestroy);
 
-                if (tempParticle == null)
+                SetParticleCollision(_trCaster, _effectInfo, objParticle);
+
+                if (objParticle == null)
                 {
                     Debug.Log("No Particle");
                     return;
                 }
 
-                liParticle.Add(tempParticle);
+                liParticle.Add(objParticle);
             }
 
             for (int i = 0; i < liParticle.Count; ++i)
@@ -163,6 +120,80 @@ public class CHMParticle
         }
     }
 
+    void SetParticleCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
+    {
+        switch (_effectInfo.eEffect)
+        {
+            case Defines.EEffect.FX_Arrow_impact:
+                {
+                    // 나뉘어진 파티클 각각에다가 파티클을 붙여야 하는 경우
+                    for (int i = 0; i < _objParticle.transform.childCount; ++i)
+                    {
+                        var trChild = _objParticle.transform.GetChild(i);
+                        ApplyShereCollision(_trCaster, _effectInfo, trChild.gameObject);
+                    }
+                }
+                break;
+            default:
+                {
+                    // 일반적으로 파티클 부모 오브젝트에만 콜리젼을 적용
+                    ApplyShereCollision(_trCaster, _effectInfo, _objParticle);
+                }
+                break;
+        }
+        
+    }
+
+    void ApplyShereCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
+    {
+        var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
+        sphereCollision.Init(_effectInfo.sphereRadius, _effectInfo.stayTickTime);
+
+        if (_effectInfo.triggerEnter)
+        {
+            sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(_ =>
+            {
+                var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
+
+                if ((1 << _.gameObject.layer & targetMask.value) != 0)
+                {
+                    Debug.Log($"TriggerEnter : {_.name}");
+                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+
+                    SetParticleTriggerValue(_trCaster, _, _effectInfo);
+                }
+            }));
+        }
+
+        if (_effectInfo.triggerExit)
+        {
+            sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(_ =>
+            {
+                var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
+
+                if ((1 << _.gameObject.layer & targetMask.value) != 0)
+                {
+                    Debug.Log($"TriggerExit : {_.name}");
+                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+
+                    SetParticleTriggerValue(_trCaster, _, _effectInfo);
+                }
+            }));
+        }
+
+        sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(_ =>
+        {
+            var targetMask = CHMMain.Skill.GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
+
+            if ((1 << _.gameObject.layer & targetMask.value) != 0)
+            {
+                Debug.Log($"TriggerStay : {_.name}");
+                CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _ }, _effectInfo);
+
+                SetParticleTriggerValue(_trCaster, _, _effectInfo);
+            }
+        }));
+    }
     public GameObject GetParticleObject(Defines.EEffect _eEffect, bool _autoDestory = true)
     {
         GameObject objParticle = null;

@@ -95,6 +95,8 @@ public class CHMPool
 
     public void Push(CHPoolable poolable)
     {
+        if (poolable == null) return;
+
         if (poolDic.ContainsKey(poolable.gameObject.name) == false)
         {
             GameObject.Destroy(poolable.gameObject);

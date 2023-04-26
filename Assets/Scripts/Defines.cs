@@ -119,6 +119,9 @@ public class Defines
         
         FX_Tornado, // 16
 
+        FX_Arrow_impact, // 17
+        FX_Arrow_impact2, // 18
+
         Max
     }
 
