@@ -19,9 +19,9 @@
 				"eTargetMask": "2",
 				"effectAngle": 0,
 				"duplication": false,
-				"onDecal": false,
-				"moveToPos": true,
-				"moveSpeed": 100,
+				"onDecal": true,
+				"moveToPos": false,
+				"moveSpeed": -1,
 				"offsetToTarget": -1,
 				"triggerEnter": true,
 				"triggerExit": false,
@@ -35,7 +35,7 @@
                 "damage": 0
             },
 			{
-                "eEffect": "7",
+                "eEffect": "20",
                 "eEffectType": "1",
                 "eEffectPos": "5",
                 "eDamageState": "0",
@@ -57,7 +57,7 @@
 				"boxHalfX": -1,
 				"boxHalfY": -1,
 				"boxHalfZ": -1,
-                "damage": 10
+                "damage": 45
             }
         ]
     },

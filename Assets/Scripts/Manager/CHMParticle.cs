@@ -322,12 +322,12 @@ public class CHMParticle
         {
             case Defines.EEffect.FX_Tornado:
                 {
-                    TargetAirborne(cts.Token, _trTarget, 2, 0.5f);
+                    //TargetAirborne(cts.Token, _trTarget, 2, 0.5f);
                 }
                 break;
             case Defines.EEffect.FX_Explosion:
                 {
-                    TargetAirborne(cts.Token, _trTarget, 10, 2f);
+                    //TargetAirborne(cts.Token, _trTarget, 10, 2f);
                 }
                 break;
             default:

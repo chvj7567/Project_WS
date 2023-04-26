@@ -123,6 +123,8 @@ public class Defines
         FX_Arrow_impact_sub, // 18
         FX_Arrow_impact2, // 19
 
+        FX_Explosion_Hit, // 20
+
         Max
     }
 

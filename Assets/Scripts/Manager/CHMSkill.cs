@@ -591,7 +591,7 @@ public class CHMSkill
                     var decalProjector = objDecal.GetComponent<DecalProjector>();
                     if (decalProjector != null)
                     {
-                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius * 2f;
+                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius;
                     }
                 }
                 break;
@@ -644,7 +644,7 @@ public class CHMSkill
                         float time = 0;
                         while (time <= _effectInfo.startDelay)
                         {
-                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2f, time / _effectInfo.startDelay);
+                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius, time / _effectInfo.startDelay);
 
                             if (decalProjector == null) break;
 

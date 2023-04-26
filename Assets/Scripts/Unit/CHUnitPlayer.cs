@@ -6,7 +6,7 @@ public class CHUnitPlayer : CHUnitBase
 {
     protected override void Init()
     {
-        orgUnitInfo = curUnitInfo = CHMMain.Json.GetUnitInfo(Defines.EUnitID.B);
+        orgUnitInfo = curUnitInfo = CHMMain.Json.GetUnitInfo(Defines.EUnitID.None);
 
         orgSkill1Info = curSkill1Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill1ID);
         orgSkill2Info = curSkill2Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill2ID);
