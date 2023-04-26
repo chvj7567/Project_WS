@@ -280,7 +280,10 @@ public class CHMSkill
                     // 맞은 타겟 수 만큼 파티클 중복 여부
                     if (_effectInfo.duplication)
                     {
-                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
+                        foreach (var target in liTarget)
+                        {
+                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
+                        }
                     }
                     else
                     {
@@ -365,7 +368,9 @@ public class CHMSkill
                 break;
             default:
                 {
-                    if (_effectInfo.eEffectPos == Defines.EEffectPos.Me_Only)
+                    if (_effectInfo.eEffectPos == Defines.EEffectPos.Me_Only ||
+                        _effectInfo.eEffectPos == Defines.EEffectPos.Me_Targeting||
+                        _effectInfo.eEffectPos == Defines.EEffectPos.Me_NoneTargeting)
                     {
                         if (_trTarget == null)
                         {

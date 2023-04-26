@@ -1,6 +1,8 @@
 using System;
 using UniRx;
 using UnityEngine;
+using static Defines;
+using static Infomation;
 
 public class CHSphereCollision : MonoBehaviour
 {
@@ -8,12 +10,12 @@ public class CHSphereCollision : MonoBehaviour
     float stayTickTime = -1f;
     float stayTickLastTime = -1f;
 
-    Subject<Transform> subjectEnter = new Subject<Transform>();
-    Subject<Transform> subjectStay = new Subject<Transform>();
-    Subject<Transform> subjectExit = new Subject<Transform>();
-    public IObservable<Transform> OnEnter => subjectEnter;
-    public IObservable<Transform> OnStay => subjectStay;
-    public IObservable<Transform> OnExit => subjectExit;
+    Subject<Collider> subjectEnter = new Subject<Collider>();
+    Subject<Collider> subjectStay = new Subject<Collider>();
+    Subject<Collider> subjectExit = new Subject<Collider>();
+    public IObservable<Collider> OnEnter => subjectEnter;
+    public IObservable<Collider> OnStay => subjectStay;
+    public IObservable<Collider> OnExit => subjectExit;
 
     IDisposable disposeEnter;
     IDisposable disposeStay;
@@ -21,16 +23,25 @@ public class CHSphereCollision : MonoBehaviour
 
     bool useStay = false;
 
-    public void Init(float _sphereRadius, float _stayTickTime = 0f)
+    Transform trCaster;
+    EffectInfo effectInfo;
+
+    public void Init(Transform _trCaster, EffectInfo _effectInfo)
     {
+        trCaster = _trCaster;
+        effectInfo = _effectInfo;
+
         sphereCollider = gameObject.GetOrAddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = _sphereRadius;
+        sphereCollider.radius = _effectInfo.sphereRadius;
+
+        SetCollisionCenter();
+
         gameObject.layer = 2;
 
-        if (_stayTickTime >= 0f)
+        if (_effectInfo.stayTickTime >= 0f)
         {
-            stayTickTime = _stayTickTime;
+            stayTickTime = _effectInfo.stayTickTime;
             stayTickLastTime = -1f;
             useStay = true;
         }
@@ -38,11 +49,6 @@ public class CHSphereCollision : MonoBehaviour
         {
             useStay = false;
         }
-    }
-
-    public void SetCollisionCenter(float _x, float _y, float _z)
-    {
-        sphereCollider.center = new Vector3(_x, _y, _z);
     }
 
     private void Update()
@@ -104,11 +110,7 @@ public class CHSphereCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var unitBase = other.gameObject.GetComponent<CHUnitBase>();
-        if (unitBase != null)
-        {
-            subjectEnter.OnNext(unitBase.transform);
-        }
+        subjectEnter.OnNext(other);
     }
 
     private void OnTriggerStay(Collider other)
@@ -118,20 +120,30 @@ public class CHSphereCollision : MonoBehaviour
         {
             stayTickLastTime = 0.0001f;
 
-            var unitBase = other.gameObject.GetComponent<CHUnitBase>();
-            if (unitBase != null)
-            {
-                subjectStay.OnNext(unitBase.transform);
-            }
+            subjectStay.OnNext(other);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        var unitBase = other.gameObject.GetComponent<CHUnitBase>();
-        if (unitBase != null)
+        subjectExit.OnNext(other);
+    }
+
+    void SetCollisionCenter()
+    {
+        switch (effectInfo.eEffect)
         {
-            subjectExit.OnNext(unitBase.transform);
+            case Defines.EEffect.FX_Arrow_impact:
+            case Defines.EEffect.FX_Arrow_impact_sub:
+                {
+                    sphereCollider.center = new Vector3(0f, 4f, 0f);
+                }
+                break;
+            default:
+                {
+                    sphereCollider.center = new Vector3(0f, 0f, 0f);
+                }
+                break;
         }
     }
 }

@@ -1796,7 +1796,7 @@ PrefabInstance:
     - target: {fileID: -7272946533663279021, guid: 59b43e47be199f34ba8fc52535c2c3cc,
         type: 3}
       propertyPath: useSkill2
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2376815555908959892, guid: 59b43e47be199f34ba8fc52535c2c3cc,
         type: 3}
