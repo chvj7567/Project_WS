@@ -186,7 +186,7 @@ public class Defines
 
         AtOnce, // 0 : 한번에
         Continuous_1Sec_3Count, // 1 : 1초동안 3번 지속 데미지
-
+        Continuous_Dot1Sec_10Count, // 1 : 0.1초동안 10번 지속 데미지
         Max
     }
 
