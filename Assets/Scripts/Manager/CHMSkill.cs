@@ -21,6 +21,20 @@ public class CHMSkill
         public Vector3 dirTarget;
         public Vector3 posSkill;
         public Vector3 dirSkill;
+
+        public SkillLocationInfo Copy()
+        {
+            SkillLocationInfo copy = new SkillLocationInfo();
+            copy.trCaster = this.trCaster;
+            copy.posCaster = this.posCaster;
+            copy.dirCaster = this.dirCaster;
+            copy.trTarget = this.trTarget;
+            copy.posTarget = this.posTarget;
+            copy.dirTarget = this.dirTarget;
+            copy.posSkill = this.posSkill;
+            copy.dirSkill = this.dirSkill;
+            return copy;
+        }
     }
 
     public async void CreateSkill(SkillLocationInfo _skillLocationInfo, Defines.ESkillID _skill)
@@ -200,7 +214,8 @@ public class CHMSkill
 
     void CreateSphereCollision(SkillLocationInfo _skillLocationInfo, EffectInfo _effectInfo, bool _isTargeting)
     {
-        LayerMask targetMask = GetTargetMask(_skillLocationInfo.trCaster.gameObject.layer, _effectInfo.eTargetMask);
+        SkillLocationInfo skillLocationInfo = _skillLocationInfo.Copy();
+        LayerMask targetMask = GetTargetMask(skillLocationInfo.trCaster.gameObject.layer, _effectInfo.eTargetMask);
 
         List<TargetInfo> liTargetInfo = new List<TargetInfo>();
         List<Transform> liTarget = new List<Transform>();
@@ -211,17 +226,17 @@ public class CHMSkill
             // 논타겟팅 스킬
             if (_effectInfo.createCasterPosition == false)
             {
-                liTargetInfo = GetTargetInfoListInRange(_skillLocationInfo.posSkill, _skillLocationInfo.dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+                liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.posSkill, skillLocationInfo.dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
                 liTarget = GetTargetTransformList(liTargetInfo);
             }
             else
             {
                 // 스킬 시전할 당시의 스킬 시전자 위치에 콜리젼 생성
-                liTargetInfo = GetTargetInfoListInRange(_skillLocationInfo.posCaster, _skillLocationInfo.dirCaster, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+                liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.posCaster, skillLocationInfo.dirCaster, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
                 liTarget = GetTargetTransformList(liTargetInfo);
 
-                _skillLocationInfo.posSkill = _skillLocationInfo.posCaster;
-                _skillLocationInfo.dirSkill = _skillLocationInfo.dirCaster;
+                skillLocationInfo.posSkill = skillLocationInfo.posCaster;
+                skillLocationInfo.dirSkill = skillLocationInfo.dirCaster;
             }
 
             // 논타겟팅 스킬은 생성 시에 타겟이 없을 수도 있음
@@ -229,8 +244,8 @@ public class CHMSkill
             {
                 if (_effectInfo.createOnEmpty)
                 {
-                    CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { _skillLocationInfo.trTarget },
-                        new List<Vector3> { _skillLocationInfo.posSkill }, new List<Vector3> { _skillLocationInfo.dirSkill }, _effectInfo);
+                    CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                        new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { skillLocationInfo.dirSkill }, _effectInfo);
                 }
 
                 return;
@@ -241,17 +256,17 @@ public class CHMSkill
             // 타겟팅 스킬
             if (_effectInfo.createCasterPosition == false)
             {
-                liTargetInfo = GetTargetInfoListInRange(_skillLocationInfo.trTarget.position, _skillLocationInfo.trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+                liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.trTarget.position, skillLocationInfo.trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
                 liTarget = GetTargetTransformList(liTargetInfo);
             }
             else
             {
                 // 스킬 시전자 위치에 콜리젼 생성
-                liTargetInfo = GetTargetInfoListInRange(_skillLocationInfo.trCaster.position, _skillLocationInfo.trCaster.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+                liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.trCaster.position, skillLocationInfo.trCaster.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
                 liTarget = GetTargetTransformList(liTargetInfo);
 
-                _skillLocationInfo.posSkill = _skillLocationInfo.posCaster;
-                _skillLocationInfo.dirSkill = _skillLocationInfo.dirCaster;
+                skillLocationInfo.posSkill = skillLocationInfo.posCaster;
+                skillLocationInfo.dirSkill = skillLocationInfo.dirCaster;
             }
 
             if (liTargetInfo == null || liTargetInfo.Count <= 0)
@@ -270,14 +285,14 @@ public class CHMSkill
                     {
                         foreach (var target in liTarget)
                         {
-                            CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { _skillLocationInfo.trTarget },
-                                new List<Vector3> { _skillLocationInfo.posSkill }, new List<Vector3> { _skillLocationInfo.dirSkill }, _effectInfo);
+                            CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                                new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { skillLocationInfo.dirSkill }, _effectInfo);
                         }
                     }
                     else
                     {
-                        CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { _skillLocationInfo.trTarget },
-                            new List<Vector3> { _skillLocationInfo.posSkill }, new List<Vector3> { _skillLocationInfo.dirSkill }, _effectInfo);
+                        CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                            new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { skillLocationInfo.dirSkill }, _effectInfo);
                     }
                 }
                 break;
@@ -290,13 +305,13 @@ public class CHMSkill
                     {
                         foreach (var target in liTarget)
                         {
-                            CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { targetOne },
+                            CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { targetOne },
                                 new List<Vector3> { targetOne.position }, new List<Vector3> { targetOne.forward }, _effectInfo);
                         }
                     }
                     else
                     {
-                        CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { targetOne },
+                        CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { targetOne },
                             new List<Vector3> { targetOne.position }, new List<Vector3> { targetOne.forward }, _effectInfo);
                     }
                 }
@@ -309,16 +324,16 @@ public class CHMSkill
                     for (int i = 0; i < liTarget.Count; ++i)
                     {
                         liParticlePos.Add(liTarget[i].position);
-                        liParticleDir.Add((liTarget[i].position - _skillLocationInfo.trCaster.position).normalized);
+                        liParticleDir.Add((liTarget[i].position - skillLocationInfo.trCaster.position).normalized);
                     }
 
-                    CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, liTarget, liParticlePos, liParticleDir, _effectInfo);
+                    CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, liTarget, liParticlePos, liParticleDir, _effectInfo);
                 }
                 break;
             default:
                 {
-                    CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { _skillLocationInfo.trTarget },
-                        new List<Vector3> { _skillLocationInfo.posSkill }, new List<Vector3> { _skillLocationInfo.dirSkill }, _effectInfo);
+                    CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                        new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { skillLocationInfo.dirSkill }, _effectInfo);
                 }
                 break;
         }
