@@ -113,67 +113,6 @@ public class CHMParticle
         }
     }
 
-    void SetParticleCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
-    {
-        if (_effectInfo.eCollision != Defines.ECollision.None)
-        {
-            switch (_effectInfo.eEffect)
-            {
-                default:
-                    {
-                        // 일반적으로 파티클 부모 오브젝트에만 콜리젼을 적용
-                        ApplyShereCollision(_trCaster, _effectInfo, _objParticle);
-                    }
-                    break;
-            }
-        }
-    }
-
-    void ApplyShereCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
-    {
-        var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
-        sphereCollision.Init(_trCaster, _effectInfo);
-
-        if (_effectInfo.triggerEnter)
-        {
-            sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(collider =>
-            {
-                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
-                {
-                    Debug.Log($"TriggerEnter : {collider.name}");
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
-
-                    SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
-                }
-            }));
-        }
-
-        if (_effectInfo.triggerExit)
-        {
-            sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(collider =>
-            {
-                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
-                {
-                    Debug.Log($"TriggerExit : {collider.name}");
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
-
-                    SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
-                }
-            }));
-        }
-
-        sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(collider =>
-        {
-            if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
-            {
-                Debug.Log($"TriggerStay : {collider.name}");
-                CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
-
-                SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
-            }
-        }));
-    }
-
     public bool IsTarget(int _casterLayer, int _targetLayer, Defines.ETargetMask _targetMask)
     {
         var targetMask = CHMMain.Skill.GetTargetMask(_casterLayer, _targetMask);
@@ -247,6 +186,67 @@ public class CHMParticle
         if (_objParticle) CHMMain.Resource.Destroy(_objParticle);
     }
 
+    void SetParticleCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
+    {
+        if (_effectInfo.eCollision != Defines.ECollision.None)
+        {
+            switch (_effectInfo.eEffect)
+            {
+                default:
+                    {
+                        // 일반적으로 파티클 부모 오브젝트에만 콜리젼을 적용
+                        ApplyShereCollision(_trCaster, _effectInfo, _objParticle);
+                    }
+                    break;
+            }
+        }
+    }
+
+    void ApplyShereCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
+    {
+        var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
+        sphereCollision.Init(_trCaster, _effectInfo);
+
+        if (_effectInfo.triggerEnter)
+        {
+            sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(collider =>
+            {
+                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
+                {
+                    Debug.Log($"TriggerEnter : {collider.name}");
+                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
+
+                    SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
+                }
+            }));
+        }
+
+        if (_effectInfo.triggerExit)
+        {
+            sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(collider =>
+            {
+                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
+                {
+                    Debug.Log($"TriggerExit : {collider.name}");
+                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
+
+                    SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
+                }
+            }));
+        }
+
+        sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(collider =>
+        {
+            if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
+            {
+                Debug.Log($"TriggerStay : {collider.name}");
+                CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
+
+                SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
+            }
+        }));
+    }
+
     bool IsPoolableEffect(Defines.EEffect _eEffect)
     {
         switch (_eEffect)
@@ -264,6 +264,11 @@ public class CHMParticle
         // 각 이펙트별로 세부 설정이 필요한 경우
         switch (_effectInfo.eEffect)
         {
+            case Defines.EEffect.FX_Explosion:
+                {
+                    //float distance = Vector3.Distance(_skillLocationInfo.trCaster.position, _skillLocationInfo.posSkill);
+                }
+                break;
             case Defines.EEffect.FX_Circle_meteor:
             case Defines.EEffect.FX_Arrow_impact2:
                 {

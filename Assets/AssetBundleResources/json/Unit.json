@@ -40,7 +40,7 @@
 		"range": 20,
 		"rangeMulti": 2,
 		"viewAngle" : 180,
-		"eSkill1ID": 5,
+		"eSkill1ID": 0,
 		"eSkill2ID": 1,
 		"eSkill3ID": 2,
 		"eSkill4ID": 3
@@ -63,9 +63,9 @@
 		"range": 20,
 		"rangeMulti": 2,
 		"viewAngle" : 180,
-		"eSkill1ID": 0,
-		"eSkill2ID": 1,
-		"eSkill3ID": 3,
-		"eSkill4ID": 4
+		"eSkill1ID": 4,
+		"eSkill2ID": 5,
+		"eSkill3ID": 6,
+		"eSkill4ID": 7
 	}
 ]
