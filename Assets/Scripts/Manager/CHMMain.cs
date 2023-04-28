@@ -55,4 +55,16 @@ public class CHMMain : MonoBehaviour
             m_instance.m_particle.Init();
         }
     }
+
+    private void OnApplicationQuit()
+    {
+        if (m_instance != null)
+        {
+            m_instance.m_pool.Clear();
+            m_instance.m_json.Clear();
+            m_instance.m_particle.Clear();
+
+            Destroy(this);
+        }
+    }
 }

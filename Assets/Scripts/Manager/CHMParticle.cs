@@ -7,7 +7,6 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using System.Threading;
 using static Infomation;
-using Unity.VisualScripting;
 
 public class MyEvent : UnityEvent { }
 
@@ -23,6 +22,13 @@ public class CHMParticle
         cts = new CancellationTokenSource();
 
         OnApplicationQuitEvent.AddListener(OnApplicationQuitHandler);
+    }
+
+    public void Clear()
+    {
+        dicParticleInfo.Clear();
+        OnApplicationQuitEvent = null;
+        cts = null;
     }
 
     void OnApplicationQuitHandler()
@@ -41,84 +47,69 @@ public class CHMParticle
             return;
         }
 
+        if (_liTarget == null)
+        {
+            Debug.Log("No Target");
+            return;
+        }
+
+        if (_liParticlePos == null || _liParticleDir == null)
+        {
+            Debug.Log("No Skill Info");
+            return;
+        }
+
         List<GameObject> liParticle = new List<GameObject>();
 
-        // 타겟이 없다는 건 논타겟 스킬이라는 것
-        if (_liTarget == null || _liTarget.Count == 0 || _liTarget.First() == null)
+        // 타겟의 수 만큼 파티클 생성 
+        for (int i = 0; i < _liTarget.Count; ++i)
         {
-            _liTarget = null;
+            var objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestroy);
 
-            // 타겟 생성할 위치 수 만큼 파티클 생성 
-            for (int i = 0; i < _liParticlePos.Count; ++i)
+            SetParticleCollision(_trCaster, _effectInfo, objParticle);
+
+            if (objParticle == null)
             {
-                var objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestroy);
-
-                SetParticleCollision(_trCaster, _effectInfo, objParticle);
-
-                if (objParticle == null)
-                {
-                    Debug.Log("No Particle");
-                    return;
-                }
-
-                liParticle.Add(objParticle);
+                Debug.Log("No Particle");
+                return;
             }
 
-            for (int i = 0; i < liParticle.Count; ++i)
-            {
-                var objParticle = liParticle.ElementAtOrDefault(i);
-                var posParticle = _liParticlePos.ElementAtOrDefault(i);
-                var dirParticle = _liParticleDir.ElementAtOrDefault(i);
-
-                posParticle.y = 0f;
-                dirParticle.y = 0f;
-
-                objParticle.transform.position = posParticle;
-                objParticle.transform.forward = dirParticle;
-                objParticle.transform.forward = objParticle.transform.Angle(_effectInfo.effectAngle);
-
-                SetParticleValue(_trCaster, null, posParticle, dirParticle, objParticle, _effectInfo);
-            }
+            liParticle.Add(objParticle);
         }
-        else
+
+        bool createCasterPosition = _effectInfo.createCasterPosition;
+
+        for (int i = 0; i < liParticle.Count; ++i)
         {
-            // 타겟의 수 만큼 파티클 생성 
-            for (int i = 0; i < _liTarget.Count; ++i)
+            var objParticle = liParticle.ElementAtOrDefault(i);
+            var trTarget = _liTarget.ElementAtOrDefault(i);
+            var posParticle = _liParticlePos.ElementAtOrDefault(i);
+            var dirParticle = _liParticleDir.ElementAtOrDefault(i);
+
+            posParticle.y = 0f;
+            dirParticle.y = 0f;
+
+            objParticle.transform.position = posParticle;
+
+            objParticle.transform.forward = dirParticle;
+            objParticle.transform.forward = objParticle.transform.Angle(_effectInfo.effectAngle);
+
+            if (_effectInfo.createCasterPosition == false)
             {
-                var objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestroy);
-
-                SetParticleCollision(_trCaster, _effectInfo, objParticle);
-
-                if (objParticle == null)
+                if (_effectInfo.attach)
                 {
-                    Debug.Log("No Particle");
-                    return;
+                    objParticle.transform.SetParent(trTarget);
                 }
-
-                liParticle.Add(objParticle);
             }
-
-            for (int i = 0; i < liParticle.Count; ++i)
+            else
             {
-                var objParticle = liParticle.ElementAtOrDefault(i);
-                var trTarget = _liTarget.ElementAtOrDefault(i);
-
-                var posParticle = trTarget.position;
-                var dirParticle = _trCaster.forward;
-
-                posParticle.y = 0f;
-                dirParticle.y = 0f;
-
-                objParticle.transform.position = posParticle;
-                objParticle.transform.forward = dirParticle;
-                objParticle.transform.forward = objParticle.transform.Angle(_effectInfo.effectAngle);
-
-                objParticle.transform.SetParent(trTarget);
-
-                SetParticleValue(_trCaster, trTarget, Vector3.zero, Vector3.zero, objParticle, _effectInfo);
+                if (_effectInfo.attach)
+                {
+                    objParticle.transform.SetParent(_trCaster);
+                }
             }
 
-            CHMMain.Skill.ApplySkillValue(_trCaster, _liTarget, _effectInfo);
+            SetParticleValue(_trCaster, trTarget, objParticle, _effectInfo);
         }
     }
 
@@ -268,7 +259,7 @@ public class CHMParticle
         }
     }
 
-    void SetParticleValue(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, GameObject _objParticle, EffectInfo _effectInfo)
+    void SetParticleValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, EffectInfo _effectInfo)
     {
         // 각 이펙트별로 세부 설정이 필요한 경우
         switch (_effectInfo.eEffect)
@@ -276,16 +267,21 @@ public class CHMParticle
             case Defines.EEffect.FX_Circle_meteor:
             case Defines.EEffect.FX_Arrow_impact2:
                 {
-                    // y축으로 23 이동
+                    // y축으로 +23 이동
                     var posOrigin = _objParticle.transform.localPosition;
                     _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 23f, posOrigin.z);
                 }
                 break;
             case Defines.EEffect.FX_Arrow_impact:
                 {
-                    // y축으로 -3 이동
+                    ParticleMove(_trCaster, _objParticle.transform.forward, 30f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                }
+                break;
+            case Defines.EEffect.FX_Ax:
+                {
+                    // y축으로 +3 이동
                     var posOrigin = _objParticle.transform.localPosition;
-                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y - 3f, posOrigin.z);
+                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 3f, posOrigin.z);
                     ParticleMove(_trCaster, _trTarget, 30f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
                 }
                 break;
@@ -298,10 +294,8 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    ParticleMove(_trCaster, _trTarget, 10f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                    ParticleMove(_trCaster, _trCaster.forward, 10f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
                 }
-                break;
-            default:
                 break;
         }
     }
@@ -331,14 +325,13 @@ public class CHMParticle
         }
     }
 
-    async void ParticleMove(Transform _trCaster, Transform _trTarget, float _speed, float _effectTime, GameObject _objParticle)
+    async void ParticleMove(Transform _trCaster, Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
     {
         Vector3 posOrigin = _objParticle.transform.localPosition;
-        Vector3 direction = _objParticle.transform.forward;
 
         float time = 0;
-        
-        if (_trTarget == null)
+
+        if (_direction != null)
         {
             while (time <= _effectTime)
             {
@@ -346,12 +339,20 @@ public class CHMParticle
                 {
                     break;
                 }
-                _objParticle.transform.localPosition = posOrigin + direction.normalized * _speed * time;
+                _objParticle.transform.localPosition = posOrigin + _direction.normalized * _speed * time;
                 time += Time.deltaTime;
                 await Task.Delay((int)(Time.deltaTime * 1000f));
             }
         }
-        else
+    }
+
+    async void ParticleMove(Transform _trCaster, Transform _trTarget, float _speed, float _effectTime, GameObject _objParticle)
+    {
+        Vector3 posOrigin = _objParticle.transform.localPosition;
+
+        float time = 0;
+        
+        if (_trTarget != null)
         {
             while (time <= _effectTime)
             {

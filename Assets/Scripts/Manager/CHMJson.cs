@@ -26,6 +26,14 @@ public class CHMJson
         LoadJsonData();
     }
 
+    public void Clear()
+    {
+        liAction.Clear();
+        dicStringInfo.Clear();
+        liSkillInfo.Clear();
+        liUnitInfo.Clear();
+    }
+
     void LoadJsonData()
     {
         loadCompleteFileCount = 0;

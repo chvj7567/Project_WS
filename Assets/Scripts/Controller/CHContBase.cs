@@ -148,7 +148,17 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill1 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill1Distance())
                         {
-                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, posMainTarget, dirMainTarget, unitInfo.GetOriginSkill1());
+                            CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
+                            {
+                                trCaster = transform,
+                                posCaster = transform.position,
+                                dirCaster = transform.forward,
+                                trTarget = mainTarget.objTarget.transform,
+                                posTarget = mainTarget.objTarget.transform.position,
+                                dirTarget = mainTarget.objTarget.transform.forward,
+                                posSkill = mainTarget.objTarget.transform.position,
+                                dirSkill = mainTarget.objTarget.transform.forward,
+                            }, unitInfo.GetOriginSkill1());
                             timeSinceLastSkill1 = 0.0001f;
                         }
                     }
@@ -158,7 +168,17 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
                         {
-                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, posMainTarget, dirMainTarget, unitInfo.GetOriginSkill2());
+                            CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
+                            {
+                                trCaster = transform,
+                                posCaster = transform.position,
+                                dirCaster = transform.forward,
+                                trTarget = mainTarget.objTarget.transform,
+                                posTarget = mainTarget.objTarget.transform.position,
+                                dirTarget = mainTarget.objTarget.transform.forward,
+                                posSkill = mainTarget.objTarget.transform.position,
+                                dirSkill = mainTarget.objTarget.transform.forward,
+                            }, unitInfo.GetOriginSkill2());
                             timeSinceLastSkill2 = 0.0001f;
                         }
                     }
@@ -168,7 +188,17 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
                         {
-                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, posMainTarget, dirMainTarget, unitInfo.GetOriginSkill3());
+                            CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
+                            {
+                                trCaster = transform,
+                                posCaster = transform.position,
+                                dirCaster = transform.forward,
+                                trTarget = mainTarget.objTarget.transform,
+                                posTarget = mainTarget.objTarget.transform.position,
+                                dirTarget = mainTarget.objTarget.transform.forward,
+                                posSkill = mainTarget.objTarget.transform.position,
+                                dirSkill = mainTarget.objTarget.transform.forward,
+                            }, unitInfo.GetOriginSkill3());
                             timeSinceLastSkill3 = 0.0001f;
                         }
                     }
@@ -178,7 +208,17 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
                         {
-                            CHMMain.Skill.CreateSkill(transform, mainTarget.objTarget.transform, posMainTarget, dirMainTarget, unitInfo.GetOriginSkill4());
+                            CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
+                            {
+                                trCaster = transform,
+                                posCaster = transform.position,
+                                dirCaster = transform.forward,
+                                trTarget = mainTarget.objTarget.transform,
+                                posTarget = mainTarget.objTarget.transform.position,
+                                dirTarget = mainTarget.objTarget.transform.forward,
+                                posSkill = mainTarget.objTarget.transform.position,
+                                dirSkill = mainTarget.objTarget.transform.forward,
+                            }, unitInfo.GetOriginSkill4());
                             timeSinceLastSkill4 = 0.0001f;
                         }
                     }

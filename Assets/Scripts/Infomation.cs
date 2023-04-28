@@ -51,14 +51,16 @@ public class Infomation
     {
         public EEffect eEffect = EEffect.None; // 이펙트 종류
         public EEffectType eEffectType = EEffectType.None; // 이펙트 타입
-        public EEffectPos eEffectPos = EEffectPos.None; // 이펙트 위치
+        public ETarget eTarget = ETarget.None; // 이펙트 위치
+        public ETargetMask eTargetMask = ETargetMask.None; // 스킬 대상
         public EDamageState eDamageState = EDamageState.None; // 데미지 상태
         public EDamageType eDamageType = EDamageType.None; // 데미지 타입
         public ECollision eCollision = ECollision.None; // 충돌체 모양
-        public ETargetMask eTargetMask = ETargetMask.None; // 스킬 대상
         public float effectAngle = -1f; // 이펙트 각도
-        public bool isTargeting = false; // 이펙트 타겟팅 여부
-        public bool duplication = false; // 스킬 중복 여부
+        public bool createCasterPosition = false; // 이펙트 생성 위치(시전자, 타겟)
+        public bool createOnEmpty = false; // 타겟이 없을 때 이펙트 생성 여부
+        public bool attach = false; // 시전자 혹은 타겟의 자식 오브젝트로 들어갈지 여부
+        public bool duplication = false; // 이펙트 중복 여부
         public bool onDecal = false; // 데칼 표시 여부
         public bool moveToPos = false; // true인 경우 moveSpeed에 따라 startDelay는 자동 계산
         public float moveSpeed = -1f; // moveToPos가 true인 경우만 사용, 움직일 속도
@@ -79,7 +81,7 @@ public class Infomation
             EffectInfo effect = new EffectInfo();
             effect.eEffect = this.eEffect;
             effect.eEffectType = this.eEffectType;
-            effect.eEffectPos = this.eEffectPos;
+            effect.eTarget = this.eTarget;
             effect.eDamageState = this.eDamageState;
             effect.eDamageType = this.eDamageType;
             effect.eCollision = this.eCollision;

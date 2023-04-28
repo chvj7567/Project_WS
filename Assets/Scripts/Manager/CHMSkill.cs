@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using static CHMSkill;
 using static Infomation;
 
 public class CHMSkill
@@ -10,22 +11,28 @@ public class CHMSkill
     GameObject roundAreaDecal = null;
     GameObject roundTimingDecal = null;
 
-    public async void CreateSkill(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, Defines.ESkillID _skill)
+    public class SkillLocationInfo
+    {
+        public Transform trCaster;
+        public Vector3 posCaster;
+        public Vector3 dirCaster;
+        public Transform trTarget;
+        public Vector3 posTarget;
+        public Vector3 dirTarget;
+        public Vector3 posSkill;
+        public Vector3 dirSkill;
+    }
+
+    public async void CreateSkill(SkillLocationInfo _skillLocationInfo, Defines.ESkillID _skill)
     {
         // 스킬 시전자가 죽었으면 스킬 발동 X
-        var isDeath = _trCaster.GetComponent<CHUnitBase>().GetIsDeath();
+        var isDeath = _skillLocationInfo.trCaster.GetComponent<CHUnitBase>().GetIsDeath();
         if (isDeath) return;
 
         var skillInfo = CHMMain.Json.GetSkillInfo(_skill);
         if (skillInfo != null)
         {
-            // 논타겟 스킬은 타겟을 강제로 삭제
-            if (skillInfo.isTargeting == false)
-            {
-                _trTarget = null;
-            }
-
-            var casterUnit = _trCaster.GetComponent<CHUnitBase>();
+            var casterUnit = _skillLocationInfo.trCaster.GetComponent<CHUnitBase>();
             if (casterUnit != null)
             {
                 if (CanUseSkill(casterUnit, skillInfo) == false) return;
@@ -36,14 +43,14 @@ public class CHMSkill
                 // 해당 위치로 움직일지 여부
                 if (effectInfo.moveToPos)
                 {
-                    float distance = Vector3.Distance(_trCaster.position, _posSkill);
+                    float distance = Vector3.Distance(_skillLocationInfo.trCaster.position, _skillLocationInfo.posSkill);
                     effectInfo.startDelay = (distance + effectInfo.offsetToTarget) / effectInfo.moveSpeed;
                 }
                 
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
                 if (effectInfo.onDecal && (Mathf.Approximately(0f, effectInfo.startDelay) == false))
                 {
-                    await CreateDecal(_trCaster, _trTarget, _posSkill, _dirSkill, effectInfo);
+                    await CreateDecal(_skillLocationInfo, effectInfo, skillInfo.isTargeting);
                 }
                 else
                 {
@@ -52,7 +59,7 @@ public class CHMSkill
                         float time = 0f;
                         while (time <= effectInfo.startDelay)
                         {
-                            _trCaster.position += _dirSkill.normalized * effectInfo.moveSpeed * Time.deltaTime;
+                            _skillLocationInfo.trCaster.position += _skillLocationInfo.dirSkill.normalized * effectInfo.moveSpeed * Time.deltaTime;
 
                             time += Time.deltaTime;
                             await Task.Delay((int)(Time.deltaTime * 1000f));
@@ -64,10 +71,10 @@ public class CHMSkill
                     }
                 }
 
-                if (_trCaster == null) return;
+                if (_skillLocationInfo.trCaster == null) return;
 
                 // 스킬 충돌 범위 생성
-                CreateSkillCollision(_trCaster, _trTarget, _posSkill, _dirSkill, effectInfo);
+                CreateSkillCollision(_skillLocationInfo, effectInfo, skillInfo.isTargeting);
             }
         }
     }
@@ -78,6 +85,8 @@ public class CHMSkill
 
         // 범위내에 있는 타겟들 확인
         Collider[] targets = Physics.OverlapSphere(_originPos, _range, _lmTarget);
+
+        float minDistance = float.MaxValue;
 
         foreach (Collider target in targets)
         {
@@ -93,39 +102,26 @@ public class CHMSkill
                 // 타겟이 살아있으면 타겟으로 지정
                 if (unitBase != null && unitBase.GetIsDeath() == false)
                 {
-                    targetInfoList.Add(new TargetInfo
+                    // 제일 짧은 거리에 있는 타겟을 리스트의 첫번째로
+                    if (minDistance > targetDis)
                     {
-                        objTarget = target.gameObject,
-                        distance = targetDis,
-                    });
+                        minDistance = targetDis;
+
+                        targetInfoList.Insert(0, new TargetInfo
+                        {
+                            objTarget = target.gameObject,
+                            distance = targetDis,
+                        });
+                    }
+                    else
+                    {
+                        targetInfoList.Add(new TargetInfo
+                        {
+                            objTarget = target.gameObject,
+                            distance = targetDis,
+                        });
+                    }
                 }
-            }
-        }
-
-        return targetInfoList;
-    }
-
-    public List<TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, LayerMask _lmTarget, Vector3 _size, Quaternion _quater)
-    {
-        List<TargetInfo> targetInfoList = new List<TargetInfo>();
-
-        // 범위내에 있는 타겟들 확인
-        Collider[] targets = Physics.OverlapBox(_originPos, _size / 2f, _quater, _lmTarget);
-
-        foreach (Collider target in targets)
-        {
-            Transform targetTr = target.transform;
-            Vector3 targetDir = (targetTr.position - _originPos).normalized;
-            float targetDis = Vector3.Distance(_originPos, targetTr.position);
-
-            // 장애물이 있는지 확인
-            if (Physics.Raycast(_originPos, targetDir, targetDis, ~_lmTarget) == false)
-            {
-                targetInfoList.Add(new TargetInfo
-                {
-                    objTarget = target.gameObject,
-                    distance = targetDis,
-                });
             }
         }
 
@@ -202,96 +198,90 @@ public class CHMSkill
 
     //-------------------------------------- private ------------------------------------------//
 
-    void CreateSphereCollision(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    void CreateSphereCollision(SkillLocationInfo _skillLocationInfo, EffectInfo _effectInfo, bool _isTargeting)
     {
-        LayerMask targetMask = GetTargetMask(_trCaster.gameObject.layer, _effectInfo.eTargetMask);
+        LayerMask targetMask = GetTargetMask(_skillLocationInfo.trCaster.gameObject.layer, _effectInfo.eTargetMask);
 
         List<TargetInfo> liTargetInfo = new List<TargetInfo>();
         List<Transform> liTarget = new List<Transform>();
 
         // 스킬 시작 시 해당 위치에 콜리젼 생성
-        if (_effectInfo.eEffectPos != Defines.EEffectPos.Me_Only)
+        if (_isTargeting == false)
         {
-            if (_trTarget == null)
+            // 논타겟팅 스킬
+            if (_effectInfo.createCasterPosition == false)
             {
-                // 논타겟팅 스킬
-                liTargetInfo = GetTargetInfoListInRange(_posSkill, _dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+                liTargetInfo = GetTargetInfoListInRange(_skillLocationInfo.posSkill, _skillLocationInfo.dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
                 liTarget = GetTargetTransformList(liTargetInfo);
-
-                // 논타겟팅 스킬은 생성 시에 타겟이 없을 수도 있음
-                if (liTargetInfo == null || liTargetInfo.Count <= 0)
-                {
-                    // 파티클 기준이 자기 기준이 아닐 때만 파티클 생성
-                    if ((_effectInfo.eEffectPos != Defines.EEffectPos.Me_Targeting) && (_effectInfo.eEffectPos != Defines.EEffectPos.Me_NoneTargeting))
-                    {
-                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
-                    }
-
-                    return;
-                }
             }
             else
             {
-                // 타겟팅 스킬
-                liTargetInfo = GetTargetInfoListInRange(_trTarget.position, _trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+                // 스킬 시전할 당시의 스킬 시전자 위치에 콜리젼 생성
+                liTargetInfo = GetTargetInfoListInRange(_skillLocationInfo.posCaster, _skillLocationInfo.dirCaster, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
                 liTarget = GetTargetTransformList(liTargetInfo);
 
-                if (liTargetInfo == null || liTargetInfo.Count <= 0)
+                _skillLocationInfo.posSkill = _skillLocationInfo.posCaster;
+                _skillLocationInfo.dirSkill = _skillLocationInfo.dirCaster;
+            }
+
+            // 논타겟팅 스킬은 생성 시에 타겟이 없을 수도 있음
+            if (liTargetInfo == null || liTargetInfo.Count <= 0)
+            {
+                if (_effectInfo.createOnEmpty)
                 {
-                    Debug.Log("Targeting Skil : No Target Error");
-                    return;
+                    CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { _skillLocationInfo.trTarget },
+                        new List<Vector3> { _skillLocationInfo.posSkill }, new List<Vector3> { _skillLocationInfo.dirSkill }, _effectInfo);
                 }
+
+                return;
+            }
+        }
+        else
+        {
+            // 타겟팅 스킬
+            if (_effectInfo.createCasterPosition == false)
+            {
+                liTargetInfo = GetTargetInfoListInRange(_skillLocationInfo.trTarget.position, _skillLocationInfo.trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+                liTarget = GetTargetTransformList(liTargetInfo);
+            }
+            else
+            {
+                // 스킬 시전자 위치에 콜리젼 생성
+                liTargetInfo = GetTargetInfoListInRange(_skillLocationInfo.trCaster.position, _skillLocationInfo.trCaster.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+                liTarget = GetTargetTransformList(liTargetInfo);
+
+                _skillLocationInfo.posSkill = _skillLocationInfo.posCaster;
+                _skillLocationInfo.dirSkill = _skillLocationInfo.dirCaster;
+            }
+
+            if (liTargetInfo == null || liTargetInfo.Count <= 0)
+            {
+                Debug.Log("Targeting Skil : No Target Error");
+                return;
             }
         }
 
         // 파티클 위치에 따라 파티클 생성
-        switch (_effectInfo.eEffectPos)
+        switch (_effectInfo.eTarget)
         {
-            case Defines.EEffectPos.Me_Only:
+            case Defines.ETarget.Position:
                 {
-                    if (_trTarget == null)
-                    {
-                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
-                    }
-                    else
-                    {
-                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
-                    }
-                }
-                break;
-            case Defines.EEffectPos.Me_Targeting:
-                {
-                    // 맞은 타겟 수 만큼 파티클 중복 여부
                     if (_effectInfo.duplication)
                     {
                         foreach (var target in liTarget)
                         {
-                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
+                            CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { _skillLocationInfo.trTarget },
+                                new List<Vector3> { _skillLocationInfo.posSkill }, new List<Vector3> { _skillLocationInfo.dirSkill }, _effectInfo);
                         }
                     }
                     else
                     {
-                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
+                        CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { _skillLocationInfo.trTarget },
+                            new List<Vector3> { _skillLocationInfo.posSkill }, new List<Vector3> { _skillLocationInfo.dirSkill }, _effectInfo);
                     }
                 }
                 break;
-            case Defines.EEffectPos.Me_NoneTargeting:
-                {
-                    // 맞은 타겟 수 만큼 파티클 중복 여부
-                    if (_effectInfo.duplication)
-                    {
-                        foreach (var target in liTarget)
-                        {
-                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
-                        }
-                    }
-                    else
-                    {
-                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
-                    }
-                }
-                break;
-            case Defines.EEffectPos.Target_One_Targeting:
+            case Defines.ETarget.Target_One:
                 {
                     Transform targetOne = liTarget.First();
 
@@ -300,39 +290,18 @@ public class CHMSkill
                     {
                         foreach (var target in liTarget)
                         {
-                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { targetOne }, null, null, _effectInfo);
+                            CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { targetOne },
+                                new List<Vector3> { targetOne.position }, new List<Vector3> { targetOne.forward }, _effectInfo);
                         }
                     }
                     else
                     {
-                        CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { targetOne }, null, null, _effectInfo);
+                        CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { targetOne },
+                            new List<Vector3> { targetOne.position }, new List<Vector3> { targetOne.forward }, _effectInfo);
                     }
                 }
                 break;
-            case Defines.EEffectPos.Target_One_NoneTargeting:
-                {
-                    Transform targetOne = liTarget.First();
-
-                    // 맞은 타겟 수 만큼 파티클 중복 여부
-                    if (_effectInfo.duplication)
-                    {
-                        foreach (var target in liTarget)
-                        {
-                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
-                        }
-                    }
-                    else
-                    {
-                        CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
-                    }
-                }
-                break;
-            case Defines.EEffectPos.Target_All_Targeting:
-                {
-                    CHMMain.Particle.CreateParticle(_trCaster, liTarget, null, null, _effectInfo);
-                }
-                break;
-            case Defines.EEffectPos.Target_All_NoneTargeting:
+            case Defines.ETarget.Target_All:
                 {
                     List<Vector3> liParticlePos = new List<Vector3>();
                     List<Vector3> liParticleDir = new List<Vector3>();
@@ -340,61 +309,32 @@ public class CHMSkill
                     for (int i = 0; i < liTarget.Count; ++i)
                     {
                         liParticlePos.Add(liTarget[i].position);
-                        liParticleDir.Add((liTarget[i].position - _trCaster.position).normalized);
+                        liParticleDir.Add((liTarget[i].position - _skillLocationInfo.trCaster.position).normalized);
                     }
 
-                    CHMMain.Particle.CreateParticle(_trCaster, null, liParticlePos, liParticleDir, _effectInfo);
+                    CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, liTarget, liParticlePos, liParticleDir, _effectInfo);
                 }
                 break;
             default:
                 {
-                    CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
+                    CHMMain.Particle.CreateParticle(_skillLocationInfo.trCaster, new List<Transform> { _skillLocationInfo.trTarget },
+                        new List<Vector3> { _skillLocationInfo.posSkill }, new List<Vector3> { _skillLocationInfo.dirSkill }, _effectInfo);
                 }
                 break;
         }
     }
 
-    void CreateSkillCollision(Transform _trCaster, Transform _trTarget, Vector3 _posSkill, Vector3 _dirSkill, EffectInfo _effectInfo)
+    void CreateSkillCollision(SkillLocationInfo _skillLocationInfo, EffectInfo _effectInfo, bool _isTargeting)
     {
         // Collision 모양에 따라 구분
         switch (_effectInfo.eCollision)
         {
             case Defines.ECollision.Sphere:
                 {
-                    CreateSphereCollision(_trCaster, _trTarget, _posSkill, _dirSkill, _effectInfo);
+                    CreateSphereCollision(_skillLocationInfo, _effectInfo, _isTargeting);
                 }
                 break;
             case Defines.ECollision.Box:
-                break;
-            default:
-                {
-                    if (_effectInfo.eEffectPos == Defines.EEffectPos.Me_Only ||
-                        _effectInfo.eEffectPos == Defines.EEffectPos.Me_Targeting||
-                        _effectInfo.eEffectPos == Defines.EEffectPos.Me_NoneTargeting)
-                    {
-                        if (_trTarget == null)
-                        {
-                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _trCaster.position }, new List<Vector3> { _trCaster.forward }, _effectInfo);
-                        }
-                        else
-                        {
-                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trCaster }, null, null, _effectInfo);
-                        }
-                    }
-                    else
-                    {
-                        if (_trTarget == null)
-                        {
-                            // 논타겟팅 스킬
-                            CHMMain.Particle.CreateParticle(_trCaster, null, new List<Vector3> { _posSkill }, new List<Vector3> { _dirSkill }, _effectInfo);
-                        }
-                        else
-                        {
-                            // 타겟팅 스킬
-                            CHMMain.Particle.CreateParticle(_trCaster, new List<Transform> { _trTarget }, null, null, _effectInfo);
-                        }
-                    }
-                }
                 break;
         }
     }
@@ -559,7 +499,7 @@ public class CHMSkill
         }
     }
 
-    async Task CreateDecal(Transform _trCaster, Transform _trTarget, Vector3 _posDecal, Vector3 _dirDecal, EffectInfo _effectInfo)
+    async Task CreateDecal(SkillLocationInfo _skillLocationInfo, EffectInfo _effectInfo, bool _isTargeting)
     {
         GameObject objDecal = null;
 
@@ -583,12 +523,27 @@ public class CHMSkill
                         objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
                     }
 
-                    objDecal.transform.position = _posDecal;
-                    objDecal.transform.forward = _dirDecal;
+                    bool createCasterPosition = _effectInfo.createCasterPosition;
 
-                    if (_trTarget != null)
+                    if (createCasterPosition == false)
                     {
-                        objDecal.transform.SetParent(_trTarget.transform);
+                        objDecal.transform.position = _skillLocationInfo.posSkill;
+                        objDecal.transform.forward = _skillLocationInfo.dirSkill;
+
+                        if (_isTargeting)
+                        {
+                            objDecal.transform.SetParent(_skillLocationInfo.trTarget.transform);
+                        }
+                    }
+                    else
+                    {
+                        objDecal.transform.position = _skillLocationInfo.trCaster.position;
+                        objDecal.transform.forward = _skillLocationInfo.trCaster.forward;
+
+                        if (_isTargeting)
+                        {
+                            objDecal.transform.SetParent(_skillLocationInfo.trCaster.transform);
+                        }
                     }
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
@@ -596,20 +551,18 @@ public class CHMSkill
                     var decalProjector = objDecal.GetComponent<DecalProjector>();
                     if (decalProjector != null)
                     {
-                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius;
+                        decalProjector.size = Vector3.one * _effectInfo.sphereRadius * 2;
                     }
                 }
                 break;
             case Defines.ECollision.Box:
                 break;
-            default:
-                break;
         }
 
-        await CreateTimeDecal(_trCaster, _trTarget, _posDecal, _dirDecal, objDecal, _effectInfo);
+        await CreateTimeDecal(_skillLocationInfo, objDecal, _effectInfo, _isTargeting);
     }
 
-    async Task CreateTimeDecal(Transform _trCaster, Transform _trTarget, Vector3 _posDecal, Vector3 _dirDecal, GameObject _areaDecal, EffectInfo _effectInfo)
+    async Task CreateTimeDecal(SkillLocationInfo _skillLocationInfo, GameObject _areaDecal, EffectInfo _effectInfo, bool _isTargeting)
     {
         GameObject objDecal = null;
 
@@ -633,12 +586,25 @@ public class CHMSkill
                         objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
                     }
 
-                    objDecal.transform.position = _posDecal;
-                    objDecal.transform.forward = _dirDecal;
-
-                    if (_trTarget != null)
+                    if (_effectInfo.createCasterPosition == false)
                     {
-                        objDecal.transform.SetParent(_trTarget.transform);
+                        objDecal.transform.position = _skillLocationInfo.posSkill;
+                        objDecal.transform.forward = _skillLocationInfo.dirSkill;
+
+                        if (_isTargeting)
+                        {
+                            objDecal.transform.SetParent(_skillLocationInfo.trTarget.transform);
+                        }
+                    }
+                    else
+                    {
+                        objDecal.transform.position = _skillLocationInfo.trCaster.position;
+                        objDecal.transform.forward = _skillLocationInfo.trCaster.forward;
+
+                        if (_isTargeting)
+                        {
+                            objDecal.transform.SetParent(_skillLocationInfo.trCaster.transform);
+                        }
                     }
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
@@ -649,7 +615,7 @@ public class CHMSkill
                         float time = 0;
                         while (time <= _effectInfo.startDelay)
                         {
-                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius, time / _effectInfo.startDelay);
+                            var curValue = Mathf.Lerp(0, _effectInfo.sphereRadius * 2, time / _effectInfo.startDelay);
 
                             if (decalProjector == null) break;
 
@@ -658,7 +624,7 @@ public class CHMSkill
 
                             if (_effectInfo.moveToPos)
                             {
-                                _trCaster.position += _dirDecal.normalized * _effectInfo.moveSpeed * Time.deltaTime;
+                                _skillLocationInfo.trCaster.position += _skillLocationInfo.dirSkill.normalized * _effectInfo.moveSpeed * Time.deltaTime;
                             }
 
                             await Task.Delay((int)(Time.deltaTime * 1000f));
