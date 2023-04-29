@@ -270,7 +270,7 @@ public class CHMSkill
 
             if (liTargetInfo == null || liTargetInfo.Count <= 0)
             {
-                Debug.Log("Targeting Skil : No Target Error");
+                Debug.Log("Targeting Skill : No Target Error");
                 return;
             }
         }
