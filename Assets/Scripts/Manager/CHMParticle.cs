@@ -40,7 +40,7 @@ public class CHMParticle
         }
     }
 
-    public void CreateParticle(Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, EffectInfo _effectInfo, bool _autoDestroy = true)
+    public void CreateParticle(Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, EffectInfo _effectInfo)
     {
         if (_trCaster == null)
         {
@@ -65,7 +65,7 @@ public class CHMParticle
         // 타겟의 수 만큼 파티클 생성 
         for (int i = 0; i < _liTarget.Count; ++i)
         {
-            var objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect, _autoDestroy);
+            var objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect);
 
             SetParticleCollision(_trCaster, _effectInfo, objParticle);
 
@@ -121,7 +121,7 @@ public class CHMParticle
         return (1 << _targetLayer & targetMask.value) != 0;
     }
 
-    public GameObject GetParticleObject(Defines.EEffect _eEffect, bool _autoDestory = true)
+    public GameObject GetParticleObject(Defines.EEffect _eEffect)
     {
         GameObject objParticle = null;
 
@@ -143,7 +143,7 @@ public class CHMParticle
 
                 objParticle = CHMMain.Resource.Instantiate(dicParticleInfo[_eEffect].objParticle);
 
-                if (_autoDestory)
+                if (IsAutoDestroy(_eEffect))
                 {
                     DestroyParticle(_eEffect, objParticle);
                 }
@@ -153,7 +153,7 @@ public class CHMParticle
         {
             objParticle = CHMMain.Resource.Instantiate(dicParticleInfo[_eEffect].objParticle);
 
-            if (_autoDestory)
+            if (IsAutoDestroy(_eEffect))
             {
                 DestroyParticle(_eEffect, objParticle);
             }
@@ -260,6 +260,17 @@ public class CHMParticle
         }
     }
 
+    bool IsAutoDestroy(Defines.EEffect _eEffect)
+    {
+        switch (_eEffect)
+        {
+            case Defines.EEffect.FX_Ax:
+                return false;
+            default:
+                return true;
+        }
+    }
+
     async Task SetParticleValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, EffectInfo _effectInfo)
     {
         // 각 이펙트별로 세부 설정이 필요한 경우
@@ -285,8 +296,9 @@ public class CHMParticle
                     _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y + 3f, posOrigin.z);
 
                     await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 30f, 1f, _objParticle);
-                    await MoveParticleTrasnform(cts.Token, _objParticle.transform, _trCaster, 30f, 1f, _objParticle);
-                    //_objParticle.gameObject.SetActive(false);
+                    await MoveParticleTrasnform(cts.Token, _objParticle.transform, _trCaster, 30f, 3f, _objParticle);
+
+                    CHMMain.Resource.Destroy(_objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Arrow_impact_sub:
@@ -356,25 +368,29 @@ public class CHMParticle
         }
     }
 
-    async Task MoveParticleTrasnform(CancellationToken _token, Transform _trStart, Transform _trEnd, float _speed, float _effectTime, GameObject _objParticle)
+    async Task MoveParticleTrasnform(CancellationToken _token, Transform _trStart, Transform _trEnd, float _speed, float _offset, GameObject _objParticle)
     {
         float time = 0;
         if (_trStart != null && _trEnd != null)
         {
-            while (!_token.IsCancellationRequested && time <= _effectTime)
+            while (!_token.IsCancellationRequested)
             {
                 try
                 {
-                    if (_objParticle == null)
-                    {
-                        break;
-                    }
+                    if (_objParticle == null) break;
 
                     var direction = _trEnd.position - _trStart.position;
                     direction.y = 0f;
 
                     _objParticle.transform.forward = direction;
                     _objParticle.transform.position += direction.normalized * _speed * Time.deltaTime;
+
+                    var posParticle = _objParticle.transform.position;
+                    var posEnd = _trEnd.position;
+                    posParticle.y = 0f;
+                    posEnd.y = 0f;
+
+                    if (Vector3.Distance(posParticle, posEnd) <= _offset) break;
 
                     time += Time.deltaTime;
                     await Task.Delay((int)(Time.deltaTime * 1000f));
