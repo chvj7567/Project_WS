@@ -127,6 +127,8 @@ public class Defines
 
         FX_Ax, // 21
 
+        FX_Electricity_Hit, // 22
+
         Max
     }
 

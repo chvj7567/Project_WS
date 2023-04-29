@@ -7,6 +7,7 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using System.Threading;
 using static Infomation;
+using DG.Tweening;
 
 public class MyEvent : UnityEvent { }
 
@@ -179,7 +180,7 @@ public class CHMParticle
 
     //-------------------------------------- private ------------------------------------------//
 
-    async void DestroyParticle(Defines.EEffect _eEffect, GameObject _objParticle)
+    async Task DestroyParticle(Defines.EEffect _eEffect, GameObject _objParticle)
     {
         await Task.Delay((int)(dicParticleInfo[_eEffect].time * 1000));
 
@@ -259,47 +260,45 @@ public class CHMParticle
         }
     }
 
-    void SetParticleValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, EffectInfo _effectInfo)
+    async Task SetParticleValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, EffectInfo _effectInfo)
     {
         // 각 이펙트별로 세부 설정이 필요한 경우
         switch (_effectInfo.eEffect)
         {
-            case Defines.EEffect.FX_Explosion:
-                {
-                    //float distance = Vector3.Distance(_skillLocationInfo.trCaster.position, _skillLocationInfo.posSkill);
-                }
-                break;
             case Defines.EEffect.FX_Circle_meteor:
             case Defines.EEffect.FX_Arrow_impact2:
                 {
                     // y축으로 +23 이동
-                    var posOrigin = _objParticle.transform.localPosition;
-                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 23f, posOrigin.z);
+                    var posOrigin = _objParticle.transform.position;
+                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y + 23f, posOrigin.z);
                 }
                 break;
             case Defines.EEffect.FX_Arrow_impact:
                 {
-                    ParticleMove(_trCaster, _objParticle.transform.forward, 30f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 30f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Ax:
                 {
                     // y축으로 +3 이동
-                    var posOrigin = _objParticle.transform.localPosition;
-                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y + 3f, posOrigin.z);
-                    ParticleMove(_trCaster, _trTarget, 30f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                    var posOrigin = _objParticle.transform.position;
+                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y + 3f, posOrigin.z);
+
+                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 30f, 1f, _objParticle);
+                    await MoveParticleTrasnform(cts.Token, _objParticle.transform, _trCaster, 30f, 1f, _objParticle);
+                    //_objParticle.gameObject.SetActive(false);
                 }
                 break;
             case Defines.EEffect.FX_Arrow_impact_sub:
                 {
                     // y축으로 -3 이동
-                    var posOrigin = _objParticle.transform.localPosition;
-                    _objParticle.transform.localPosition = new Vector3(posOrigin.x, posOrigin.y - 3f, posOrigin.z);
+                    var posOrigin = _objParticle.transform.position;
+                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 3f, posOrigin.z);
                 }
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    ParticleMove(_trCaster, _trCaster.forward, 10f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                    await MoveParticleDirection(cts.Token, _trCaster.forward, 10f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
                 }
                 break;
         }
@@ -330,49 +329,65 @@ public class CHMParticle
         }
     }
 
-    async void ParticleMove(Transform _trCaster, Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
+    async Task MoveParticleDirection(CancellationToken _token, Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
     {
-        Vector3 posOrigin = _objParticle.transform.localPosition;
-
         float time = 0;
-
         if (_direction != null)
         {
-            while (time <= _effectTime)
+            while (!_token.IsCancellationRequested && time <= _effectTime)
             {
-                if (_objParticle == null)
+                try
                 {
-                    break;
+                    if (_objParticle == null)
+                    {
+                        break;
+                    }
+
+                    _objParticle.transform.position += _direction.normalized * _speed * Time.deltaTime;
+
+                    time += Time.deltaTime;
+                    await Task.Delay((int)(Time.deltaTime * 1000f));
                 }
-                _objParticle.transform.localPosition = posOrigin + _direction.normalized * _speed * time;
-                time += Time.deltaTime;
-                await Task.Delay((int)(Time.deltaTime * 1000f));
+                catch (TaskCanceledException)
+                {
+
+                }
             }
         }
     }
 
-    async void ParticleMove(Transform _trCaster, Transform _trTarget, float _speed, float _effectTime, GameObject _objParticle)
+    async Task MoveParticleTrasnform(CancellationToken _token, Transform _trStart, Transform _trEnd, float _speed, float _effectTime, GameObject _objParticle)
     {
-        Vector3 posOrigin = _objParticle.transform.localPosition;
-
         float time = 0;
-        
-        if (_trTarget != null)
+        if (_trStart != null && _trEnd != null)
         {
-            while (time <= _effectTime)
+            while (!_token.IsCancellationRequested && time <= _effectTime)
             {
-                if (_objParticle == null)
+                try
                 {
-                    break;
+                    if (_objParticle == null)
+                    {
+                        break;
+                    }
+
+                    var direction = _trEnd.position - _trStart.position;
+                    direction.y = 0f;
+
+                    _objParticle.transform.forward = direction;
+                    _objParticle.transform.position += direction.normalized * _speed * Time.deltaTime;
+
+                    time += Time.deltaTime;
+                    await Task.Delay((int)(Time.deltaTime * 1000f));
                 }
-                _objParticle.transform.localPosition = posOrigin + (_trTarget.position - _trCaster.position).normalized * _speed * time;
-                time += Time.deltaTime;
-                await Task.Delay((int)(Time.deltaTime * 1000f));
+                catch(TaskCanceledException)
+                {
+
+                }
             }
         }
     }
 
-    async void TargetAirborne(CancellationToken _token, Transform _trTarget, float _airborneHeight, float _airborneTime)
+    async Task TargetAirborne(CancellationToken _token, Transform _trTarget, float _airborneHeight, float _airborneTime)
     {
         var unitBase = _trTarget.GetComponent<CHUnitBase>();
         float gravity = -2 * _airborneHeight / Mathf.Pow(_airborneTime, 2);
