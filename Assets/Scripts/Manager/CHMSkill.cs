@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using static CHMSkill;
 using static Infomation;
 
 public class CHMSkill

@@ -326,9 +326,9 @@ public class CHMParticle
                     //TargetAirborne(cts.Token, _trTarget, 2, 0.5f);
                 }
                 break;
-            case Defines.EEffect.FX_Explosion:
+            case Defines.EEffect.FX_Electricity_Hit:
                 {
-                    //TargetAirborne(cts.Token, _trTarget, 10, 2f);
+                    TargetAirborne(cts.Token, _trTarget, 10, .5f, 100f);
                 }
                 break;
             case Defines.EEffect.FX_Arrow_impact:
@@ -403,7 +403,7 @@ public class CHMParticle
         }
     }
 
-    async Task TargetAirborne(CancellationToken _token, Transform _trTarget, float _airborneHeight, float _airborneTime)
+    async Task TargetAirborne(CancellationToken _token, Transform _trTarget, float _airborneHeight, float _airborneTime, float _fallSpeed)
     {
         var unitBase = _trTarget.GetComponent<CHUnitBase>();
         float gravity = -2 * _airborneHeight / Mathf.Pow(_airborneTime, 2);
@@ -440,7 +440,6 @@ public class CHMParticle
 
         unitBase.IsFalling = true;
 
-        float fallSpeed = 9.8f;
         float groundLevel = 0f;
         Vector3 fallVector = Vector3.zero;
 
@@ -450,7 +449,7 @@ public class CHMParticle
             try
             {
                 if (unitBase.IsFalling == false) break;
-                fallVector.y -= fallSpeed * Time.deltaTime;
+                fallVector.y -= _fallSpeed * Time.deltaTime;
                 _trTarget.position += fallVector * Time.deltaTime;
                 await Task.Delay((int)(Time.deltaTime * 1000f));
             }

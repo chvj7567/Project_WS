@@ -37,7 +37,7 @@
 		"attackDistance": 10,
 		"moveSpeed": 5,
 		"rotateSpeed": 120,
-		"range": 20,
+		"range": 100,
 		"rangeMulti": 2,
 		"viewAngle" : 180,
 		"eSkill1ID": 8,
