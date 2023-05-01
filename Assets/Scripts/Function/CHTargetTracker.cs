@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
-using static Infomation;
 
 public class CHTargetTracker : MonoBehaviour
 {
@@ -30,7 +27,7 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField, ReadOnly] CHUnitBase unitBase;
     [SerializeField, ReadOnly] Animator animator;
     [SerializeField, ReadOnly] CHContBase contBase;
-    [SerializeField, ReadOnly] TargetInfo closestTarget;
+    [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
 
     [SerializeField, ReadOnly] float orgRangeMulti = -1f;
     [SerializeField, ReadOnly] float orgViewAngle = -1f;
@@ -93,11 +90,15 @@ public class CHTargetTracker : MonoBehaviour
                         rangeMulti = orgRangeMulti;
                     }
 
-                    if (unitBase.IsNormalState() && trDestination)
+                    if (unitBase != null && unitBase.IsNormalState() && trDestination)
                     {
                         if (agent.isOnNavMesh)
                         {
                             agent.SetDestination(trDestination.position);
+                        }
+                        else
+                        {
+                            transform.forward = trDestination.position - transform.position;
                         }
                         
                         PlayRunAnim();
@@ -119,22 +120,26 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
 
+                    var posTarget = closestTarget.objTarget.transform.position;
+                    var myTarget = transform.position;
+                    posTarget.y = 0f;
+                    myTarget.y = 0f;
+
                     if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState())
                     {
                         if (agent.isOnNavMesh)
                         {
                             agent.SetDestination(closestTarget.objTarget.transform.position);
                         }
+                        else
+                        {
+                            transform.forward = posTarget - myTarget;
+                        }
 
                         PlayRunAnim();
                     }
                     else
                     {
-                        var posTarget = closestTarget.objTarget.transform.position;
-                        var myTarget = transform.position;
-                        posTarget.y = 0f;
-                        myTarget.y = 0f;
-
                         transform.forward = posTarget - myTarget;
                         if (agent.isOnNavMesh)
                         {
@@ -193,14 +198,14 @@ public class CHTargetTracker : MonoBehaviour
         expensionRange = false;
     }
 
-    public TargetInfo GetClosestTargetInfo()
+    public Infomation.TargetInfo GetClosestTargetInfo()
     {
         return closestTarget;
     }
 
-    public List<TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
+    public List<Infomation.TargetInfo> GetTargetInfoListInRange(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
     {
-        List<TargetInfo> targetInfoList = new List<TargetInfo>();
+        List<Infomation.TargetInfo> targetInfoList = new List<Infomation.TargetInfo>();
 
         // 범위내에 있는 타겟들 확인
         Collider[] targets = Physics.OverlapSphere(_originPos, _range, _lmTarget);
@@ -224,7 +229,7 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟이 살아있으면 타겟으로 지정
                     if (unitBase != null && unitBase.GetIsDeath() == false)
                     {
-                        targetInfoList.Add(new TargetInfo
+                        targetInfoList.Add(new Infomation.TargetInfo
                         {
                             objTarget = target.gameObject,
                             distance = targetDis,
@@ -237,16 +242,16 @@ public class CHTargetTracker : MonoBehaviour
         return targetInfoList;
     }
 
-    public TargetInfo GetClosestTargetInfo(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
+    public Infomation.TargetInfo GetClosestTargetInfo(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
     {
-        TargetInfo closestTargetInfo = null;
-        List<TargetInfo> targetInfoList = GetTargetInfoListInRange(_originPos, _direction, _lmTarget, _range, _viewAngle);
+        Infomation.TargetInfo closestTargetInfo = null;
+        List<Infomation.TargetInfo> targetInfoList = GetTargetInfoListInRange(_originPos, _direction, _lmTarget, _range, _viewAngle);
 
         if (targetInfoList.Count > 0)
         {
             float minDis = Mathf.Infinity;
 
-            foreach (TargetInfo targetInfo in targetInfoList)
+            foreach (Infomation.TargetInfo targetInfo in targetInfoList)
             {
                 if (targetInfo.distance < minDis)
                 {
