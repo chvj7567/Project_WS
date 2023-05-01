@@ -203,10 +203,13 @@ public class CHMParticle
         }
     }
 
-    void ApplyShereCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
+    async void ApplyShereCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
     {
+        await Task.Delay((int)(_effectInfo.triggerStartDelay * 1000f));
+
         var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
         sphereCollision.Init(_trCaster, _effectInfo);
+        sphereCollision.sphereCollider.enabled = true;
 
         if (_effectInfo.triggerEnter)
         {
@@ -246,6 +249,10 @@ public class CHMParticle
                 SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
             }
         }));
+
+        await Task.Delay((int)(_effectInfo.triggerStayTime * 1000f));
+
+        if (sphereCollision != null && sphereCollision.sphereCollider != null) sphereCollision.sphereCollider.enabled = false;
     }
 
     bool IsPoolableEffect(Defines.EEffect _eEffect)

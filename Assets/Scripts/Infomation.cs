@@ -68,6 +68,8 @@ public class Infomation
         public bool triggerEnter = false; // 이펙트 Trigger에 닿았을 때 데미지를 넣을 것인지 여부
         public bool triggerExit = false; // 이펙트 Trigger에서 벗어났을 때 데미지를 넣을 것인지 여부
         public float stayTickTime = -1f; // 이펙트 Trigger에서 머물고 있을 때 데미지를 넣을 때 틱 타입(음수이면 데미지 안 넣음)
+        public float triggerStartDelay = -1f; // 이펙트 실행 후 몇 초 뒤에 Trigger를 만들지
+        public float triggerStayTime = -1f; // Trigger를 얼마나 유지할지
         public float startDelay = -1f; // 스킬 시전 후 이펙트 나오는 시간, 여러 개일 경우 누적 시간
         public float collisionAngle = -1f; // 충돌 여부 결정할 때 각도
         public float sphereRadius = -1f; // 구 모양의 충돌체일 경우 구의 반지름

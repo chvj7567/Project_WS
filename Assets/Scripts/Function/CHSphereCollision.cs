@@ -1,12 +1,11 @@
 using System;
 using UniRx;
 using UnityEngine;
-using static Defines;
 using static Infomation;
 
 public class CHSphereCollision : MonoBehaviour
 {
-    SphereCollider sphereCollider;
+    public SphereCollider sphereCollider;
     float stayTickTime = -1f;
     float stayTickLastTime = -1f;
 
@@ -150,4 +149,6 @@ public class CHSphereCollision : MonoBehaviour
                 break;
         }
     }
+
+
 }
