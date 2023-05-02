@@ -94,7 +94,7 @@ public class CHMParticle
 
             // 파티클의 경우 z축이 정면이 되도록
             objParticle.transform.forward = dirParticle;
-            objParticle.transform.forward = objParticle.transform.Angle(_effectInfo.effectAngle, Defines.StandardAxis.Z);
+            objParticle.transform.forward = objParticle.transform.Angle(_effectInfo.effectAngle, Defines.EStandardAxis.Z);
 
             if (_effectInfo.createCasterPosition == false)
             {

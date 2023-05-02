@@ -223,17 +223,12 @@ public class CHMSkill
         if (_isTargeting == false)
         {
             // 논타겟팅 스킬
-            if (_effectInfo.createCasterPosition == false)
-            {
-                liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.posSkill, skillLocationInfo.dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
-                liTarget = GetTargetTransformList(liTargetInfo);
-            }
-            else
-            {
-                // 스킬 시전할 당시의 스킬 시전자 위치에 콜리젼 생성
-                liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.posCaster, skillLocationInfo.dirCaster, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
-                liTarget = GetTargetTransformList(liTargetInfo);
+            liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.posSkill, skillLocationInfo.dirSkill, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+            liTarget = GetTargetTransformList(liTargetInfo);
 
+            if (_effectInfo.createCasterPosition)
+            {
+                // 파티클을 시전자 위치에서 생성
                 skillLocationInfo.posSkill = skillLocationInfo.posCaster;
                 skillLocationInfo.dirSkill = skillLocationInfo.dirCaster;
             }
@@ -253,17 +248,12 @@ public class CHMSkill
         else
         {
             // 타겟팅 스킬
-            if (_effectInfo.createCasterPosition == false)
-            {
-                liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.trTarget.position, skillLocationInfo.trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
-                liTarget = GetTargetTransformList(liTargetInfo);
-            }
-            else
-            {
-                // 스킬 시전자 위치에 콜리젼 생성
-                liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.trCaster.position, skillLocationInfo.trCaster.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
-                liTarget = GetTargetTransformList(liTargetInfo);
+            liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.trTarget.position, skillLocationInfo.trTarget.forward, targetMask, _effectInfo.sphereRadius, _effectInfo.collisionAngle);
+            liTarget = GetTargetTransformList(liTargetInfo);
 
+            if (_effectInfo.createCasterPosition)
+            {
+                // 파티클을 시전자 위치에서 생성
                 skillLocationInfo.posSkill = skillLocationInfo.posCaster;
                 skillLocationInfo.dirSkill = skillLocationInfo.dirCaster;
             }
@@ -298,20 +288,40 @@ public class CHMSkill
             case Defines.ETarget.Target_One:
                 {
                     Transform targetOne = liTarget.First();
+                    Vector3 direction = (targetOne.position - skillLocationInfo.trCaster.position).normalized;
 
                     // 맞은 타겟 수 만큼 파티클 중복 여부
                     if (_effectInfo.duplication)
                     {
-                        foreach (var target in liTarget)
+                        if (_effectInfo.createCasterPosition == false)
                         {
-                            CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { targetOne },
-                                new List<Vector3> { targetOne.position }, new List<Vector3> { targetOne.forward }, _effectInfo);
+                            foreach (var target in liTarget)
+                            {
+                                CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { targetOne },
+                                    new List<Vector3> { targetOne.position }, new List<Vector3> { direction }, _effectInfo);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var target in liTarget)
+                            {
+                                CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                                    new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { direction }, _effectInfo);
+                            }
                         }
                     }
                     else
                     {
-                        CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { targetOne },
-                            new List<Vector3> { targetOne.position }, new List<Vector3> { targetOne.forward }, _effectInfo);
+                        if (_effectInfo.createCasterPosition == false)
+                        {
+                            CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { targetOne },
+                                new List<Vector3> { targetOne.position }, new List<Vector3> { direction }, _effectInfo);
+                        }
+                        else
+                        {
+                            CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                                new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { direction }, _effectInfo);
+                        }
                     }
                 }
                 break;
@@ -320,10 +330,21 @@ public class CHMSkill
                     List<Vector3> liParticlePos = new List<Vector3>();
                     List<Vector3> liParticleDir = new List<Vector3>();
 
-                    for (int i = 0; i < liTarget.Count; ++i)
+                    if (_effectInfo.createCasterPosition == false)
                     {
-                        liParticlePos.Add(liTarget[i].position);
-                        liParticleDir.Add((liTarget[i].position - skillLocationInfo.trCaster.position).normalized);
+                        for (int i = 0; i < liTarget.Count; ++i)
+                        {
+                            liParticlePos.Add(liTarget[i].position);
+                            liParticleDir.Add((liTarget[i].position - skillLocationInfo.trCaster.position).normalized);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < liTarget.Count; ++i)
+                        {
+                            liParticlePos.Add(skillLocationInfo.trCaster.position);
+                            liParticleDir.Add((liTarget[i].position - skillLocationInfo.trCaster.position).normalized);
+                        }
                     }
 
                     CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, liTarget, liParticlePos, liParticleDir, _effectInfo);
@@ -539,25 +560,12 @@ public class CHMSkill
 
                     bool createCasterPosition = _effectInfo.createCasterPosition;
 
-                    if (createCasterPosition == false)
-                    {
-                        objDecal.transform.position = _skillLocationInfo.posSkill;
-                        objDecal.transform.forward = _skillLocationInfo.dirSkill;
+                    objDecal.transform.position = _skillLocationInfo.posSkill;
+                    objDecal.transform.forward = _skillLocationInfo.dirSkill;
 
-                        if (_isTargeting)
-                        {
-                            objDecal.transform.SetParent(_skillLocationInfo.trTarget.transform);
-                        }
-                    }
-                    else
+                    if (_isTargeting)
                     {
-                        objDecal.transform.position = _skillLocationInfo.trCaster.position;
-                        objDecal.transform.forward = _skillLocationInfo.trCaster.forward;
-
-                        if (_isTargeting)
-                        {
-                            objDecal.transform.SetParent(_skillLocationInfo.trCaster.transform);
-                        }
+                        objDecal.transform.SetParent(_skillLocationInfo.trTarget.transform);
                     }
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
@@ -600,25 +608,12 @@ public class CHMSkill
                         objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
                     }
 
-                    if (_effectInfo.createCasterPosition == false)
-                    {
-                        objDecal.transform.position = _skillLocationInfo.posSkill;
-                        objDecal.transform.forward = _skillLocationInfo.dirSkill;
+                    objDecal.transform.position = _skillLocationInfo.posSkill;
+                    objDecal.transform.forward = _skillLocationInfo.dirSkill;
 
-                        if (_isTargeting)
-                        {
-                            objDecal.transform.SetParent(_skillLocationInfo.trTarget.transform);
-                        }
-                    }
-                    else
+                    if (_isTargeting)
                     {
-                        objDecal.transform.position = _skillLocationInfo.trCaster.position;
-                        objDecal.transform.forward = _skillLocationInfo.trCaster.forward;
-
-                        if (_isTargeting)
-                        {
-                            objDecal.transform.SetParent(_skillLocationInfo.trCaster.transform);
-                        }
+                        objDecal.transform.SetParent(_skillLocationInfo.trTarget.transform);
                     }
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);

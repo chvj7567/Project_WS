@@ -294,7 +294,7 @@ public class Defines
         IsAirborne = 1 << 1
     }
 
-    public enum StandardAxis
+    public enum EStandardAxis
     {
         None = -1,
 

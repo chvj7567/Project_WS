@@ -65,7 +65,7 @@
 		"cost": 0,
         "liEffectInfo":
 		[
-            {"eEffect":"16","eEffectType":"1","eTarget":"2","eTargetMask":"1","eDamageState":"0","eDamageType":"0","eCollision":"0","effectAngle":0,"createCasterPosition":true,"createOnEmpty":false,"duplication":true,"onDecal":true,"moveToPos":false,"moveSpeed":-1,"offsetToTarget":-1,"triggerEnter":true,"triggerExit":false,"stayTickTime":-1,"triggerStartDelay":0,"triggerStayTime":0,"startDelay":2,"collisionAngle":360,"sphereRadius":5,"boxHalfX":-1,"boxHalfY":-1,"boxHalfZ":-1,"damage":10}
+            {"eEffect":"16","eEffectType":"1","eTarget":"2","eTargetMask":"2","eDamageState":"0","eDamageType":"0","eCollision":"0","effectAngle":0,"createCasterPosition":true,"createOnEmpty":false,"duplication":true,"onDecal":true,"moveToPos":false,"moveSpeed":-1,"offsetToTarget":-1,"triggerEnter":true,"triggerExit":false,"stayTickTime":-1,"triggerStartDelay":0,"triggerStayTime":0,"startDelay":2,"collisionAngle":360,"sphereRadius":5,"boxHalfX":-1,"boxHalfY":-1,"boxHalfZ":-1,"damage":10}
         ]
     },
 	{

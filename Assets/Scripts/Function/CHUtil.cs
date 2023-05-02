@@ -76,16 +76,16 @@ public static class CHUtil
         return -_value;
     }
 
-    public static Vector3 Angle(this Transform _tr, float _angle, Defines.StandardAxis _standardAxis)
+    public static Vector3 Angle(this Transform _tr, float _angle, Defines.EStandardAxis _standardAxis)
     {
         switch (_standardAxis)
         {
-            case Defines.StandardAxis.X:
+            case Defines.EStandardAxis.X:
                 {
                     _angle += _tr.eulerAngles.y + 90f;
                 }
                 break;
-            case Defines.StandardAxis.Z:
+            case Defines.EStandardAxis.Z:
                 {
                     _angle += _tr.eulerAngles.y;
                 }

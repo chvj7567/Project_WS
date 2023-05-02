@@ -9,7 +9,7 @@ using UnityEngine.AI;
 public class CHTargetTracker : MonoBehaviour
 {
     // 기준이 될 축
-    public Defines.StandardAxis standardAxis;
+    public Defines.EStandardAxis standardAxis;
     // 타겟이 될 레이어 마스크
     public LayerMask targetMask;
     // 무시할 레이어 마스크
@@ -67,12 +67,12 @@ public class CHTargetTracker : MonoBehaviour
                 // 시야 범위 안에 들어온 타겟 중 제일 가까운 타겟 감지
                 switch (standardAxis)
                 {
-                    case Defines.StandardAxis.X:
+                    case Defines.EStandardAxis.X:
                         {
                             closestTarget = GetClosestTargetInfo(transform.position, transform.right, targetMask, range * rangeMulti, viewAngle);
                         }
                         break;
-                    case Defines.StandardAxis.Z:
+                    case Defines.EStandardAxis.Z:
                         {
                             closestTarget = GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
                         }
@@ -180,12 +180,12 @@ public class CHTargetTracker : MonoBehaviour
 
         switch (standardAxis)
         {
-            case Defines.StandardAxis.X:
+            case Defines.EStandardAxis.X:
                 {
                     transform.right = posTarget - posMy;
                 }
                 break;
-            case Defines.StandardAxis.Z:
+            case Defines.EStandardAxis.Z:
                 {
                     transform.forward = posTarget - posMy;
                 }
