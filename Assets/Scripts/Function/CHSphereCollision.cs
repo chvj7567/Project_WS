@@ -132,11 +132,6 @@ public class CHSphereCollision : MonoBehaviour
     {
         switch (effectInfo.eEffect)
         {
-            case Defines.EEffect.FX_Arrow_impact:
-                {
-                    sphereCollider.center = new Vector3(0f, 4f, 0f);
-                }
-                break;
             case Defines.EEffect.FX_Arrow_impact2:
                 {
                     sphereCollider.center = new Vector3(0f, -23f, 0f);
