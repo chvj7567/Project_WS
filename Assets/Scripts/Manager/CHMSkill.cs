@@ -558,14 +558,15 @@ public class CHMSkill
                         objDecal = CHMMain.Resource.Instantiate(roundAreaDecal);
                     }
 
-                    bool createCasterPosition = _effectInfo.createCasterPosition;
-
-                    objDecal.transform.position = _skillLocationInfo.posSkill;
-                    objDecal.transform.forward = _skillLocationInfo.dirSkill;
-
                     if (_isTargeting)
                     {
                         objDecal.transform.SetParent(_skillLocationInfo.trTarget.transform);
+                        objDecal.transform.localPosition = Vector3.zero;
+                    }
+                    else
+                    {
+                        objDecal.transform.position = _skillLocationInfo.posSkill;
+                        objDecal.transform.forward = _skillLocationInfo.dirSkill;
                     }
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
@@ -608,12 +609,15 @@ public class CHMSkill
                         objDecal = CHMMain.Resource.Instantiate(roundTimingDecal);
                     }
 
-                    objDecal.transform.position = _skillLocationInfo.posSkill;
-                    objDecal.transform.forward = _skillLocationInfo.dirSkill;
-
                     if (_isTargeting)
                     {
                         objDecal.transform.SetParent(_skillLocationInfo.trTarget.transform);
+                        objDecal.transform.localPosition = Vector3.zero;
+                    }
+                    else
+                    {
+                        objDecal.transform.position = _skillLocationInfo.posSkill;
+                        objDecal.transform.forward = _skillLocationInfo.dirSkill;
                     }
 
                     objDecal.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);

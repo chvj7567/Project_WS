@@ -107,8 +107,23 @@ public class CHContBase : MonoBehaviour
                 // 타겟이 범위 안에 있으면 즉시 공격 후 공격 딜레이 설정
                 else
                 {
-                    var posMainTarget = mainTarget.objTarget.transform.position;
-                    var posMy = transform.position;
+                    Vector3 posMainTarget = mainTarget.objTarget.transform.position;
+                    Vector3 posMy = transform.position;
+                    Vector3 dirMy = Vector3.zero;
+
+                    switch (targetTracker.standardAxis)
+                    {
+                        case Defines.EStandardAxis.X:
+                            {
+                                dirMy = transform.right;
+                            }
+                            break;
+                        case Defines.EStandardAxis.Z:
+                            {
+                                dirMy = transform.forward;
+                            }
+                            break;
+                    }
                     posMainTarget.y = 0f;
                     posMy.y = 0f;
                     var dirMainTarget = posMainTarget - posMy;
@@ -148,12 +163,12 @@ public class CHContBase : MonoBehaviour
                             {
                                 trCaster = transform,
                                 posCaster = transform.position,
-                                dirCaster = transform.forward,
+                                dirCaster = dirMy,
                                 trTarget = mainTarget.objTarget.transform,
-                                posTarget = mainTarget.objTarget.transform.position,
-                                dirTarget = mainTarget.objTarget.transform.position - transform.position,
-                                posSkill = mainTarget.objTarget.transform.position,
-                                dirSkill = mainTarget.objTarget.transform.position - transform.position,
+                                posTarget = posMainTarget,
+                                dirTarget = posMainTarget - transform.position,
+                                posSkill = posMainTarget,
+                                dirSkill = posMainTarget - transform.position,
                             }, unitInfo.GetOriginSkill1());
                             timeSinceLastSkill1 = 0.0001f;
                         }
@@ -168,12 +183,12 @@ public class CHContBase : MonoBehaviour
                             {
                                 trCaster = transform,
                                 posCaster = transform.position,
-                                dirCaster = transform.forward,
+                                dirCaster = dirMy,
                                 trTarget = mainTarget.objTarget.transform,
-                                posTarget = mainTarget.objTarget.transform.position,
-                                dirTarget = mainTarget.objTarget.transform.position - transform.position,
-                                posSkill = mainTarget.objTarget.transform.position,
-                                dirSkill = mainTarget.objTarget.transform.position - transform.position,
+                                posTarget = posMainTarget,
+                                dirTarget = posMainTarget - transform.position,
+                                posSkill = posMainTarget,
+                                dirSkill = posMainTarget - transform.position,
                             }, unitInfo.GetOriginSkill2());
                             timeSinceLastSkill2 = 0.0001f;
                         }
@@ -188,12 +203,12 @@ public class CHContBase : MonoBehaviour
                             {
                                 trCaster = transform,
                                 posCaster = transform.position,
-                                dirCaster = transform.forward,
+                                dirCaster = dirMy,
                                 trTarget = mainTarget.objTarget.transform,
-                                posTarget = mainTarget.objTarget.transform.position,
-                                dirTarget = mainTarget.objTarget.transform.position - transform.position,
-                                posSkill = mainTarget.objTarget.transform.position,
-                                dirSkill = mainTarget.objTarget.transform.position - transform.position,
+                                posTarget = posMainTarget,
+                                dirTarget = posMainTarget - transform.position,
+                                posSkill = posMainTarget,
+                                dirSkill = posMainTarget - transform.position,
                             }, unitInfo.GetOriginSkill3());
                             timeSinceLastSkill3 = 0.0001f;
                         }
@@ -208,12 +223,12 @@ public class CHContBase : MonoBehaviour
                             {
                                 trCaster = transform,
                                 posCaster = transform.position,
-                                dirCaster = transform.forward,
+                                dirCaster = dirMy,
                                 trTarget = mainTarget.objTarget.transform,
-                                posTarget = mainTarget.objTarget.transform.position,
-                                dirTarget = mainTarget.objTarget.transform.position - transform.position,
-                                posSkill = mainTarget.objTarget.transform.position,
-                                dirSkill = mainTarget.objTarget.transform.position - transform.position,
+                                posTarget = posMainTarget,
+                                dirTarget = posMainTarget - transform.position,
+                                posSkill = posMainTarget,
+                                dirSkill = posMainTarget - transform.position,
                             }, unitInfo.GetOriginSkill4());
                             timeSinceLastSkill4 = 0.0001f;
                         }
