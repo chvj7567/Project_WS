@@ -8,6 +8,8 @@ using UnityEngine.AI;
 
 public class CHTargetTracker : MonoBehaviour
 {
+    // 기준이 될 축
+    public Defines.StandardAxis standardAxis;
     // 타겟이 될 레이어 마스크
     public LayerMask targetMask;
     // 무시할 레이어 마스크
@@ -24,9 +26,11 @@ public class CHTargetTracker : MonoBehaviour
     public bool viewEditor;
 
     [SerializeField, ReadOnly] NavMeshAgent agent;
-    [SerializeField, ReadOnly] CHUnitBase unitBase;
     [SerializeField, ReadOnly] Animator animator;
+
+    [SerializeField, ReadOnly] CHUnitBase unitBase;
     [SerializeField, ReadOnly] CHContBase contBase;
+
     [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
 
     [SerializeField, ReadOnly] float orgRangeMulti = -1f;
@@ -75,7 +79,19 @@ public class CHTargetTracker : MonoBehaviour
             if (isDead == false)
             {
                 // 시야 범위 안에 들어온 타겟 중 제일 가까운 타겟 감지
-                closestTarget = GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
+                switch (standardAxis)
+                {
+                    case Defines.StandardAxis.X:
+                        {
+                            closestTarget = GetClosestTargetInfo(transform.position, transform.right, targetMask, range * rangeMulti, viewAngle);
+                        }
+                        break;
+                    case Defines.StandardAxis.Z:
+                        {
+                            closestTarget = GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
+                        }
+                        break;
+                }
 
                 if (closestTarget == null)
                 {
@@ -98,7 +114,7 @@ public class CHTargetTracker : MonoBehaviour
                         }
                         else
                         {
-                            transform.forward = trDestination.position - transform.position;
+                            LookAtPosition(trDestination.position);
                         }
                         
                         PlayRunAnim();
@@ -120,11 +136,6 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
 
-                    var posTarget = closestTarget.objTarget.transform.position;
-                    var myTarget = transform.position;
-                    posTarget.y = 0f;
-                    myTarget.y = 0f;
-
                     if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState())
                     {
                         if (agent.isOnNavMesh)
@@ -133,14 +144,15 @@ public class CHTargetTracker : MonoBehaviour
                         }
                         else
                         {
-                            transform.forward = posTarget - myTarget;
+                            LookAtPosition(closestTarget.objTarget.transform.position);
                         }
 
                         PlayRunAnim();
                     }
                     else
                     {
-                        transform.forward = posTarget - myTarget;
+                        LookAtPosition(closestTarget.objTarget.transform.position);
+
                         if (agent.isOnNavMesh)
                         {
                             agent.ResetPath();
@@ -164,11 +176,34 @@ public class CHTargetTracker : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, range * rangeMulti);
 
             // 시야각의 경계선
-            Vector3 left = transform.Angle(-viewAngle * 0.5f);
-            Vector3 right = transform.Angle(viewAngle * 0.5f);
+            Vector3 left = transform.Angle(-viewAngle * 0.5f, standardAxis);
+            Vector3 right = transform.Angle(viewAngle * 0.5f, standardAxis);
 
             Debug.DrawRay(transform.position, left * range, Color.green);
             Debug.DrawRay(transform.position, right * range, Color.green);
+        }
+    }
+
+    void LookAtPosition(Vector3 _pos)
+    {
+        var posTarget = _pos;
+        var posMy = transform.position;
+
+        posTarget.y = 0f;
+        posMy.y = 0f;
+
+        switch (standardAxis)
+        {
+            case Defines.StandardAxis.X:
+                {
+                    transform.right = posTarget - posMy;
+                }
+                break;
+            case Defines.StandardAxis.Z:
+                {
+                    transform.forward = posTarget - posMy;
+                }
+                break;
         }
     }
 

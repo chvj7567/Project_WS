@@ -76,9 +76,22 @@ public static class CHUtil
         return -_value;
     }
 
-    public static Vector3 Angle(this Transform _tr, float _angle)
+    public static Vector3 Angle(this Transform _tr, float _angle, Defines.StandardAxis _standardAxis)
     {
-        _angle += _tr.eulerAngles.y;
+        switch (_standardAxis)
+        {
+            case Defines.StandardAxis.X:
+                {
+                    _angle += _tr.eulerAngles.y + 90f;
+                }
+                break;
+            case Defines.StandardAxis.Z:
+                {
+                    _angle += _tr.eulerAngles.y;
+                }
+                break;
+        }
+        
         return new Vector3(Mathf.Sin(_angle * Mathf.Deg2Rad), 0f, Mathf.Cos(_angle * Mathf.Deg2Rad));
     }
 }

@@ -293,4 +293,14 @@ public class Defines
         IsDead = 1 << 0,
         IsAirborne = 1 << 1
     }
+
+    public enum StandardAxis
+    {
+        None = -1,
+
+        X,
+        Z,
+
+        Max
+    }
 }
