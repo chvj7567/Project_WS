@@ -39,14 +39,6 @@ public class Defines
         Max
     }
 
-    public enum ECharacter
-    {
-        None = -1,
-
-        Slime,
-        Max
-    }
-
     public enum EUI
     {
         None = -1,

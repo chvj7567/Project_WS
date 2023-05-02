@@ -55,18 +55,6 @@ public class CHMResource
         LoadAsset<T>(_bundleName, _assetName, _callbackTemp);
     }
 
-    public void InstantiateCharacter(Defines.ECharacter _character, Action<GameObject> _callback = null, bool _random = false, int _index = 1)
-    {
-        if (_random == false)
-        {
-            InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Character.ToString()}/{_character.ToString()}", $"{_character.ToString()}{_index}", _callback);
-        }
-        else
-        {
-            InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Character.ToString()}/{_character.ToString()}", $"{_character.ToString()}{GetRandomCharacterNumber(_character)}", _callback);
-        }
-    }
-
     public void InstantiateMajor(Defines.EMajor _major, Action<GameObject> _callback = null)
     {
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Major.ToString()}", $"{_major.ToString()}", _callback);
@@ -117,16 +105,5 @@ public class CHMResource
         {
             UnityEngine.Object.Destroy(_object, _time);
         }
-    }
-
-    int GetRandomCharacterNumber(Defines.ECharacter _character)
-    {
-        switch (_character)
-        {
-            case Defines.ECharacter.Slime:
-                return UnityEngine.Random.Range(1, 9);
-        }
-
-        return -1;
     }
 }
