@@ -1,31 +1,29 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
-using Unity.VisualScripting;
 using UnityEngine;
 using static Defines;
 using static Infomation;
 
-public abstract class CHUnitBase : MonoBehaviour
+public class CHUnitBase : MonoBehaviour
 {
+    [SerializeField] Defines.EUnitID unitID;
     [SerializeField, ReadOnly] protected Collider unitCollider;
 
     // 기본 유닛 정보
-    [SerializeField, ReadOnly] protected Infomation.UnitInfo orgUnitInfo;
-    [SerializeField, ReadOnly] protected Infomation.SkillInfo orgSkill1Info;
-    [SerializeField, ReadOnly] protected Infomation.SkillInfo orgSkill2Info;
-    [SerializeField, ReadOnly] protected Infomation.SkillInfo orgSkill3Info;
-    [SerializeField, ReadOnly] protected Infomation.SkillInfo orgSkill4Info;
+    [SerializeField, ReadOnly] protected UnitInfo orgUnitInfo;
+    [SerializeField, ReadOnly] protected SkillInfo orgSkill1Info;
+    [SerializeField, ReadOnly] protected SkillInfo orgSkill2Info;
+    [SerializeField, ReadOnly] protected SkillInfo orgSkill3Info;
+    [SerializeField, ReadOnly] protected SkillInfo orgSkill4Info;
 
     // 현재 유닛 정보
-    [SerializeField, ReadOnly] protected Infomation.UnitInfo curUnitInfo;
-    [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill1Info;
-    [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill2Info;
-    [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill3Info;
-    [SerializeField, ReadOnly] protected Infomation.SkillInfo curSkill4Info;
+    [SerializeField, ReadOnly] protected UnitInfo curUnitInfo;
+    [SerializeField, ReadOnly] protected SkillInfo curSkill1Info;
+    [SerializeField, ReadOnly] protected SkillInfo curSkill2Info;
+    [SerializeField, ReadOnly] protected SkillInfo curSkill3Info;
+    [SerializeField, ReadOnly] protected SkillInfo curSkill4Info;
 
     [SerializeField, ReadOnly] protected Defines.EUnitState unitState = Defines.EUnitState.None;
 
@@ -34,24 +32,20 @@ public abstract class CHUnitBase : MonoBehaviour
 
     protected CHGaugeBar hpGaugeBar;
 
-    public void Reset()
-    {
-        unitState = 0;
-
-        curUnitInfo = orgUnitInfo.Clone();
-        curSkill1Info = orgSkill1Info.Clone();
-        curSkill1Info = orgSkill2Info.Clone();
-        curSkill1Info = orgSkill3Info.Clone();
-        curSkill1Info = orgSkill4Info.Clone();
-
-        unitCollider.enabled = true;
-
-        hpGaugeBar.ResetGaugeBar();
-    }
-
     private void Awake()
     {
-        Init();
+        orgUnitInfo = CHMMain.Json.GetUnitInfo(unitID);
+        curUnitInfo = orgUnitInfo.Clone();
+
+        orgSkill1Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill1ID);
+        orgSkill2Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill2ID);
+        orgSkill3Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill3ID);
+        orgSkill4Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill4ID);
+
+        curSkill1Info = orgSkill1Info.Clone();
+        curSkill2Info = orgSkill2Info.Clone();
+        curSkill3Info = orgSkill3Info.Clone();
+        curSkill4Info = orgSkill4Info.Clone();
     }
 
     private void Start()
@@ -88,8 +82,6 @@ public abstract class CHUnitBase : MonoBehaviour
             }
         });
     }
-
-    protected abstract void Init();
 
     #region OriginUnitInfoGetter
     public Defines.EUnitID GetOriginUnitID() { return orgUnitInfo.eUnitID; }
@@ -154,6 +146,21 @@ public abstract class CHUnitBase : MonoBehaviour
     public float GetCurrentSkill3Distance() { return curSkill3Info.distance; }
     public float GetCurrentSkill4Distance() { return curSkill4Info.distance; }
     #endregion
+
+    public void ResetUnit()
+    {
+        unitState = 0;
+
+        curUnitInfo = orgUnitInfo.Clone();
+        curSkill1Info = orgSkill1Info.Clone();
+        curSkill1Info = orgSkill2Info.Clone();
+        curSkill1Info = orgSkill3Info.Clone();
+        curSkill1Info = orgSkill4Info.Clone();
+
+        unitCollider.enabled = true;
+
+        hpGaugeBar.ResetGaugeBar();
+    }
 
     public bool IsNormalState()
     {

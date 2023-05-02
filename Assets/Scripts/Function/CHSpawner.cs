@@ -46,7 +46,7 @@ public class CHSpawner : MonoBehaviour
                 var unitBase = obj.GetComponent<CHUnitBase>();
                 if (unitBase != null && unitBase.GetCurrentHp() < 1f)
                 {
-                    unitBase.Reset();
+                    unitBase.ResetUnit();
                 }
 
                 await Task.Delay((int)(spawnDelay * 1000f), cts.Token);

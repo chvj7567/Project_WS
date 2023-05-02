@@ -236,11 +236,19 @@ public class Defines
     {
         None = -1,
 
-        A, // 0
-        B, // 1
-        C, // 2
-        D, // 3
-        E, // 4
+        Crane, // 0
+        Dog, // 1
+        Dragon, // 2
+        Goat, // 3
+        Horse, // 4
+        Monkey, // 5
+        Ox, // 6
+        Pig, // 7
+        Rabbit, // 8
+        Rat, // 9
+        Rooster, // 10
+        Snake, // 11
+        Tigher, // 12
 
         Max
     }

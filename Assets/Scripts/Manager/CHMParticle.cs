@@ -318,7 +318,7 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    await MoveParticleDirection(cts.Token, _trCaster.forward, 10f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 10f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
                 }
                 break;
         }
