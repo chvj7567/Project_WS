@@ -76,7 +76,7 @@ public class CHUnitBase : MonoBehaviour
                         unitCollider = gameObject.GetOrAddComponent<Collider>();
                     }
 
-                    // 스케일에 비례하게 y축 조정
+                    // HP 게이지가 스케일에 영향받지 않도록 
                     hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
                     hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), GetCurrentHp(), 0f);
                 }
