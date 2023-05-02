@@ -111,7 +111,7 @@ public class Infomation
     [Serializable]
     public class UnitInfo
     {
-        public EUnitID eUnitID = EUnitID.None;
+        public EUnit eUnitID = EUnit.None;
         public int nameStringID = -1;
         public float maxHp = -1f;
         public float hp = -1f;

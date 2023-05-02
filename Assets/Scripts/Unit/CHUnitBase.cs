@@ -8,7 +8,7 @@ using static Infomation;
 
 public class CHUnitBase : MonoBehaviour
 {
-    [SerializeField] Defines.EUnitID unitID;
+    [SerializeField] Defines.EUnit unitID;
     [SerializeField, ReadOnly] protected Collider unitCollider;
 
     // 기본 유닛 정보
@@ -85,7 +85,7 @@ public class CHUnitBase : MonoBehaviour
     }
 
     #region OriginUnitInfoGetter
-    public Defines.EUnitID GetOriginUnitID() { return orgUnitInfo.eUnitID; }
+    public Defines.EUnit GetOriginUnitID() { return orgUnitInfo.eUnitID; }
     public int GetOriginNameStringID() { return orgUnitInfo.nameStringID; }
     public float GetOriginMaxHp() { return orgUnitInfo.maxHp; }
     public float GetOriginHp() { return orgUnitInfo.hp; }
@@ -117,7 +117,7 @@ public class CHUnitBase : MonoBehaviour
     #endregion
 
     #region CurrentUnitInfoGetter
-    public Defines.EUnitID GetCurrentUnitID() { return curUnitInfo.eUnitID; }
+    public Defines.EUnit GetCurrentUnitID() { return curUnitInfo.eUnitID; }
     public int GetCurrentNameStringID() { return curUnitInfo.nameStringID; }
     public float GetCurrentMaxHp() { return curUnitInfo.maxHp; }
     public float GetCurrentHp() { return curUnitInfo.hp; }

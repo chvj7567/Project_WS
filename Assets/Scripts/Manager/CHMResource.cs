@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UniRx;
 using System;
-using Unity.VisualScripting;
-using static UnityEngine.UI.Image;
 using System.Threading.Tasks;
 
 #if UNITY_EDITOR
@@ -58,6 +53,11 @@ public class CHMResource
     public void InstantiateMajor(Defines.EMajor _major, Action<GameObject> _callback = null)
     {
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Major.ToString()}", $"{_major.ToString()}", _callback);
+    }
+
+    public void InstantiateUnit(Defines.EUnit _unit, Action<GameObject> _callback = null)
+    {
+        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Unit.ToString()}", $"{_unit.ToString()}", _callback);
     }
 
     public void InstantiateUI(Defines.EUI _ui, Action<GameObject> _callback = null)

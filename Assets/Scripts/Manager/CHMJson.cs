@@ -131,7 +131,7 @@ public class CHMJson
         return liSkillInfo.Find(_ => _.eSkillID == _skillID);
     }
 
-    public UnitInfo GetUnitInfo(Defines.EUnitID _unitID)
+    public UnitInfo GetUnitInfo(Defines.EUnit _unitID)
     {
         return liUnitInfo.Find(_ => _.eUnitID == _unitID);
     }

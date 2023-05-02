@@ -30,7 +30,7 @@ public class Defines
         None = -1,
 
         Major,
-        Character,
+        Unit,
         UI,
         Json,
         Effect,
@@ -232,7 +232,7 @@ public class Defines
         Max
     }
 
-    public enum EUnitID
+    public enum EUnit
     {
         None = -1,
 
