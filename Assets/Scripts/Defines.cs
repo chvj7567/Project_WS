@@ -67,19 +67,15 @@ public class Defines
     {
         None = -1,
 
-        Curse, // 0
-        Devil, // 1
-        Electricity, // 2
-        Energy, // 3
-        Explosion, // 4
-        Explosion_Magic, // 5
-        Explosion_Magic2, // 6
+        Explosion, // 0
+        Meteor, // 1
+        Heal, // 2
+        SlashPoison, // 3
+        Tornado, // 4
+        IceArrow, // 5
+        IceArrow2, // 6
         Fire, // 7
-        Healing, // 8
-        Iceflake, // 9
-        Poison, // 10
-        Slash, // 11
-        Defense, // 12
+        ElectronicExplosion, // 8
 
         Max
     }

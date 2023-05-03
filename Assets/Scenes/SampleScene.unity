@@ -2117,6 +2117,7 @@ GameObject:
   - component: {fileID: 1713448142}
   - component: {fileID: 1713448150}
   - component: {fileID: 1713448151}
+  - component: {fileID: 1713448152}
   m_Layer: 7
   m_Name: testUnit1
   m_TagString: Untagged
@@ -2408,6 +2409,25 @@ MonoBehaviour:
     cost: -1
     liEffectInfo: []
   unitState: 0
+--- !u!320 &1713448152
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713448141}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: e77ee3d719254fb49b05aebdfaec0b86, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 7495647284374784402, guid: e77ee3d719254fb49b05aebdfaec0b86, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &1734815115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5647054001098654375, guid: c128ac5951f1f594f94f7aac78606c46,
