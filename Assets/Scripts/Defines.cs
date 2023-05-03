@@ -39,6 +39,18 @@ public class Defines
         Max
     }
 
+    public enum EAssetPiece
+    {
+        None = -1,
+
+        Materials,
+        Meshes,
+        Shaders,
+        Texture,
+
+        Max
+    }
+
     public enum EUI
     {
         None = -1,
@@ -300,6 +312,22 @@ public class Defines
 
         X,
         Z,
+
+        Max
+    }
+
+    public enum EMaterial
+    {
+        None = -1,
+
+        Blue,
+        Brown,
+        Gray,
+        Orange,
+        Pink,
+        Red,
+        White,
+        Yellow,
 
         Max
     }

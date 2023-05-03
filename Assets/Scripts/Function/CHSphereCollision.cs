@@ -144,6 +144,4 @@ public class CHSphereCollision : MonoBehaviour
                 break;
         }
     }
-
-
 }

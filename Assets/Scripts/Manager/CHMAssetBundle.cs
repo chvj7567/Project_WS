@@ -70,15 +70,15 @@ public partial class AssetBundlePool
 
 public class CHMAssetBundle
 {
-    private static AssetBundlePool assetBundlePool = new AssetBundlePool();
+    private AssetBundlePool assetBundlePool = new AssetBundlePool();
     //private static ObjectPool objectPool = new ObjectPool();
 
-    public static void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
+    public void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
     {
         assetBundlePool.LoadAssetBundle(_bundleName, _assetBundle);
     }
 
-    public static void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
+    public void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
         AssetBundle assetBundle = assetBundlePool.GetItem(_bundleName);
 
@@ -93,7 +93,7 @@ public class CHMAssetBundle
     }
 
 #if UNITY_EDITOR
-    public static void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
+    public void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
         string path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}";
 

@@ -13,6 +13,7 @@ public class CHMMain : MonoBehaviour
     CHMString m_string = new CHMString();
     CHMParticle m_particle = new CHMParticle();
     CHMSkill m_skill = new CHMSkill();
+    CHMAssetBundle m_bundle = new CHMAssetBundle();
 
     public static CHMPool Pool { get { return Instance.m_pool; } }
     public static CHMResource Resource { get { return Instance.m_resource; } }
@@ -21,6 +22,7 @@ public class CHMMain : MonoBehaviour
     public static CHMString String { get { return Instance.m_string; } }
     public static CHMParticle Particle { get { return Instance.m_particle; } }
     public static CHMSkill Skill { get { return Instance.m_skill; } }
+    public static CHMAssetBundle Bundle { get { return Instance.m_bundle; } }
     #endregion
 
     void Start()

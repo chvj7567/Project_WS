@@ -33,12 +33,12 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         {
             AssetBundle assetBundle = DownloadHandlerAssetBundle.GetContent(request);
             AssetBundleManifest manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-            string[] arrAssetName = manifest.GetAllAssetBundles();
+            string[] arrBundleName = manifest.GetAllAssetBundles();
 
-            totalAssetBundleCount = remainLoadAssetBundleCount = arrAssetName.Length;
+            totalAssetBundleCount = remainLoadAssetBundleCount = arrBundleName.Length;
 
             assetBundle.Unload(false);
-            foreach (string name in arrAssetName)
+            foreach (string name in arrBundleName)
             {
                 yield return DownloadAssetBundle(name);
 
@@ -55,9 +55,9 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         }
     }
 
-    IEnumerator DownloadAssetBundle(string _assetBundleName)
+    IEnumerator DownloadAssetBundle(string _bundleName)
     {
-        UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle($"{url}/{_assetBundleName}");
+        UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle($"{url}/{_bundleName}");
 
         yield return request.SendWebRequest();
 
@@ -69,9 +69,9 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         {
             AssetBundle assetBundle = DownloadHandlerAssetBundle.GetContent(request);
 
-            Debug.Log($"Success : {_assetBundleName}");
+            Debug.Log($"Success : {_bundleName}");
 
-            assetBundle.Unload(false);
+            CHMMain.Bundle.LoadAssetBundle(_bundleName, assetBundle);
         }
     }
 }

@@ -13,9 +13,9 @@ public class CHMResource
     private void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
 #if UNITY_EDITOR
-        CHMAssetBundle.LoadAssetOnEditor<T>(_bundleName, _assetName, _callback);
+        CHMMain.Bundle.LoadAssetOnEditor<T>(_bundleName, _assetName, _callback);
 #else
-        CHMAssetBundle.LoadAsset<T>(_bundleName, _assetName, _callback);
+        CHMMain.Bundle.LoadAsset<T>(_bundleName, _assetName, _callback);
 #endif
     }
 
@@ -73,6 +73,11 @@ public class CHMResource
     public void InstantiateDecal(Defines.EDecal _decal, Action<GameObject> _callback = null)
     {
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Decal.ToString()}", $"{_decal.ToString()}", _callback);
+    }
+
+    public void InstantiateMaterial(Defines.EMaterial _material, Action<Material> _callback = null)
+    {
+        InstantiateAsObservable<Material>($"{Defines.EAssetPiece.Materials.ToString()}", $"{_material.ToString()}", _callback);
     }
 
     public GameObject Instantiate(GameObject _object, Transform _parent = null)
