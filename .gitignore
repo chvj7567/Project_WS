@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # Custom
 *.keystore
+Assets/testUnit1Timeline.playable
+Assets/testUnit1Timeline.playable.meta
+ProjectSettings/TimelineSettings.asset

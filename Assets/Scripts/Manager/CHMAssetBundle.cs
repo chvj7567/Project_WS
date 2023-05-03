@@ -6,6 +6,7 @@ using UniRx;
 using System.Linq;
 using System.IO;
 using UnityEditor;
+using Unity.VisualScripting;
 
 [Serializable]
 public class AssetBundleInfo
@@ -95,15 +96,19 @@ public class CHMAssetBundle
 #if UNITY_EDITOR
     public void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
-        string path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}";
+        string path = null;
 
         if (typeof(T) == typeof(GameObject))
         {
-            path += ".prefab";
+            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.prefab";
         }
         else if (typeof(T) == typeof(TextAsset))
         {
-            path += ".json";
+            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.json";
+        }
+        else if (typeof(T) == typeof(Material))
+        {
+            path += $"Assets/AssetPieces/{_bundleName.ToLower()}/{_assetName}.mat";
         }
 
         T original = AssetDatabase.LoadAssetAtPath<T>(path);

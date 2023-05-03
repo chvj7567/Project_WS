@@ -1,15 +1,31 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class FirstScene : MonoBehaviour
 {
-    void Update()
+    [SerializeField] CHUnitBase testUnit1;
+    [SerializeField] CHUnitBase testUnit2;
+
+    [SerializeField, ReadOnly] List<Material> liMaterial = new List<Material>();
+    
+    
+    private void Start()
     {
-        if (CHMMain.Json.GetJsonLoadingPercent() >= 99.9999f)
+        CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
+
+        for (int i = 0; i < (int)Defines.EMaterial.Max; ++i)
         {
-            SceneManager.LoadScene("SampleScene");
+            CHMMain.Resource.InstantiateMaterial((Defines.EMaterial)i, (mat) =>
+            {
+                liMaterial.Add(mat);
+            });
+        }
+
+        if (liMaterial.Count > 0)
+        {
+            testUnit1.meshRenderer.material = liMaterial[(int)Defines.EMaterial.Red];
+            testUnit2.meshRenderer.material = liMaterial[(int)Defines.EMaterial.Yellow];
         }
     }
 }

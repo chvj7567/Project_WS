@@ -9,7 +9,8 @@ using static Infomation;
 public class CHUnitBase : MonoBehaviour
 {
     [SerializeField] Defines.EUnit unitID;
-    [SerializeField, ReadOnly] protected Collider unitCollider;
+    [SerializeField] public Collider unitCollider;
+    [SerializeField] public MeshRenderer meshRenderer;
 
     // 기본 유닛 정보
     [SerializeField, ReadOnly] protected UnitInfo orgUnitInfo;
