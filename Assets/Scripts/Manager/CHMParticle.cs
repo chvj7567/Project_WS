@@ -98,21 +98,6 @@ public class CHMParticle
             objParticle.transform.forward = dirParticle;
             objParticle.transform.forward = objParticle.transform.Angle(_effectData.effectAngle, Defines.EStandardAxis.Z);
 
-            if (_effectData.createCasterPosition == false)
-            {
-                if (_effectData.attach)
-                {
-                    objParticle.transform.SetParent(trTarget);
-                }
-            }
-            else
-            {
-                if (_effectData.attach)
-                {
-                    objParticle.transform.SetParent(_trCaster);
-                }
-            }
-
             SetParticlePositionValue(_trCaster, trTarget, objParticle, _effectData);
             SetParticleCollision(_trCaster, trTarget, objParticle, _effectData);
         }
@@ -200,6 +185,8 @@ public class CHMParticle
         {
             sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(collider =>
             {
+                if (_trCaster == null || _trTarget == null || _objParticle == null) return;
+
                 if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                 {
                     SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
@@ -211,6 +198,8 @@ public class CHMParticle
         {
             sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(collider =>
             {
+                if (_trCaster == null || _trTarget == null || _objParticle == null) return;
+
                 if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                 {
                     SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
@@ -220,6 +209,8 @@ public class CHMParticle
 
         sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(collider =>
         {
+            if (_trCaster == null || _trTarget == null || _objParticle == null) return;
+
             if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
             {
                 SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
