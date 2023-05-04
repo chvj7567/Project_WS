@@ -233,20 +233,6 @@ public class CHMParticle
         }
     }
 
-    bool IsPoolableEffect(Defines.EEffect _eEffect)
-    {
-        switch (_eEffect)
-        {
-            // 움직이는 애들은 풀링 사용시 비동기가 겹치면서 속도가 변하는 이슈가 있음
-            case Defines.EEffect.FX_Tornado:
-            case Defines.EEffect.FX_Arrow_impact:
-            case Defines.EEffect.FX_Ax:
-                return false;
-            default:
-                return true;
-        }
-    }
-
     bool IsAutoDestroy(Defines.EEffect _eEffect)
     {
         switch (_eEffect)
