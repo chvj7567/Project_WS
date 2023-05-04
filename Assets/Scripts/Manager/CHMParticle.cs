@@ -6,6 +6,7 @@ using UniRx;
 using UnityEngine.AI;
 using System.Threading;
 using Unity.VisualScripting;
+using DG.Tweening;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -297,14 +298,11 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    TargetAirborne(cts.Token, _trTarget, 10, 0.5f, 25f);
+                    //TargetAirborne(cts.Token, _trTarget, 10, 0.5f, 25f);
+
+                    _trTarget.DOJump(_trTarget.transform.position, 10f, 1, 3f);
 
                     CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
-                }
-                break;
-            case Defines.EEffect.FX_Electricity_Hit:
-                {
-                    TargetAirborne(cts.Token, _trTriggerTarget, 10, .5f, 100f);
                 }
                 break;
             case Defines.EEffect.FX_Arrow_impact:
@@ -358,7 +356,7 @@ public class CHMParticle
             {
                 try
                 {
-                    if (_objParticle == null) break;
+                    if (_trStart == null || _trEnd == null || _objParticle == null) break;
 
                     var direction = _trEnd.position - _trStart.position;
                     direction.y = 0f;
@@ -380,75 +378,6 @@ public class CHMParticle
                 {
 
                 }
-            }
-        }
-    }
-
-    async void TargetAirborne(CancellationToken _token, Transform _trTarget, float _airborneHeight, float _airborneTime, float _fallSpeed)
-    {
-        var unitBase = _trTarget.GetComponent<CHUnitBase>();
-        float gravity = -2 * _airborneHeight / Mathf.Pow(_airborneTime, 2);
-        float airborneVelocity = -gravity * _airborneTime;
-        Vector3 startPos = _trTarget.position;
-
-        var agent = _trTarget.GetComponent<NavMeshAgent>();
-        if (agent != null)
-        {
-            agent.enabled = false;
-        }
-
-        // 타겟 유닛 에어본 상태 체크
-        unitBase.SetIsAirborne(true);
-        unitBase.IsFalling = false;
-
-        float time = 0f;
-        // 위로 떠오르는 코드
-        while (!_token.IsCancellationRequested && time <= _airborneTime)
-        {
-            try
-            {
-                if (_trTarget == null || unitBase.GetIsDeath()) break;
-                float height = startPos.y + (airborneVelocity * time) + (0.5f * gravity * Mathf.Pow(time, 2));
-                _trTarget.position = new Vector3(_trTarget.position.x, height, _trTarget.position.z);
-                time += Time.deltaTime;
-                await Task.Delay((int)(Time.deltaTime * 1000f));
-            }
-            catch (TaskCanceledException)
-            {
-                Debug.Log("에어본 떠오르는 도중 종료");
-            }
-        }
-
-        unitBase.IsFalling = true;
-
-        float groundLevel = 0f;
-        Vector3 fallVector = Vector3.zero;
-
-        // 아래로 떨어지는 코드
-        while (!_token.IsCancellationRequested && _trTarget != null && _trTarget.position.y > groundLevel)
-        {
-            try
-            {
-                if (unitBase.IsFalling == false) break;
-                fallVector.y -= _fallSpeed * Time.deltaTime;
-                _trTarget.position += fallVector * Time.deltaTime;
-                await Task.Delay((int)(Time.deltaTime * 1000f));
-            }
-            catch (TaskCanceledException)
-            {
-                Debug.Log("에어본 떨어지는 도중 종료");
-            }
-        }
-
-        if (_trTarget != null && unitBase != null && unitBase.IsFalling)
-        {
-            unitBase.IsFalling = false;
-            unitBase.SetIsAirborne(false);
-            _trTarget.position = new Vector3(_trTarget.position.x, 0f, _trTarget.position.z);
-
-            if(agent != null)
-            {
-                agent.enabled = true;
             }
         }
     }

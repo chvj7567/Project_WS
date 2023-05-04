@@ -23,9 +23,6 @@ public class CHUnitBase : MonoBehaviour
 
     [SerializeField, ReadOnly] protected EUnitState unitState = EUnitState.None;
 
-    // 떨어지는 상태인지 확인(에어본과 별도 확인)
-    public bool IsFalling { get; set; }
-
     protected CHGaugeBar hpGaugeBar;
 
     private void Awake()
@@ -115,7 +112,6 @@ public class CHUnitBase : MonoBehaviour
     public float GetOriginSkill3Distance() { return skill3Data.distance; }
     public float GetOriginSkill4Distance() { return skill4Data.distance; }
     #endregion
-
 
     public float GetCurrentHp()
     {

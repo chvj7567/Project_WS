@@ -23,7 +23,6 @@ public class CHContBase : MonoBehaviour
     [SerializeField, ReadOnly] protected float timeSinceLastSkill4 = -1f;
 
     [SerializeField, ReadOnly] Animator animator;
-    [SerializeField, ReadOnly] NavMeshAgent agent;
 
     [SerializeField, ReadOnly] public int attackRange = Animator.StringToHash("AttackRange");
     [SerializeField, ReadOnly] public int sightRange = Animator.StringToHash("SightRange");
@@ -36,7 +35,6 @@ public class CHContBase : MonoBehaviour
 
     public virtual void Init()
     {
-        agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         var unitInfo = gameObject.GetOrAddComponent<CHUnitBase>();
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
@@ -57,9 +55,9 @@ public class CHContBase : MonoBehaviour
 
             gameObject.UpdateAsObservable().Subscribe(_ =>
             {
-                if (unitInfo.GetIsDeath() && agent.enabled)
+                // 죽거나 땅에 있는 상태가 아닐 때 (에어본 같은 경우)
+                if (unitInfo.GetIsDeath() && transform.position.y >= 0.1f)
                 {
-                    agent.ResetPath();
                     return;
                 }
 
@@ -244,7 +242,7 @@ public class CHContBase : MonoBehaviour
                         }
                     }
                 }
-            });
+            }).AddTo(this);
         }
     }
 
