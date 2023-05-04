@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be057a474a649a44e8fdc21bdf54ca50, type: 3}
   m_Name: Ax
   m_EditorClassIdentifier: 
-  eSkillID: 7
+  eSkill: 7
   skillDesc: "\uB4DC\uBE10 \uAD81"
   isTargeting: 0
   distance: 50

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be057a474a649a44e8fdc21bdf54ca50, type: 3}
   m_Name: Explosion
   m_EditorClassIdentifier: 
-  eSkillID: 0
+  eSkill: 0
   skillDesc: "\uC9C8\uB9AC\uC5B8 Q"
   isTargeting: 1
   distance: 50

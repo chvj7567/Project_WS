@@ -5,11 +5,16 @@ using UnityEngine.AI;
 
 public class CHContBase : MonoBehaviour
 {
-    [SerializeField] protected bool useAttack = true;
-    [SerializeField] protected bool useSkill1 = true;
-    [SerializeField] protected bool useSkill2 = true;
-    [SerializeField] protected bool useSkill3 = true;
-    [SerializeField] protected bool useSkill4 = true;
+    [SerializeField] protected bool useAttack = false;
+    [SerializeField] protected bool useSkill1 = false;
+    [SerializeField] protected bool useSkill2 = false;
+    [SerializeField] protected bool useSkill3 = false;
+    [SerializeField] protected bool useSkill4 = false;
+
+    [SerializeField, ReadOnly] protected bool skill1Lock = false;
+    [SerializeField, ReadOnly] protected bool skill2Lock = false;
+    [SerializeField, ReadOnly] protected bool skill3Lock = false;
+    [SerializeField, ReadOnly] protected bool skill4Lock = false;
 
     [SerializeField, ReadOnly] protected float timeSinceLastAttack = -1f;
     [SerializeField, ReadOnly] protected float timeSinceLastSkill1 = -1f;
@@ -37,6 +42,11 @@ public class CHContBase : MonoBehaviour
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
         if (unitInfo != null && targetTracker != null)
         {
+            if (unitInfo.GetSkill1Data() == null) skill1Lock = true;
+            if (unitInfo.GetSkill2Data() == null) skill2Lock = true;
+            if (unitInfo.GetSkill3Data() == null) skill3Lock = true;
+            if (unitInfo.GetSkill4Data() == null) skill4Lock = true;
+
             targetTracker.ResetValue(unitInfo);
 
             timeSinceLastAttack = -1f;
@@ -155,7 +165,7 @@ public class CHContBase : MonoBehaviour
                     }
 
                     // 1번 스킬
-                    if (useSkill1 && unitInfo.IsNormalState())
+                    if ((skill1Lock == false) && useSkill1 && unitInfo.IsNormalState())
                     {
                         if (timeSinceLastSkill1 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill1Distance())
                         {
@@ -175,7 +185,7 @@ public class CHContBase : MonoBehaviour
                     }
 
                     // 2번 스킬
-                    if (useSkill2 && unitInfo.IsNormalState())
+                    if ((skill2Lock == false) && useSkill2 && unitInfo.IsNormalState())
                     {
                         if (timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
                         {
@@ -195,7 +205,7 @@ public class CHContBase : MonoBehaviour
                     }
 
                     // 3번 스킬
-                    if (useSkill3 && unitInfo.IsNormalState())
+                    if ((skill3Lock == false) && useSkill3 && unitInfo.IsNormalState())
                     {
                         if (timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
                         {
@@ -215,7 +225,7 @@ public class CHContBase : MonoBehaviour
                     }
 
                     // 4번 스킬
-                    if (useSkill4 && unitInfo.IsNormalState())
+                    if ((skill4Lock == false) && useSkill4 && unitInfo.IsNormalState())
                     {
                         if (timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
                         {

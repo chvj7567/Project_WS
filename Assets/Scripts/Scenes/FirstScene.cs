@@ -24,8 +24,8 @@ public class FirstScene : MonoBehaviour
 
         if (liMaterial.Count > 0)
         {
-            testUnit1.meshRenderer.material = liMaterial[(int)Defines.EMaterial.Red];
-            testUnit2.meshRenderer.material = liMaterial[(int)Defines.EMaterial.Yellow];
+            //testUnit1.meshRenderer.material = liMaterial[(int)Defines.EMaterial.Red];
+            //testUnit2.meshRenderer.material = liMaterial[(int)Defines.EMaterial.Yellow];
         }
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be057a474a649a44e8fdc21bdf54ca50, type: 3}
   m_Name: SlashPoison
   m_EditorClassIdentifier: 
-  eSkillID: 3
+  eSkill: 3
   skillDesc: "\uCE7C\uC744 \uD718\uB450\uB974\uACE0 \uB3C5 \uB370\uBBF8\uC9C0"
   isTargeting: 0
   distance: 50
@@ -28,9 +28,9 @@ MonoBehaviour:
     attach: 0
     duplication: 0
     onDecal: 1
-    eEffectType: -1
-    eDamageState: -1
-    eDamageType: -1
+    eStatModifyType: -1
+    eDamageType1: -1
+    eDamageType2: -1
     damage: 0
     eTarget: 0
     eTargetMask: 2
@@ -54,9 +54,9 @@ MonoBehaviour:
     attach: 0
     duplication: 1
     onDecal: 0
-    eEffectType: 1
-    eDamageState: 1
-    eDamageType: 0
+    eStatModifyType: -1
+    eDamageType1: -1
+    eDamageType2: -1
     damage: 44
     eTarget: 1
     eTargetMask: 2

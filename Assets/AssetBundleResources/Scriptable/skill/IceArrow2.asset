@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be057a474a649a44e8fdc21bdf54ca50, type: 3}
   m_Name: IceArrow2
   m_EditorClassIdentifier: 
-  eSkillID: 6
+  eSkill: 6
   skillDesc: "\uC5BC\uC74C \uD654\uC0B4\uC774 \uACF5\uC911\uC5D0\uC11C \uAF42\uD798"
   isTargeting: 0
   distance: 50

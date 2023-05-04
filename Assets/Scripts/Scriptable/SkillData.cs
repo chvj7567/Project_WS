@@ -7,7 +7,7 @@ using static Defines;
 public class SkillData : ScriptableObject
 {
     [Header("스킬")]
-    [Tooltip("스킬 이름")] public ESkill eSkillID = ESkill.None;
+    [Tooltip("스킬 이름")] public ESkill eSkill = ESkill.None;
     [Tooltip("스킬 설명"), Multiline(5)] public string skillDesc = null;
     [Tooltip("스킬 타겟팅 여부")] public bool isTargeting = false;
     [Tooltip("스킬 사정거리")] public float distance = -1f;
@@ -19,7 +19,7 @@ public class SkillData : ScriptableObject
     public SkillData Clone()
     {
         SkillData clone = ScriptableObject.CreateInstance<SkillData>();
-        clone.eSkillID = this.eSkillID;
+        clone.eSkill = this.eSkill;
         clone.skillDesc = this.skillDesc;
         clone.isTargeting = this.isTargeting;
         clone.distance = this.distance;

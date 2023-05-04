@@ -30,11 +30,12 @@ public class CHUnitBase : MonoBehaviour
 
     private void Awake()
     {
-        CHMMain.Resource.LoadUnitData(unit, (_) =>
-        {
-            if (_ == null) return;
+        if (unitCollider == null) unitCollider = gameObject.GetOrAddComponent<Collider>();
+        if (meshRenderer == null) meshRenderer = gameObject.GetOrAddComponent<MeshRenderer>();
 
-            unitData = _;
+        unitData = CHMMain.Unit.GetUnitData(unit);
+        if (unitData != null)
+        {
             hp = unitData.maxHp;
             mp = unitData.maxMp;
 
@@ -42,7 +43,7 @@ public class CHUnitBase : MonoBehaviour
             skill2Data = CHMMain.Skill.GetSkillData(unitData.eSkill2);
             skill3Data = CHMMain.Skill.GetSkillData(unitData.eSkill3);
             skill4Data = CHMMain.Skill.GetSkillData(unitData.eSkill4);
-        });
+        }
     }
 
     private void Start()
@@ -82,7 +83,7 @@ public class CHUnitBase : MonoBehaviour
     }
 
     #region OriginUnitInfoGetter
-    public Defines.EUnit GetOriginUnitID() { return unitData.eUnit; }
+    public EUnit GetOriginUnitID() { return unitData.eUnit; }
     public int GetOriginNameStringID() { return unitData.nameStringID; }
     public float GetOriginMaxHp() { return unitData.maxHp; }
     public float GetOriginHpRegenPerSecond() { return unitData.hpRegenPerSecond; }
@@ -97,10 +98,14 @@ public class CHUnitBase : MonoBehaviour
     public float GetOriginRange() { return unitData.range; }
     public float GetOriginRangeMulti() { return unitData.rangeMulti; }
     public float GetOriginViewAngle() { return unitData.viewAngle; }
-    public Defines.ESkill GetOriginSkill1() { return skill1Data.eSkillID; }
-    public Defines.ESkill GetOriginSkill2() { return skill2Data.eSkillID; }
-    public Defines.ESkill GetOriginSkill3() { return skill3Data.eSkillID; }
-    public Defines.ESkill GetOriginSkill4() { return skill4Data.eSkillID; }
+    public SkillData GetSkill1Data() { return skill1Data; }
+    public SkillData GetSkill2Data() { return skill2Data; }
+    public SkillData GetSkill3Data() { return skill3Data; }
+    public SkillData GetSkill4Data() { return skill4Data; }
+    public Defines.ESkill GetOriginSkill1() { return skill1Data.eSkill; }
+    public Defines.ESkill GetOriginSkill2() { return skill2Data.eSkill; }
+    public Defines.ESkill GetOriginSkill3() { return skill3Data.eSkill; }
+    public Defines.ESkill GetOriginSkill4() { return skill4Data.eSkill; }
     public float GetOriginSkill1CoolTime() { return skill1Data.coolTime; }
     public float GetOriginSkill2CoolTime() { return skill2Data.coolTime; }
     public float GetOriginSkill3CoolTime() { return skill3Data.coolTime; }

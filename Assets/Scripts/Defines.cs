@@ -329,4 +329,14 @@ public class Defines
 
         Max
     }
+
+    public enum ETeamLayer
+    {
+        None = -1,
+
+        Red = 6,
+        Blue = 7,
+
+        Max
+    }
 }

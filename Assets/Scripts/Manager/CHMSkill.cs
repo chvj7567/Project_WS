@@ -44,11 +44,11 @@ public class CHMSkill
         {
             var skill = (Defines.ESkill)i;
 
-            CHMMain.Resource.LoadSkillData(skill, (skillData) =>
+            CHMMain.Resource.LoadSkillData(skill, (_) =>
             {
-                if (skillData == null) return;
+                if (_ == null) return;
 
-                dicSkillData.Add(skill, skillData);
+                dicSkillData.Add(skill, _);
             });
         }
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be057a474a649a44e8fdc21bdf54ca50, type: 3}
   m_Name: Meteor
   m_EditorClassIdentifier: 
-  eSkillID: 1
+  eSkill: 1
   skillDesc: "\uBA54\uD14C\uC624 \uC2A4\uD0AC"
   isTargeting: 0
   distance: 50
@@ -28,9 +28,9 @@ MonoBehaviour:
     attach: 0
     duplication: 0
     onDecal: 0
-    eEffectType: -1
-    eDamageState: -1
-    eDamageType: -1
+    eStatModifyType: -1
+    eDamageType1: -1
+    eDamageType2: -1
     damage: 0
     eTarget: -1
     eTargetMask: -1
@@ -54,9 +54,9 @@ MonoBehaviour:
     attach: 0
     duplication: 0
     onDecal: 0
-    eEffectType: -1
-    eDamageState: -1
-    eDamageType: -1
+    eStatModifyType: -1
+    eDamageType1: -1
+    eDamageType2: -1
     damage: 0
     eTarget: -1
     eTargetMask: -1
@@ -80,9 +80,9 @@ MonoBehaviour:
     attach: 0
     duplication: 0
     onDecal: 1
-    eEffectType: 1
-    eDamageState: 0
-    eDamageType: 0
+    eStatModifyType: -1
+    eDamageType1: -1
+    eDamageType2: -1
     damage: 22
     eTarget: 0
     eTargetMask: 2

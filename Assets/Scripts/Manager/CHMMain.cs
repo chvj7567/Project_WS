@@ -13,6 +13,7 @@ public class CHMMain : MonoBehaviour
     CHMString m_string = new CHMString();
     CHMParticle m_particle = new CHMParticle();
     CHMSkill m_skill = new CHMSkill();
+    CHMUnit m_unit = new CHMUnit();
     CHMAssetBundle m_bundle = new CHMAssetBundle();
 
     public static CHMPool Pool { get { return Instance.m_pool; } }
@@ -22,6 +23,7 @@ public class CHMMain : MonoBehaviour
     public static CHMString String { get { return Instance.m_string; } }
     public static CHMParticle Particle { get { return Instance.m_particle; } }
     public static CHMSkill Skill { get { return Instance.m_skill; } }
+    public static CHMUnit Unit { get { return Instance.m_unit; } }
     public static CHMAssetBundle Bundle { get { return Instance.m_bundle; } }
     #endregion
 
@@ -53,6 +55,7 @@ public class CHMMain : MonoBehaviour
             m_instance = go.GetOrAddComponent<CHMMain>();
 
             m_instance.m_skill.Init();
+            m_instance.m_unit.Init();
             m_instance.m_pool.Init();
             m_instance.m_json.Init();
             m_instance.m_particle.Init();
@@ -64,6 +67,7 @@ public class CHMMain : MonoBehaviour
         if (m_instance != null)
         {
             m_instance.m_skill.Clear();
+            m_instance.m_unit.Clear();
             m_instance.m_json.Clear();
             m_instance.m_particle.Clear();
 
