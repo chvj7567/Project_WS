@@ -32,7 +32,33 @@ MonoBehaviour:
     eDamageType1: 0
     eDamageType2: 0
     damage: 11
-    eTarget: 1
+    eTarget: 0
+    eTargetMask: 2
+    moveToPos: 0
+    moveSpeed: 0
+    offsetToTarget: 0
+    eCollision: 0
+    collisionAngle: 360
+    sphereRadius: 10
+    boxHalf: {x: 0, y: 0, z: 0}
+    triggerStartDelay: 0
+    triggerStayTime: 0.5
+    triggerEnter: 1
+    triggerExit: 0
+    stayTickTime: -1
+  - eEffect: 20
+    effectAngle: 0
+    createCasterPosition: 0
+    startDelay: 0
+    createOnEmpty: 0
+    attach: 1
+    duplication: 0
+    onDecal: 0
+    eStatModifyType: 1
+    eDamageType1: 1
+    eDamageType2: 0
+    damage: 5
+    eTarget: 2
     eTargetMask: 2
     moveToPos: 0
     moveSpeed: 0

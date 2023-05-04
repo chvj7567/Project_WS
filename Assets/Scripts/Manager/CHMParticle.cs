@@ -238,6 +238,12 @@ public class CHMParticle
 
     async void SetParticlePositionValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
+        // 이펙트가 붙어있어야하는 경우 SetParent를 해버리면 해당 타겟은 충돌체에 감지가 안되므로 타겟을 따라다니도록 수정
+        if (_effectData.attach)
+        {
+            await MoveTrasnform(cts.Token, _objParticle.transform, _trTarget, -1f, dicParticleTime[_effectData.eEffect], 0f, _objParticle);
+        }
+
         // 각 이펙트별로 세부 설정이 필요한 경우
         switch (_effectData.eEffect)
         {
@@ -251,7 +257,7 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Arrow_impact:
                 {
-                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 30f, dicParticleTime[_effectData.eEffect], _objParticle);
+                    await MoveDirection(cts.Token, _objParticle.transform.forward, 30f, dicParticleTime[_effectData.eEffect], _objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Ax:
@@ -260,15 +266,15 @@ public class CHMParticle
                     var posOrigin = _objParticle.transform.position;
                     _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y + 3f, posOrigin.z);
 
-                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 30f, 1f, _objParticle);
-                    await MoveParticleTrasnform(cts.Token, _objParticle.transform, _trCaster, 30f, 3f, _objParticle);
+                    await MoveDirection(cts.Token, _objParticle.transform.forward, 30f, 1f, _objParticle);
+                    await MoveTrasnform(cts.Token, _objParticle.transform, _trCaster, 30f, -1f, 3f, _objParticle);
 
                     CHMMain.Resource.Destroy(_objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 10f, dicParticleTime[_effectData.eEffect], _objParticle);
+                    await MoveDirection(cts.Token, _objParticle.transform.forward, 10f, dicParticleTime[_effectData.eEffect], _objParticle);
                 }
                 break;
         }
@@ -311,11 +317,11 @@ public class CHMParticle
         }
     }
 
-    async Task MoveParticleDirection(CancellationToken _token, Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
+    async Task MoveDirection(CancellationToken _token, Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
     {
-        float time = 0;
         if (_direction != null)
         {
+            float time = 0;
             while (!_token.IsCancellationRequested && time <= _effectTime)
             {
                 try
@@ -338,36 +344,102 @@ public class CHMParticle
         }
     }
 
-    async Task MoveParticleTrasnform(CancellationToken _token, Transform _trStart, Transform _trEnd, float _speed, float _offset, GameObject _objParticle)
+    async Task MoveTrasnform(CancellationToken _token, Transform _trStart, Transform _trEnd, float _speed, float _effectTime, float _offset, GameObject _objParticle)
     {
-        float time = 0;
         if (_trStart != null && _trEnd != null)
         {
-            while (!_token.IsCancellationRequested)
+            float time = 0;
+
+            // 일정한 속도로 일정 시간 동안 타겟에게 다가감
+            if (_speed >= 0 && _effectTime >= 0)
             {
-                try
+                while (!_token.IsCancellationRequested && time <= _effectTime)
                 {
-                    if (_trStart == null || _trEnd == null || _objParticle == null) break;
+                    try
+                    {
+                        if (_trStart == null || _trEnd == null || _objParticle == null) break;
 
-                    var direction = _trEnd.position - _trStart.position;
-                    direction.y = 0f;
+                        var direction = _trEnd.position - _trStart.position;
+                        direction.y = 0f;
 
-                    _objParticle.transform.forward = direction;
-                    _objParticle.transform.position += direction.normalized * _speed * Time.deltaTime;
+                        _objParticle.transform.forward = direction;
+                        _objParticle.transform.position += direction.normalized * _speed * Time.deltaTime;
 
-                    var posParticle = _objParticle.transform.position;
-                    var posEnd = _trEnd.position;
-                    posParticle.y = 0f;
-                    posEnd.y = 0f;
+                        var posParticle = _objParticle.transform.position;
+                        var posEnd = _trEnd.position;
+                        posParticle.y = 0f;
+                        posEnd.y = 0f;
 
-                    if (Vector3.Distance(posParticle, posEnd) <= _offset) break;
+                        if (Vector3.Distance(posParticle, posEnd) <= _offset) break;
 
-                    time += Time.deltaTime;
-                    await Task.Delay((int)(Time.deltaTime * 1000f));
+                        time += Time.deltaTime;
+                        await Task.Delay((int)(Time.deltaTime * 1000f));
+                    }
+                    catch (TaskCanceledException)
+                    {
+
+                    }
                 }
-                catch(TaskCanceledException)
+            }
+            // 일정한 속도로 타겟에게 offset 거리가 될 때까지 다가감
+            else if (_speed >= 0 && _effectTime < 0)
+            {
+                while (!_token.IsCancellationRequested)
                 {
+                    try
+                    {
+                        if (_trStart == null || _trEnd == null || _objParticle == null) break;
 
+                        var direction = _trEnd.position - _trStart.position;
+                        direction.y = 0f;
+
+                        _objParticle.transform.forward = direction;
+                        _objParticle.transform.position += direction.normalized * _speed * Time.deltaTime;
+
+                        var posParticle = _objParticle.transform.position;
+                        var posEnd = _trEnd.position;
+                        posParticle.y = 0f;
+                        posEnd.y = 0f;
+
+                        if (Vector3.Distance(posParticle, posEnd) <= _offset) break;
+
+                        await Task.Delay((int)(Time.deltaTime * 1000f));
+                    }
+                    catch (TaskCanceledException)
+                    {
+
+                    }
+                }
+            }
+            // 타겟에게 일정 시간동안 정해진 거리를 유지한채 붙어있음
+            else if (_speed < 0 && _effectTime >= 0)
+            {
+                while (!_token.IsCancellationRequested && time <= _effectTime)
+                {
+                    try
+                    {
+                        if (_trStart == null || _trEnd == null || _objParticle == null) break;
+
+                        var direction = (_trEnd.position - _trStart.position).normalized;
+                        direction.y = 0f;
+
+                        var posParticle = _objParticle.transform.position;
+                        var posEnd = _trEnd.position;
+                        posParticle.y = 0f;
+                        posEnd.y = 0f;
+
+                        var distance = Vector3.Distance(posParticle, posEnd);
+
+                        _objParticle.transform.forward = direction;
+                        _objParticle.transform.position += direction * (distance - _offset);
+
+                        time += Time.deltaTime;
+                        await Task.Delay((int)(Time.deltaTime * 1000f));
+                    }
+                    catch (TaskCanceledException)
+                    {
+
+                    }
                 }
             }
         }
