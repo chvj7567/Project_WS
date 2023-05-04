@@ -106,6 +106,14 @@ public class CHMAssetBundle
         {
             path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.json";
         }
+        else if (typeof(T) == typeof(SkillData))
+        {
+            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/skill/{_assetName}.asset";
+        }
+        else if (typeof(T) == typeof(UnitData))
+        {
+            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/unit/{_assetName}.asset";
+        }
         else if (typeof(T) == typeof(Material))
         {
             path += $"Assets/AssetPieces/{_bundleName.ToLower()}/{_assetName}.mat";

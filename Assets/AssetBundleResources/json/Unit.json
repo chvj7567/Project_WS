@@ -43,7 +43,7 @@
 		"eSkill1ID": 0,
 		"eSkill2ID": 1,
 		"eSkill3ID": 2,
-		"eSkill4ID": 3
+		"eSkill4ID": 0
 	},
 	{
 		"eUnitID": 1,
@@ -63,9 +63,9 @@
 		"range": 20,
 		"rangeMulti": 2,
 		"viewAngle" : 180,
-		"eSkill1ID": 4,
-		"eSkill2ID": 5,
-		"eSkill3ID": 6,
-		"eSkill4ID": 7
+		"eSkill1ID": 0,
+		"eSkill2ID": 0,
+		"eSkill3ID": 0,
+		"eSkill4ID": 0
 	}
 ]

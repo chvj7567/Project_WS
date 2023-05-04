@@ -24,6 +24,21 @@ public class CHMResource
         LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_jsonType.ToString()}", _callback);
     }
 
+    public void LoadMaterial(Defines.EMaterial _material, Action<Material> _callback)
+    {
+        LoadAsset<Material>($"{Defines.EAssetPiece.Materials.ToString()}", $"{_material.ToString()}", _callback);
+    }
+
+    public void LoadSkillData(Defines.ESkill _skill, Action<SkillData> _callback)
+    {
+        LoadAsset<SkillData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_skill.ToString()}", _callback);
+    }
+
+    public void LoadUnitData(Defines.EUnit _unit, Action<UnitData> _callback)
+    {
+        LoadAsset<UnitData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_unit.ToString()}", _callback);
+    }
+
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object
     {
         Action<T> _callbackTemp = original =>
@@ -73,11 +88,6 @@ public class CHMResource
     public void InstantiateDecal(Defines.EDecal _decal, Action<GameObject> _callback = null)
     {
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Decal.ToString()}", $"{_decal.ToString()}", _callback);
-    }
-
-    public void InstantiateMaterial(Defines.EMaterial _material, Action<Material> _callback = null)
-    {
-        InstantiateAsObservable<Material>($"{Defines.EAssetPiece.Materials.ToString()}", $"{_material.ToString()}", _callback);
     }
 
     public GameObject Instantiate(GameObject _object, Transform _parent = null)

@@ -16,7 +16,7 @@ public class FirstScene : MonoBehaviour
 
         for (int i = 0; i < (int)Defines.EMaterial.Max; ++i)
         {
-            CHMMain.Resource.InstantiateMaterial((Defines.EMaterial)i, (mat) =>
+            CHMMain.Resource.LoadMaterial((Defines.EMaterial)i, (mat) =>
             {
                 liMaterial.Add(mat);
             });

@@ -23,24 +23,24 @@ public class CHSphereCollision : MonoBehaviour
     bool useStay = false;
 
     Transform trCaster;
-    EffectInfo effectInfo;
+    SkillData.EffectData effectData;
 
-    public void Init(Transform _trCaster, EffectInfo _effectInfo)
+    public void Init(Transform _trCaster, SkillData.EffectData _effectData)
     {
         trCaster = _trCaster;
-        effectInfo = _effectInfo;
+        effectData = _effectData;
 
         sphereCollider = gameObject.GetOrAddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = _effectInfo.sphereRadius;
+        sphereCollider.radius = _effectData.sphereRadius;
 
         SetCollisionCenter();
 
         gameObject.layer = 2;
 
-        if (_effectInfo.stayTickTime >= 0f)
+        if (_effectData.stayTickTime >= 0f)
         {
-            stayTickTime = _effectInfo.stayTickTime;
+            stayTickTime = _effectData.stayTickTime;
             stayTickLastTime = -1f;
             useStay = true;
         }
@@ -130,7 +130,7 @@ public class CHSphereCollision : MonoBehaviour
 
     void SetCollisionCenter()
     {
-        switch (effectInfo.eEffect)
+        switch (effectData.eEffect)
         {
             case Defines.EEffect.FX_Arrow_impact2:
                 {

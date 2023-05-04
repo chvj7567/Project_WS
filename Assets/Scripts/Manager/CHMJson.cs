@@ -9,7 +9,6 @@ public class CHMJson
     public class JsonData
     {
         public StringInfo[] arrStringInfo;
-        public SkillInfo[] arrSkillInfo;
         public UnitInfo[] arrUnitInfo;
     }
 
@@ -18,7 +17,6 @@ public class CHMJson
 
     List<Action<TextAsset>> liAction = new List<Action<TextAsset>>();
     Dictionary<int, string> dicStringInfo = new Dictionary<int, string>();
-    List<SkillInfo> liSkillInfo = new List<SkillInfo>();
     List<UnitInfo> liUnitInfo = new List<UnitInfo>();
 
     public void Init()
@@ -30,7 +28,6 @@ public class CHMJson
     {
         liAction.Clear();
         dicStringInfo.Clear();
-        liSkillInfo.Clear();
         liUnitInfo.Clear();
     }
 
@@ -40,7 +37,6 @@ public class CHMJson
         liAction.Clear();
 
         liAction.Add(LoadStringInfo());
-        liAction.Add(LoadSkillInfo());
         liAction.Add(LoadUnitInfo());
 
         loadingFileCount = liAction.Count;
@@ -68,26 +64,6 @@ public class CHMJson
             foreach (var data in jsonData.arrStringInfo)
             {
                 dicStringInfo.Add(data.stringID, data.value);
-            }
-
-            ++loadCompleteFileCount;
-        });
-
-        return callback;
-    }
-
-    Action<TextAsset> LoadSkillInfo()
-    {
-        Action<TextAsset> callback;
-
-        liSkillInfo.Clear();
-
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Skill, callback = (TextAsset textAsset) =>
-        {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"arrSkillInfo\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.arrSkillInfo)
-            {
-                liSkillInfo.Add(data);
             }
 
             ++loadCompleteFileCount;
@@ -126,13 +102,8 @@ public class CHMJson
         return "";
     }
 
-    public SkillInfo GetSkillInfo(Defines.ESkillID _skillID)
-    {
-        return liSkillInfo.Find(_ => _.eSkillID == _skillID);
-    }
-
     public UnitInfo GetUnitInfo(Defines.EUnit _unitID)
     {
-        return liUnitInfo.Find(_ => _.eUnitID == _unitID);
+        return liUnitInfo.Find(_ => _.eUnit == _unitID);
     }
 }

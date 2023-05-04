@@ -52,6 +52,7 @@ public class CHMMain : MonoBehaviour
 
             m_instance = go.GetOrAddComponent<CHMMain>();
 
+            m_instance.m_skill.Init();
             m_instance.m_pool.Init();
             m_instance.m_json.Init();
             m_instance.m_particle.Init();
@@ -62,6 +63,7 @@ public class CHMMain : MonoBehaviour
     {
         if (m_instance != null)
         {
+            m_instance.m_skill.Clear();
             m_instance.m_pool.Clear();
             m_instance.m_json.Clear();
             m_instance.m_particle.Clear();

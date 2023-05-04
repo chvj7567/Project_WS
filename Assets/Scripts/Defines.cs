@@ -35,6 +35,7 @@ public class Defines
         Json,
         Effect,
         Decal,
+        Scriptable,
 
         Max
     }
@@ -63,7 +64,7 @@ public class Defines
         Max
     }
 
-    public enum ESkillID
+    public enum ESkill
     {
         None = -1,
 
@@ -133,7 +134,7 @@ public class Defines
     }
 
     // 스킬대상자 스킬형태
-    public enum EEffectType
+    public enum EStatModifyType
     {
         None = -1,
 
@@ -180,7 +181,7 @@ public class Defines
         Max
     }
 
-    public enum EDamageState
+    public enum EDamageType1
     {
         None = -1,
 
@@ -190,7 +191,7 @@ public class Defines
         Max
     }
 
-    public enum EDamageType
+    public enum EDamageType2
     {
         None = -1,
 

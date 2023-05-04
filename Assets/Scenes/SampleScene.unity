@@ -1925,7 +1925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useAttack: 0
   useSkill1: 0
-  useSkill2: 1
+  useSkill2: 0
   useSkill3: 0
   useSkill4: 0
   timeSinceLastAttack: -1
@@ -1975,42 +1975,10 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  orgSkill1Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  orgSkill2Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  orgSkill3Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  orgSkill4Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
+  orgSkill1Info: {fileID: 0}
+  orgSkill2Info: {fileID: 0}
+  orgSkill3Info: {fileID: 0}
+  orgSkill4Info: {fileID: 0}
   curUnitInfo:
     eUnitID: -1
     nameStringID: -1
@@ -2033,42 +2001,10 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  curSkill1Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  curSkill2Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  curSkill3Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  curSkill4Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
+  curSkill1Info: {fileID: 0}
+  curSkill2Info: {fileID: 0}
+  curSkill3Info: {fileID: 0}
+  curSkill4Info: {fileID: 0}
   unitState: 0
 --- !u!1 &1298909348
 GameObject:
@@ -2314,42 +2250,10 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  orgSkill1Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  orgSkill2Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  orgSkill3Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  orgSkill4Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
+  orgSkill1Info: {fileID: 0}
+  orgSkill2Info: {fileID: 0}
+  orgSkill3Info: {fileID: 0}
+  orgSkill4Info: {fileID: 0}
   curUnitInfo:
     eUnitID: -1
     nameStringID: -1
@@ -2372,42 +2276,10 @@ MonoBehaviour:
     eSkill2ID: -1
     eSkill3ID: -1
     eSkill4ID: -1
-  curSkill1Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  curSkill2Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  curSkill3Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
-  curSkill4Info:
-    eSkillID: -1
-    skillDesc: -1
-    isTargeting: 0
-    distance: -1
-    coolTime: -1
-    eSkillCost: -1
-    cost: -1
-    liEffectInfo: []
+  curSkill1Info: {fileID: 0}
+  curSkill2Info: {fileID: 0}
+  curSkill3Info: {fileID: 0}
+  curSkill4Info: {fileID: 0}
   unitState: 0
 --- !u!320 &1713448152
 PlayableDirector:

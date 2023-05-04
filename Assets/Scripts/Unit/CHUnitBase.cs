@@ -8,25 +8,17 @@ using static Infomation;
 
 public class CHUnitBase : MonoBehaviour
 {
-    [SerializeField] Defines.EUnit unitID;
+    [SerializeField] EUnit unit;
     [SerializeField] public Collider unitCollider;
     [SerializeField] public MeshRenderer meshRenderer;
 
-    // 기본 유닛 정보
-    [SerializeField, ReadOnly] protected UnitInfo orgUnitInfo;
-    [SerializeField, ReadOnly] protected SkillInfo orgSkill1Info;
-    [SerializeField, ReadOnly] protected SkillInfo orgSkill2Info;
-    [SerializeField, ReadOnly] protected SkillInfo orgSkill3Info;
-    [SerializeField, ReadOnly] protected SkillInfo orgSkill4Info;
+    [SerializeField, ReadOnly] protected UnitData unitData;
+    [SerializeField, ReadOnly] protected SkillData skill1Data;
+    [SerializeField, ReadOnly] protected SkillData skill2Data;
+    [SerializeField, ReadOnly] protected SkillData skill3Data;
+    [SerializeField, ReadOnly] protected SkillData skill4Data;
 
-    // 현재 유닛 정보
-    [SerializeField, ReadOnly] protected UnitInfo curUnitInfo;
-    [SerializeField, ReadOnly] protected SkillInfo curSkill1Info;
-    [SerializeField, ReadOnly] protected SkillInfo curSkill2Info;
-    [SerializeField, ReadOnly] protected SkillInfo curSkill3Info;
-    [SerializeField, ReadOnly] protected SkillInfo curSkill4Info;
-
-    [SerializeField, ReadOnly] protected Defines.EUnitState unitState = Defines.EUnitState.None;
+    [SerializeField, ReadOnly] protected EUnitState unitState = EUnitState.None;
 
     // 떨어지는 상태인지 확인(에어본과 별도 확인)
     public bool IsFalling { get; set; }
@@ -35,18 +27,17 @@ public class CHUnitBase : MonoBehaviour
 
     private void Awake()
     {
-        orgUnitInfo = CHMMain.Json.GetUnitInfo(unitID);
-        curUnitInfo = orgUnitInfo.Clone();
+        CHMMain.Resource.LoadUnitData(unit, (_) =>
+        {
+            if (_ == null) return;
 
-        orgSkill1Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill1ID);
-        orgSkill2Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill2ID);
-        orgSkill3Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill3ID);
-        orgSkill4Info = CHMMain.Json.GetSkillInfo(orgUnitInfo.eSkill4ID);
+            unitData = _;
 
-        curSkill1Info = orgSkill1Info.Clone();
-        curSkill2Info = orgSkill2Info.Clone();
-        curSkill3Info = orgSkill3Info.Clone();
-        curSkill4Info = orgSkill4Info.Clone();
+            skill1Data = CHMMain.Skill.GetSkillData(unitData.eSkill1);
+            skill2Data = CHMMain.Skill.GetSkillData(unitData.eSkill2);
+            skill3Data = CHMMain.Skill.GetSkillData(unitData.eSkill3);
+            skill4Data = CHMMain.Skill.GetSkillData(unitData.eSkill4);
+        });
     }
 
     private void Start()
@@ -57,8 +48,8 @@ public class CHUnitBase : MonoBehaviour
         {
             if (GetIsDeath() == false)
             {
-                /*ChangeHp(curUnitInfo.hpRegenPerSecond, Defines.EDamageState.None);
-                ChangeMp(curUnitInfo.mpRegenPerSecond, Defines.EDamageState.None);*/
+                ChangeHp(this, unitData.hpRegenPerSecond, Defines.EDamageType1.None);
+                ChangeMp(this, unitData.mpRegenPerSecond, Defines.EDamageType1.None);
             }
         });
 
@@ -79,85 +70,50 @@ public class CHUnitBase : MonoBehaviour
 
                     // HP 게이지가 스케일에 영향받지 않도록 
                     hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
-                    hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), GetCurrentHp(), 0f);
+                    hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), GetOriginHp(), 0f);
                 }
             }
         });
     }
 
     #region OriginUnitInfoGetter
-    public Defines.EUnit GetOriginUnitID() { return orgUnitInfo.eUnitID; }
-    public int GetOriginNameStringID() { return orgUnitInfo.nameStringID; }
-    public float GetOriginMaxHp() { return orgUnitInfo.maxHp; }
-    public float GetOriginHp() { return orgUnitInfo.hp; }
-    public float GetOriginHpRegenPerSecond() { return orgUnitInfo.hpRegenPerSecond; }
-    public float GetOriginMaxMp() { return orgUnitInfo.maxMp; }
-    public float GetOriginMp() { return orgUnitInfo.mp; }
-    public float GetOriginMpRegenPerSecond() { return orgUnitInfo.mpRegenPerSecond; }
-    public float GetOriginAttackPower() { return orgUnitInfo.attackPower; }
-    public float GetOriginDefensePower() { return orgUnitInfo.defensePower; }
-    public float GetOriginAttackDelay() { return orgUnitInfo.attackDelay; }
-    public float GetOriginAttackDistance() { return orgUnitInfo.attackDistance; }
-    public float GetOriginMoveSpeed() { return orgUnitInfo.moveSpeed; }
-    public float GetOriginRotateSpeed() { return orgUnitInfo.rotateSpeed; }
-    public float GetOriginRange() { return orgUnitInfo.range; }
-    public float GetOriginRangeMulti() { return orgUnitInfo.rangeMulti; }
-    public float GetOriginViewAngle() { return orgUnitInfo.viewAngle; }
-    public Defines.ESkillID GetOriginSkill1() { return orgSkill1Info.eSkillID; }
-    public Defines.ESkillID GetOriginSkill2() { return orgSkill2Info.eSkillID; }
-    public Defines.ESkillID GetOriginSkill3() { return orgSkill3Info.eSkillID; }
-    public Defines.ESkillID GetOriginSkill4() { return orgSkill4Info.eSkillID; }
-    public float GetOriginSkill1CoolTime() { return orgSkill1Info.coolTime; }
-    public float GetOriginSkill2CoolTime() { return orgSkill2Info.coolTime; }
-    public float GetOriginSkill3CoolTime() { return orgSkill3Info.coolTime; }
-    public float GetOriginSkill4CoolTime() { return orgSkill4Info.coolTime; }
-    public float GetOriginSkill1Distance() { return orgSkill1Info.distance; }
-    public float GetOriginSkill2Distance() { return orgSkill2Info.distance; }
-    public float GetOriginSkill3Distance() { return orgSkill3Info.distance; }
-    public float GetOriginSkill4Distance() { return orgSkill4Info.distance; }
-    #endregion
-
-    #region CurrentUnitInfoGetter
-    public Defines.EUnit GetCurrentUnitID() { return curUnitInfo.eUnitID; }
-    public int GetCurrentNameStringID() { return curUnitInfo.nameStringID; }
-    public float GetCurrentMaxHp() { return curUnitInfo.maxHp; }
-    public float GetCurrentHp() { return curUnitInfo.hp; }
-    public float GetCurrentHpRegenPerSecond() { return curUnitInfo.hpRegenPerSecond; }
-    public float GetCurrentMaxMp() { return curUnitInfo.maxMp; }
-    public float GetCurrentMp() { return curUnitInfo.mp; }
-    public float GetCurrnetHpRegenPerSecond() { return curUnitInfo.hpRegenPerSecond; }
-    public float GetCurrentAttackPower() { return curUnitInfo.attackPower; }
-    public float GetCurrentDefensePower() { return curUnitInfo.defensePower; }
-    public float GetCurrentAttackDelay() { return curUnitInfo.attackDelay; }
-    public float GetCurrentAttackDistance() { return curUnitInfo.attackDistance; }
-    public float GetCurrentMoveSpeed() { return curUnitInfo.moveSpeed; }
-    public float GetCurrentRotateSpeed() { return curUnitInfo.rotateSpeed; }
-    public float GetCurrentRange() { return curUnitInfo.range; }
-    public float GetCurrentRangeMulti() { return curUnitInfo.rangeMulti; }
-    public float GetCurrentViewAngle() { return curUnitInfo.viewAngle; }
-    public Defines.ESkillID GetCurrentSkill1() { return curSkill1Info.eSkillID; }
-    public Defines.ESkillID GetCurrentSkill2() { return curSkill2Info.eSkillID; }
-    public Defines.ESkillID GetCurrentSkill3() { return curSkill3Info.eSkillID; }
-    public Defines.ESkillID GetCurrentSkill4() { return curSkill4Info.eSkillID; }
-    public float GetCurrentSkill1CoolTime() { return curSkill1Info.coolTime; }
-    public float GetCurrentSkill2CoolTime() { return curSkill2Info.coolTime; }
-    public float GetCurrentSkill3CoolTime() { return curSkill3Info.coolTime; }
-    public float GetCurrentSkill4CoolTime() { return curSkill4Info.coolTime; }
-    public float GetCurrentSkill1Distance() { return curSkill1Info.distance; }
-    public float GetCurrentSkill2Distance() { return curSkill2Info.distance; }
-    public float GetCurrentSkill3Distance() { return curSkill3Info.distance; }
-    public float GetCurrentSkill4Distance() { return curSkill4Info.distance; }
+    public Defines.EUnit GetOriginUnitID() { return unitData.eUnit; }
+    public int GetOriginNameStringID() { return unitData.nameStringID; }
+    public float GetOriginMaxHp() { return unitData.maxHp; }
+    public float GetOriginHp() { return unitData.hp; }
+    public float GetOriginHpRegenPerSecond() { return unitData.hpRegenPerSecond; }
+    public float GetOriginMaxMp() { return unitData.maxMp; }
+    public float GetOriginMp() { return unitData.mp; }
+    public float GetOriginMpRegenPerSecond() { return unitData.hpRegenPerSecond; }
+    public float GetOriginAttackPower() { return unitData.attackPower; }
+    public float GetOriginDefensePower() { return unitData.defensePower; }
+    public float GetOriginAttackDelay() { return unitData.attackDelay; }
+    public float GetOriginAttackDistance() { return unitData.attackDistance; }
+    public float GetOriginMoveSpeed() { return unitData.moveSpeed; }
+    public float GetOriginRotateSpeed() { return unitData.rotateSpeed; }
+    public float GetOriginRange() { return unitData.range; }
+    public float GetOriginRangeMulti() { return unitData.rangeMulti; }
+    public float GetOriginViewAngle() { return unitData.viewAngle; }
+    public Defines.ESkill GetOriginSkill1() { return skill1Data.eSkillID; }
+    public Defines.ESkill GetOriginSkill2() { return skill2Data.eSkillID; }
+    public Defines.ESkill GetOriginSkill3() { return skill3Data.eSkillID; }
+    public Defines.ESkill GetOriginSkill4() { return skill4Data.eSkillID; }
+    public float GetOriginSkill1CoolTime() { return skill1Data.coolTime; }
+    public float GetOriginSkill2CoolTime() { return skill2Data.coolTime; }
+    public float GetOriginSkill3CoolTime() { return skill3Data.coolTime; }
+    public float GetOriginSkill4CoolTime() { return skill4Data.coolTime; }
+    public float GetOriginSkill1Distance() { return skill1Data.distance; }
+    public float GetOriginSkill2Distance() { return skill2Data.distance; }
+    public float GetOriginSkill3Distance() { return skill3Data.distance; }
+    public float GetOriginSkill4Distance() { return skill4Data.distance; }
     #endregion
 
     public void ResetUnit()
     {
         unitState = 0;
 
-        curUnitInfo = orgUnitInfo.Clone();
-        curSkill1Info = orgSkill1Info.Clone();
-        curSkill1Info = orgSkill2Info.Clone();
-        curSkill1Info = orgSkill3Info.Clone();
-        curSkill1Info = orgSkill4Info.Clone();
+        unitData.hp = unitData.maxHp;
+        unitData.mp = unitData.maxMp;
 
         unitCollider.enabled = true;
 
@@ -191,7 +147,7 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeHp(CHUnitBase _attackUnit, float _value, Defines.EDamageState eDamageState)
+    public void ChangeHp(CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
     {
         if (GetIsDeath() == false)
         {
@@ -201,15 +157,15 @@ public class CHUnitBase : MonoBehaviour
                 targetTracker.ExpensionRange();
             }
 
-            switch (eDamageState)
+            switch (eDamageType1)
             {
-                case Defines.EDamageState.AtOnce:
+                case Defines.EDamageType1.AtOnce:
                     AtOnceChangeHp(_value);
                     break;
-                case Defines.EDamageState.Continuous_1Sec_3Count:
+                case Defines.EDamageType1.Continuous_1Sec_3Count:
                     ContinuousChangeHp(1f, 3, _value);
                     break;
-                case Defines.EDamageState.Continuous_Dot1Sec_10Count:
+                case Defines.EDamageType1.Continuous_Dot1Sec_10Count:
                     ContinuousChangeHp(.1f, 10, _value);
                     break;
                 default:
@@ -219,16 +175,16 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeMp(CHUnitBase _attackUnit, float _value, Defines.EDamageState eDamageState)
+    public void ChangeMp(CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
     {
         if (GetIsDeath() == false)
         {
-            switch (eDamageState)
+            switch (eDamageType1)
             {
-                case Defines.EDamageState.AtOnce:
+                case Defines.EDamageType1.AtOnce:
                     AtOnceChangeMp(_value);
                     break;
-                case Defines.EDamageState.Continuous_1Sec_3Count:
+                case Defines.EDamageType1.Continuous_1Sec_3Count:
                     ContinuousChangeMp(1f, 3, _value);
                     break;
                 default:
@@ -238,16 +194,16 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeAttackPower(CHUnitBase _attackUnit, float _value, Defines.EDamageState eDamageState)
+    public void ChangeAttackPower(CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
     {
         if (GetIsDeath() == false)
         {
-            switch (eDamageState)
+            switch (eDamageType1)
             {
-                case Defines.EDamageState.AtOnce:
+                case Defines.EDamageType1.AtOnce:
                     AtOnceChangeAttackPower(_value);
                     break;
-                case Defines.EDamageState.Continuous_1Sec_3Count:
+                case Defines.EDamageType1.Continuous_1Sec_3Count:
                     ContinuousChangeAttackPower(1f, 3, _value);
                     break;
                 default:
@@ -256,16 +212,16 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeDefensePower(CHUnitBase _attackUnit, float _value, Defines.EDamageState eDamageState)
+    public void ChangeDefensePower(CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
     {
         if (GetIsDeath() == false)
         {
-            switch (eDamageState)
+            switch (eDamageType1)
             {
-                case Defines.EDamageState.AtOnce:
+                case Defines.EDamageType1.AtOnce:
                     AtOnceChangeDefensePower(_value);
                     break;
-                case Defines.EDamageState.Continuous_1Sec_3Count:
+                case Defines.EDamageType1.Continuous_1Sec_3Count:
                     ContinuousChangeDefensePower(1f, 3, _value);
                     break;
                 default:
@@ -276,16 +232,16 @@ public class CHUnitBase : MonoBehaviour
 
     void AtOnceChangeHp(float _value)
     {
-        float hpOrigin = curUnitInfo.hp;
-        float hpResult = curUnitInfo.hp + _value;
-        if (hpResult >= GetCurrentMaxHp())
+        float hpOrigin = unitData.hp;
+        float hpResult = unitData.hp + _value;
+        if (hpResult >= GetOriginMaxHp())
         {
-            hpResult = GetCurrentMaxHp();
+            hpResult = GetOriginMaxHp();
         }
 
-        curUnitInfo.hp = hpResult;
-        if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetCurrentMaxHp(), hpResult, hpResult - hpOrigin);
-        Debug.Log($"{curUnitInfo.nameStringID}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
+        unitData.hp = hpResult;
+        if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), hpResult, hpResult - hpOrigin);
+        Debug.Log($"{unitData.nameStringID}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
 
         // 죽음 Die
         if (hpResult <= 0.00001f)
@@ -314,39 +270,39 @@ public class CHUnitBase : MonoBehaviour
 
     void AtOnceChangeMp(float _value)
     {
-        float mpOrigin = curUnitInfo.mp;
-        float mpResult = curUnitInfo.mp + _value;
-        if (mpResult >= GetCurrentMaxMp())
+        float mpOrigin = unitData.mp;
+        float mpResult = unitData.mp + _value;
+        if (mpResult >= GetOriginMaxMp())
         {
-            mpResult = GetCurrentMaxMp();
+            mpResult = GetOriginMaxMp();
         }
         else if (mpResult < 0)
         {
             mpResult = 0f;
         }
 
-        curUnitInfo.mp = mpResult;
-        Debug.Log($"{curUnitInfo.nameStringID} => Mp : {mpOrigin} -> Mp : {mpResult}");
+        unitData.mp = mpResult;
+        Debug.Log($"{unitData.nameStringID} => Mp : {mpOrigin} -> Mp : {mpResult}");
     }
 
     void AtOnceChangeAttackPower(float _value)
     {
-        float attackPowerOrigin = curUnitInfo.attackPower;
-        float attackPowerResult = curUnitInfo.attackPower + _value;
+        float attackPowerOrigin = unitData.attackPower;
+        float attackPowerResult = unitData.attackPower + _value;
         CheckMaxStatValue(Defines.EStat.AttackPower, ref attackPowerResult);
 
-        curUnitInfo.attackPower = attackPowerResult;
-        Debug.Log($"{curUnitInfo.nameStringID} => AttackPower : {attackPowerOrigin} -> AttackPower : {attackPowerResult}");
+        unitData.attackPower = attackPowerResult;
+        Debug.Log($"{unitData.nameStringID} => AttackPower : {attackPowerOrigin} -> AttackPower : {attackPowerResult}");
     }
 
     void AtOnceChangeDefensePower(float _value)
     {
-        float defensePowerOrigin = curUnitInfo.defensePower;
-        float defensePowerResult = curUnitInfo.defensePower + _value;
+        float defensePowerOrigin = unitData.defensePower;
+        float defensePowerResult = unitData.defensePower + _value;
         CheckMaxStatValue(Defines.EStat.DefensePower, ref defensePowerResult);
 
-        curUnitInfo.attackPower = defensePowerResult;
-        Debug.Log($"{curUnitInfo.nameStringID} => DefensePower : {defensePowerOrigin} -> DefensePower : {defensePowerResult}");
+        unitData.attackPower = defensePowerResult;
+        Debug.Log($"{unitData.nameStringID} => DefensePower : {defensePowerOrigin} -> DefensePower : {defensePowerResult}");
     }
 
     async void ContinuousChangeHp(float _time, int _count, float _value)

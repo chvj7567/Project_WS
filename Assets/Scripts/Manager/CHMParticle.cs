@@ -13,7 +13,7 @@ public class MyEvent : UnityEvent { }
 
 public class CHMParticle
 {
-    Dictionary<Defines.EEffect, ParticleInfo> dicParticleInfo = new Dictionary<Defines.EEffect, Infomation.ParticleInfo>();
+    Dictionary<Defines.EEffect, ParticleInfo> dicParticleInfo = new Dictionary<Defines.EEffect, ParticleInfo>();
 
     MyEvent OnApplicationQuitEvent = new MyEvent();
     CancellationTokenSource cts;
@@ -40,7 +40,7 @@ public class CHMParticle
         }
     }
 
-    public void CreateParticle(Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, EffectInfo _effectInfo)
+    public void CreateParticle(Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, SkillData.EffectData _effectData)
     {
         if (_trCaster == null)
         {
@@ -65,9 +65,9 @@ public class CHMParticle
         // 타겟의 수 만큼 파티클 생성 
         for (int i = 0; i < _liTarget.Count; ++i)
         {
-            var objParticle = CHMMain.Particle.GetParticleObject(_effectInfo.eEffect);
+            var objParticle = CHMMain.Particle.GetParticleObject(_effectData.eEffect);
 
-            SetParticleCollision(_trCaster, _effectInfo, objParticle);
+            SetParticleCollision(_trCaster, _effectData, objParticle);
 
             if (objParticle == null)
             {
@@ -78,7 +78,7 @@ public class CHMParticle
             liParticle.Add(objParticle);
         }
 
-        bool createCasterPosition = _effectInfo.createCasterPosition;
+        bool createCasterPosition = _effectData.createCasterPosition;
 
         for (int i = 0; i < liParticle.Count; ++i)
         {
@@ -94,24 +94,24 @@ public class CHMParticle
 
             // 파티클의 경우 z축이 정면이 되도록
             objParticle.transform.forward = dirParticle;
-            objParticle.transform.forward = objParticle.transform.Angle(_effectInfo.effectAngle, Defines.EStandardAxis.Z);
+            objParticle.transform.forward = objParticle.transform.Angle(_effectData.effectAngle, Defines.EStandardAxis.Z);
 
-            if (_effectInfo.createCasterPosition == false)
+            if (_effectData.createCasterPosition == false)
             {
-                if (_effectInfo.attach)
+                if (_effectData.attach)
                 {
                     objParticle.transform.SetParent(trTarget);
                 }
             }
             else
             {
-                if (_effectInfo.attach)
+                if (_effectData.attach)
                 {
                     objParticle.transform.SetParent(_trCaster);
                 }
             }
 
-            SetParticleValue(_trCaster, trTarget, objParticle, _effectInfo);
+            SetParticlePositionValue(_trCaster, trTarget, objParticle, _effectData);
         }
     }
 
@@ -188,70 +188,61 @@ public class CHMParticle
         if (_objParticle) CHMMain.Resource.Destroy(_objParticle);
     }
 
-    void SetParticleCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
+    void SetParticleCollision(Transform _trCaster, SkillData.EffectData _effectData, GameObject _objParticle)
     {
-        if (_effectInfo.eCollision != Defines.ECollision.None)
+        if (_effectData.eCollision != Defines.ECollision.None)
         {
-            switch (_effectInfo.eEffect)
+            switch (_effectData.eEffect)
             {
                 default:
                     {
                         // 일반적으로 파티클 부모 오브젝트에만 콜리젼을 적용
-                        ApplyShereCollision(_trCaster, _effectInfo, _objParticle);
+                        ApplyShereCollision(_trCaster, _effectData, _objParticle);
                     }
                     break;
             }
         }
     }
 
-    async void ApplyShereCollision(Transform _trCaster, EffectInfo _effectInfo, GameObject _objParticle)
+    async void ApplyShereCollision(Transform _trCaster, SkillData.EffectData _effectData, GameObject _objParticle)
     {
-        await Task.Delay((int)(_effectInfo.triggerStartDelay * 1000f));
+        await Task.Delay((int)(_effectData.triggerStartDelay * 1000f));
 
         var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
-        sphereCollision.Init(_trCaster, _effectInfo);
+        sphereCollision.Init(_trCaster, _effectData);
         sphereCollision.sphereCollider.enabled = true;
 
-        if (_effectInfo.triggerEnter)
+        if (_effectData.triggerEnter)
         {
             sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(collider =>
             {
-                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
+                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                 {
-                    Debug.Log($"TriggerEnter : {collider.name}");
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
-
-                    SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
+                    SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectData);
                 }
             }));
         }
 
-        if (_effectInfo.triggerExit)
+        if (_effectData.triggerExit)
         {
             sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(collider =>
             {
-                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
+                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                 {
-                    Debug.Log($"TriggerExit : {collider.name}");
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
-
-                    SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
+                    SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectData);
                 }
             }));
         }
 
         sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(collider =>
         {
-            if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectInfo.eTargetMask))
+            if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
             {
-                Debug.Log($"TriggerStay : {collider.name}");
-                CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { collider.transform }, _effectInfo);
-
-                SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectInfo);
+                SetParticleTriggerValue(_trCaster, collider.transform, _objParticle, _effectData);
             }
         }));
 
-        await Task.Delay((int)(_effectInfo.triggerStayTime * 1000f));
+        await Task.Delay((int)(_effectData.triggerStayTime * 1000f));
 
         if (sphereCollision != null && sphereCollision.sphereCollider != null) sphereCollision.sphereCollider.enabled = false;
     }
@@ -279,10 +270,10 @@ public class CHMParticle
         }
     }
 
-    async Task SetParticleValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, EffectInfo _effectInfo)
+    async Task SetParticlePositionValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
         // 각 이펙트별로 세부 설정이 필요한 경우
-        switch (_effectInfo.eEffect)
+        switch (_effectData.eEffect)
         {
             case Defines.EEffect.FX_Circle_meteor:
             case Defines.EEffect.FX_Arrow_impact2:
@@ -294,7 +285,7 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Arrow_impact:
                 {
-                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 30f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 30f, dicParticleInfo[_effectData.eEffect].time, _objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Ax:
@@ -318,17 +309,25 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 10f, dicParticleInfo[_effectInfo.eEffect].time, _objParticle);
+                    await MoveParticleDirection(cts.Token, _objParticle.transform.forward, 10f, dicParticleInfo[_effectData.eEffect].time, _objParticle);
                 }
                 break;
         }
     }
 
-    void SetParticleTriggerValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, EffectInfo _effectInfo)
+    void SetParticleTriggerValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
-        // 각 이펙트에 트리거 된 타겟들 처리
-        switch (_effectInfo.eEffect)
+        // 각 이펙트에 트리거 된 타겟들 관련 처리
+        switch (_effectData.eEffect)
         {
+            case Defines.EEffect.FX_Healing:
+                {
+                    // 적들의 수 만큼만 힐링
+                    if (_trCaster.gameObject.layer == _trTarget.gameObject.layer) return;
+
+                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectData);
+                }
+                break;
             case Defines.EEffect.FX_Tornado:
                 {
                     //TargetAirborne(cts.Token, _trTarget, 2, 0.5f);
@@ -345,6 +344,9 @@ public class CHMParticle
                 }
                 break;
             default:
+                {
+                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trTarget }, _effectData);
+                }
                 break;
         }
     }

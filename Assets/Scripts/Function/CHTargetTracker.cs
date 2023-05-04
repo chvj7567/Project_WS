@@ -40,18 +40,18 @@ public class CHTargetTracker : MonoBehaviour
     {
         unitBase = _unitBase;
 
-        range = unitBase.GetCurrentRange();
-        rangeMulti = unitBase.GetCurrentRangeMulti();
+        range = unitBase.GetOriginRange();
+        rangeMulti = unitBase.GetOriginRangeMulti();
         orgRangeMulti = rangeMulti;
         rangeMulti = 1f;
 
-        viewAngle = unitBase.GetCurrentViewAngle();
+        viewAngle = unitBase.GetOriginViewAngle();
         orgViewAngle = viewAngle;
 
         agent = gameObject.GetOrAddComponent<NavMeshAgent>();
-        agent.speed = unitBase.GetCurrentMoveSpeed();
-        agent.angularSpeed = unitBase.GetCurrentRotateSpeed();
-        agent.stoppingDistance = unitBase.GetCurrentAttackDistance();
+        agent.speed = unitBase.GetOriginMoveSpeed();
+        agent.angularSpeed = unitBase.GetOriginRotateSpeed();
+        agent.stoppingDistance = unitBase.GetOriginAttackDistance();
     }
 
     private void Start()
@@ -122,7 +122,7 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
 
-                    if (closestTarget.distance > unitBase.GetCurrentAttackDistance() && unitBase.IsNormalState())
+                    if (closestTarget.distance > unitBase.GetOriginAttackDistance() && unitBase.IsNormalState())
                     {
                         if (agent.isOnNavMesh)
                         {
