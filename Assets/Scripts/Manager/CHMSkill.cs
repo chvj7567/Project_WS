@@ -439,7 +439,8 @@ public class CHMSkill
                     _targetUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(totalValue), _effectData.eDamageType1);
                 }
                 break;
-            case Defines.EStatModifyType.Mp_Up:
+                // 우선 HP만 사용 아래는 사용 시 추가 작업 필요
+            /*case Defines.EStatModifyType.Mp_Up:
                 _targetUnit.ChangeMp(_casterUnit, skillValue, _effectData.eDamageType1);
                 break;
             case Defines.EStatModifyType.Mp_Down:
@@ -456,7 +457,7 @@ public class CHMSkill
                 break;
             case Defines.EStatModifyType.DefensePower_Down:
                 _targetUnit.ChangeDefensePower(_casterUnit, CHUtil.ReverseValue(skillValue), _effectData.eDamageType1);
-                break;
+                break;*/
             default:
                 break;
         }

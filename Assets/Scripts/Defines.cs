@@ -139,12 +139,12 @@ public class Defines
 
         Hp_Up, // 0
         Hp_Down, // 1
-        Mp_Up, // 2
+        /*Mp_Up, // 2
         Mp_Down, // 3
         AttackPower_Up, // 4
         AttackPower_Down, // 5
         DefensePower_Up, // 6
-        DefensePower_Down, // 7
+        DefensePower_Down, // 7*/
 
         Max,
     }
