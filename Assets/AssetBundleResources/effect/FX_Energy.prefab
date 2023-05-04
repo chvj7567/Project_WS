@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1203522313928540552}
   - component: {fileID: 1203522313928540553}
   - component: {fileID: 1203522313928540554}
+  - component: {fileID: 8570263915839606031}
   m_Layer: 0
   m_Name: FX_Energy
   m_TagString: Untagged
@@ -4885,6 +4886,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &8570263915839606031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203522313928540555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUse: 1
 --- !u!1 &1203522314675691673
 GameObject:
   m_ObjectHideFlags: 0

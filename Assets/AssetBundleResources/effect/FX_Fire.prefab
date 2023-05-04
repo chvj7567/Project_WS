@@ -19679,6 +19679,7 @@ GameObject:
   - component: {fileID: 3799533999932294346}
   - component: {fileID: 6952562774990998571}
   - component: {fileID: 1182846807481256884}
+  - component: {fileID: 635467613143353783}
   m_Layer: 0
   m_Name: FX_Fire
   m_TagString: Untagged
@@ -24552,6 +24553,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &635467613143353783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316525236298468254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUse: 1
 --- !u!1 &9066320793380370837
 GameObject:
   m_ObjectHideFlags: 0

@@ -64,10 +64,10 @@ public class CHMMain : MonoBehaviour
         if (m_instance != null)
         {
             m_instance.m_skill.Clear();
-            m_instance.m_pool.Clear();
             m_instance.m_json.Clear();
             m_instance.m_particle.Clear();
 
+            m_instance.m_pool.Clear();
             Destroy(this);
         }
     }

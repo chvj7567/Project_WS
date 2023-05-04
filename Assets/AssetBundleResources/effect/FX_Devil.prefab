@@ -14899,6 +14899,7 @@ GameObject:
   - component: {fileID: 8230770316166448602}
   - component: {fileID: 5250071906869188968}
   - component: {fileID: 8086995098341117049}
+  - component: {fileID: 7600079530759526423}
   m_Layer: 0
   m_Name: FX_Devil
   m_TagString: Untagged
@@ -19792,6 +19793,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &7600079530759526423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2761421633278707742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUse: 1
 --- !u!1 &3863085791485358608
 GameObject:
   m_ObjectHideFlags: 0

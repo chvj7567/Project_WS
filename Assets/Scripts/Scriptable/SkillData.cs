@@ -50,9 +50,9 @@ public class SkillData : ScriptableObject
         [Tooltip("데칼 표시 여부")] public bool onDecal = false;
 
         [Header("스킬 효과")]
-        [Tooltip("적용할 스탯")] public EStatModifyType eEffectType = EStatModifyType.None;
-        [Tooltip("데미지 상태")] public EDamageType1 eDamageState = EDamageType1.None;
-        [Tooltip("데미지 타입")] public EDamageType2 eDamageType = EDamageType2.None;
+        [Tooltip("적용할 스탯")] public EStatModifyType eStatModifyType = EStatModifyType.None;
+        [Tooltip("데미지 상태")] public EDamageType1 eDamageType1 = EDamageType1.None;
+        [Tooltip("데미지 타입")] public EDamageType2 eDamageType2 = EDamageType2.None;
         [Tooltip("데미지")] public float damage = -1f;
 
         [Header("스킬 대상")]
@@ -88,9 +88,9 @@ public class SkillData : ScriptableObject
             clone.attach = this.attach;
             clone.duplication = this.duplication;
             clone.onDecal = this.onDecal;
-            clone.eEffectType = this.eEffectType;
-            clone.eDamageState = this.eDamageState;
-            clone.eDamageType = this.eDamageType;
+            clone.eStatModifyType = this.eStatModifyType;
+            clone.eDamageType1 = this.eDamageType1;
+            clone.eDamageType2 = this.eDamageType2;
             clone.damage = this.damage;
             clone.eTarget = this.eTarget;
             clone.eTargetMask = this.eTargetMask;

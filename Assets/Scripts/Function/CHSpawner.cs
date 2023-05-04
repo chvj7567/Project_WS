@@ -44,7 +44,7 @@ public class CHSpawner : MonoBehaviour
                 targetTracker.trDestination = trDestination;
 
                 var unitBase = obj.GetComponent<CHUnitBase>();
-                if (unitBase != null && unitBase.GetOriginHp() < 1f)
+                if (unitBase != null && unitBase.GetCurrentHp() < 1f)
                 {
                     unitBase.ResetUnit();
                 }

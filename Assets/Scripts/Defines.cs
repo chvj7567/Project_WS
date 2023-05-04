@@ -75,8 +75,7 @@ public class Defines
         Tornado, // 4
         IceArrow, // 5
         IceArrow2, // 6
-        Fire, // 7
-        ElectronicExplosion, // 8
+        Ax, // 7
 
         Max
     }
@@ -140,10 +139,12 @@ public class Defines
 
         Hp_Up, // 0
         Hp_Down, // 1
-        AttackPower_Up, // 2
-        AttackPower_Down, // 3
-        DefensePower_Up, // 4
-        DefensePower_Down, // 5
+        Mp_Up, // 2
+        Mp_Down, // 3
+        AttackPower_Up, // 4
+        AttackPower_Down, // 5
+        DefensePower_Up, // 6
+        DefensePower_Down, // 7
 
         Max,
     }

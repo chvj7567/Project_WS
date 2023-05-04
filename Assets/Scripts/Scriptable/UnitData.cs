@@ -7,10 +7,8 @@ public class UnitData : ScriptableObject
     [Tooltip("유닛 이름")] public Defines.EUnit eUnit = Defines.EUnit.None;
     [Tooltip("유닛 이름 스트링ID")] public int nameStringID = -1;
     [Tooltip("최대 HP")] public float maxHp = -1f;
-    [Tooltip("현재 HP")] public float hp = -1f;
     [Tooltip("HP 초당 회복량")] public float hpRegenPerSecond = -1f;
     [Tooltip("최대 MP")] public float maxMp = -1f;
-    [Tooltip("현재 MP")] public float mp = -1f;
     [Tooltip("MP 초당 회복량")] public float mpRegenPerSecond = -1f;
     [Tooltip("공격력")] public float attackPower = -1f;
     [Tooltip("방어력")] public float defensePower = -1f;
@@ -35,10 +33,8 @@ public class UnitData : ScriptableObject
         newUnitInfo.eUnit = this.eUnit;
         newUnitInfo.nameStringID = this.nameStringID;
         newUnitInfo.maxHp = this.maxHp;
-        newUnitInfo.hp = this.hp;
         newUnitInfo.hpRegenPerSecond = this.hpRegenPerSecond;
         newUnitInfo.maxMp = this.maxMp;
-        newUnitInfo.mp = this.mp;
         newUnitInfo.mpRegenPerSecond = this.mpRegenPerSecond;
         newUnitInfo.attackPower = this.attackPower;
         newUnitInfo.defensePower = this.defensePower;

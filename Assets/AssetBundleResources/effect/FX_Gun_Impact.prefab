@@ -9653,6 +9653,7 @@ GameObject:
   - component: {fileID: 2578527067354702567}
   - component: {fileID: 2578527067354702566}
   - component: {fileID: 2578527067354702561}
+  - component: {fileID: -8316159772707782359}
   m_Layer: 0
   m_Name: FX_Gun_Impact
   m_TagString: Untagged
@@ -14469,6 +14470,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-8316159772707782359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2578527067354702560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUse: 1
 --- !u!1 &3342583302859263213
 GameObject:
   m_ObjectHideFlags: 0

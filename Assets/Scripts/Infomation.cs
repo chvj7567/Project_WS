@@ -73,10 +73,4 @@ public class Infomation
         public GameObject objTarget = null;
         public float distance = -1f;
     }
-
-    public class ParticleInfo
-    {
-        public GameObject objParticle = null;
-        public float time = -1f;
-    }
 }

@@ -9836,6 +9836,7 @@ GameObject:
   - component: {fileID: 331653984213423387}
   - component: {fileID: 1364880242190691672}
   - component: {fileID: 1898556760593810317}
+  - component: {fileID: -6065070633950629064}
   m_Layer: 0
   m_Name: FX_Explosion_Magic
   m_TagString: Untagged
@@ -14715,6 +14716,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-6065070633950629064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2717154039621330545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUse: 1
 --- !u!1 &4518239097698057455
 GameObject:
   m_ObjectHideFlags: 0

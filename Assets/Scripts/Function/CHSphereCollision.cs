@@ -2,6 +2,7 @@ using System;
 using UniRx;
 using UnityEngine;
 using static Infomation;
+using static SkillData;
 
 public class CHSphereCollision : MonoBehaviour
 {
@@ -31,10 +32,7 @@ public class CHSphereCollision : MonoBehaviour
         effectData = _effectData;
 
         sphereCollider = gameObject.GetOrAddComponent<SphereCollider>();
-        sphereCollider.isTrigger = true;
-        sphereCollider.radius = _effectData.sphereRadius;
-
-        SetCollisionCenter();
+        SetTriggerCollider();
 
         gameObject.layer = 2;
 
@@ -128,17 +126,21 @@ public class CHSphereCollision : MonoBehaviour
         subjectExit.OnNext(other);
     }
 
-    void SetCollisionCenter()
+    void SetTriggerCollider()
     {
+        sphereCollider.isTrigger = true;
+
         switch (effectData.eEffect)
         {
             case Defines.EEffect.FX_Arrow_impact2:
                 {
+                    sphereCollider.radius = effectData.sphereRadius;
                     sphereCollider.center = new Vector3(0f, -23f, 0f);
                 }
                 break;
             default:
                 {
+                    sphereCollider.radius = effectData.sphereRadius;
                     sphereCollider.center = new Vector3(0f, 0f, 0f);
                 }
                 break;

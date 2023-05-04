@@ -4881,6 +4881,7 @@ GameObject:
   - component: {fileID: 9172092216986638881}
   - component: {fileID: 8338948351327030512}
   - component: {fileID: 4062087927959856714}
+  - component: {fileID: 7175148438122724721}
   m_Layer: 0
   m_Name: FX_Circle_ring
   m_TagString: Untagged
@@ -9741,3 +9742,16 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &7175148438122724721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8075351999612643590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUse: 1

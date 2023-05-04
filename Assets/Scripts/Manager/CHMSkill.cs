@@ -199,7 +199,7 @@ public class CHMSkill
 
     public void ApplySkillValue(Transform _trCaster, List<Transform> _liTarget, SkillData.EffectData _effectData)
     {
-        // 스킬 값들을(데미지나, 힐 등) _liTarget 적용
+        // 스킬 효과(데미지 등) 적용
 
         var casterUnit = _trCaster.GetComponent<CHUnitBase>();
 
@@ -259,16 +259,16 @@ public class CHMSkill
             liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.posSkill, skillLocationInfo.dirSkill, targetMask, _effectData.sphereRadius, _effectData.collisionAngle);
             liTarget = GetTargetTransformList(liTargetInfo);
 
-            if (_effectData.createCasterPosition)
-            {
-                // 파티클을 시전자 위치에서 생성
-                skillLocationInfo.posSkill = skillLocationInfo.posCaster;
-                skillLocationInfo.dirSkill = skillLocationInfo.dirCaster;
-            }
-
             // 논타겟팅 스킬은 생성 시에 타겟이 없을 수도 있음
             if (liTargetInfo == null || liTargetInfo.Count <= 0)
             {
+                if (_effectData.createCasterPosition)
+                {
+                    // 파티클을 시전자 위치에서 생성
+                    skillLocationInfo.posSkill = skillLocationInfo.posCaster;
+                    skillLocationInfo.dirSkill = skillLocationInfo.dirCaster;
+                }
+
                 if (_effectData.createOnEmpty)
                 {
                     CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
@@ -284,18 +284,18 @@ public class CHMSkill
             liTargetInfo = GetTargetInfoListInRange(skillLocationInfo.trTarget.position, skillLocationInfo.trTarget.forward, targetMask, _effectData.sphereRadius, _effectData.collisionAngle);
             liTarget = GetTargetTransformList(liTargetInfo);
 
-            if (_effectData.createCasterPosition)
-            {
-                // 파티클을 시전자 위치에서 생성
-                skillLocationInfo.posSkill = skillLocationInfo.posCaster;
-                skillLocationInfo.dirSkill = skillLocationInfo.dirCaster;
-            }
-
             if (liTargetInfo == null || liTargetInfo.Count <= 0)
             {
                 Debug.Log("Targeting Skill : No Target Error");
                 return;
             }
+        }
+
+        if (_effectData.createCasterPosition)
+        {
+            // 파티클을 시전자 위치에서 생성
+            skillLocationInfo.posSkill = skillLocationInfo.posCaster;
+            skillLocationInfo.dirSkill = skillLocationInfo.dirCaster;
         }
 
         // 파티클 위치에 따라 파티클 생성
@@ -320,7 +320,22 @@ public class CHMSkill
                 break;
             case Defines.ETarget.Target_One:
                 {
-                    Transform targetOne = liTarget.First();
+                    Transform targetOne = null;
+
+                    foreach (var target in liTarget)
+                    {
+                        if (target == _skillLocationInfo.trTarget)
+                        {
+                            targetOne = target;
+                            break;
+                        }
+                    }
+                    
+                    if (targetOne == null)
+                    {
+                        targetOne = liTarget.Last();
+                    }
+
                     Vector3 direction = (targetOne.position - skillLocationInfo.trCaster.position).normalized;
 
                     // 맞은 타겟 수 만큼 파티클 중복 여부
@@ -405,11 +420,11 @@ public class CHMSkill
         float targetAttackPower = _targetUnit.GetOriginAttackPower();
         float targetDefensePower = _targetUnit.GetOriginDefensePower();
 
-        switch (_effectData.eEffectType)
+        switch (_effectData.eStatModifyType)
         {
             case Defines.EStatModifyType.Hp_Up:
                 Debug.Log($"HpUp : {skillValue}");
-                _targetUnit.ChangeHp(_casterUnit, skillValue, _effectData.eDamageState);
+                _targetUnit.ChangeHp(_casterUnit, skillValue, _effectData.eDamageType1);
                 break;
             case Defines.EStatModifyType.Hp_Down:
                 {
@@ -421,20 +436,26 @@ public class CHMSkill
                         totalValue = 0f;
                     }
                     Debug.Log($"HpDown : {totalValue}");
-                    _targetUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(totalValue), _effectData.eDamageState);
+                    _targetUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(totalValue), _effectData.eDamageType1);
                 }
                 break;
+            case Defines.EStatModifyType.Mp_Up:
+                _targetUnit.ChangeMp(_casterUnit, skillValue, _effectData.eDamageType1);
+                break;
+            case Defines.EStatModifyType.Mp_Down:
+                _targetUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(skillValue), _effectData.eDamageType1);
+                break;
             case Defines.EStatModifyType.AttackPower_Up:
-                _targetUnit.ChangeAttackPower(_casterUnit, skillValue, _effectData.eDamageState);
+                _targetUnit.ChangeAttackPower(_casterUnit, skillValue, _effectData.eDamageType1);
                 break;
             case Defines.EStatModifyType.AttackPower_Down:
-                _targetUnit.ChangeAttackPower(_casterUnit, CHUtil.ReverseValue(skillValue), _effectData.eDamageState);
+                _targetUnit.ChangeAttackPower(_casterUnit, CHUtil.ReverseValue(skillValue), _effectData.eDamageType1);
                 break;
             case Defines.EStatModifyType.DefensePower_Up:
-                _targetUnit.ChangeDefensePower(_casterUnit, skillValue, _effectData.eDamageState);
+                _targetUnit.ChangeDefensePower(_casterUnit, skillValue, _effectData.eDamageType1);
                 break;
             case Defines.EStatModifyType.DefensePower_Down:
-                _targetUnit.ChangeDefensePower(_casterUnit, CHUtil.ReverseValue(skillValue), _effectData.eDamageState);
+                _targetUnit.ChangeDefensePower(_casterUnit, CHUtil.ReverseValue(skillValue), _effectData.eDamageType1);
                 break;
             default:
                 break;
@@ -446,18 +467,18 @@ public class CHMSkill
         if (_casterUnit == null || _targetUnit == null || _effectData == null) return 0f;
 
         // 데미지 타입에 따라 구분
-        switch (_effectData.eDamageType)
+        switch (_effectData.eDamageType2)
         {
             case Defines.EDamageType2.Fixed:
                 return _effectData.damage;
             case Defines.EDamageType2.Percent_Me_MaxHp:
                 return _casterUnit.GetOriginMaxHp() * _effectData.damage / 100f;
             case Defines.EDamageType2.Percent_Me_RemainHp:
-                return _casterUnit.GetOriginHp() * _effectData.damage / 100f;
+                return _casterUnit.GetCurrentHp() * _effectData.damage / 100f;
             case Defines.EDamageType2.Percent_Target_MaxHp:
                 return _targetUnit.GetOriginMaxHp() * _effectData.damage / 100f;
             case Defines.EDamageType2.Percent_Target_RemainHp:
-                return _targetUnit.GetOriginHp() * _effectData.damage / 100f;
+                return _targetUnit.GetCurrentHp() * _effectData.damage / 100f;
             default:
                 return 0f;
         }
@@ -469,7 +490,7 @@ public class CHMSkill
         {
             case Defines.ESkillCost.Fixed_HP:
                 {
-                    if (_casterUnit.GetOriginHp() >= skillInfo.cost)
+                    if (_casterUnit.GetCurrentHp() >= skillInfo.cost)
                     {
                         _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageType1.None);
                         return true;
@@ -483,7 +504,7 @@ public class CHMSkill
                 {
                     var costValue = _casterUnit.GetOriginMaxHp() * skillInfo.cost / 100f;
 
-                    if (_casterUnit.GetOriginHp() >= costValue)
+                    if (_casterUnit.GetCurrentHp() >= costValue)
                     {
                         _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
                         return true;
@@ -495,9 +516,9 @@ public class CHMSkill
                 }
             case Defines.ESkillCost.Percent_RemainHP:
                 {
-                    var costValue = _casterUnit.GetOriginHp() * skillInfo.cost / 100f;
+                    var costValue = _casterUnit.GetCurrentHp() * skillInfo.cost / 100f;
 
-                    if (_casterUnit.GetOriginHp() >= costValue)
+                    if (_casterUnit.GetCurrentHp() >= costValue)
                     {
                         _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
                         return true;
@@ -509,7 +530,7 @@ public class CHMSkill
                 }
             case Defines.ESkillCost.Fixed_MP:
                 {
-                    if (_casterUnit.GetOriginMp() >= skillInfo.cost)
+                    if (_casterUnit.GetCurrentMp() >= skillInfo.cost)
                     {
                         _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageType1.None);
                         return true;
@@ -523,7 +544,7 @@ public class CHMSkill
                 {
                     var costValue = _casterUnit.GetOriginMaxMp() * skillInfo.cost / 100f;
 
-                    if (_casterUnit.GetOriginMp() >= costValue)
+                    if (_casterUnit.GetCurrentMp() >= costValue)
                     {
                         _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
                         return true;
@@ -535,9 +556,9 @@ public class CHMSkill
                 }
             case Defines.ESkillCost.Percent_RemainMP:
                 {
-                    var costValue = _casterUnit.GetOriginMp() * skillInfo.cost / 100f;
+                    var costValue = _casterUnit.GetCurrentMp() * skillInfo.cost / 100f;
 
-                    if (_casterUnit.GetOriginMp() >= costValue)
+                    if (_casterUnit.GetCurrentMp() >= costValue)
                     {
                         _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
                         return true;

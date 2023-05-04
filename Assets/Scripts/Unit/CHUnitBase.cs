@@ -12,6 +12,9 @@ public class CHUnitBase : MonoBehaviour
     [SerializeField] public Collider unitCollider;
     [SerializeField] public MeshRenderer meshRenderer;
 
+    [SerializeField, ReadOnly] protected float hp;
+    [SerializeField, ReadOnly] protected float mp;
+
     [SerializeField, ReadOnly] protected UnitData unitData;
     [SerializeField, ReadOnly] protected SkillData skill1Data;
     [SerializeField, ReadOnly] protected SkillData skill2Data;
@@ -32,6 +35,8 @@ public class CHUnitBase : MonoBehaviour
             if (_ == null) return;
 
             unitData = _;
+            hp = unitData.maxHp;
+            mp = unitData.maxMp;
 
             skill1Data = CHMMain.Skill.GetSkillData(unitData.eSkill1);
             skill2Data = CHMMain.Skill.GetSkillData(unitData.eSkill2);
@@ -48,12 +53,12 @@ public class CHUnitBase : MonoBehaviour
         {
             if (GetIsDeath() == false)
             {
-                ChangeHp(this, unitData.hpRegenPerSecond, Defines.EDamageType1.None);
-                ChangeMp(this, unitData.mpRegenPerSecond, Defines.EDamageType1.None);
+                /*ChangeHp(this, unitData.hpRegenPerSecond, Defines.EDamageType1.None);
+                ChangeMp(this, unitData.mpRegenPerSecond, Defines.EDamageType1.None);*/
             }
         });
 
-        CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, (gaugeBar) =>
+        CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, (Action<GameObject>)((gaugeBar) =>
         {
             if (gaugeBar)
             {
@@ -70,20 +75,18 @@ public class CHUnitBase : MonoBehaviour
 
                     // HP 게이지가 스케일에 영향받지 않도록 
                     hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
-                    hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), GetOriginHp(), 0f);
+                    hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), this.GetCurrentHp(), 0f);
                 }
             }
-        });
+        }));
     }
 
     #region OriginUnitInfoGetter
     public Defines.EUnit GetOriginUnitID() { return unitData.eUnit; }
     public int GetOriginNameStringID() { return unitData.nameStringID; }
     public float GetOriginMaxHp() { return unitData.maxHp; }
-    public float GetOriginHp() { return unitData.hp; }
     public float GetOriginHpRegenPerSecond() { return unitData.hpRegenPerSecond; }
     public float GetOriginMaxMp() { return unitData.maxMp; }
-    public float GetOriginMp() { return unitData.mp; }
     public float GetOriginMpRegenPerSecond() { return unitData.hpRegenPerSecond; }
     public float GetOriginAttackPower() { return unitData.attackPower; }
     public float GetOriginDefensePower() { return unitData.defensePower; }
@@ -108,12 +111,23 @@ public class CHUnitBase : MonoBehaviour
     public float GetOriginSkill4Distance() { return skill4Data.distance; }
     #endregion
 
+
+    public float GetCurrentHp()
+    {
+        return hp;
+    }
+
+    public float GetCurrentMp()
+    {
+        return mp;
+    }
+
     public void ResetUnit()
     {
         unitState = 0;
 
-        unitData.hp = unitData.maxHp;
-        unitData.mp = unitData.maxMp;
+        hp = unitData.maxHp;
+        mp = unitData.maxMp;
 
         unitCollider.enabled = true;
 
@@ -232,14 +246,14 @@ public class CHUnitBase : MonoBehaviour
 
     void AtOnceChangeHp(float _value)
     {
-        float hpOrigin = unitData.hp;
-        float hpResult = unitData.hp + _value;
+        float hpOrigin = hp;
+        float hpResult = hp + _value;
         if (hpResult >= GetOriginMaxHp())
         {
             hpResult = GetOriginMaxHp();
         }
 
-        unitData.hp = hpResult;
+        hp = hpResult;
         if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), hpResult, hpResult - hpOrigin);
         Debug.Log($"{unitData.nameStringID}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
 
@@ -270,8 +284,8 @@ public class CHUnitBase : MonoBehaviour
 
     void AtOnceChangeMp(float _value)
     {
-        float mpOrigin = unitData.mp;
-        float mpResult = unitData.mp + _value;
+        float mpOrigin = mp;
+        float mpResult = mp + _value;
         if (mpResult >= GetOriginMaxMp())
         {
             mpResult = GetOriginMaxMp();
@@ -281,7 +295,7 @@ public class CHUnitBase : MonoBehaviour
             mpResult = 0f;
         }
 
-        unitData.mp = mpResult;
+        mp = mpResult;
         Debug.Log($"{unitData.nameStringID} => Mp : {mpOrigin} -> Mp : {mpResult}");
     }
 
