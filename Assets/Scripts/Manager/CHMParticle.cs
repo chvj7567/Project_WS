@@ -158,75 +158,62 @@ public class CHMParticle
         if (_objParticle) CHMMain.Resource.Destroy(_objParticle);
     }
 
-    void SetParticleCollision(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
+    async void SetParticleCollision(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
         if (_effectData.eCollision != Defines.ECollision.None)
         {
-            switch (_effectData.eEffect)
-            {
-                default:
-                    {
-                        // 일반적으로 파티클 부모 오브젝트에만 콜리젼을 적용
-                        ApplyShereCollision(_trCaster, _trTarget, _objParticle, _effectData);
-                    }
-                    break;
-            }
-        }
-    }
-
-    async void ApplyShereCollision(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
-    {
-        await Task.Delay((int)(_effectData.triggerStartDelay * 1000f));
-
-        if (cts.IsCancellationRequested) return;
-
-        var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
-        sphereCollision.Init(_trCaster, _effectData);
-        sphereCollision.sphereCollider.enabled = true;
-
-        if (_effectData.triggerEnter)
-        {
-            sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(collider =>
-            {
-                if (_trCaster == null || _trTarget == null || _objParticle == null) return;
-
-                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
-                {
-                    SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
-                }
-            }));
-        }
-
-        if (_effectData.triggerExit)
-        {
-            sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(collider =>
-            {
-                if (_trCaster == null || _trTarget == null || _objParticle == null) return;
-
-                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
-                {
-                    SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
-                }
-            }));
-        }
-
-        sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(collider =>
-        {
-            if (_trCaster == null || _trTarget == null || _objParticle == null) return;
-
-            if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
-            {
-                SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
-            }
-        }));
-
-        if (_effectData.triggerStayTime >= 0f)
-        {
-            await Task.Delay((int)(_effectData.triggerStayTime * 1000f));
+            await Task.Delay((int)(_effectData.triggerStartDelay * 1000f));
 
             if (cts.IsCancellationRequested) return;
 
-            if (sphereCollision != null && sphereCollision.sphereCollider != null) sphereCollision.sphereCollider.enabled = false;
+            var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
+            sphereCollision.Init(_trCaster, _effectData);
+            sphereCollision.sphereCollider.enabled = true;
+
+            if (_effectData.triggerEnter)
+            {
+                sphereCollision.TriggerEnterCallback(sphereCollision.OnEnter.Subscribe(collider =>
+                {
+                    if (_trCaster == null || _trTarget == null || _objParticle == null) return;
+
+                    if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
+                    {
+                        SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                    }
+                }));
+            }
+
+            if (_effectData.triggerExit)
+            {
+                sphereCollision.TriggerExitCallback(sphereCollision.OnExit.Subscribe(collider =>
+                {
+                    if (_trCaster == null || _trTarget == null || _objParticle == null) return;
+
+                    if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
+                    {
+                        SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                    }
+                }));
+            }
+
+            sphereCollision.TriggerStayCallback(sphereCollision.OnStay.Subscribe(collider =>
+            {
+                if (_trCaster == null || _trTarget == null || _objParticle == null) return;
+
+                if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
+                {
+                    SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                }
+            }));
+
+            if (_effectData.triggerStayTime >= 0f)
+            {
+                await Task.Delay((int)(_effectData.triggerStayTime * 1000f));
+
+                if (cts.IsCancellationRequested) return;
+
+                if (sphereCollision != null && sphereCollision.sphereCollider != null) sphereCollision.sphereCollider.enabled = false;
+            }
         }
     }
 
