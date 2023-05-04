@@ -1,14 +1,21 @@
-using Mono.Cecil;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FirstScene : MonoBehaviour
 {
+    [SerializeField] Button btnExitReady;
     [SerializeField] List<CHUnitBase> liUnit = new List<CHUnitBase>();
 
     private void Start()
     {
+        btnExitReady.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMMain.Particle.OnApplicationQuitHandler();
+            CHMMain.Skill.OnApplicationQuitHandler();
+        });
+
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
         foreach (var unit in liUnit)

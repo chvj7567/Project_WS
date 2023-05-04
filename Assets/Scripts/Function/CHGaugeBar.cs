@@ -13,7 +13,6 @@ public class CHGaugeBar : MonoBehaviour
     [SerializeField] Image imgBackGaugeBar;
     [SerializeField] Image imgGaugeBar;
 
-    CancellationTokenSource cts;
     float originPosYText;
 
     private void Update()
@@ -46,9 +45,6 @@ public class CHGaugeBar : MonoBehaviour
 
     void ShowDamageText(float _damage, float _time)
     {
-        cts = new CancellationTokenSource();
-        CancellationToken token = cts.Token;
-
         if (textDamage)
         {
             var copyTextDamage = CHMMain.Resource.Instantiate(textDamage.gameObject, transform).GetComponent<CHTMPro>();
@@ -82,10 +78,5 @@ public class CHGaugeBar : MonoBehaviour
                 });
             }
         }
-    }
-
-    private void OnDestroy()
-    {
-        cts?.Cancel();
     }
 }

@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting.Antlr3.Runtime;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Infomation;
@@ -38,8 +41,21 @@ public class CHMSkill
 
     Dictionary<Defines.ESkill, SkillData> dicSkillData = new Dictionary<Defines.ESkill, SkillData>();
 
+    CancellationTokenSource cts;
+    CancellationToken token;
+
     public void Init()
     {
+        cts = new CancellationTokenSource();
+        token = cts.Token;
+
+#if UNITY_EDITOR
+        EditorApplication.quitting -= OnApplicationQuitHandler;
+        EditorApplication.quitting += OnApplicationQuitHandler;
+#else
+        Application.quitting -= OnApplicationQuitHandler;
+        Application.quitting += OnApplicationQuitHandler;
+#endif
         for (int i = 0; i < (int)Defines.ESkill.Max; ++i)
         {
             var skill = (Defines.ESkill)i;
@@ -50,6 +66,14 @@ public class CHMSkill
 
                 dicSkillData.Add(skill, _);
             });
+        }
+    }
+
+    public void OnApplicationQuitHandler()
+    {
+        if (cts != null && !cts.IsCancellationRequested)
+        {
+            cts.Cancel();
         }
     }
 
@@ -666,7 +690,7 @@ public class CHMSkill
                     if (decalProjector != null)
                     {
                         float time = 0;
-                        while (time <= _effectData.startDelay)
+                        while (!token.IsCancellationRequested && time <= _effectData.startDelay)
                         {
                             var curValue = Mathf.Lerp(0, _effectData.sphereRadius * 2, time / _effectData.startDelay);
 

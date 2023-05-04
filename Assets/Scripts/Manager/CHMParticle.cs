@@ -17,10 +17,12 @@ public class CHMParticle
     Dictionary<Defines.EEffect, float> dicParticleTime = new Dictionary<Defines.EEffect, float>();
 
     CancellationTokenSource cts;
+    CancellationToken token;
 
     public void Init()
     {
         cts = new CancellationTokenSource();
+        token = cts.Token;
 
 #if UNITY_EDITOR
         EditorApplication.quitting -= OnApplicationQuitHandler;
@@ -34,11 +36,10 @@ public class CHMParticle
     public void Clear()
     {
         dicParticleTime.Clear();
-        cts = null;
         OnApplicationQuitHandler();
     }
 
-    void OnApplicationQuitHandler()
+    public void OnApplicationQuitHandler()
     {
         if (cts != null && !cts.IsCancellationRequested)
         {
@@ -221,6 +222,8 @@ public class CHMParticle
         {
             await Task.Delay((int)(_effectData.triggerStayTime * 1000f));
 
+            if (cts.IsCancellationRequested) return;
+
             if (sphereCollision != null && sphereCollision.sphereCollider != null) sphereCollision.sphereCollider.enabled = false;
         }
     }
@@ -241,7 +244,7 @@ public class CHMParticle
         // 이펙트가 붙어있어야하는 경우 SetParent를 해버리면 해당 타겟은 충돌체에 감지가 안되므로 타겟을 따라다니도록 수정
         if (_effectData.attach)
         {
-            await MoveTrasnform(cts.Token, _objParticle.transform, _trTarget, -1f, dicParticleTime[_effectData.eEffect], 0f, _objParticle);
+            MoveTrasnform(_objParticle.transform, _trTarget, -1f, dicParticleTime[_effectData.eEffect], 0f, _objParticle);
         }
 
         // 각 이펙트별로 세부 설정이 필요한 경우
@@ -257,7 +260,7 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Arrow_impact:
                 {
-                    await MoveDirection(cts.Token, _objParticle.transform.forward, 30f, dicParticleTime[_effectData.eEffect], _objParticle);
+                    MoveDirection(_objParticle.transform.forward, 30f, dicParticleTime[_effectData.eEffect], _objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Ax:
@@ -266,15 +269,15 @@ public class CHMParticle
                     var posOrigin = _objParticle.transform.position;
                     _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y + 3f, posOrigin.z);
 
-                    await MoveDirection(cts.Token, _objParticle.transform.forward, 30f, 1f, _objParticle);
-                    await MoveTrasnform(cts.Token, _objParticle.transform, _trCaster, 30f, -1f, 3f, _objParticle);
+                    MoveDirection(_objParticle.transform.forward, 30f, 1f, _objParticle);
+                    MoveTrasnform(_objParticle.transform, _trCaster, 30f, -1f, 3f, _objParticle);
 
                     CHMMain.Resource.Destroy(_objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    await MoveDirection(cts.Token, _objParticle.transform.forward, 10f, dicParticleTime[_effectData.eEffect], _objParticle);
+                    MoveDirection(_objParticle.transform.forward, 10f, dicParticleTime[_effectData.eEffect], _objParticle);
                 }
                 break;
         }
@@ -317,12 +320,12 @@ public class CHMParticle
         }
     }
 
-    async Task MoveDirection(CancellationToken _token, Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
+    async void MoveDirection(Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
     {
         if (_direction != null)
         {
             float time = 0;
-            while (!_token.IsCancellationRequested && time <= _effectTime)
+            while (!token.IsCancellationRequested && time <= _effectTime)
             {
                 try
                 {
@@ -344,7 +347,7 @@ public class CHMParticle
         }
     }
 
-    async Task MoveTrasnform(CancellationToken _token, Transform _trStart, Transform _trEnd, float _speed, float _effectTime, float _offset, GameObject _objParticle)
+    async void MoveTrasnform(Transform _trStart, Transform _trEnd, float _speed, float _effectTime, float _offset, GameObject _objParticle)
     {
         if (_trStart != null && _trEnd != null)
         {
@@ -353,7 +356,7 @@ public class CHMParticle
             // 일정한 속도로 일정 시간 동안 타겟에게 다가감
             if (_speed >= 0 && _effectTime >= 0)
             {
-                while (!_token.IsCancellationRequested && time <= _effectTime)
+                while (!token.IsCancellationRequested && time <= _effectTime)
                 {
                     try
                     {
@@ -384,7 +387,7 @@ public class CHMParticle
             // 일정한 속도로 타겟에게 offset 거리가 될 때까지 다가감
             else if (_speed >= 0 && _effectTime < 0)
             {
-                while (!_token.IsCancellationRequested)
+                while (!token.IsCancellationRequested)
                 {
                     try
                     {
@@ -414,7 +417,7 @@ public class CHMParticle
             // 타겟에게 일정 시간동안 정해진 거리를 유지한채 붙어있음
             else if (_speed < 0 && _effectTime >= 0)
             {
-                while (!_token.IsCancellationRequested && time <= _effectTime)
+                while (!token.IsCancellationRequested && time <= _effectTime)
                 {
                     try
                     {
