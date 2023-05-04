@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
@@ -25,8 +26,14 @@ public class CHUnitBase : MonoBehaviour
 
     protected CHGaugeBar hpGaugeBar;
 
+    CancellationTokenSource cts;
+    CancellationToken token;
+
     private void Awake()
     {
+        cts = new CancellationTokenSource();
+        token = cts.Token;
+
         if (unitCollider == null) unitCollider = gameObject.GetOrAddComponent<Collider>();
         if (meshRenderer == null) meshRenderer = gameObject.GetOrAddComponent<MeshRenderer>();
 
@@ -77,6 +84,14 @@ public class CHUnitBase : MonoBehaviour
                 }
             }
         }));
+    }
+
+    private void OnDestroy()
+    {
+        if (cts != null && !cts.IsCancellationRequested)
+        {
+            cts.Cancel();
+        }
     }
 
     #region OriginUnitInfoGetter
@@ -297,7 +312,7 @@ public class CHUnitBase : MonoBehaviour
         }
 
         mp = mpResult;
-        Debug.Log($"{unitData.nameStringID} => Mp : {mpOrigin} -> Mp : {mpResult}");
+        if (unitData) Debug.Log($"{unitData.nameStringID} => Mp : {mpOrigin} -> Mp : {mpResult}");
     }
 
     void AtOnceChangeAttackPower(float _value)
@@ -334,6 +349,8 @@ public class CHUnitBase : MonoBehaviour
             }
 
             await Task.Delay((int)(tickTime * 1000f));
+
+            if (cts.IsCancellationRequested) return;
         }
     }
 
@@ -351,6 +368,8 @@ public class CHUnitBase : MonoBehaviour
             }
 
             await Task.Delay((int)(tickTime * 1000f));
+
+            if (cts.IsCancellationRequested) return;
         }
     }
 
@@ -368,6 +387,8 @@ public class CHUnitBase : MonoBehaviour
             }
 
             await Task.Delay((int)(tickTime * 1000f));
+
+            if (cts.IsCancellationRequested) return;
         }
     }
 
@@ -385,6 +406,8 @@ public class CHUnitBase : MonoBehaviour
             }
 
             await Task.Delay((int)(tickTime * 1000f));
+
+            if (cts.IsCancellationRequested) return;
         }
     }
 

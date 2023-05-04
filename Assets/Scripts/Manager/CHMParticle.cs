@@ -178,6 +178,8 @@ public class CHMParticle
     {
         await Task.Delay((int)(_effectData.triggerStartDelay * 1000f));
 
+        if (cts.IsCancellationRequested) return;
+
         var sphereCollision = _objParticle.GetOrAddComponent<CHSphereCollision>();
         sphereCollision.Init(_trCaster, _effectData);
         sphereCollision.sphereCollider.enabled = true;
@@ -239,7 +241,7 @@ public class CHMParticle
         }
     }
 
-    async void SetParticlePositionValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
+    void SetParticlePositionValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
         // 이펙트가 붙어있어야하는 경우 SetParent를 해버리면 해당 타겟은 충돌체에 감지가 안되므로 타겟을 따라다니도록 수정
         if (_effectData.attach)
