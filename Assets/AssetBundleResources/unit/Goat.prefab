@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -8563475378632382452}
   - component: {fileID: 5091343854850866024}
   - component: {fileID: 3636077340484142408}
+  - component: {fileID: -1011838933736920378}
   m_Layer: 0
   m_Name: Goat
   m_TagString: Untagged
@@ -99,8 +100,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.40969625
-  m_Center: {x: 0.051454246, y: 0.35018998, z: -0.041598503}
+  m_Radius: 0.55
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &3645587585884415923
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -113,7 +114,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -198,7 +199,28 @@ MonoBehaviour:
   timeSinceLastSkill3: -1
   timeSinceLastSkill4: -1
   animator: {fileID: 0}
-  agent: {fileID: 0}
   attackRange: 2128890732
   sightRange: 667485285
   isDeath: 569220492
+--- !u!195 &-1011838933736920378
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749815345293910}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.4611505
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.401956
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4676101727754333833}
   - component: {fileID: -1876476142628137344}
   - component: {fileID: 3520020439636646268}
+  - component: {fileID: 2671907649087683324}
   m_Layer: 0
   m_Name: Dragon
   m_TagString: Untagged
@@ -99,8 +100,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.7483535
-  m_Center: {x: -0.048712492, y: 0.350907, z: 0}
+  m_Radius: 0.55
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &-8971712378004608415
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -113,7 +114,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -198,7 +199,28 @@ MonoBehaviour:
   timeSinceLastSkill3: -1
   timeSinceLastSkill4: -1
   animator: {fileID: 0}
-  agent: {fileID: 0}
   attackRange: 2128890732
   sightRange: 667485285
   isDeath: 569220492
+--- !u!195 &2671907649087683324
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180148154098208}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.699641
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.49536
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

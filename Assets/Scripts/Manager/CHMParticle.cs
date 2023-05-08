@@ -228,12 +228,12 @@ public class CHMParticle
         }
     }
 
-    void SetParticlePositionValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
+    async void SetParticlePositionValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
         // 이펙트가 붙어있어야하는 경우 SetParent를 해버리면 해당 타겟은 충돌체에 감지가 안되므로 타겟을 따라다니도록 수정
         if (_effectData.attach)
         {
-            MoveTrasnform(_objParticle.transform, _trTarget, -1f, dicParticleTime[_effectData.eEffect], 0f, _objParticle);
+            await MoveTrasnform(_objParticle.transform, _trTarget, -1f, dicParticleTime[_effectData.eEffect], 0f, _objParticle);
         }
 
         // 각 이펙트별로 세부 설정이 필요한 경우
@@ -249,7 +249,7 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Arrow_impact:
                 {
-                    MoveDirection(_objParticle.transform.forward, 30f, dicParticleTime[_effectData.eEffect], _objParticle);
+                    await MoveDirection(_objParticle.transform.forward, 30f, dicParticleTime[_effectData.eEffect], _objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Ax:
@@ -258,15 +258,15 @@ public class CHMParticle
                     var posOrigin = _objParticle.transform.position;
                     _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y + 3f, posOrigin.z);
 
-                    MoveDirection(_objParticle.transform.forward, 30f, 1f, _objParticle);
-                    MoveTrasnform(_objParticle.transform, _trCaster, 30f, -1f, 3f, _objParticle);
+                    await MoveDirection(_objParticle.transform.forward, 30f, 1f, _objParticle);
+                    await MoveTrasnform(_objParticle.transform, _trCaster, 30f, -1f, 3f, _objParticle);
 
                     CHMMain.Resource.Destroy(_objParticle);
                 }
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    MoveDirection(_objParticle.transform.forward, 10f, dicParticleTime[_effectData.eEffect], _objParticle);
+                    await MoveDirection(_objParticle.transform.forward, 10f, dicParticleTime[_effectData.eEffect], _objParticle);
                 }
                 break;
         }
@@ -309,7 +309,7 @@ public class CHMParticle
         }
     }
 
-    async void MoveDirection(Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
+    async Task MoveDirection(Vector3 _direction, float _speed, float _effectTime, GameObject _objParticle)
     {
         if (_direction != null)
         {
@@ -336,7 +336,7 @@ public class CHMParticle
         }
     }
 
-    async void MoveTrasnform(Transform _trStart, Transform _trEnd, float _speed, float _effectTime, float _offset, GameObject _objParticle)
+    async Task MoveTrasnform(Transform _trStart, Transform _trEnd, float _speed, float _effectTime, float _offset, GameObject _objParticle)
     {
         if (_trStart != null && _trEnd != null)
         {
