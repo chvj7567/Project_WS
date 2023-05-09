@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -16,6 +19,11 @@ public class CHContBase : MonoBehaviour
     [SerializeField, ReadOnly] protected bool skill3Lock = false;
     [SerializeField, ReadOnly] protected bool skill4Lock = false;
 
+    [SerializeField, ReadOnly] protected bool skill1Channeling = false;
+    [SerializeField, ReadOnly] protected bool skill2Channeling = false;
+    [SerializeField, ReadOnly] protected bool skill3Channeling = false;
+    [SerializeField, ReadOnly] protected bool skill4Channeling = false;
+
     [SerializeField, ReadOnly] protected float timeSinceLastAttack = -1f;
     [SerializeField, ReadOnly] protected float timeSinceLastSkill1 = -1f;
     [SerializeField, ReadOnly] protected float timeSinceLastSkill2 = -1f;
@@ -24,18 +32,56 @@ public class CHContBase : MonoBehaviour
 
     [SerializeField, ReadOnly] Animator animator;
 
+    enum Anim
+    {
+        Idle,
+        Attack,
+        Run,
+        Death
+    }
+
+    [SerializeField] List<string> liAnimName = new List<string>();
+
+    [SerializeField, ReadOnly] Dictionary<string, float> dicAnimTime = new Dictionary<string, float>();
+
     [SerializeField, ReadOnly] public int attackRange = Animator.StringToHash("AttackRange");
     [SerializeField, ReadOnly] public int sightRange = Animator.StringToHash("SightRange");
     [SerializeField, ReadOnly] public int isDeath = Animator.StringToHash("IsDeath");
+
+    CancellationTokenSource cts;
+    CancellationToken token;
 
     private void Start()
     {
         Init();
     }
 
+    private void OnDestroy()
+    {
+        if (cts != null && !cts.IsCancellationRequested)
+        {
+            cts.Cancel();
+        }
+    }
+
     public virtual void Init()
     {
+        cts = new CancellationTokenSource();
+        token = cts.Token;
+
         animator = GetComponent<Animator>();
+
+        if (animator != null)
+        {
+            RuntimeAnimatorController ac = animator.runtimeAnimatorController;
+
+            foreach (AnimationClip clip in ac.animationClips)
+            {
+                Debug.Log(clip.name);
+                dicAnimTime.Add(clip.name, clip.length);
+            }
+        }
+
         var unitInfo = gameObject.GetOrAddComponent<CHUnitBase>();
         var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
         if (unitInfo != null && targetTracker != null)
@@ -53,7 +99,7 @@ public class CHContBase : MonoBehaviour
             timeSinceLastSkill3 = -1f;
             timeSinceLastSkill4 = -1f;
 
-            gameObject.UpdateAsObservable().Subscribe(_ =>
+            gameObject.UpdateAsObservable().Subscribe(async _ =>
             {
                 // 죽거나 땅에 있는 상태가 아닐 때 (에어본 같은 경우)
                 if (unitInfo.GetIsDeath() && transform.position.y >= 0.1f)
@@ -141,32 +187,29 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastAttack < 0f && mainTarget.distance <= unitInfo.GetOriginAttackDistance())
                         {
-                            if (animator) animator.SetBool(attackRange, true);
+                            if (animator) animator.SetTrigger(attackRange);
                             timeSinceLastAttack = 0.00001f;
-                        }
-                        else
-                        {
-                            if (animator) animator.SetBool(attackRange, false);
-                        }
-                    }
-                    else
-                    {
-                        // 공격 사정거리 안인 경우
-                        if (mainTarget.distance <= unitInfo.GetOriginAttackDistance())
-                        {
-                            if (animator) animator.SetBool(attackRange, false);
-                        }
-                        else
-                        {
-                            if (animator) animator.SetBool(attackRange, false);
                         }
                     }
 
                     // 1번 스킬
                     if ((skill1Lock == false) && useSkill1 && unitInfo.IsNormalState())
                     {
-                        if (timeSinceLastSkill1 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill1Distance())
+                        if ((skill1Channeling == false) && (timeSinceLastSkill1 < 0f) && (mainTarget.distance <= unitInfo.GetOriginSkill1Distance()))
                         {
+                            if (animator)
+                            {
+                                animator.SetTrigger(attackRange);
+
+                                // 애니메이션 시전 시간동안 채널링
+                                skill1Channeling = true;
+                                await Task.Delay((int)(dicAnimTime[liAnimName[(int)Anim.Attack]] * 1000f));
+
+                                if (cts.IsCancellationRequested) return;
+
+                                skill1Channeling = false;
+                            }
+
                             CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
                             {
                                 trCaster = transform,
@@ -178,6 +221,7 @@ public class CHContBase : MonoBehaviour
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - transform.position,
                             }, unitInfo.GetOriginSkill1());
+
                             timeSinceLastSkill1 = 0.0001f;
                         }
                     }

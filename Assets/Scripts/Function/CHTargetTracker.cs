@@ -48,10 +48,17 @@ public class CHTargetTracker : MonoBehaviour
         viewAngle = unitBase.GetOriginViewAngle();
         orgViewAngle = viewAngle;
 
-        agent = gameObject.GetOrAddComponent<NavMeshAgent>();
         agent.speed = unitBase.GetOriginMoveSpeed();
         agent.angularSpeed = unitBase.GetOriginRotateSpeed();
         agent.stoppingDistance = unitBase.GetOriginAttackDistance();
+    }
+
+    private void Awake()
+    {
+        agent = gameObject.GetOrAddComponent<NavMeshAgent>();
+        contBase = gameObject.GetOrAddComponent<CHContBase>();
+        unitBase = gameObject.GetOrAddComponent<CHUnitBase>();
+        animator = gameObject.GetComponent<Animator>();
     }
 
     private void Start()
