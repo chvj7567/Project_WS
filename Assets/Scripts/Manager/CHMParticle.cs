@@ -236,13 +236,18 @@ public class CHMParticle
             await MoveTrasnform(_objParticle.transform, _trTarget, -1f, dicParticleTime[_effectData.eEffect], 0f, _objParticle);
         }
 
-        // 각 이펙트별로 세부 설정이 필요한 경우
+        // 각 이펙트별로 위치 설정이 필요한 경우
         switch (_effectData.eEffect)
         {
+            case Defines.EEffect.FX_Circle_ring:
+                {
+                    var posOrigin = _objParticle.transform.position;
+                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 0.95f, posOrigin.z);
+                }
+                break;
             case Defines.EEffect.FX_Circle_meteor:
             case Defines.EEffect.FX_Arrow_impact2:
                 {
-                    // y축으로 +23 이동
                     var posOrigin = _objParticle.transform.position;
                     _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y + 23f, posOrigin.z);
                 }
@@ -254,7 +259,6 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Ax:
                 {
-                    // y축으로 +3 이동
                     var posOrigin = _objParticle.transform.position;
                     _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y + 3f, posOrigin.z);
 
