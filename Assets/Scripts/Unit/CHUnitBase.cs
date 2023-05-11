@@ -103,8 +103,6 @@ public class CHUnitBase : MonoBehaviour
     public float GetOriginMpRegenPerSecond() { return unitData.hpRegenPerSecond; }
     public float GetOriginAttackPower() { return unitData.attackPower; }
     public float GetOriginDefensePower() { return unitData.defensePower; }
-    public float GetOriginAttackDelay() { return unitData.attackDelay; }
-    public float GetOriginAttackDistance() { return unitData.attackDistance; }
     public float GetOriginMoveSpeed() { return unitData.moveSpeed; }
     public float GetOriginRotateSpeed() { return unitData.rotateSpeed; }
     public float GetOriginRange() { return unitData.range; }

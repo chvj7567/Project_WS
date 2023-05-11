@@ -12,8 +12,6 @@ public class UnitData : ScriptableObject
     [Tooltip("MP 초당 회복량")] public float mpRegenPerSecond = -1f;
     [Tooltip("공격력")] public float attackPower = -1f;
     [Tooltip("방어력")] public float defensePower = -1f;
-    [Tooltip("공격 딜레이")] public float attackDelay = -1f;
-    [Tooltip("공격 사정거리")] public float attackDistance = -1f;
     [Tooltip("움직일 때 스피드")] public float moveSpeed = -1f;
     [Tooltip("회전할 때 스피드")] public float rotateSpeed = -1f;
     [Tooltip("타겟이 없을 경우 타겟 감지 범위")] public float range = -1f;
@@ -38,8 +36,6 @@ public class UnitData : ScriptableObject
         newUnitInfo.mpRegenPerSecond = this.mpRegenPerSecond;
         newUnitInfo.attackPower = this.attackPower;
         newUnitInfo.defensePower = this.defensePower;
-        newUnitInfo.attackDelay = this.attackDelay;
-        newUnitInfo.attackDistance = this.attackDistance;
         newUnitInfo.moveSpeed = this.moveSpeed;
         newUnitInfo.rotateSpeed = this.rotateSpeed;
         newUnitInfo.range = this.range;

@@ -50,7 +50,7 @@ public class CHTargetTracker : MonoBehaviour
 
         agent.speed = unitBase.GetOriginMoveSpeed();
         agent.angularSpeed = unitBase.GetOriginRotateSpeed();
-        agent.stoppingDistance = unitBase.GetOriginAttackDistance();
+        agent.stoppingDistance = unitBase.GetOriginSkill1Distance();
     }
 
     private void Awake()
@@ -129,7 +129,7 @@ public class CHTargetTracker : MonoBehaviour
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
 
-                    if (closestTarget.distance > unitBase.GetOriginAttackDistance() && unitBase.IsNormalState())
+                    if (closestTarget.distance > unitBase.GetOriginSkill1Distance() && unitBase.IsNormalState())
                     {
                         if (agent.isOnNavMesh)
                         {
