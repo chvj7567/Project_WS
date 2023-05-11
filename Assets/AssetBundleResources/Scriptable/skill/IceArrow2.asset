@@ -15,6 +15,7 @@ MonoBehaviour:
   eSkill: 6
   skillDesc: "\uC5BC\uC74C \uD654\uC0B4\uC774 \uACF5\uC911\uC5D0\uC11C \uAF42\uD798"
   isTargeting: 0
+  isChanneling: 1
   distance: 50
   coolTime: 3
   eSkillCost: 0

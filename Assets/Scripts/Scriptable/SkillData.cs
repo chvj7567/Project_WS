@@ -10,6 +10,7 @@ public class SkillData : ScriptableObject
     [Tooltip("스킬 이름")] public ESkill eSkill = ESkill.None;
     [Tooltip("스킬 설명"), Multiline(5)] public string skillDesc = null;
     [Tooltip("스킬 타겟팅 여부")] public bool isTargeting = false;
+    [Tooltip("스킬 채널링 여부")] public bool isChanneling = false;
     [Tooltip("스킬 사정거리")] public float distance = -1f;
     [Tooltip("스킬 쿨타임")] public float coolTime = -1f;
     [Tooltip("스킬 비용 타입")] public ESkillCost eSkillCost = ESkillCost.None;

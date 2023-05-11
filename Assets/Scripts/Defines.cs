@@ -68,14 +68,14 @@ public class Defines
     {
         None = -1,
 
-        Explosion, // 0
-        Meteor, // 1
-        Heal, // 2
-        SlashPoison, // 3
-        Tornado, // 4
-        IceArrow, // 5
-        IceArrow2, // 6
-        Ax, // 7
+        Explosion,
+        Meteor,
+        Heal,
+        SlashPoison,
+        Tornado,
+        IceArrow,
+        IceArrow2,
+        Ax,
 
         Max
     }
@@ -84,12 +84,12 @@ public class Defines
     {
         None = -1,
 
-        Fixed_HP, // 0
-        Percent_MaxHP, // 1
-        Percent_RemainHP, // 2
-        Fixed_MP, // 3
-        Percent_MaxMP, // 4
-        Percent_RemainMP, // 5
+        Fixed_HP,
+        Percent_MaxHP,
+        Percent_RemainHP,
+        Fixed_MP,
+        Percent_MaxMP,
+        Percent_RemainMP,
 
         Max
     }
@@ -98,36 +98,29 @@ public class Defines
     {
         None = -1,
 
-        FX_Curse, // 0
-        FX_Devil, // 1
-        FX_Electricity, // 2
-        FX_Energy, // 3
-        FX_Explosion, // 4
-        FX_Explosion_Magic, // 5
-        FX_Explosion_Magic2, // 6
-        FX_Fire, // 7
-        FX_Healing, // 8
-        FX_Iceflake, // 9
-        FX_Poison, // 10
-        Slash, // 11
-
-        FX_Circle_ring, // 12
-        FX_Circle_meteor, // 13
-        FX_Circle_hit, // 14
-
-        FX_Defense, // 15
-        
-        FX_Tornado, // 16
-
-        FX_Arrow_impact, // 17
-        FX_Arrow_impact_sub, // 18
-        FX_Arrow_impact2, // 19
-
-        FX_Explosion_Hit, // 20
-
-        FX_Ax, // 21
-
-        FX_Electricity_Hit, // 22
+        FX_Curse,
+        FX_Devil,
+        FX_Electricity,
+        FX_Energy,
+        FX_Explosion,
+        FX_Explosion_Magic,
+        FX_Explosion_Magic2,
+        FX_Fire,
+        FX_Healing,
+        FX_Iceflake,
+        FX_Poison,
+        Slash,
+        FX_Circle_ring,
+        FX_Circle_meteor,
+        FX_Circle_hit,
+        FX_Defense,
+        FX_Tornado,
+        FX_Arrow_impact,
+        FX_Arrow_impact_sub,
+        FX_Arrow_impact2,
+        FX_Explosion_Hit,
+        FX_Ax,
+        FX_Electricity_Hit,
 
         Max
     }
@@ -137,14 +130,14 @@ public class Defines
     {
         None = -1,
 
-        Hp_Up, // 0
-        Hp_Down, // 1
-        /*Mp_Up, // 2
-        Mp_Down, // 3
-        AttackPower_Up, // 4
-        AttackPower_Down, // 5
-        DefensePower_Up, // 6
-        DefensePower_Down, // 7*/
+        Hp_Up,
+        Hp_Down,
+        /*Mp_Up,
+        Mp_Down,
+        AttackPower_Up,
+        AttackPower_Down,
+        DefensePower_Up,
+        DefensePower_Down,*/
 
         Max,
     }
@@ -153,8 +146,8 @@ public class Defines
     {
         None = -1,
 
-        Sphere, // 0
-        Box, // 1
+        Sphere,
+        Box,
 
         Max
     }
@@ -163,9 +156,9 @@ public class Defines
     {
         None = -1,
 
-        Position, // 0
-        Target_One, // 1
-        Target_All, // 2
+        Position,
+        Target_One,
+        Target_All,
 
         Max
     }
@@ -174,10 +167,10 @@ public class Defines
     {
         None = -1,
 
-        Me, // 0
-        MyTeam, // 1
-        Enemy, // 2
-        MyTeam_Enemy, // 3
+        Me,
+        MyTeam,
+        Enemy,
+        MyTeam_Enemy,
 
         Max
     }
@@ -186,9 +179,9 @@ public class Defines
     {
         None = -1,
 
-        AtOnce, // 0 : 한번에
-        Continuous_1Sec_3Count, // 1 : 1초동안 3번 지속 데미지
-        Continuous_Dot1Sec_10Count, // 1 : 0.1초동안 10번 지속 데미지
+        AtOnce, // 한번에
+        Continuous_1Sec_3Count, // 1초동안 3번 지속 데미지
+        Continuous_Dot1Sec_10Count, // 0.1초동안 10번 지속 데미지
         Max
     }
 
@@ -196,11 +189,11 @@ public class Defines
     {
         None = -1,
 
-        Fixed, // 0 : 고정 데미지
-        Percent_Me_MaxHp, // 1 : 나의 전체 Hp 퍼센트 데미지
-        Percent_Me_RemainHp, // 2 : 나의 남은 Hp 퍼센트 데미지
-        Percent_Target_MaxHp, // 3 : 타겟의 전체 Hp 퍼센트 데미지
-        Percent_Target_RemainHp, // 4 : 타겟의 남은 Hp 퍼센트 데미지
+        Fixed, // 고정 데미지
+        Percent_Me_MaxHp, // 나의 전체 Hp 퍼센트 데미지
+        Percent_Me_RemainHp, // 나의 남은 Hp 퍼센트 데미지
+        Percent_Target_MaxHp, // 타겟의 전체 Hp 퍼센트 데미지
+        Percent_Target_RemainHp, // 타겟의 남은 Hp 퍼센트 데미지
 
         Max
     }
@@ -246,19 +239,8 @@ public class Defines
     {
         None = -1,
 
-        Crane, // 0
-        Dog, // 1
-        Dragon, // 2
-        Goat, // 3
-        Horse, // 4
-        Monkey, // 5
-        Ox, // 6
-        Pig, // 7
-        Rabbit, // 8
-        Rat, // 9
-        Rooster, // 10
-        Snake, // 11
-        Tigher, // 12
+        Player,
+        Monster1,
 
         Max
     }

@@ -239,6 +239,12 @@ public class CHMParticle
         // 각 이펙트별로 위치 설정이 필요한 경우
         switch (_effectData.eEffect)
         {
+            case Defines.EEffect.Slash:
+                {
+                    var posOrigin = _objParticle.transform.position;
+                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 2.2f, posOrigin.z);
+                }
+                break;
             case Defines.EEffect.FX_Circle_ring:
                 {
                     var posOrigin = _objParticle.transform.position;

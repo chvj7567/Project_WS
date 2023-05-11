@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eSkill: 3
   skillDesc: "\uCE7C\uC744 \uD718\uB450\uB974\uACE0 \uB3C5 \uB370\uBBF8\uC9C0"
-  isTargeting: 0
+  isTargeting: 1
+  isChanneling: 0
   distance: 50
   coolTime: 3
   eSkillCost: 0
@@ -23,11 +24,11 @@ MonoBehaviour:
   - eEffect: 11
     effectAngle: 0
     createCasterPosition: 1
-    startDelay: 1
+    startDelay: 0.5
     createOnEmpty: 1
     attach: 0
     duplication: 0
-    onDecal: 1
+    onDecal: 0
     eStatModifyType: -1
     eDamageType1: -1
     eDamageType2: -1
@@ -53,10 +54,10 @@ MonoBehaviour:
     createOnEmpty: 0
     attach: 0
     duplication: 1
-    onDecal: 0
-    eStatModifyType: -1
-    eDamageType1: -1
-    eDamageType2: -1
+    onDecal: 1
+    eStatModifyType: 1
+    eDamageType1: 0
+    eDamageType2: 0
     damage: 44
     eTarget: 1
     eTargetMask: 2
@@ -65,7 +66,7 @@ MonoBehaviour:
     offsetToTarget: 0
     eCollision: 0
     collisionAngle: 360
-    sphereRadius: 1
+    sphereRadius: 10
     boxHalf: {x: 0, y: 0, z: 0}
     triggerStartDelay: 0
     triggerStayTime: 0.5

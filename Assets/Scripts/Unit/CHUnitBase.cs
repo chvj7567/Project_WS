@@ -110,10 +110,10 @@ public class CHUnitBase : MonoBehaviour
     public float GetOriginRange() { return unitData.range; }
     public float GetOriginRangeMulti() { return unitData.rangeMulti; }
     public float GetOriginViewAngle() { return unitData.viewAngle; }
-    public SkillData GetSkill1Data() { return skill1Data; }
-    public SkillData GetSkill2Data() { return skill2Data; }
-    public SkillData GetSkill3Data() { return skill3Data; }
-    public SkillData GetSkill4Data() { return skill4Data; }
+    public SkillData GetOriginSkill1Data() { return skill1Data; }
+    public SkillData GetOriginSkill2Data() { return skill2Data; }
+    public SkillData GetOriginSkill3Data() { return skill3Data; }
+    public SkillData GetOriginSkill4Data() { return skill4Data; }
     public Defines.ESkill GetOriginSkill1() { return skill1Data.eSkill; }
     public Defines.ESkill GetOriginSkill2() { return skill2Data.eSkill; }
     public Defines.ESkill GetOriginSkill3() { return skill3Data.eSkill; }

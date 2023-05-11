@@ -15,6 +15,7 @@ MonoBehaviour:
   eSkill: 2
   skillDesc: "\uC790\uAE30 \uC790\uC2E0 \uD790"
   isTargeting: 0
+  isChanneling: 1
   distance: 50
   coolTime: 3
   eSkillCost: 0
