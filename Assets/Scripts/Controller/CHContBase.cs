@@ -197,6 +197,9 @@ public class CHContBase : MonoBehaviour
                     {
                         if ((skill1Channeling == false) && (timeSinceLastSkill1 < 0f) && (mainTarget.distance <= unitInfo.GetOriginSkill1Distance()))
                         {
+                            // 스킬 쿨타임 초기화
+                            timeSinceLastSkill1 = 0.0001f;
+
                             if (animator)
                             {
                                 animator.SetTrigger(attackRange);
@@ -221,8 +224,6 @@ public class CHContBase : MonoBehaviour
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - transform.position,
                             }, unitInfo.GetOriginSkill1());
-
-                            timeSinceLastSkill1 = 0.0001f;
                         }
                     }
 
@@ -231,6 +232,22 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
                         {
+                            // 스킬 쿨타임 초기화
+                            timeSinceLastSkill2 = 0.0001f;
+
+                            if (animator)
+                            {
+                                animator.SetTrigger(attackRange);
+
+                                // 애니메이션 시전 시간동안 채널링
+                                skill2Channeling = true;
+                                await Task.Delay((int)(dicAnimTime[liAnimName[(int)Anim.Attack]] * 1000f));
+
+                                if (cts.IsCancellationRequested) return;
+
+                                skill2Channeling = false;
+                            }
+
                             CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
                             {
                                 trCaster = transform,
@@ -251,6 +268,22 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
                         {
+                            // 스킬 쿨타임 초기화
+                            timeSinceLastSkill3 = 0.0001f;
+
+                            if (animator)
+                            {
+                                animator.SetTrigger(attackRange);
+
+                                // 애니메이션 시전 시간동안 채널링
+                                skill3Channeling = true;
+                                await Task.Delay((int)(dicAnimTime[liAnimName[(int)Anim.Attack]] * 1000f));
+
+                                if (cts.IsCancellationRequested) return;
+
+                                skill3Channeling = false;
+                            }
+
                             CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
                             {
                                 trCaster = transform,
@@ -271,6 +304,22 @@ public class CHContBase : MonoBehaviour
                     {
                         if (timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
                         {
+                            // 스킬 쿨타임 초기화
+                            timeSinceLastSkill4 = 0.0001f;
+
+                            if (animator)
+                            {
+                                animator.SetTrigger(attackRange);
+
+                                // 애니메이션 시전 시간동안 채널링
+                                skill4Channeling = true;
+                                await Task.Delay((int)(dicAnimTime[liAnimName[(int)Anim.Attack]] * 1000f));
+
+                                if (cts.IsCancellationRequested) return;
+
+                                skill4Channeling = false;
+                            }
+
                             CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
                             {
                                 trCaster = transform,
