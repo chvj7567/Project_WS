@@ -50,7 +50,7 @@ MonoBehaviour:
   - eEffect: 10
     effectAngle: 0
     createCasterPosition: 0
-    startDelay: 0
+    startDelay: 1
     createOnEmpty: 0
     attach: 0
     duplication: 1

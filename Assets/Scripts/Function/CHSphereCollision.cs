@@ -132,6 +132,12 @@ public class CHSphereCollision : MonoBehaviour
 
         switch (effectData.eEffect)
         {
+            case Defines.EEffect.FX_Poison:
+                {
+                    sphereCollider.radius = 1f;
+                    sphereCollider.center = new Vector3(0f, 0f, 0f);
+                }
+                break;
             case Defines.EEffect.FX_Arrow_impact2:
                 {
                     sphereCollider.radius = effectData.sphereRadius;

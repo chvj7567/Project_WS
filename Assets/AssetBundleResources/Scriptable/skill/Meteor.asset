@@ -80,10 +80,10 @@ MonoBehaviour:
     createOnEmpty: 1
     attach: 0
     duplication: 0
-    onDecal: 1
-    eStatModifyType: -1
-    eDamageType1: -1
-    eDamageType2: -1
+    onDecal: 0
+    eStatModifyType: 1
+    eDamageType1: 0
+    eDamageType2: 0
     damage: 22
     eTarget: 0
     eTargetMask: 2
@@ -92,7 +92,7 @@ MonoBehaviour:
     offsetToTarget: 0
     eCollision: 0
     collisionAngle: 360
-    sphereRadius: 5
+    sphereRadius: 3
     boxHalf: {x: 0, y: 0, z: 0}
     triggerStartDelay: 0
     triggerStayTime: 0.5

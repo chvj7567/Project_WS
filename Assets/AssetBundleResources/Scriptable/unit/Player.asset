@@ -20,14 +20,12 @@ MonoBehaviour:
   mpRegenPerSecond: 100
   attackPower: 0
   defensePower: 0
-  attackDelay: 5
-  attackDistance: 30
   moveSpeed: 5
   rotateSpeed: 5
   range: 20
   rangeMulti: 2
   viewAngle: 180
   eSkill1: 1
-  eSkill2: -1
-  eSkill3: -1
-  eSkill4: -1
+  eSkill2: 0
+  eSkill3: 5
+  eSkill4: 6
