@@ -1,26 +1,24 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
 public class CHSpawner : MonoBehaviour
 {
     [SerializeField] GameObject objSpawn;
     [SerializeField] Transform trDestination;
-    [SerializeField] float spawnDelay;
+    [SerializeField] float spawnDelay = 1f;
 
     public bool isSpawn;
 
     CancellationTokenSource cts;
+    CancellationToken token;
 
     private void Start()
     {
         cts = new CancellationTokenSource();
+        token = cts.Token;
 
-        StartSpawn(cts.Token);
+        StartSpawn();
     }
 
     public void SetSpawnDelay(float _value)
@@ -28,12 +26,12 @@ public class CHSpawner : MonoBehaviour
         spawnDelay = _value;
     }
 
-    public async void StartSpawn(CancellationToken _token)
+    public async void StartSpawn()
     {
         isSpawn = true;
-        cts = CancellationTokenSource.CreateLinkedTokenSource(_token);
+        cts = CancellationTokenSource.CreateLinkedTokenSource(token);
 
-        while (!_token.IsCancellationRequested && isSpawn)
+        while (!token.IsCancellationRequested && isSpawn)
         {
             try
             {

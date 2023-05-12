@@ -78,8 +78,8 @@ public class CHMSkill
 
     public void Clear()
     {
-        roundAreaDecal = null;
-        roundTimingDecal = null;
+        if (roundAreaDecal) CHMMain.Resource.Destroy(roundAreaDecal);
+        if (roundTimingDecal) CHMMain.Resource.Destroy(roundTimingDecal);
 
         dicSkillData.Clear();
     }
