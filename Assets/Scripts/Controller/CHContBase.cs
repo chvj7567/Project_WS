@@ -204,13 +204,13 @@ public class CHContBase : MonoBehaviour
                             CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
                             {
                                 trCaster = transform,
-                                posCaster = transform.position,
+                                posCaster = posMy,
                                 dirCaster = dirMy,
                                 trTarget = mainTarget.objTarget.transform,
                                 posTarget = posMainTarget,
-                                dirTarget = posMainTarget - transform.position,
+                                dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
-                                dirSkill = posMainTarget - transform.position,
+                                dirSkill = posMainTarget - posMy,
                             }, unitInfo.GetOriginSkill1());
                         }
                     }
@@ -242,13 +242,13 @@ public class CHContBase : MonoBehaviour
                             CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
                             {
                                 trCaster = transform,
-                                posCaster = transform.position,
+                                posCaster = posMy,
                                 dirCaster = dirMy,
                                 trTarget = mainTarget.objTarget.transform,
                                 posTarget = posMainTarget,
-                                dirTarget = posMainTarget - transform.position,
+                                dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
-                                dirSkill = posMainTarget - transform.position,
+                                dirSkill = posMainTarget - posMy,
                             }, unitInfo.GetOriginSkill2());
                             timeSinceLastSkill2 = 0.0001f;
                         }
@@ -281,13 +281,13 @@ public class CHContBase : MonoBehaviour
                             CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
                             {
                                 trCaster = transform,
-                                posCaster = transform.position,
+                                posCaster = posMy,
                                 dirCaster = dirMy,
                                 trTarget = mainTarget.objTarget.transform,
                                 posTarget = posMainTarget,
-                                dirTarget = posMainTarget - transform.position,
+                                dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
-                                dirSkill = posMainTarget - transform.position,
+                                dirSkill = posMainTarget - posMy,
                             }, unitInfo.GetOriginSkill3());
                             timeSinceLastSkill3 = 0.0001f;
                         }
@@ -320,13 +320,13 @@ public class CHContBase : MonoBehaviour
                             CHMMain.Skill.CreateSkill(new CHMSkill.SkillLocationInfo
                             {
                                 trCaster = transform,
-                                posCaster = transform.position,
+                                posCaster = posMy,
                                 dirCaster = dirMy,
                                 trTarget = mainTarget.objTarget.transform,
                                 posTarget = posMainTarget,
-                                dirTarget = posMainTarget - transform.position,
+                                dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
-                                dirSkill = posMainTarget - transform.position,
+                                dirSkill = posMainTarget - posMy,
                             }, unitInfo.GetOriginSkill4());
                             timeSinceLastSkill4 = 0.0001f;
                         }

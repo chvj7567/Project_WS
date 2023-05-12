@@ -36,18 +36,6 @@ public class CHUnitBase : MonoBehaviour
 
         if (unitCollider == null) unitCollider = gameObject.GetOrAddComponent<Collider>();
         if (meshRenderer == null) meshRenderer = gameObject.GetOrAddComponent<MeshRenderer>();
-
-        unitData = CHMMain.Unit.GetUnitData(unit);
-        if (unitData != null)
-        {
-            hp = unitData.maxHp;
-            mp = unitData.maxMp;
-
-            skill1Data = CHMMain.Skill.GetSkillData(unitData.eSkill1);
-            skill2Data = CHMMain.Skill.GetSkillData(unitData.eSkill2);
-            skill3Data = CHMMain.Skill.GetSkillData(unitData.eSkill3);
-            skill4Data = CHMMain.Skill.GetSkillData(unitData.eSkill4);
-        }
     }
 
     private void Start()
@@ -63,27 +51,8 @@ public class CHUnitBase : MonoBehaviour
             }
         });
 
-        CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, (Action<GameObject>)((gaugeBar) =>
-        {
-            if (gaugeBar)
-            {
-                gaugeBar.transform.SetParent(transform);
-                gaugeBar.transform.localPosition = Vector3.zero;
-
-                hpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
-                if (hpGaugeBar)
-                {
-                    if (unitCollider == null)
-                    {
-                        unitCollider = gameObject.GetOrAddComponent<Collider>();
-                    }
-
-                    // HP 게이지가 스케일에 영향받지 않도록 
-                    hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
-                    hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), this.GetCurrentHp(), 0f);
-                }
-            }
-        }));
+        InitUnitData();
+        InitGaugeBar();
     }
 
     private void OnDestroy()
@@ -95,35 +64,35 @@ public class CHUnitBase : MonoBehaviour
     }
 
     #region OriginUnitInfoGetter
-    public EUnit GetOriginUnitID() { return unitData.eUnit; }
-    public int GetOriginNameStringID() { return unitData.nameStringID; }
-    public float GetOriginMaxHp() { return unitData.maxHp; }
-    public float GetOriginHpRegenPerSecond() { return unitData.hpRegenPerSecond; }
-    public float GetOriginMaxMp() { return unitData.maxMp; }
-    public float GetOriginMpRegenPerSecond() { return unitData.hpRegenPerSecond; }
-    public float GetOriginAttackPower() { return unitData.attackPower; }
-    public float GetOriginDefensePower() { return unitData.defensePower; }
-    public float GetOriginMoveSpeed() { return unitData.moveSpeed; }
-    public float GetOriginRotateSpeed() { return unitData.rotateSpeed; }
-    public float GetOriginRange() { return unitData.range; }
-    public float GetOriginRangeMulti() { return unitData.rangeMulti; }
-    public float GetOriginViewAngle() { return unitData.viewAngle; }
-    public SkillData GetOriginSkill1Data() { return skill1Data; }
-    public SkillData GetOriginSkill2Data() { return skill2Data; }
-    public SkillData GetOriginSkill3Data() { return skill3Data; }
-    public SkillData GetOriginSkill4Data() { return skill4Data; }
-    public Defines.ESkill GetOriginSkill1() { return skill1Data.eSkill; }
-    public Defines.ESkill GetOriginSkill2() { return skill2Data.eSkill; }
-    public Defines.ESkill GetOriginSkill3() { return skill3Data.eSkill; }
-    public Defines.ESkill GetOriginSkill4() { return skill4Data.eSkill; }
-    public float GetOriginSkill1CoolTime() { return skill1Data.coolTime; }
-    public float GetOriginSkill2CoolTime() { return skill2Data.coolTime; }
-    public float GetOriginSkill3CoolTime() { return skill3Data.coolTime; }
-    public float GetOriginSkill4CoolTime() { return skill4Data.coolTime; }
-    public float GetOriginSkill1Distance() { return skill1Data.distance; }
-    public float GetOriginSkill2Distance() { return skill2Data.distance; }
-    public float GetOriginSkill3Distance() { return skill3Data.distance; }
-    public float GetOriginSkill4Distance() { return skill4Data.distance; }
+    public EUnit GetOriginUnitID() { if (unitData == null) InitUnitData(); return unitData.eUnit; }
+    public int GetOriginNameStringID() { if (unitData == null) InitUnitData(); return unitData.nameStringID; }
+    public float GetOriginMaxHp() { if (unitData == null) InitUnitData(); return unitData.maxHp; }
+    public float GetOriginHpRegenPerSecond() { if (unitData == null) InitUnitData(); return unitData.hpRegenPerSecond; }
+    public float GetOriginMaxMp() { if (unitData == null) InitUnitData(); return unitData.maxMp; }
+    public float GetOriginMpRegenPerSecond() { if (unitData == null) InitUnitData(); return unitData.hpRegenPerSecond; }
+    public float GetOriginAttackPower() { if (unitData == null) InitUnitData(); return unitData.attackPower; }
+    public float GetOriginDefensePower() { if (unitData == null) InitUnitData(); return unitData.defensePower; }
+    public float GetOriginMoveSpeed() { if (unitData == null) InitUnitData(); return unitData.moveSpeed; }
+    public float GetOriginRotateSpeed() { if (unitData == null) InitUnitData(); return unitData.rotateSpeed; }
+    public float GetOriginRange() { if (unitData == null) InitUnitData(); return unitData.range; }
+    public float GetOriginRangeMulti() { if (unitData == null) InitUnitData(); return unitData.rangeMulti; }
+    public float GetOriginViewAngle() { if (unitData == null) InitUnitData(); return unitData.viewAngle; }
+    public SkillData GetOriginSkill1Data() { if (unitData == null) InitUnitData(); return skill1Data; }
+    public SkillData GetOriginSkill2Data() { if (unitData == null) InitUnitData(); return skill2Data; }
+    public SkillData GetOriginSkill3Data() { if (unitData == null) InitUnitData(); return skill3Data; }
+    public SkillData GetOriginSkill4Data() { if (unitData == null) InitUnitData(); return skill4Data; }
+    public Defines.ESkill GetOriginSkill1() { if (unitData == null) InitUnitData(); return skill1Data.eSkill; }
+    public Defines.ESkill GetOriginSkill2() { if (unitData == null) InitUnitData(); return skill2Data.eSkill; }
+    public Defines.ESkill GetOriginSkill3() { if (unitData == null) InitUnitData(); return skill3Data.eSkill; }
+    public Defines.ESkill GetOriginSkill4() { if (unitData == null) InitUnitData(); return skill4Data.eSkill; }
+    public float GetOriginSkill1CoolTime() { if (unitData == null) InitUnitData(); return skill1Data.coolTime; }
+    public float GetOriginSkill2CoolTime() { if (unitData == null) InitUnitData(); return skill2Data.coolTime; }
+    public float GetOriginSkill3CoolTime() { if (unitData == null) InitUnitData(); return skill3Data.coolTime; }
+    public float GetOriginSkill4CoolTime() { if (unitData == null) InitUnitData(); return skill4Data.coolTime; }
+    public float GetOriginSkill1Distance() { if (unitData == null) InitUnitData(); return skill1Data.distance; }
+    public float GetOriginSkill2Distance() { if (unitData == null) InitUnitData(); return skill2Data.distance; }
+    public float GetOriginSkill3Distance() { if (unitData == null) InitUnitData(); return skill3Data.distance; }
+    public float GetOriginSkill4Distance() { if (unitData == null) InitUnitData(); return skill4Data.distance; }
     #endregion
 
     public float GetCurrentHp()
@@ -139,6 +108,9 @@ public class CHUnitBase : MonoBehaviour
     public void ResetUnit()
     {
         unitState = 0;
+
+        InitUnitData();
+        InitGaugeBar();
 
         hp = unitData.maxHp;
         mp = unitData.maxMp;
@@ -256,6 +228,50 @@ public class CHUnitBase : MonoBehaviour
                     break;
             }
         }
+    }
+
+    void InitUnitData()
+    {
+        if (unitData) return;
+
+        unitData = CHMMain.Unit.GetUnitData(unit);
+        if (unitData != null)
+        {
+            hp = unitData.maxHp;
+            mp = unitData.maxMp;
+
+            skill1Data = CHMMain.Skill.GetSkillData(unitData.eSkill1);
+            skill2Data = CHMMain.Skill.GetSkillData(unitData.eSkill2);
+            skill3Data = CHMMain.Skill.GetSkillData(unitData.eSkill3);
+            skill4Data = CHMMain.Skill.GetSkillData(unitData.eSkill4);
+        }
+    }
+
+    void InitGaugeBar()
+    {
+        if (hpGaugeBar) return;
+
+        CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, (Action<GameObject>)((gaugeBar) =>
+        {
+            if (gaugeBar)
+            {
+                gaugeBar.transform.SetParent(transform);
+                gaugeBar.transform.localPosition = Vector3.zero;
+
+                hpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
+                if (hpGaugeBar)
+                {
+                    if (unitCollider == null)
+                    {
+                        unitCollider = gameObject.GetOrAddComponent<Collider>();
+                    }
+
+                    // HP 게이지가 스케일에 영향받지 않도록 
+                    hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
+                    hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), this.GetCurrentHp(), 0f);
+                }
+            }
+        }));
     }
 
     void AtOnceChangeHp(float _value)

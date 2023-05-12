@@ -69,18 +69,15 @@ public class CHMPool
 
     public void Init()
     {
+        rootObject = GameObject.Find("@CHMPool");
         if (rootObject == null)
         {
-            rootObject = GameObject.Find("@CHMPool");
-            if (rootObject == null)
-            {
-                rootObject = new GameObject { name = "@CHMPool" };
-            }
+            rootObject = new GameObject { name = "@CHMPool" };
+        }
 
-            if (Application.isPlaying)
-            {
-                Object.DontDestroyOnLoad(rootObject);
-            }
+        if (Application.isPlaying)
+        {
+            //Object.DontDestroyOnLoad(rootObject);
         }
     }
 

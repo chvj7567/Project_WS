@@ -33,6 +33,7 @@ public class CHTargetTracker : MonoBehaviour
 
     [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
 
+    [SerializeField, ReadOnly] float orgStoppingDistance = -1f;
     [SerializeField, ReadOnly] float orgRangeMulti = -1f;
     [SerializeField, ReadOnly] float orgViewAngle = -1f;
     [SerializeField, ReadOnly] bool expensionRange = false;
@@ -51,6 +52,7 @@ public class CHTargetTracker : MonoBehaviour
         agent.speed = unitBase.GetOriginMoveSpeed();
         agent.angularSpeed = unitBase.GetOriginRotateSpeed();
         agent.stoppingDistance = unitBase.GetOriginSkill1Distance();
+        orgStoppingDistance = agent.stoppingDistance;
     }
 
     private void Awake()
@@ -103,6 +105,7 @@ public class CHTargetTracker : MonoBehaviour
                     {
                         if (agent.isOnNavMesh)
                         {
+                            agent.stoppingDistance = 0f;
                             agent.SetDestination(trDestination.position);
                         }
                         else
@@ -128,6 +131,7 @@ public class CHTargetTracker : MonoBehaviour
                     viewAngle = 360f;
                     // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
+                    agent.stoppingDistance = orgStoppingDistance;
 
                     if (closestTarget.distance > unitBase.GetOriginSkill1Distance() && unitBase.IsNormalState())
                     {

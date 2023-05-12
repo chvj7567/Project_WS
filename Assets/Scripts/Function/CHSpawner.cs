@@ -38,13 +38,17 @@ public class CHSpawner : MonoBehaviour
                 var obj = CHMMain.Resource.Instantiate(objSpawn, transform);
                 obj.transform.localPosition = Vector3.zero;
 
-                var targetTracker = obj.GetComponent<CHTargetTracker>();
-                targetTracker.trDestination = trDestination;
+                if (trDestination)
+                {
+                    var targetTracker = obj.GetComponent<CHTargetTracker>();
+                    targetTracker.trDestination = trDestination;
+                }
 
                 var unitBase = obj.GetComponent<CHUnitBase>();
-                if (unitBase != null && unitBase.GetCurrentHp() < 1f)
+                if (unitBase != null)
                 {
                     unitBase.ResetUnit();
+                    unitBase.gameObject.SetActive(true);
                 }
 
                 await Task.Delay((int)(spawnDelay * 1000f), cts.Token);
