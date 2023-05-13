@@ -292,15 +292,15 @@ public class CHUnitBase : MonoBehaviour
         {
             hpResult = 0f;
 
-            var unitBase = GetComponent<CHContBase>();
-            if (unitBase != null)
+            var contBase = GetComponent<CHContBase>();
+            if (contBase != null)
             {
-                var animator = unitBase.GetAnimator();
+                var animator = contBase.GetAnimator();
                 if (animator != null)
                 {
-                    animator.SetBool(unitBase.attackRange, false);
-                    animator.SetBool(unitBase.sightRange, false);
-                    animator.SetBool(unitBase.isDeath, true);
+                    animator.SetBool(contBase.attackRange, false);
+                    animator.SetBool(contBase.sightRange, false);
+                    animator.SetTrigger(contBase.isDeath);
                 }
             }
 
