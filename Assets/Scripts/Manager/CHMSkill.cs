@@ -447,19 +447,20 @@ public class CHMSkill
         {
             case Defines.EStatModifyType.Hp_Up:
                 Debug.Log($"HpUp : {skillValue}");
-                _targetUnit.ChangeHp(_casterUnit, skillValue, _effectData.eDamageType1);
+                _targetUnit.ChangeHp(_casterUnit, Mathf.Round(skillValue), _effectData.eDamageType1);
                 break;
             case Defines.EStatModifyType.Hp_Down:
                 {
                     // 데미지 계산 : 스킬 데미지 + 스킬 시전자 공격력 - 타겟 방어력
                     float totalValue = skillValue + casterAttackPower - targetDefensePower;
+
                     // 데미지가 -이면 데미지를 줄 수 없다는 뜻
                     if (totalValue < 0)
                     {
                         totalValue = 0f;
                     }
                     Debug.Log($"HpDown : {totalValue}");
-                    _targetUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(totalValue), _effectData.eDamageType1);
+                    _targetUnit.ChangeHp(_casterUnit, Mathf.Round(CHUtil.ReverseValue(totalValue)), _effectData.eDamageType1);
                 }
                 break;
                 // 우선 HP만 사용 아래는 사용 시 추가 작업 필요

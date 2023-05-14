@@ -59,10 +59,11 @@ public class CHTargetTracker : MonoBehaviour
 
     private void Awake()
     {
-        agent = gameObject.GetOrAddComponent<NavMeshAgent>();
-        contBase = gameObject.GetOrAddComponent<CHContBase>();
-        unitBase = gameObject.GetOrAddComponent<CHUnitBase>();
+        contBase = gameObject.GetComponent<CHContBase>();
+        unitBase = gameObject.GetComponent<CHUnitBase>();
         animator = gameObject.GetComponent<Animator>();
+
+        agent = gameObject.GetOrAddComponent<NavMeshAgent>();
     }
 
     private void Start()

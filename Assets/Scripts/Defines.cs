@@ -327,6 +327,7 @@ public class Defines
         None = -1,
 
         A,
+        B,
 
         Max
     }

@@ -13,19 +13,19 @@ public class CHUnitBase : MonoBehaviour
     [SerializeField] public Collider unitCollider;
     [SerializeField] public MeshRenderer meshRenderer;
 
+    [SerializeField] protected UnitData unitData;
+
+    [SerializeField] protected SkillData skill1Data;
+    [SerializeField] protected SkillData skill2Data;
+    [SerializeField] protected SkillData skill3Data;
+    [SerializeField] protected SkillData skill4Data;
+
+    [SerializeField] protected ItemData item1Data;
+
+    [SerializeField] protected EUnitState unitState = EUnitState.None;
+
     [SerializeField, ReadOnly] protected float hp;
     [SerializeField, ReadOnly] protected float mp;
-
-    [SerializeField, ReadOnly] protected UnitData unitData;
-
-    [SerializeField, ReadOnly] protected SkillData skill1Data;
-    [SerializeField, ReadOnly] protected SkillData skill2Data;
-    [SerializeField, ReadOnly] protected SkillData skill3Data;
-    [SerializeField, ReadOnly] protected SkillData skill4Data;
-
-    [SerializeField, ReadOnly] protected ItemData item1Data;
-
-    [SerializeField, ReadOnly] protected EUnitState unitState = EUnitState.None;
 
     protected CHGaugeBar hpGaugeBar;
 
@@ -479,6 +479,28 @@ public class CHUnitBase : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void ChangeSkill1(Defines.ESkill _skill)
+    {
+        skill1Data = CHMMain.Skill.GetSkillData(_skill);
+    }
+    public void ChangeSkill2(Defines.ESkill _skill)
+    {
+        skill2Data = CHMMain.Skill.GetSkillData(_skill);
+    }
+    public void ChangeSkill3(Defines.ESkill _skill)
+    {
+        skill3Data = CHMMain.Skill.GetSkillData(_skill);
+    }
+    public void ChangeSkill4(Defines.ESkill _skill)
+    {
+        skill4Data = CHMMain.Skill.GetSkillData(_skill);
+    }
+
+    public void ChangeItem1(Defines.EItem _item)
+    {
+        item1Data = CHMMain.Item.GetItemData(_item);
     }
 
     void InitUnitData()
