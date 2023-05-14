@@ -85,7 +85,7 @@ MonoBehaviour:
     eDamageType1: 0
     eDamageType2: 0
     damage: 22
-    eTarget: 0
+    eTarget: 2
     eTargetMask: 2
     moveToPos: 0
     moveSpeed: 0

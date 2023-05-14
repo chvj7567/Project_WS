@@ -103,7 +103,7 @@ public class CHTargetTracker : MonoBehaviour
 
                     if (unitBase != null && unitBase.IsNormalState() && trDestination)
                     {
-                        if (agent.isOnNavMesh)
+                        if (agent.isOnNavMesh && IsRunAnimPlaying())
                         {
                             agent.stoppingDistance = 0f;
                             agent.SetDestination(trDestination.position);
@@ -135,7 +135,7 @@ public class CHTargetTracker : MonoBehaviour
 
                     if (closestTarget.distance > unitBase.GetOriginSkill1Distance() && unitBase.IsNormalState())
                     {
-                        if (agent.isOnNavMesh)
+                        if (agent.isOnNavMesh && IsRunAnimPlaying())
                         {
                             agent.SetDestination(closestTarget.objTarget.transform.position);
                         }
@@ -202,6 +202,25 @@ public class CHTargetTracker : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    bool IsRunAnimPlaying()
+    {
+        if (animator == null) return false;
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // 애니메이션의 해시 값 비교
+        if (stateInfo.IsName("Run"))
+        {
+            // 애니메이션의 재생 시간 비교
+            if (stateInfo.normalizedTime < 1f)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void PlayRunAnim()
