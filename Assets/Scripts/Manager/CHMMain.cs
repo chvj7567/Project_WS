@@ -15,6 +15,7 @@ public class CHMMain : MonoBehaviour
     CHMSkill m_skill = new CHMSkill();
     CHMUnit m_unit = new CHMUnit();
     CHMAssetBundle m_bundle = new CHMAssetBundle();
+    CHMItem m_item = new CHMItem();
 
     public static CHMPool Pool { get { return Instance.m_pool; } }
     public static CHMResource Resource { get { return Instance.m_resource; } }
@@ -25,6 +26,7 @@ public class CHMMain : MonoBehaviour
     public static CHMSkill Skill { get { return Instance.m_skill; } }
     public static CHMUnit Unit { get { return Instance.m_unit; } }
     public static CHMAssetBundle Bundle { get { return Instance.m_bundle; } }
+    public static CHMItem Item { get { return Instance.m_item; } }
     #endregion
 
     void Start()
@@ -56,6 +58,7 @@ public class CHMMain : MonoBehaviour
 
             m_instance.m_skill.Init();
             m_instance.m_unit.Init();
+            m_instance.m_item.Init();
             m_instance.m_pool.Init();
             m_instance.m_json.Init();
             m_instance.m_particle.Init();
@@ -68,6 +71,7 @@ public class CHMMain : MonoBehaviour
         {
             m_instance.m_skill.Clear();
             m_instance.m_unit.Clear();
+            m_instance.m_item.Clear();
             m_instance.m_json.Clear();
             m_instance.m_particle.Clear();
 

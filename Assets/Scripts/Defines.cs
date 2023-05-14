@@ -321,4 +321,13 @@ public class Defines
 
         Max
     }
+
+    public enum EItem
+    {
+        None = -1,
+
+        A,
+
+        Max
+    }
 }

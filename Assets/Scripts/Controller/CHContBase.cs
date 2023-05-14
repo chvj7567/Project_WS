@@ -111,7 +111,7 @@ public class CHContBase : MonoBehaviour
 
                 Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
 
-                if (timeSinceLastSkill1 >= 0f && timeSinceLastSkill1 < unitInfo.GetOriginSkill1CoolTime())
+                if (timeSinceLastSkill1 >= 0f && timeSinceLastSkill1 < unitInfo.GetCurrentSkill1CoolTime())
                 {
                     timeSinceLastSkill1 += Time.deltaTime;
                 }
@@ -120,7 +120,7 @@ public class CHContBase : MonoBehaviour
                     timeSinceLastSkill1 = -1f;
                 }
 
-                if (timeSinceLastSkill2 >= 0f && timeSinceLastSkill2 < unitInfo.GetOriginSkill2CoolTime())
+                if (timeSinceLastSkill2 >= 0f && timeSinceLastSkill2 < unitInfo.GetCurrentSkill2CoolTime())
                 {
                     timeSinceLastSkill2 += Time.deltaTime;
                 }
@@ -129,7 +129,7 @@ public class CHContBase : MonoBehaviour
                     timeSinceLastSkill2 = -1f;
                 }
 
-                if (timeSinceLastSkill3 >= 0f && timeSinceLastSkill3 < unitInfo.GetOriginSkill3CoolTime())
+                if (timeSinceLastSkill3 >= 0f && timeSinceLastSkill3 < unitInfo.GetCurrentSkill3CoolTime())
                 {
                     timeSinceLastSkill3 += Time.deltaTime;
                 }
@@ -138,7 +138,7 @@ public class CHContBase : MonoBehaviour
                     timeSinceLastSkill3 = -1f;
                 }
 
-                if (timeSinceLastSkill4 >= 0f && timeSinceLastSkill4 < unitInfo.GetOriginSkill4CoolTime())
+                if (timeSinceLastSkill4 >= 0f && timeSinceLastSkill4 < unitInfo.GetCurrentSkill4CoolTime())
                 {
                     timeSinceLastSkill4 += Time.deltaTime;
                 }
@@ -178,7 +178,7 @@ public class CHContBase : MonoBehaviour
                     // 1번 스킬
                     if ((skill1Lock == false) && useSkill1 && unitInfo.IsNormalState())
                     {
-                        if ((skill1Channeling == false) && (timeSinceLastSkill1 < 0f) && (mainTarget.distance <= unitInfo.GetOriginSkill1Distance()))
+                        if ((skill1Channeling == false) && (timeSinceLastSkill1 < 0f) && (mainTarget.distance <= unitInfo.GetCurrentSkill1Distance()))
                         {
                             // 스킬 쿨타임 초기화
                             timeSinceLastSkill1 = 0.0001f;
@@ -211,14 +211,14 @@ public class CHContBase : MonoBehaviour
                                 dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
-                            }, unitInfo.GetOriginSkill1());
+                            }, unitInfo.GetOriginSkill1Data().eSkill);
                         }
                     }
 
                     // 2번 스킬
                     if ((skill2Lock == false) && useSkill2 && unitInfo.IsNormalState())
                     {
-                        if (timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill2Distance())
+                        if ((skill2Channeling == false) && timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetCurrentSkill2Distance())
                         {
                             // 스킬 쿨타임 초기화
                             timeSinceLastSkill2 = 0.0001f;
@@ -249,7 +249,7 @@ public class CHContBase : MonoBehaviour
                                 dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
-                            }, unitInfo.GetOriginSkill2());
+                            }, unitInfo.GetOriginSkill2Data().eSkill);
                             timeSinceLastSkill2 = 0.0001f;
                         }
                     }
@@ -257,7 +257,7 @@ public class CHContBase : MonoBehaviour
                     // 3번 스킬
                     if ((skill3Lock == false) && useSkill3 && unitInfo.IsNormalState())
                     {
-                        if (timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill3Distance())
+                        if ((skill3Channeling == false) && timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetCurrentSkill3Distance())
                         {
                             // 스킬 쿨타임 초기화
                             timeSinceLastSkill3 = 0.0001f;
@@ -288,7 +288,7 @@ public class CHContBase : MonoBehaviour
                                 dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
-                            }, unitInfo.GetOriginSkill3());
+                            }, unitInfo.GetOriginSkill3Data().eSkill);
                             timeSinceLastSkill3 = 0.0001f;
                         }
                     }
@@ -296,7 +296,7 @@ public class CHContBase : MonoBehaviour
                     // 4번 스킬
                     if ((skill4Lock == false) && useSkill4 && unitInfo.IsNormalState())
                     {
-                        if (timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetOriginSkill4Distance())
+                        if ((skill4Channeling == false) && timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetCurrentSkill4Distance())
                         {
                             // 스킬 쿨타임 초기화
                             timeSinceLastSkill4 = 0.0001f;
@@ -327,7 +327,7 @@ public class CHContBase : MonoBehaviour
                                 dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
-                            }, unitInfo.GetOriginSkill4());
+                            }, unitInfo.GetOriginSkill4Data().eSkill);
                             timeSinceLastSkill4 = 0.0001f;
                         }
                     }

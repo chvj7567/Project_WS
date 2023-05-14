@@ -24,6 +24,9 @@ public class UnitData : ScriptableObject
     [Tooltip("스킬3 이름")] public Defines.ESkill eSkill3 = Defines.ESkill.None;
     [Tooltip("스킬4 이름")] public Defines.ESkill eSkill4 = Defines.ESkill.None;
 
+    [Header("아이템 정보")]
+    [Tooltip("아이템1 이름")] public Defines.EItem eItem1 = Defines.EItem.None;
+
     public UnitData Clone()
     {
         UnitData newUnitInfo = new UnitData();
@@ -45,6 +48,7 @@ public class UnitData : ScriptableObject
         newUnitInfo.eSkill2 = this.eSkill2;
         newUnitInfo.eSkill3 = this.eSkill3;
         newUnitInfo.eSkill4 = this.eSkill4;
+        newUnitInfo.eItem1 = this.eItem1;
 
         return newUnitInfo;
     }

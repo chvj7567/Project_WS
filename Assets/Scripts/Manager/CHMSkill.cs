@@ -437,11 +437,11 @@ public class CHMSkill
         float skillValue = CalculateSkillDamage(_casterUnit, _targetUnit, _effectData);
 
         // 스킬 시전자 스탯
-        float casterAttackPower = _casterUnit.GetOriginAttackPower();
-        float casterDefensePower = _casterUnit.GetOriginDefensePower();
+        float casterAttackPower = _casterUnit.GetCurrentAttackPower();
+        float casterDefensePower = _casterUnit.GetCurrentDefensePower();
         // 타겟 스탯
-        float targetAttackPower = _targetUnit.GetOriginAttackPower();
-        float targetDefensePower = _targetUnit.GetOriginDefensePower();
+        float targetAttackPower = _targetUnit.GetCurrentAttackPower();
+        float targetDefensePower = _targetUnit.GetCurrentDefensePower();
 
         switch (_effectData.eStatModifyType)
         {
@@ -490,19 +490,21 @@ public class CHMSkill
     {
         if (_casterUnit == null || _targetUnit == null || _effectData == null) return 0f;
 
+        float damage = _effectData.damage + _casterUnit.GetOriginItem1Data().damage;
+
         // 데미지 타입에 따라 구분
         switch (_effectData.eDamageType2)
         {
             case Defines.EDamageType2.Fixed:
-                return _effectData.damage;
+                return damage;
             case Defines.EDamageType2.Percent_Me_MaxHp:
-                return _casterUnit.GetOriginMaxHp() * _effectData.damage / 100f;
+                return _casterUnit.GetCurrentMaxHp() * damage / 100f;
             case Defines.EDamageType2.Percent_Me_RemainHp:
-                return _casterUnit.GetCurrentHp() * _effectData.damage / 100f;
+                return _casterUnit.GetCurrentHp() * damage / 100f;
             case Defines.EDamageType2.Percent_Target_MaxHp:
-                return _targetUnit.GetOriginMaxHp() * _effectData.damage / 100f;
+                return _targetUnit.GetCurrentMaxHp() * damage / 100f;
             case Defines.EDamageType2.Percent_Target_RemainHp:
-                return _targetUnit.GetCurrentHp() * _effectData.damage / 100f;
+                return _targetUnit.GetCurrentHp() * damage / 100f;
             default:
                 return 0f;
         }
@@ -526,7 +528,7 @@ public class CHMSkill
                 }
             case Defines.ESkillCost.Percent_MaxHP:
                 {
-                    var costValue = _casterUnit.GetOriginMaxHp() * skillInfo.cost / 100f;
+                    var costValue = _casterUnit.GetCurrentMaxHp() * skillInfo.cost / 100f;
 
                     if (_casterUnit.GetCurrentHp() >= costValue)
                     {
@@ -566,7 +568,7 @@ public class CHMSkill
                 }
             case Defines.ESkillCost.Percent_MaxMP:
                 {
-                    var costValue = _casterUnit.GetOriginMaxMp() * skillInfo.cost / 100f;
+                    var costValue = _casterUnit.GetCurrentMaxMp() * skillInfo.cost / 100f;
 
                     if (_casterUnit.GetCurrentMp() >= costValue)
                     {

@@ -39,6 +39,11 @@ public class CHMResource
         LoadAsset<UnitData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_unit.ToString()}", _callback);
     }
 
+    public void LoadItemData(Defines.EItem _unit, Action<ItemData> _callback)
+    {
+        LoadAsset<ItemData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_unit.ToString()}", _callback);
+    }
+
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object
     {
         Action<T> _callbackTemp = original =>

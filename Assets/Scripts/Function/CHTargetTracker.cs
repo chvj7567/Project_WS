@@ -39,19 +39,21 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField, ReadOnly] bool expensionRange = false;
     public void ResetValue(CHUnitBase _unitBase)
     {
+        if (_unitBase == null) return;
+
         unitBase = _unitBase;
 
-        range = unitBase.GetOriginRange();
-        rangeMulti = unitBase.GetOriginRangeMulti();
+        range = unitBase.GetCurrentRange();
+        rangeMulti = unitBase.GetCurrentRangeMulti();
         orgRangeMulti = rangeMulti;
         rangeMulti = 1f;
 
-        viewAngle = unitBase.GetOriginViewAngle();
+        viewAngle = unitBase.GetCurrentViewAngle();
         orgViewAngle = viewAngle;
 
-        agent.speed = unitBase.GetOriginMoveSpeed();
-        agent.angularSpeed = unitBase.GetOriginRotateSpeed();
-        agent.stoppingDistance = unitBase.GetOriginSkill1Distance();
+        agent.speed = unitBase.GetCurrentMoveSpeed();
+        agent.angularSpeed = unitBase.GetCurrentRotateSpeed();
+        agent.stoppingDistance = unitBase.GetCurrentSkill1Distance();
         orgStoppingDistance = agent.stoppingDistance;
     }
 
@@ -133,7 +135,7 @@ public class CHTargetTracker : MonoBehaviour
                     rangeMulti = orgRangeMulti;
                     agent.stoppingDistance = orgStoppingDistance;
 
-                    if (closestTarget.distance > unitBase.GetOriginSkill1Distance() && unitBase.IsNormalState())
+                    if (closestTarget.distance > orgStoppingDistance && unitBase.IsNormalState())
                     {
                         if (agent.isOnNavMesh && IsRunAnimPlaying())
                         {

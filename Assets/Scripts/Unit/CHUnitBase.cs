@@ -17,10 +17,13 @@ public class CHUnitBase : MonoBehaviour
     [SerializeField, ReadOnly] protected float mp;
 
     [SerializeField, ReadOnly] protected UnitData unitData;
+
     [SerializeField, ReadOnly] protected SkillData skill1Data;
     [SerializeField, ReadOnly] protected SkillData skill2Data;
     [SerializeField, ReadOnly] protected SkillData skill3Data;
     [SerializeField, ReadOnly] protected SkillData skill4Data;
+
+    [SerializeField, ReadOnly] protected ItemData item1Data;
 
     [SerializeField, ReadOnly] protected EUnitState unitState = EUnitState.None;
 
@@ -64,36 +67,284 @@ public class CHUnitBase : MonoBehaviour
     }
 
     #region OriginUnitInfoGetter
-    public EUnit GetOriginUnitID() { if (unitData == null) InitUnitData(); return unitData.eUnit; }
-    public int GetOriginNameStringID() { if (unitData == null) InitUnitData(); return unitData.nameStringID; }
-    public float GetOriginMaxHp() { if (unitData == null) InitUnitData(); return unitData.maxHp; }
-    public float GetOriginHpRegenPerSecond() { if (unitData == null) InitUnitData(); return unitData.hpRegenPerSecond; }
-    public float GetOriginMaxMp() { if (unitData == null) InitUnitData(); return unitData.maxMp; }
-    public float GetOriginMpRegenPerSecond() { if (unitData == null) InitUnitData(); return unitData.hpRegenPerSecond; }
-    public float GetOriginAttackPower() { if (unitData == null) InitUnitData(); return unitData.attackPower; }
-    public float GetOriginDefensePower() { if (unitData == null) InitUnitData(); return unitData.defensePower; }
-    public float GetOriginMoveSpeed() { if (unitData == null) InitUnitData(); return unitData.moveSpeed; }
-    public float GetOriginRotateSpeed() { if (unitData == null) InitUnitData(); return unitData.rotateSpeed; }
-    public float GetOriginRange() { if (unitData == null) InitUnitData(); return unitData.range; }
-    public float GetOriginRangeMulti() { if (unitData == null) InitUnitData(); return unitData.rangeMulti; }
-    public float GetOriginViewAngle() { if (unitData == null) InitUnitData(); return unitData.viewAngle; }
+    UnitData GetOriginUnitData() { if (unitData == null) InitUnitData(); return unitData; }
     public SkillData GetOriginSkill1Data() { if (unitData == null) InitUnitData(); return skill1Data; }
     public SkillData GetOriginSkill2Data() { if (unitData == null) InitUnitData(); return skill2Data; }
     public SkillData GetOriginSkill3Data() { if (unitData == null) InitUnitData(); return skill3Data; }
     public SkillData GetOriginSkill4Data() { if (unitData == null) InitUnitData(); return skill4Data; }
-    public Defines.ESkill GetOriginSkill1() { if (unitData == null) InitUnitData(); return skill1Data.eSkill; }
-    public Defines.ESkill GetOriginSkill2() { if (unitData == null) InitUnitData(); return skill2Data.eSkill; }
-    public Defines.ESkill GetOriginSkill3() { if (unitData == null) InitUnitData(); return skill3Data.eSkill; }
-    public Defines.ESkill GetOriginSkill4() { if (unitData == null) InitUnitData(); return skill4Data.eSkill; }
-    public float GetOriginSkill1CoolTime() { if (unitData == null) InitUnitData(); return skill1Data.coolTime; }
-    public float GetOriginSkill2CoolTime() { if (unitData == null) InitUnitData(); return skill2Data.coolTime; }
-    public float GetOriginSkill3CoolTime() { if (unitData == null) InitUnitData(); return skill3Data.coolTime; }
-    public float GetOriginSkill4CoolTime() { if (unitData == null) InitUnitData(); return skill4Data.coolTime; }
-    public float GetOriginSkill1Distance() { if (unitData == null) InitUnitData(); return skill1Data.distance; }
-    public float GetOriginSkill2Distance() { if (unitData == null) InitUnitData(); return skill2Data.distance; }
-    public float GetOriginSkill3Distance() { if (unitData == null) InitUnitData(); return skill3Data.distance; }
-    public float GetOriginSkill4Distance() { if (unitData == null) InitUnitData(); return skill4Data.distance; }
+    public ItemData GetOriginItem1Data() { if (unitData == null) InitUnitData(); return item1Data; }
     #endregion
+
+    #region CurrentUnitInfoGetter
+    public float GetCurrentMaxHp()
+    {
+        float maxHp = 0f;
+
+        maxHp += GetOriginUnitData().maxHp;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            maxHp += item1.maxHp;
+        }
+
+        return maxHp;
+    }
+    public float GetCurrentHpRegenPerSecond()
+    {
+        float hpRegenPerSecond = 0f;
+
+        hpRegenPerSecond += GetOriginUnitData().hpRegenPerSecond;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            hpRegenPerSecond += item1.hpRegenPerSecond;
+        }
+
+        return hpRegenPerSecond;
+    }
+    public float GetCurrentMaxMp()
+    {
+        float maxMp = 0f;
+
+        maxMp += GetOriginUnitData().maxMp;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            maxMp += item1.maxMp;
+        }
+
+        return maxMp;
+    }
+    public float GetCurrentMpRegenPerSecond()
+    {
+        float mpRegenPerSecond = 0f;
+
+        mpRegenPerSecond += GetOriginUnitData().mpRegenPerSecond;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            mpRegenPerSecond += item1.mpRegenPerSecond;
+        }
+
+        return mpRegenPerSecond;
+    }
+    public float GetCurrentAttackPower()
+    {
+        float attackPower = 0f;
+
+        attackPower += GetOriginUnitData().attackPower;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            attackPower += item1.attackPower;
+        }
+
+        return attackPower;
+    }
+    public float GetCurrentDefensePower()
+    {
+        float defensePower = 0f;
+
+        defensePower += GetOriginUnitData().defensePower;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            defensePower += item1.defensePower;
+        }
+
+        return defensePower;
+    }
+    public float GetCurrentMoveSpeed()
+    {
+        float moveSpeed = 0f;
+
+        moveSpeed += GetOriginUnitData().moveSpeed;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            moveSpeed += item1.moveSpeed;
+        }
+
+        return moveSpeed;
+    }
+    public float GetCurrentRotateSpeed()
+    {
+        float rotateSpeed = 0f;
+
+        rotateSpeed += GetOriginUnitData().rotateSpeed;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            rotateSpeed += item1.rotateSpeed;
+        }
+
+        return rotateSpeed;
+    }
+    public float GetCurrentRange()
+    {
+        float range = 0f;
+
+        range += GetOriginUnitData().range;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            range += item1.range;
+        }
+
+        return range;
+    }
+    public float GetCurrentRangeMulti()
+    {
+        float rangeMulti = 0f;
+
+        rangeMulti += GetOriginUnitData().rangeMulti;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            rangeMulti += item1.rangeMulti;
+        }
+
+        return rangeMulti;
+    }
+    public float GetCurrentViewAngle()
+    {
+        float viewAngle = 0f;
+
+        viewAngle += GetOriginUnitData().viewAngle;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            viewAngle += item1.viewAngle;
+        }
+
+        return viewAngle;
+    }
+    public float GetCurrentSkill1Distance()
+    {
+        float distance = 0f;
+
+        distance += GetOriginSkill1Data().distance;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            distance += item1.distance;
+        }
+
+        return distance;
+    }
+    public float GetCurrentSkill2Distance()
+    {
+        float distance = 0f;
+
+        distance += GetOriginSkill2Data().distance;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            distance += item1.distance;
+        }
+
+        return distance;
+    }
+    public float GetCurrentSkill3Distance()
+    {
+        float distance = 0f;
+
+        distance += GetOriginSkill3Data().distance;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            distance += item1.distance;
+        }
+
+        return distance;
+    }
+    public float GetCurrentSkill4Distance()
+    {
+        float distance = 0f;
+
+        distance += GetOriginSkill4Data().distance;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            distance += item1.distance;
+        }
+
+        return distance;
+    }
+    public float GetCurrentSkill1CoolTime()
+    {
+        float coolTime = 0f;
+
+        coolTime += GetOriginSkill1Data().coolTime;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            coolTime += item1.coolTime;
+        }
+
+        return coolTime;
+    }
+    public float GetCurrentSkill2CoolTime()
+    {
+        float coolTime = 0f;
+
+        coolTime += GetOriginSkill2Data().coolTime;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            coolTime += item1.coolTime;
+        }
+
+        return coolTime;
+    }
+    public float GetCurrentSkill3CoolTime()
+    {
+        float coolTime = 0f;
+
+        coolTime += GetOriginSkill3Data().coolTime;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            coolTime += item1.coolTime;
+        }
+
+        return coolTime;
+    }
+    public float GetCurrentSkill4CoolTime()
+    {
+        float coolTime = 0f;
+
+        coolTime += GetOriginSkill4Data().coolTime;
+
+        ItemData item1 = GetOriginItem1Data();
+        if (item1 != null)
+        {
+            coolTime += item1.coolTime;
+        }
+
+        return coolTime;
+    }
+    #endregion
+
+
 
     public float GetCurrentHp()
     {
@@ -244,6 +495,8 @@ public class CHUnitBase : MonoBehaviour
             skill2Data = CHMMain.Skill.GetSkillData(unitData.eSkill2);
             skill3Data = CHMMain.Skill.GetSkillData(unitData.eSkill3);
             skill4Data = CHMMain.Skill.GetSkillData(unitData.eSkill4);
+
+            item1Data = CHMMain.Item.GetItemData(unitData.eItem1);
         }
     }
 
@@ -268,7 +521,7 @@ public class CHUnitBase : MonoBehaviour
 
                     // HP 게이지가 스케일에 영향받지 않도록 
                     hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
-                    hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), this.GetCurrentHp(), 0f);
+                    hpGaugeBar.SetGaugeBar(GetOriginUnitData().maxHp, this.GetCurrentHp(), 0f);
                 }
             }
         }));
@@ -278,13 +531,13 @@ public class CHUnitBase : MonoBehaviour
     {
         float hpOrigin = hp;
         float hpResult = hp + _value;
-        if (hpResult >= GetOriginMaxHp())
+        if (hpResult >= GetOriginUnitData().maxHp)
         {
-            hpResult = GetOriginMaxHp();
+            hpResult = GetOriginUnitData().maxHp;
         }
 
         hp = hpResult;
-        if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetOriginMaxHp(), hpResult, hpResult - hpOrigin);
+        if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetOriginUnitData().maxHp, hpResult, hpResult - hpOrigin);
         Debug.Log($"{unitData.nameStringID}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
 
         // 죽음 Die
@@ -316,9 +569,9 @@ public class CHUnitBase : MonoBehaviour
     {
         float mpOrigin = mp;
         float mpResult = mp + _value;
-        if (mpResult >= GetOriginMaxMp())
+        if (mpResult >= GetOriginUnitData().maxMp)
         {
-            mpResult = GetOriginMaxMp();
+            mpResult = GetOriginUnitData().maxMp;
         }
         else if (mpResult < 0)
         {

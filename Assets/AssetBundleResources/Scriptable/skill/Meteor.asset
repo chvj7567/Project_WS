@@ -17,7 +17,7 @@ MonoBehaviour:
   isTargeting: 0
   isChanneling: 1
   distance: 50
-  coolTime: 3
+  coolTime: 10
   eSkillCost: 0
   cost: 0
   liEffectData:
