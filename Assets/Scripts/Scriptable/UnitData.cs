@@ -5,7 +5,8 @@ public class UnitData : ScriptableObject
 {
     [Header("유닛 정보")]
     [Tooltip("유닛 이름")] public Defines.EUnit eUnit = Defines.EUnit.None;
-    [Tooltip("유닛 이름 스트링ID")] public int nameStringID = -1;
+    [Tooltip("유닛 이름 String")] public string unitName = null;
+    [Tooltip("유닛 레벨")] public Defines.ELevel eLevel = Defines.ELevel.None;
     [Tooltip("최대 HP")] public float maxHp = -1f;
     [Tooltip("HP 초당 회복량")] public float hpRegenPerSecond = -1f;
     [Tooltip("최대 MP")] public float maxMp = -1f;
@@ -32,7 +33,7 @@ public class UnitData : ScriptableObject
         UnitData newUnitInfo = new UnitData();
 
         newUnitInfo.eUnit = this.eUnit;
-        newUnitInfo.nameStringID = this.nameStringID;
+        newUnitInfo.unitName = this.unitName;
         newUnitInfo.maxHp = this.maxHp;
         newUnitInfo.hpRegenPerSecond = this.hpRegenPerSecond;
         newUnitInfo.maxMp = this.maxMp;

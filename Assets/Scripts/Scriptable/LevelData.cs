@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Scriptable Object/Item Data", order = 3)]
-public class ItemData : ScriptableObject
+[CreateAssetMenu(menuName = "Scriptable Object/Level Data", order = 2)]
+public class LevelData : ScriptableObject
 {
-    [Header("아이템")]
-    [Tooltip("아이템 이름")] public Defines.EItem eItem = Defines.EItem.None;
-    [Tooltip("아이템 설명"), Multiline(5)] public string itemDesc = null;
+    [Header("레벨")]
+    [Tooltip("레벨 수")] public Defines.ELevel eLevel = Defines.ELevel.None;
+    [Tooltip("레벨 설명"), Multiline(5)] public string levelDesc = null;
 
-    [Header("아이템 유닛 효과")]
+    [Header("레벨 유닛 효과")]
     [Tooltip("추가 최대 HP")] public float maxHp = 0f;
     [Tooltip("추가 HP 초당 회복량")] public float hpRegenPerSecond = 0f;
     [Tooltip("추가 최대 MP")] public float maxMp = 0f;
@@ -20,16 +20,16 @@ public class ItemData : ScriptableObject
     [Tooltip("추가 타겟이 있을 경우 확장되는 감지 배수 범위")] public float rangeMulti = 0f;
     [Tooltip("추가 타겟 감지 각도")] public float viewAngle = 0f;
 
-    [Header("아이템 스킬 효과")]
+    [Header("레벨 스킬 효과")]
     [Tooltip("추가 스킬 사정거리")] public float distance = 0f;
     [Tooltip("추가 스킬 쿨타임")] public float coolTime = 0f;
     [Tooltip("추가 스킬 데미지")] public float damage = 0f;
 
-    public ItemData Clone()
+    public LevelData Clone()
     {
-        ItemData clone = ScriptableObject.CreateInstance<ItemData>();
-        clone.eItem = this.eItem;
-        clone.itemDesc = this.itemDesc;
+        LevelData clone = ScriptableObject.CreateInstance<LevelData>();
+        clone.eLevel = this.eLevel;
+        clone.levelDesc = this.levelDesc;
         clone.attackPower = this.attackPower;
         clone.defensePower = this.defensePower;
         clone.maxHp = this.maxHp;

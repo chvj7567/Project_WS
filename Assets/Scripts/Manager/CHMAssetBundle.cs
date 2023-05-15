@@ -118,6 +118,10 @@ public class CHMAssetBundle
         {
             path += $"Assets/AssetPieces/{_bundleName.ToLower()}/{_assetName}.mat";
         }
+        else if (typeof(T) == typeof(LevelData))
+        {
+            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/level/{_assetName}.asset";
+        }
         else if (typeof(T) == typeof(ItemData))
         {
             path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/item/{_assetName}.asset";

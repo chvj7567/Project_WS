@@ -322,6 +322,17 @@ public class Defines
         Max
     }
 
+    public enum ELevel
+    {
+        None = -1,
+
+        Level1,
+        Level2,
+        Level3,
+
+        Max
+    }
+
     public enum EItem
     {
         None = -1,

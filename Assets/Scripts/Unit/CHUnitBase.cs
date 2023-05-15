@@ -15,6 +15,8 @@ public class CHUnitBase : MonoBehaviour
 
     [SerializeField] protected UnitData unitData;
 
+    [SerializeField] protected LevelData levelData;
+
     [SerializeField] protected SkillData skill1Data;
     [SerializeField] protected SkillData skill2Data;
     [SerializeField] protected SkillData skill3Data;
@@ -513,6 +515,8 @@ public class CHUnitBase : MonoBehaviour
             hp = unitData.maxHp;
             mp = unitData.maxMp;
 
+            levelData = CHMMain.Level.GetLevelData(unit, unitData.eLevel);
+
             skill1Data = CHMMain.Skill.GetSkillData(unitData.eSkill1);
             skill2Data = CHMMain.Skill.GetSkillData(unitData.eSkill2);
             skill3Data = CHMMain.Skill.GetSkillData(unitData.eSkill3);
@@ -560,7 +564,7 @@ public class CHUnitBase : MonoBehaviour
 
         hp = hpResult;
         if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetOriginUnitData().maxHp, hpResult, hpResult - hpOrigin);
-        Debug.Log($"{unitData.nameStringID}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
+        Debug.Log($"{unitData.unitName}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
 
         // Á×À½ Die
         if (hpResult <= 0.00001f)
@@ -601,7 +605,7 @@ public class CHUnitBase : MonoBehaviour
         }
 
         mp = mpResult;
-        if (unitData) Debug.Log($"{unitData.nameStringID} => Mp : {mpOrigin} -> Mp : {mpResult}");
+        if (unitData) Debug.Log($"{unitData.unitName} => Mp : {mpOrigin} -> Mp : {mpResult}");
     }
 
     void AtOnceChangeAttackPower(float _value)
@@ -611,7 +615,7 @@ public class CHUnitBase : MonoBehaviour
         CheckMaxStatValue(Defines.EStat.AttackPower, ref attackPowerResult);
 
         unitData.attackPower = attackPowerResult;
-        Debug.Log($"{unitData.nameStringID} => AttackPower : {attackPowerOrigin} -> AttackPower : {attackPowerResult}");
+        Debug.Log($"{unitData.unitName} => AttackPower : {attackPowerOrigin} -> AttackPower : {attackPowerResult}");
     }
 
     void AtOnceChangeDefensePower(float _value)
@@ -621,7 +625,7 @@ public class CHUnitBase : MonoBehaviour
         CheckMaxStatValue(Defines.EStat.DefensePower, ref defensePowerResult);
 
         unitData.attackPower = defensePowerResult;
-        Debug.Log($"{unitData.nameStringID} => DefensePower : {defensePowerOrigin} -> DefensePower : {defensePowerResult}");
+        Debug.Log($"{unitData.unitName} => DefensePower : {defensePowerOrigin} -> DefensePower : {defensePowerResult}");
     }
 
     async void ContinuousChangeHp(float _time, int _count, float _value)
