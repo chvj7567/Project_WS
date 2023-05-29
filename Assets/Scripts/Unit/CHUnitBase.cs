@@ -5,7 +5,6 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using static Defines;
-using static Infomation;
 
 public class CHUnitBase : MonoBehaviour
 {

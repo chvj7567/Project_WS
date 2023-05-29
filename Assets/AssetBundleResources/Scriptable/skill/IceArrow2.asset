@@ -24,7 +24,7 @@ MonoBehaviour:
   - eEffect: 12
     effectAngle: 0
     createCasterPosition: 0
-    startDelay: Infinity
+    startDelay: 0
     createOnEmpty: 1
     attach: 0
     duplication: 0
@@ -39,9 +39,9 @@ MonoBehaviour:
     moveSpeed: 0
     offsetToTarget: 0
     eCollision: -1
-    collisionAngle: 0
     sphereRadius: 0
     boxHalf: {x: 0, y: 0, z: 0}
+    collisionAngle: 0
     triggerStartDelay: 0
     triggerStayTime: 0
     triggerEnter: 1
@@ -65,9 +65,9 @@ MonoBehaviour:
     moveSpeed: 0
     offsetToTarget: 0
     eCollision: 0
-    collisionAngle: 360
     sphereRadius: 10
     boxHalf: {x: 0, y: 0, z: 0}
+    collisionAngle: 360
     triggerStartDelay: 0.3
     triggerStayTime: 0.5
     triggerEnter: 1

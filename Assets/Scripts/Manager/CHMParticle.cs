@@ -245,12 +245,6 @@ public class CHMParticle
                     _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 2.2f, posOrigin.z);
                 }
                 break;
-            case Defines.EEffect.FX_Circle_ring:
-                {
-                    var posOrigin = _objParticle.transform.position;
-                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 0.95f, posOrigin.z);
-                }
-                break;
             case Defines.EEffect.FX_Circle_meteor:
             case Defines.EEffect.FX_Arrow_impact2:
                 {
@@ -277,6 +271,18 @@ public class CHMParticle
             case Defines.EEffect.FX_Tornado:
                 {
                     await MoveDirection(_objParticle.transform.forward, 10f, dicParticleTime[_effectData.eEffect], _objParticle);
+                }
+                break;
+            case Defines.EEffect.FX_Explosion_Hit:
+                {
+                    var posOrigin = _objParticle.transform.position;
+                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 0.95f, posOrigin.z);
+                }
+                break;
+            default:
+                {
+                    var posOrigin = _objParticle.transform.position;
+                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 0.95f, posOrigin.z);
                 }
                 break;
         }

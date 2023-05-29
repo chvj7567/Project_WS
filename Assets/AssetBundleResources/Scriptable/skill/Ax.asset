@@ -38,10 +38,10 @@ MonoBehaviour:
     moveToPos: 0
     moveSpeed: 0
     offsetToTarget: 0
-    eCollision: 0
-    collisionAngle: 360
+    eCollision: -1
     sphereRadius: 3
     boxHalf: {x: 0, y: 0, z: 0}
+    collisionAngle: 360
     triggerStartDelay: 0
     triggerStayTime: -1
     triggerEnter: 1

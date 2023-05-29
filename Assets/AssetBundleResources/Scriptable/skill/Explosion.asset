@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eSkill: 0
   skillDesc: "\uC9C8\uB9AC\uC5B8 Q"
-  isTargeting: 1
+  isTargeting: 0
   isChanneling: 1
   distance: 50
   coolTime: 3
@@ -40,7 +40,7 @@ MonoBehaviour:
     offsetToTarget: 0
     eCollision: 0
     collisionAngle: 360
-    sphereRadius: 10
+    sphereRadius: 3
     boxHalf: {x: 0, y: 0, z: 0}
     triggerStartDelay: 0
     triggerStayTime: 0.5
@@ -66,7 +66,7 @@ MonoBehaviour:
     offsetToTarget: 0
     eCollision: 0
     collisionAngle: 360
-    sphereRadius: 10
+    sphereRadius: 1
     boxHalf: {x: 0, y: 0, z: 0}
     triggerStartDelay: 0
     triggerStayTime: 0.5

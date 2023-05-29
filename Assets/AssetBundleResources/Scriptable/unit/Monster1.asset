@@ -15,7 +15,7 @@ MonoBehaviour:
   eUnit: 1
   unitName: 
   eLevel: 0
-  maxHp: 3000
+  maxHp: 5000
   hpRegenPerSecond: 100
   maxMp: 3000
   mpRegenPerSecond: 100
