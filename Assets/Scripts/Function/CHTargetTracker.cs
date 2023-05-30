@@ -209,7 +209,7 @@ public class CHTargetTracker : MonoBehaviour
 
     bool IsRunAnimPlaying()
     {
-        if (animator == null) return false;
+        if (animator == null) return true;
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 

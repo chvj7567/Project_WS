@@ -279,12 +279,6 @@ public class CHMParticle
                     _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 0.95f, posOrigin.z);
                 }
                 break;
-            default:
-                {
-                    var posOrigin = _objParticle.transform.position;
-                    _objParticle.transform.position = new Vector3(posOrigin.x, posOrigin.y - 0.95f, posOrigin.z);
-                }
-                break;
         }
     }
 
