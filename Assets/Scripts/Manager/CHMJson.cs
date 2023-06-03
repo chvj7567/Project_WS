@@ -9,7 +9,6 @@ public class CHMJson
     public class JsonData
     {
         public StringInfo[] arrStringInfo;
-        public UnitInfo[] arrUnitInfo;
     }
 
     int loadCompleteFileCount = 0;
@@ -17,7 +16,6 @@ public class CHMJson
 
     List<Action<TextAsset>> liAction = new List<Action<TextAsset>>();
     Dictionary<int, string> dicStringInfo = new Dictionary<int, string>();
-    List<UnitInfo> liUnitInfo = new List<UnitInfo>();
 
     public void Init()
     {
@@ -28,7 +26,6 @@ public class CHMJson
     {
         liAction.Clear();
         dicStringInfo.Clear();
-        liUnitInfo.Clear();
     }
 
     void LoadJsonData()
@@ -37,7 +34,6 @@ public class CHMJson
         liAction.Clear();
 
         liAction.Add(LoadStringInfo());
-        liAction.Add(LoadUnitInfo());
 
         loadingFileCount = liAction.Count;
     }
@@ -72,26 +68,6 @@ public class CHMJson
         return callback;
     }
 
-    Action<TextAsset> LoadUnitInfo()
-    {
-        Action<TextAsset> callback;
-
-        liUnitInfo.Clear();
-
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Unit, callback = (TextAsset textAsset) =>
-        {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"arrUnitInfo\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.arrUnitInfo)
-            {
-                liUnitInfo.Add(data);
-            }
-
-            ++loadCompleteFileCount;
-        });
-
-        return callback;
-    }
-
     public string TryGetString(int _stringID)
     {
         if (dicStringInfo.TryGetValue(_stringID, out string result))
@@ -100,10 +76,5 @@ public class CHMJson
         }
 
         return "";
-    }
-
-    public UnitInfo GetUnitInfo(Defines.EUnit _unitID)
-    {
-        return liUnitInfo.Find(_ => _.eUnit == _unitID);
     }
 }
