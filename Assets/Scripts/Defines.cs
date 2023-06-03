@@ -60,6 +60,7 @@ public class Defines
         UICamera,
         UICanvas,
         UIAlarm,
+        UIMenu,
 
         Max
     }

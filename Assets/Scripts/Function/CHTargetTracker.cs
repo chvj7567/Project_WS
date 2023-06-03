@@ -272,7 +272,7 @@ public class CHTargetTracker : MonoBehaviour
             Vector3 dirTarget = (posTarget - _originPos).normalized;
 
             // 시야각에 걸리는지 확인
-            if (Vector3.Angle(_direction, dirTarget) < _viewAngle / 2)
+            if (Vector3.Angle(_direction, dirTarget) <= _viewAngle / 2)
             {
                 float targetDis = Vector3.Distance(_originPos, posTarget);
 

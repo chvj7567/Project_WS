@@ -21,6 +21,6 @@ public class CHUIAlarm : CHUIBase
 
     private void Start()
     {
-        textDesc.SetText("AA");
+        textDesc.text.text = "AA";
     }
 }

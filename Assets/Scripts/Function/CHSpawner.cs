@@ -49,6 +49,7 @@ public class CHSpawner : MonoBehaviour
                 {
                     unitBase.ResetUnit();
                     unitBase.gameObject.SetActive(true);
+
                 }
 
                 await Task.Delay((int)(spawnDelay * 1000f), cts.Token);

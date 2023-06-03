@@ -26,7 +26,7 @@ MonoBehaviour:
   range: 20
   rangeMulti: 2
   viewAngle: 180
-  eSkill1: 0
+  eSkill1: 4
   eSkill2: 1
   eSkill3: 5
   eSkill4: 6

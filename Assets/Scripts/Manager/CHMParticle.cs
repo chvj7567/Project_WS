@@ -297,9 +297,7 @@ public class CHMParticle
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
-                    //TargetAirborne(cts.Token, _trTarget, 10, 0.5f, 25f);
-
-                    _trTarget.DOJump(_trTarget.transform.position, 10f, 1, 3f);
+                    TargetAirborne(_trTriggerTarget);
 
                     CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
                 }
@@ -445,5 +443,19 @@ public class CHMParticle
                 }
             }
         }
+    }
+
+    void TargetAirborne(Transform _target)
+    {
+        var unitBase = _target.GetComponent<CHUnitBase>();
+        if (unitBase != null)
+        {
+            unitBase.SetIsAirborne(true);
+        }
+
+        _target.DOJump(_target.transform.position, 5f, 1, 3f).OnComplete(() =>
+        {
+            unitBase.SetIsAirborne(false);
+        });
     }
 }

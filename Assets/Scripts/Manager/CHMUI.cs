@@ -154,7 +154,7 @@ public class CHMUI
         }
     }
 
-    public static void CloseUI(GameObject _uiObj)
+    public void CloseUI(GameObject _uiObj)
     {
         if (_uiObj)
         {
@@ -164,7 +164,7 @@ public class CHMUI
         }
     }
 
-    public static void CloseUI(Defines.EUI _uiType)
+    public void CloseUI(Defines.EUI _uiType)
     {
         activeUI = activeUI.FindAll(_ => _ != null);
         foreach (var obj in activeUI)

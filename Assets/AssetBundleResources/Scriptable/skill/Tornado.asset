@@ -17,7 +17,7 @@ MonoBehaviour:
   isTargeting: 0
   isChanneling: 1
   distance: 50
-  coolTime: 1
+  coolTime: 10
   eSkillCost: 0
   cost: 0
   liEffectData:
@@ -32,7 +32,7 @@ MonoBehaviour:
     eStatModifyType: 1
     eDamageType1: 0
     eDamageType2: 0
-    damage: 10
+    damage: 3000
     eTarget: 0
     eTargetMask: 2
     moveToPos: 0
