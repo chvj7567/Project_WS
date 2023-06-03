@@ -32,13 +32,13 @@ MonoBehaviour:
     eStatModifyType: 1
     eDamageType1: 0
     eDamageType2: 0
-    damage: 10
+    damage: 5
     eTarget: 0
-    eTargetMask: 3
+    eTargetMask: 2
     moveToPos: 0
     moveSpeed: 0
     offsetToTarget: 0
-    eCollision: -1
+    eCollision: 0
     sphereRadius: 3
     boxHalf: {x: 0, y: 0, z: 0}
     collisionAngle: 360

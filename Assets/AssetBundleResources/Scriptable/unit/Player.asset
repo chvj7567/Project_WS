@@ -15,9 +15,9 @@ MonoBehaviour:
   eUnit: 0
   unitName: 
   eLevel: 0
-  maxHp: 3000
+  maxHp: 100
   hpRegenPerSecond: 100
-  maxMp: 3000
+  maxMp: 100
   mpRegenPerSecond: 100
   attackPower: 0
   defensePower: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
   range: 20
   rangeMulti: 2
   viewAngle: 180
-  eSkill1: 4
+  eSkill1: 7
   eSkill2: 1
   eSkill3: 5
   eSkill4: 6

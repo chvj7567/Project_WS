@@ -71,95 +71,100 @@ public class CHTargetTracker : MonoBehaviour
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
             bool isDead = false;
-            if (unitBase) isDead = unitBase.GetIsDeath();
-
-            // 자기가 살아있을 때만 타겟 감지
-            if (isDead == false)
+            if (unitBase)
             {
-                // 시야 범위 안에 들어온 타겟 중 제일 가까운 타겟 감지
-                switch (standardAxis)
+                isDead = unitBase.GetIsDeath();
+            }
+
+            if (isDead)
+            {
+                agent.ResetPath();
+                return;
+            }
+
+            // 시야 범위 안에 들어온 타겟 중 제일 가까운 타겟 감지
+            switch (standardAxis)
+            {
+                case Defines.EStandardAxis.X:
+                    {
+                        closestTarget = GetClosestTargetInfo(transform.position, transform.right, targetMask, range * rangeMulti, viewAngle);
+                    }
+                    break;
+                case Defines.EStandardAxis.Z:
+                    {
+                        closestTarget = GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
+                    }
+                    break;
+            }
+
+            if (closestTarget == null)
+            {
+                if (expensionRange == false)
                 {
-                    case Defines.EStandardAxis.X:
-                        {
-                            closestTarget = GetClosestTargetInfo(transform.position, transform.right, targetMask, range * rangeMulti, viewAngle);
-                        }
-                        break;
-                    case Defines.EStandardAxis.Z:
-                        {
-                            closestTarget = GetClosestTargetInfo(transform.position, transform.forward, targetMask, range * rangeMulti, viewAngle);
-                        }
-                        break;
-                }
-
-                if (closestTarget == null)
-                {
-                    if (expensionRange == false)
-                    {
-                        viewAngle = orgViewAngle;
-                        rangeMulti = 1f;
-                    }
-                    else
-                    {
-                        viewAngle = 360f;
-                        rangeMulti = orgRangeMulti;
-                    }
-
-                    if (unitBase != null && unitBase.IsNormalState() && trDestination)
-                    {
-                        if (agent.isOnNavMesh && IsRunAnimPlaying())
-                        {
-                            agent.stoppingDistance = 0f;
-                            agent.SetDestination(trDestination.position);
-                        }
-                        else
-                        {
-                            LookAtPosition(trDestination.position);
-                        }
-                        
-                        PlayRunAnim();
-                    }
-                    else
-                    {
-                        if (agent.isOnNavMesh)
-                        {
-                            agent.ResetPath();
-                        }
-
-                        StopRunAnim();
-                    }
+                    viewAngle = orgViewAngle;
+                    rangeMulti = 1f;
                 }
                 else
                 {
-                    // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
                     viewAngle = 360f;
-                    // 타겟 발견 시 시야 해당 배수만큼 증가
                     rangeMulti = orgRangeMulti;
-                    agent.stoppingDistance = orgStoppingDistance;
+                }
 
-                    if (closestTarget.distance > orgStoppingDistance && unitBase.IsNormalState())
+                if (unitBase != null && unitBase.IsNormalState() && trDestination)
+                {
+                    if (agent.isOnNavMesh && IsRunAnimPlaying())
                     {
-                        if (agent.isOnNavMesh && IsRunAnimPlaying())
-                        {
-                            agent.SetDestination(closestTarget.objTarget.transform.position);
-                        }
-                        else
-                        {
-                            LookAtPosition(closestTarget.objTarget.transform.position);
-                        }
+                        agent.stoppingDistance = 0f;
+                        agent.SetDestination(trDestination.position);
+                    }
+                    else
+                    {
+                        LookAtPosition(trDestination.position);
+                    }
 
-                        PlayRunAnim();
+                    PlayRunAnim();
+                }
+                else
+                {
+                    if (agent.isOnNavMesh)
+                    {
+                        agent.ResetPath();
+                    }
+
+                    StopRunAnim();
+                }
+            }
+            else
+            {
+                // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
+                viewAngle = 360f;
+                // 타겟 발견 시 시야 해당 배수만큼 증가
+                rangeMulti = orgRangeMulti;
+                agent.stoppingDistance = orgStoppingDistance;
+
+                if (closestTarget.distance > orgStoppingDistance && unitBase.IsNormalState())
+                {
+                    if (agent.isOnNavMesh && IsRunAnimPlaying())
+                    {
+                        agent.SetDestination(closestTarget.objTarget.transform.position);
                     }
                     else
                     {
                         LookAtPosition(closestTarget.objTarget.transform.position);
-
-                        if (agent.isOnNavMesh)
-                        {
-                            agent.ResetPath();
-                        }
-                        
-                        StopRunAnim();
                     }
+
+                    PlayRunAnim();
+                }
+                else
+                {
+                    LookAtPosition(closestTarget.objTarget.transform.position);
+
+                    if (agent.isOnNavMesh)
+                    {
+                        agent.ResetPath();
+                    }
+
+                    StopRunAnim();
                 }
             }
         }).AddTo(this);

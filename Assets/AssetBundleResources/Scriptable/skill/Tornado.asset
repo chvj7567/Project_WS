@@ -32,7 +32,7 @@ MonoBehaviour:
     eStatModifyType: 1
     eDamageType1: 0
     eDamageType2: 0
-    damage: 3000
+    damage: 10
     eTarget: 0
     eTargetMask: 2
     moveToPos: 0
