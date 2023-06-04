@@ -18,11 +18,8 @@ public class CHMUnit
 
                 dicUnitData.Add(unit, _);
             });
-        }
 
-        for (int i = 0; i < (int)Defines.EMaterial.Max; ++i)
-        {
-            CHMMain.Resource.LoadMaterial((Defines.EMaterial)i, (mat) =>
+            CHMMain.Resource.LoadUnitMaterial((Defines.EUnit)i, (mat) =>
             {
                 liMaterial.Add(mat);
             });
@@ -42,10 +39,15 @@ public class CHMUnit
         return dicUnitData[_unit];
     }
 
-    public Material GetUnitMaterial(Defines.EMaterial _material)
+    public void SetColor(GameObject _objUnit, Defines.EUnit _unit)
     {
-        if ((int)_material >= liMaterial.Count) return null;
+        if (_objUnit == null) return;
 
-        return liMaterial[(int)_material];
+        var index = (int)_unit;
+        var meshRenderer = _objUnit.GetComponent<MeshRenderer>();
+        if (meshRenderer != null && index < liMaterial.Count)
+        {
+            meshRenderer.material = liMaterial[index];
+        }
     }
 }

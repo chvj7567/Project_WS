@@ -125,7 +125,7 @@ public class CHMUI
                 if (uiObj)
                 {
                     activeUI.Add(uiObj);
-                    var script = uiObj.GetComponent<CHUIBase>();
+                    var script = uiObj.GetComponent<UIBase>();
                     script.eUIType = _uiWaitData.uiType;
                     script.uid = _uiWaitData.uid;
                     script.InitUI(_uiWaitData.uiArg);
@@ -158,7 +158,7 @@ public class CHMUI
     {
         if (_uiObj)
         {
-            var popup = _uiObj.GetComponent<CHUIBase>();
+            var popup = _uiObj.GetComponent<UIBase>();
             popup.CloseUI();
             waitCloseUI.Add(_uiObj);
         }
@@ -169,7 +169,7 @@ public class CHMUI
         activeUI = activeUI.FindAll(_ => _ != null);
         foreach (var obj in activeUI)
         {
-            var ui = obj.GetComponent<CHUIBase>();
+            var ui = obj.GetComponent<UIBase>();
             if (ui.eUIType == _uiType)
             {
                 ui.CloseUI();

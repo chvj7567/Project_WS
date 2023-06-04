@@ -24,11 +24,6 @@ public class CHMResource
         LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_jsonType.ToString()}", _callback);
     }
 
-    public void LoadMaterial(Defines.EMaterial _material, Action<Material> _callback)
-    {
-        LoadAsset<Material>($"{Defines.EAssetPiece.Materials.ToString()}", $"{_material.ToString()}", _callback);
-    }
-
     public void LoadSkillData(Defines.ESkill _skill, Action<SkillData> _callback)
     {
         LoadAsset<SkillData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_skill.ToString()}", _callback);
@@ -37,6 +32,11 @@ public class CHMResource
     public void LoadUnitData(Defines.EUnit _unit, Action<UnitData> _callback)
     {
         LoadAsset<UnitData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_unit.ToString()}", _callback);
+    }
+
+    public void LoadUnitMaterial(Defines.EUnit _material, Action<Material> _callback)
+    {
+        LoadAsset<Material>($"{Defines.EAssetPiece.Materials.ToString()}", $"{_material.ToString()}", _callback);
     }
 
     public void LoadLevelData(Defines.EUnit _unit, Defines.ELevel _level, Action<LevelData> _callback)
@@ -78,6 +78,11 @@ public class CHMResource
     public void InstantiateMajor(Defines.EMajor _major, Action<GameObject> _callback = null)
     {
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Major.ToString()}", $"{_major.ToString()}", _callback);
+    }
+
+    public void InstantiateBall(Action<GameObject> _callback = null)
+    {
+        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Unit.ToString()}", $"Ball", _callback);
     }
 
     public void InstantiateUnit(Defines.EUnit _unit, Action<GameObject> _callback = null)

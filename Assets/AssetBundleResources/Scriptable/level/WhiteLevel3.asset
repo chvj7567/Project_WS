@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 955923b96de57fc41b870f46ab4d11aa, type: 3}
-  m_Name: Monster1Level3
+  m_Name: WhiteLevel3
   m_EditorClassIdentifier: 
   eLevel: 2
   levelDesc: 

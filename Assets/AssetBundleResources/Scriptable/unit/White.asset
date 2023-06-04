@@ -9,22 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 955923b96de57fc41b870f46ab4d11aa, type: 3}
-  m_Name: Monster1Level1
+  m_Script: {fileID: 11500000, guid: 398879e25a2280a4586ebcee5da6ca41, type: 3}
+  m_Name: White
   m_EditorClassIdentifier: 
+  eUnit: 0
+  unitName: 
   eLevel: 0
-  levelDesc: 
-  maxHp: 0
-  hpRegenPerSecond: 0
-  maxMp: 0
-  mpRegenPerSecond: 0
+  maxHp: 100
+  hpRegenPerSecond: 100
+  maxMp: 100
+  mpRegenPerSecond: 100
   attackPower: 0
   defensePower: 0
-  moveSpeed: 0
-  rotateSpeed: 0
-  range: 0
-  rangeMulti: 0
-  viewAngle: 0
-  distance: 0
-  coolTime: 0
-  damage: 0
+  moveSpeed: 5
+  rotateSpeed: 5
+  range: 20
+  rangeMulti: 2
+  viewAngle: 180
+  eSkill1: 7
+  eSkill2: 1
+  eSkill3: 5
+  eSkill4: 6
+  eItem1: 0

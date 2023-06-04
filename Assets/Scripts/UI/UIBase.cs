@@ -1,7 +1,7 @@
 using Unity.Collections;
 using UnityEngine;
 
-public class CHUIBase : MonoBehaviour
+public class UIBase : MonoBehaviour
 {
     [ReadOnly]
     public Defines.EUI eUIType;

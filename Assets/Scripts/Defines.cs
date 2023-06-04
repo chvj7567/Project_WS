@@ -240,8 +240,14 @@ public class Defines
     {
         None = -1,
 
-        Player,
-        Monster1,
+        White,
+        Brown,
+        Green,
+        Blue,
+        Yellow,
+        Orange,
+        Pink,
+        Red,
 
         Max
     }
@@ -293,22 +299,6 @@ public class Defines
 
         X,
         Z,
-
-        Max
-    }
-
-    public enum EMaterial
-    {
-        None = -1,
-
-        Blue,
-        Brown,
-        Gray,
-        Orange,
-        Pink,
-        Red,
-        White,
-        Yellow,
 
         Max
     }
