@@ -8,25 +8,25 @@ using static Defines;
 
 public class CHUnitBase : MonoBehaviour
 {
-    [SerializeField] EUnit unit;
+    [SerializeField] public EUnit unit;
     [SerializeField] public Collider unitCollider;
     [SerializeField] public MeshRenderer meshRenderer;
 
-    [SerializeField] protected UnitData unitData;
+    [SerializeField] public UnitData unitData;
 
-    [SerializeField] protected LevelData levelData;
+    [SerializeField] public LevelData levelData;
 
-    [SerializeField] protected SkillData skill1Data;
-    [SerializeField] protected SkillData skill2Data;
-    [SerializeField] protected SkillData skill3Data;
-    [SerializeField] protected SkillData skill4Data;
+    [SerializeField] public SkillData skill1Data;
+    [SerializeField] public SkillData skill2Data;
+    [SerializeField] public SkillData skill3Data;
+    [SerializeField] public SkillData skill4Data;
 
-    [SerializeField] protected ItemData item1Data;
+    [SerializeField] public ItemData item1Data;
 
-    [SerializeField] protected EUnitState unitState = EUnitState.None;
+    [SerializeField] public EUnitState unitState = EUnitState.None;
 
-    [SerializeField, ReadOnly] protected float hp;
-    [SerializeField, ReadOnly] protected float mp;
+    [SerializeField, ReadOnly] public float hp;
+    [SerializeField, ReadOnly] public float mp;
 
     protected CHGaugeBar hpGaugeBar;
 
@@ -529,7 +529,7 @@ public class CHUnitBase : MonoBehaviour
     {
         if (hpGaugeBar) return;
 
-        CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, (Action<GameObject>)((gaugeBar) =>
+        CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, ((gaugeBar) =>
         {
             if (gaugeBar)
             {

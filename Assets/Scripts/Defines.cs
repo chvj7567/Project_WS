@@ -303,7 +303,7 @@ public class Defines
         Max
     }
 
-    public enum ETeamLayer
+    public enum ELayer
     {
         None = -1,
 

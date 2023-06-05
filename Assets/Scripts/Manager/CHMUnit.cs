@@ -32,22 +32,52 @@ public class CHMUnit
         liMaterial.Clear();
     }
 
-    public UnitData GetUnitData(Defines.EUnit _unit)
+    public UnitData GetUnitData(Defines.EUnit _eUnit)
     {
-        if (dicUnitData.ContainsKey(_unit) == false) return null;
+        if (dicUnitData.ContainsKey(_eUnit) == false) return null;
 
-        return dicUnitData[_unit];
+        return dicUnitData[_eUnit];
     }
 
-    public void SetColor(GameObject _objUnit, Defines.EUnit _unit)
+    public void SetUnit(GameObject _objUnit, Defines.EUnit _eUnit)
     {
         if (_objUnit == null) return;
 
-        var index = (int)_unit;
+        var unitBase = _objUnit.GetComponent<CHUnitBase>();
+        if (unitBase != null)
+        {
+            unitBase.unit = _eUnit;
+        }
+    }
+
+    public void SetColor(GameObject _objUnit, Defines.EUnit _eUnit)
+    {
+        if (_objUnit == null) return;
+
+        var index = (int)_eUnit;
         var meshRenderer = _objUnit.GetComponent<MeshRenderer>();
         if (meshRenderer != null && index < liMaterial.Count)
         {
             meshRenderer.material = liMaterial[index];
+        }
+    }
+
+    public void SetLayer(GameObject _objUnit, Defines.ELayer _eLayer)
+    {
+        if (_objUnit == null) return;
+
+        _objUnit.layer = (int)_eLayer;
+    }
+
+    public void SetTargetMask(GameObject _objUnit, Defines.ELayer _eLayer)
+    {
+        if (_objUnit == null) return;
+
+        var targetTracker = _objUnit.GetComponent<CHTargetTracker>();
+
+        if (targetTracker != null)
+        {
+            targetTracker.targetMask = 1 << (int)_eLayer;
         }
     }
 }
