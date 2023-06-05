@@ -289,9 +289,6 @@ public class CHMParticle
         {
             case Defines.EEffect.FX_Healing:
                 {
-                    // 적들의 수 만큼만 힐링
-                    if (_trCaster.gameObject.layer == _trTriggerTarget.gameObject.layer) return;
-
                     CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectData);
                 }
                 break;
