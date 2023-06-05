@@ -11,7 +11,14 @@ public class UIStageArg : CHUIArg
 
 public class UIStage : UIBase
 {
+    UIStageArg arg;
+
     [SerializeField] Button btnUnitSelect;
+
+    public override void InitUI(CHUIArg _uiArg)
+    {
+        arg = _uiArg as UIStageArg;
+    }
 
     private void Start()
     {

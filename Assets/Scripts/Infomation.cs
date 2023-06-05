@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal.Internal;
-using static Defines;
+using UnityEngine.UI;
 
 public class Infomation
 {
@@ -16,7 +14,7 @@ public class Infomation
     [Serializable]
     public class UnitInfo
     {
-        public EUnit eUnit = EUnit.None;
+        public Defines.EUnit eUnit = Defines.EUnit.None;
         public int nameStringID = -1;
         public float maxHp = -1f;
         public float hp = -1f;
@@ -33,10 +31,10 @@ public class Infomation
         public float range = -1f;
         public float rangeMulti = -1f;
         public float viewAngle = -1f;
-        public ESkill eSkill1ID = ESkill.None;
-        public ESkill eSkill2ID = ESkill.None;
-        public ESkill eSkill3ID = ESkill.None;
-        public ESkill eSkill4ID = ESkill.None;
+        public Defines.ESkill eSkill1ID = Defines.ESkill.None;
+        public Defines.ESkill eSkill2ID = Defines.ESkill.None;
+        public Defines.ESkill eSkill3ID = Defines.ESkill.None;
+        public Defines.ESkill eSkill4ID = Defines.ESkill.None;
 
         public UnitInfo Clone()
         {
@@ -68,9 +66,19 @@ public class Infomation
         }
     }
 
+    [Serializable]
     public class TargetInfo
     {
         public GameObject objTarget = null;
         public float distance = -1f;
+    }
+
+    [Serializable]
+    public class CreateUnitInfo
+    {
+        public Defines.EUnit eUnit;
+        public Transform trCreate;
+        public Defines.ELayer eTeamLayer;
+        public Defines.ELayer eTargetLayer;
     }
 }

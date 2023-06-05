@@ -147,7 +147,7 @@ public class CHContBase : MonoBehaviour
                     timeSinceLastSkill4 = -1f;
                 }
 
-                if (mainTarget == null)
+                if (mainTarget == null || mainTarget.objTarget == null)
                 {
                     if (animator) animator.SetBool(attackRange, false);
                 }
