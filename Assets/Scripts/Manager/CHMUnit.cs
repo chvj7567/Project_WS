@@ -39,6 +39,29 @@ public class CHMUnit
         return dicUnitData[_eUnit];
     }
 
+    public void CreateUnit(Defines.EUnit _eUnit, Defines.ELayer _eTeamLayer, Defines.ELayer _eTargetLayer, Vector3 _position, List<CHTargetTracker> _liTargetTracker, List<LayerMask> _liTargetMask)
+    {
+        CHMMain.Resource.InstantiateBall((ball) =>
+        {
+            CHMMain.Unit.SetUnit(ball, _eUnit);
+            CHMMain.Unit.SetColor(ball, _eUnit);
+            CHMMain.Unit.SetLayer(ball, _eTeamLayer);
+            CHMMain.Unit.SetTargetMask(ball, _eTargetLayer);
+
+            ball.transform.position = _position;
+
+            var targetTracker = ball.GetComponent<CHTargetTracker>();
+            if (targetTracker != null)
+            {
+                _liTargetTracker.Add(targetTracker);
+                _liTargetMask.Add(targetTracker.targetMask);
+
+                // 유닛 생성 시 바로 공격하지 않도록 비활성화
+                targetTracker.targetMask = 0;
+            }
+        });
+    }
+
     public void SetUnit(GameObject _objUnit, Defines.EUnit _eUnit)
     {
         if (_objUnit == null) return;

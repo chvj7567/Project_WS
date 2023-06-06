@@ -511,6 +511,8 @@ public class CHUnitBase : MonoBehaviour
         unitData = CHMMain.Unit.GetUnitData(unit);
         if (unitData != null)
         {
+            CHMMain.Unit.SetColor(gameObject, unit);
+
             hp = unitData.maxHp;
             mp = unitData.maxMp;
 

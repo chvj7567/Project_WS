@@ -27,7 +27,7 @@ MonoBehaviour:
     startDelay: 1
     createOnEmpty: 0
     attach: 0
-    duplication: 1
+    duplication: 0
     onDecal: 0
     eStatModifyType: 0
     eDamageType1: 0
