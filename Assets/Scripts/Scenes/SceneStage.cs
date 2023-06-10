@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
 using static Infomation;
@@ -52,27 +51,6 @@ public class SceneStage : SceneBase
             WarStart();
         });
     }
-
-    /*public void CreateUnit(Defines.EUnit _eUnit, Defines.ELayer _eTeamLayer, Defines.ELayer _eTargetLayer, Vector3 _position)
-    {
-        CHMMain.Resource.InstantiateBall((ball) =>
-        {
-            CHMMain.Unit.SetUnit(ball, _eUnit);
-            CHMMain.Unit.SetColor(ball, _eUnit);
-            CHMMain.Unit.SetLayer(ball, _eTeamLayer);
-            CHMMain.Unit.SetTargetMask(ball, _eTargetLayer);
-
-            ball.transform.position = _position;
-
-            var targetTracker = ball.GetComponent<CHTargetTracker>();
-            if (targetTracker != null)
-            {
-                // 유닛 생성 시 바로 공격하지 않도록 비활성화
-                targetTracker.enabled = false;
-                liMyTargetTracker.Add(targetTracker);
-            }
-        });
-    }*/
 
     public void WarStart()
     {
