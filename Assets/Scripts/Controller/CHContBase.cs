@@ -8,33 +8,29 @@ using UnityEngine.AI;
 
 public class CHContBase : MonoBehaviour
 {
-    [SerializeField] protected bool useSkill1 = false;
-    [SerializeField] protected bool useSkill2 = false;
-    [SerializeField] protected bool useSkill3 = false;
-    [SerializeField] protected bool useSkill4 = false;
+    [SerializeField] bool useSkill1 = false;
+    [SerializeField] bool useSkill2 = false;
+    [SerializeField] bool useSkill3 = false;
+    [SerializeField] bool useSkill4 = false;
 
-    [SerializeField, ReadOnly] protected bool skill1Lock = false;
-    [SerializeField, ReadOnly] protected bool skill2Lock = false;
-    [SerializeField, ReadOnly] protected bool skill3Lock = false;
-    [SerializeField, ReadOnly] protected bool skill4Lock = false;
+    [SerializeField, ReadOnly] bool skill1Lock = false;
+    [SerializeField, ReadOnly] bool skill2Lock = false;
+    [SerializeField, ReadOnly] bool skill3Lock = false;
+    [SerializeField, ReadOnly] bool skill4Lock = false;
 
-    [SerializeField, ReadOnly] protected bool useSkill1Channeling = false;
-    [SerializeField, ReadOnly] protected bool useSkill2Channeling = false;
-    [SerializeField, ReadOnly] protected bool useSkill3Channeling = false;
-    [SerializeField, ReadOnly] protected bool useSkill4Channeling = false;
+    [SerializeField, ReadOnly] bool skill1Channeling = false;
+    [SerializeField, ReadOnly] bool skill2Channeling = false;
+    [SerializeField, ReadOnly] bool skill3Channeling = false;
+    [SerializeField, ReadOnly] bool skill4Channeling = false;
 
-    [SerializeField, ReadOnly] protected bool skill1Channeling = false;
-    [SerializeField, ReadOnly] protected bool skill2Channeling = false;
-    [SerializeField, ReadOnly] protected bool skill3Channeling = false;
-    [SerializeField, ReadOnly] protected bool skill4Channeling = false;
-
-    [SerializeField, ReadOnly] protected float timeSinceLastSkill1 = -1f;
-    [SerializeField, ReadOnly] protected float timeSinceLastSkill2 = -1f;
-    [SerializeField, ReadOnly] protected float timeSinceLastSkill3 = -1f;
-    [SerializeField, ReadOnly] protected float timeSinceLastSkill4 = -1f;
+    [SerializeField, ReadOnly] float timeSinceLastSkill1 = -1f;
+    [SerializeField, ReadOnly] float timeSinceLastSkill2 = -1f;
+    [SerializeField, ReadOnly] float timeSinceLastSkill3 = -1f;
+    [SerializeField, ReadOnly] float timeSinceLastSkill4 = -1f;
 
     [SerializeField, ReadOnly] Animator animator;
-
+    [SerializeField, ReadOnly] CHUnitBase unitBase;
+    [SerializeField, ReadOnly] CHTargetTracker targetTracker;
     enum Anim
     {
         Idle,
@@ -53,6 +49,32 @@ public class CHContBase : MonoBehaviour
 
     CancellationTokenSource cts;
     CancellationToken token;
+
+    public Animator GetAnimator()
+    {
+        return animator;
+    }
+    public float GetTimeSinceLastSkill1() { return timeSinceLastSkill1; }
+    public float GetTimeSinceLastSkill2() { return timeSinceLastSkill2; }
+    public float GetTimeSinceLastSkill3() { return timeSinceLastSkill3; }
+    public float GetTimeSinceLastSkill4() { return timeSinceLastSkill4; }
+    public void OpenSkill2()
+    {
+        useSkill2 = true;
+        skill2Lock = false;
+    }
+
+    public void OpenSkill3()
+    {
+        useSkill3 = true;
+        skill3Lock = false;
+    }
+
+    public void OpenSkill4()
+    {
+        useSkill4 = true;
+        skill4Lock = false;
+    }
 
     private void Start()
     {
@@ -85,16 +107,16 @@ public class CHContBase : MonoBehaviour
             }
         }
 
-        var unitInfo = gameObject.GetOrAddComponent<CHUnitBase>();
-        var targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
-        if (unitInfo != null && targetTracker != null)
+        unitBase = gameObject.GetOrAddComponent<CHUnitBase>();
+        targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
+        if (unitBase != null && targetTracker != null)
         {
-            if (unitInfo.GetOriginSkill1Data() == null) skill1Lock = true;
-            if (unitInfo.GetOriginSkill2Data() == null) skill2Lock = true;
-            if (unitInfo.GetOriginSkill3Data() == null) skill3Lock = true;
-            if (unitInfo.GetOriginSkill4Data() == null) skill4Lock = true;
+            if (unitBase.GetOriginSkill1Data() == null) skill1Lock = true;
+            if (unitBase.GetOriginSkill2Data() == null) skill2Lock = true;
+            if (unitBase.GetOriginSkill3Data() == null) skill3Lock = true;
+            if (unitBase.GetOriginSkill4Data() == null) skill4Lock = true;
 
-            targetTracker.ResetValue(unitInfo);
+            targetTracker.ResetValue(unitBase);
 
             timeSinceLastSkill1 = -1f;
             timeSinceLastSkill2 = -1f;
@@ -104,14 +126,14 @@ public class CHContBase : MonoBehaviour
             gameObject.UpdateAsObservable().Subscribe(async _ =>
             {
                 // 죽거나 땅에 있는 상태가 아닐 때 (에어본 같은 경우)
-                if (unitInfo.GetIsDeath() && transform.position.y >= 0.1f)
+                if (unitBase.GetIsDeath() && transform.position.y >= 0.1f)
                 {
                     return;
                 }
 
                 Infomation.TargetInfo mainTarget = targetTracker.GetClosestTargetInfo();
 
-                if (timeSinceLastSkill1 >= 0f && timeSinceLastSkill1 < unitInfo.GetCurrentSkill1CoolTime())
+                if (timeSinceLastSkill1 >= 0f && timeSinceLastSkill1 < unitBase.GetCurrentSkill1CoolTime())
                 {
                     timeSinceLastSkill1 += Time.deltaTime;
                 }
@@ -120,7 +142,7 @@ public class CHContBase : MonoBehaviour
                     timeSinceLastSkill1 = -1f;
                 }
 
-                if (timeSinceLastSkill2 >= 0f && timeSinceLastSkill2 < unitInfo.GetCurrentSkill2CoolTime())
+                if (timeSinceLastSkill2 >= 0f && timeSinceLastSkill2 < unitBase.GetCurrentSkill2CoolTime())
                 {
                     timeSinceLastSkill2 += Time.deltaTime;
                 }
@@ -129,7 +151,7 @@ public class CHContBase : MonoBehaviour
                     timeSinceLastSkill2 = -1f;
                 }
 
-                if (timeSinceLastSkill3 >= 0f && timeSinceLastSkill3 < unitInfo.GetCurrentSkill3CoolTime())
+                if (timeSinceLastSkill3 >= 0f && timeSinceLastSkill3 < unitBase.GetCurrentSkill3CoolTime())
                 {
                     timeSinceLastSkill3 += Time.deltaTime;
                 }
@@ -138,7 +160,7 @@ public class CHContBase : MonoBehaviour
                     timeSinceLastSkill3 = -1f;
                 }
 
-                if (timeSinceLastSkill4 >= 0f && timeSinceLastSkill4 < unitInfo.GetCurrentSkill4CoolTime())
+                if (timeSinceLastSkill4 >= 0f && timeSinceLastSkill4 < unitBase.GetCurrentSkill4CoolTime())
                 {
                     timeSinceLastSkill4 += Time.deltaTime;
                 }
@@ -176,9 +198,9 @@ public class CHContBase : MonoBehaviour
                     var dirMainTarget = posMainTarget - posMy;
 
                     // 1번 스킬
-                    if ((skill1Lock == false) && useSkill1 && unitInfo.IsNormalState())
+                    if ((skill1Lock == false) && useSkill1 && unitBase.IsNormalState())
                     {
-                        if ((skill1Channeling == false) && (timeSinceLastSkill1 < 0f) && (mainTarget.distance <= unitInfo.GetCurrentSkill1Distance()))
+                        if ((skill1Channeling == false) && (timeSinceLastSkill1 < 0f) && (mainTarget.distance <= unitBase.GetCurrentSkill1Distance()))
                         {
                             // 스킬 쿨타임 초기화
                             timeSinceLastSkill1 = 0.0001f;
@@ -187,7 +209,7 @@ public class CHContBase : MonoBehaviour
                             {
                                 animator.SetTrigger(attackRange);
                                 
-                                if (unitInfo.GetOriginSkill1Data().isChanneling)
+                                if (unitBase.GetOriginSkill1Data().isChanneling)
                                 {
                                     // 애니메이션 시전 시간동안 채널링
                                     skill1Channeling = true;
@@ -211,14 +233,14 @@ public class CHContBase : MonoBehaviour
                                 dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
-                            }, unitInfo.GetOriginSkill1Data().eSkill);
+                            }, unitBase.GetOriginSkill1Data().eSkill);
                         }
                     }
 
                     // 2번 스킬
-                    if ((skill2Lock == false) && useSkill2 && unitInfo.IsNormalState())
+                    if ((skill2Lock == false) && useSkill2 && unitBase.IsNormalState())
                     {
-                        if ((skill2Channeling == false) && timeSinceLastSkill2 < 0f && mainTarget.distance <= unitInfo.GetCurrentSkill2Distance())
+                        if ((skill2Channeling == false) && timeSinceLastSkill2 < 0f && mainTarget.distance <= unitBase.GetCurrentSkill2Distance())
                         {
                             // 스킬 쿨타임 초기화
                             timeSinceLastSkill2 = 0.0001f;
@@ -227,7 +249,7 @@ public class CHContBase : MonoBehaviour
                             {
                                 animator.SetTrigger(attackRange);
 
-                                if (unitInfo.GetOriginSkill2Data().isChanneling)
+                                if (unitBase.GetOriginSkill2Data().isChanneling)
                                 {
                                     // 애니메이션 시전 시간동안 채널링
                                     skill2Channeling = true;
@@ -249,15 +271,15 @@ public class CHContBase : MonoBehaviour
                                 dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
-                            }, unitInfo.GetOriginSkill2Data().eSkill);
+                            }, unitBase.GetOriginSkill2Data().eSkill);
                             timeSinceLastSkill2 = 0.0001f;
                         }
                     }
 
                     // 3번 스킬
-                    if ((skill3Lock == false) && useSkill3 && unitInfo.IsNormalState())
+                    if ((skill3Lock == false) && useSkill3 && unitBase.IsNormalState())
                     {
-                        if ((skill3Channeling == false) && timeSinceLastSkill3 < 0f && mainTarget.distance <= unitInfo.GetCurrentSkill3Distance())
+                        if ((skill3Channeling == false) && timeSinceLastSkill3 < 0f && mainTarget.distance <= unitBase.GetCurrentSkill3Distance())
                         {
                             // 스킬 쿨타임 초기화
                             timeSinceLastSkill3 = 0.0001f;
@@ -266,7 +288,7 @@ public class CHContBase : MonoBehaviour
                             {
                                 animator.SetTrigger(attackRange);
 
-                                if (unitInfo.GetOriginSkill3Data().isChanneling)
+                                if (unitBase.GetOriginSkill3Data().isChanneling)
                                 {
                                     // 애니메이션 시전 시간동안 채널링
                                     skill3Channeling = true;
@@ -288,15 +310,15 @@ public class CHContBase : MonoBehaviour
                                 dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
-                            }, unitInfo.GetOriginSkill3Data().eSkill);
+                            }, unitBase.GetOriginSkill3Data().eSkill);
                             timeSinceLastSkill3 = 0.0001f;
                         }
                     }
 
                     // 4번 스킬
-                    if ((skill4Lock == false) && useSkill4 && unitInfo.IsNormalState())
+                    if ((skill4Lock == false) && useSkill4 && unitBase.IsNormalState())
                     {
-                        if ((skill4Channeling == false) && timeSinceLastSkill4 < 0f && mainTarget.distance <= unitInfo.GetCurrentSkill4Distance())
+                        if ((skill4Channeling == false) && timeSinceLastSkill4 < 0f && mainTarget.distance <= unitBase.GetCurrentSkill4Distance())
                         {
                             // 스킬 쿨타임 초기화
                             timeSinceLastSkill4 = 0.0001f;
@@ -305,7 +327,7 @@ public class CHContBase : MonoBehaviour
                             {
                                 animator.SetTrigger(attackRange);
 
-                                if (unitInfo.GetOriginSkill4Data().isChanneling)
+                                if (unitBase.GetOriginSkill4Data().isChanneling)
                                 {
                                     // 애니메이션 시전 시간동안 채널링
                                     skill4Channeling = true;
@@ -327,7 +349,7 @@ public class CHContBase : MonoBehaviour
                                 dirTarget = posMainTarget - posMy,
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
-                            }, unitInfo.GetOriginSkill4Data().eSkill);
+                            }, unitBase.GetOriginSkill4Data().eSkill);
                             timeSinceLastSkill4 = 0.0001f;
                         }
                     }
@@ -335,19 +357,4 @@ public class CHContBase : MonoBehaviour
             }).AddTo(this);
         }
     }
-
-    public Animator GetAnimator()
-    {
-        return animator;
-    }
-
-    public float GetTimeSinceLastSkill1() { return timeSinceLastSkill1; }
-    public float GetTimeSinceLastSkill2() { return timeSinceLastSkill2; }
-    public float GetTimeSinceLastSkill3() { return timeSinceLastSkill3; }
-    public float GetTimeSinceLastSkill4() { return timeSinceLastSkill4; }
-
-    public void SetTimeSinceLastSkill1(float _time) { timeSinceLastSkill1 = _time; }
-    public void SetTimeSinceLastSkill2(float _time) { timeSinceLastSkill2 = _time; }
-    public void SetTimeSinceLastSkill3(float _time) { timeSinceLastSkill3 = _time; }
-    public void SetTimeSinceLastSkill4(float _time) { timeSinceLastSkill4 = _time; }
 }
