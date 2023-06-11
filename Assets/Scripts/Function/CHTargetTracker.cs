@@ -37,6 +37,12 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField, ReadOnly] float orgRangeMulti = -1f;
     [SerializeField, ReadOnly] float orgViewAngle = -1f;
     [SerializeField, ReadOnly] bool expensionRange = false;
+
+    public void UpdateSkillValue()
+    {
+        orgStoppingDistance = unitBase.GetCurrentSkill1Distance();
+    }
+
     public void ResetValue(CHUnitBase _unitBase)
     {
         if (_unitBase == null) return;
@@ -53,8 +59,7 @@ public class CHTargetTracker : MonoBehaviour
 
         agent.speed = unitBase.GetCurrentMoveSpeed();
         agent.angularSpeed = unitBase.GetCurrentRotateSpeed();
-        agent.stoppingDistance = unitBase.GetCurrentSkill1Distance();
-        orgStoppingDistance = agent.stoppingDistance;
+        orgStoppingDistance = unitBase.GetCurrentSkill1Distance();
     }
 
     private void Awake()
