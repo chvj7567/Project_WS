@@ -112,7 +112,6 @@ public class CHSphereCollision : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        
         if (useStay && stayTickLastTime < 0f)
         {
             stayTickLastTime = 0.0001f;

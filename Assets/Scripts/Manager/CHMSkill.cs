@@ -104,7 +104,7 @@ public class CHMSkill
             var casterUnit = _skillLocationInfo.trCaster.GetComponent<CHUnitBase>();
             if (casterUnit != null)
             {
-                if (CanUseSkill(casterUnit, skillData) == false) return;
+                if (CanUseSkill(_skill, casterUnit, skillData) == false) return;
             }
 
             foreach (var effectInfo in skillData.liEffectData)
@@ -143,7 +143,7 @@ public class CHMSkill
                 if (_skillLocationInfo.trCaster == null) return;
 
                 // 스킬 충돌 범위 생성
-                CreateSkillCollision(_skillLocationInfo, effectInfo, skillData.isTargeting);
+                CreateSkillCollision(_skill, _skillLocationInfo, effectInfo, skillData.isTargeting);
             }
         }
     }
@@ -220,7 +220,7 @@ public class CHMSkill
         return targetTransformList;
     }
 
-    public void ApplySkillValue(Transform _trCaster, List<Transform> _liTarget, SkillData.EffectData _effectData)
+    public void ApplySkillValue(Defines.ESkill _eSkill, Transform _trCaster, List<Transform> _liTarget, SkillData.EffectData _effectData)
     {
         // 스킬 효과(데미지 등) 적용
 
@@ -233,7 +233,7 @@ public class CHMSkill
             var targetUnit = target.GetComponent<CHUnitBase>();
             if (targetUnit != null)
             {
-                ApplyEffectType(casterUnit, targetUnit, _effectData);
+                ApplyEffectType(_eSkill, casterUnit, targetUnit, _effectData);
             }
         }
     }
@@ -267,7 +267,7 @@ public class CHMSkill
 
     //-------------------------------------- private ------------------------------------------//
 
-    void CreateSkillCollision(SkillLocationInfo _skillLocationInfo, SkillData.EffectData _effectData, bool _isTargeting)
+    void CreateSkillCollision(Defines.ESkill _eSkill, SkillLocationInfo _skillLocationInfo, SkillData.EffectData _effectData, bool _isTargeting)
     {
         SkillLocationInfo skillLocationInfo = _skillLocationInfo.Copy();
         LayerMask targetMask = GetTargetMask(skillLocationInfo.trCaster.gameObject.layer, _effectData.eTargetMask);
@@ -294,7 +294,7 @@ public class CHMSkill
 
                 if (_effectData.createOnEmpty)
                 {
-                    CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                    CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
                         new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { skillLocationInfo.dirSkill }, _effectData);
                 }
 
@@ -330,13 +330,13 @@ public class CHMSkill
                     {
                         foreach (var target in liTarget)
                         {
-                            CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                            CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
                                 new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { skillLocationInfo.dirSkill }, _effectData);
                         }
                     }
                     else
                     {
-                        CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                        CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
                             new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { skillLocationInfo.dirSkill }, _effectData);
                     }
                 }
@@ -368,7 +368,7 @@ public class CHMSkill
                         {
                             foreach (var target in liTarget)
                             {
-                                CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { targetOne },
+                                CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, new List<Transform> { targetOne },
                                     new List<Vector3> { targetOne.position }, new List<Vector3> { direction }, _effectData);
                             }
                         }
@@ -376,7 +376,7 @@ public class CHMSkill
                         {
                             foreach (var target in liTarget)
                             {
-                                CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                                CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
                                     new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { direction }, _effectData);
                             }
                         }
@@ -385,12 +385,12 @@ public class CHMSkill
                     {
                         if (_effectData.createCasterPosition == false)
                         {
-                            CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { targetOne },
+                            CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, new List<Transform> { targetOne },
                                 new List<Vector3> { targetOne.position }, new List<Vector3> { direction }, _effectData);
                         }
                         else
                         {
-                            CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                            CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
                                 new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { direction }, _effectData);
                         }
                     }
@@ -418,19 +418,19 @@ public class CHMSkill
                         }
                     }
 
-                    CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, liTarget, liParticlePos, liParticleDir, _effectData);
+                    CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, liTarget, liParticlePos, liParticleDir, _effectData);
                 }
                 break;
             default:
                 {
-                    CHMMain.Particle.CreateParticle(skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
+                    CHMMain.Particle.CreateParticle(_eSkill, skillLocationInfo.trCaster, new List<Transform> { skillLocationInfo.trTarget },
                         new List<Vector3> { skillLocationInfo.posSkill }, new List<Vector3> { skillLocationInfo.dirSkill }, _effectData);
                 }
                 break;
         }
     }
 
-    void ApplyEffectType(CHUnitBase _casterUnit, CHUnitBase _targetUnit, SkillData.EffectData _effectData)
+    void ApplyEffectType(Defines.ESkill _eSkill, CHUnitBase _casterUnit, CHUnitBase _targetUnit, SkillData.EffectData _effectData)
     {
         if (_casterUnit == null || _targetUnit == null || _effectData == null) return;
 
@@ -447,7 +447,7 @@ public class CHMSkill
         {
             case Defines.EStatModifyType.Hp_Up:
                 Debug.Log($"HpUp : {skillValue}");
-                _targetUnit.ChangeHp(_casterUnit, Mathf.Round(skillValue), _effectData.eDamageType1);
+                _targetUnit.ChangeHp(_eSkill, _casterUnit, Mathf.Round(skillValue), _effectData.eDamageType1);
                 break;
             case Defines.EStatModifyType.Hp_Down:
                 {
@@ -460,7 +460,7 @@ public class CHMSkill
                         totalValue = 0f;
                     }
                     Debug.Log($"HpDown : {totalValue}");
-                    _targetUnit.ChangeHp(_casterUnit, Mathf.Round(CHUtil.ReverseValue(totalValue)), _effectData.eDamageType1);
+                    _targetUnit.ChangeHp(_eSkill, _casterUnit, Mathf.Round(CHUtil.ReverseValue(totalValue)), _effectData.eDamageType1);
                 }
                 break;
                 // 우선 HP만 사용 아래는 사용 시 추가 작업 필요
@@ -511,7 +511,7 @@ public class CHMSkill
         }
     }
 
-    bool CanUseSkill(CHUnitBase _casterUnit, SkillData skillInfo)
+    bool CanUseSkill(Defines.ESkill _eSkill, CHUnitBase _casterUnit, SkillData skillInfo)
     {
         switch (skillInfo.eSkillCost)
         {
@@ -519,7 +519,7 @@ public class CHMSkill
                 {
                     if (_casterUnit.GetCurrentHp() >= skillInfo.cost)
                     {
-                        _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageType1.None);
+                        _casterUnit.ChangeHp(_eSkill, _casterUnit, CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageType1.None);
                         return true;
                     }
                     else
@@ -533,7 +533,7 @@ public class CHMSkill
 
                     if (_casterUnit.GetCurrentHp() >= costValue)
                     {
-                        _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
+                        _casterUnit.ChangeHp(_eSkill, _casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
                         return true;
                     }
                     else
@@ -547,7 +547,7 @@ public class CHMSkill
 
                     if (_casterUnit.GetCurrentHp() >= costValue)
                     {
-                        _casterUnit.ChangeHp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
+                        _casterUnit.ChangeHp(_eSkill, _casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
                         return true;
                     }
                     else
@@ -559,7 +559,7 @@ public class CHMSkill
                 {
                     if (_casterUnit.GetCurrentMp() >= skillInfo.cost)
                     {
-                        _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageType1.None);
+                        _casterUnit.ChangeMp(_eSkill, _casterUnit, CHUtil.ReverseValue(skillInfo.cost), Defines.EDamageType1.None);
                         return true;
                     }
                     else
@@ -573,7 +573,7 @@ public class CHMSkill
 
                     if (_casterUnit.GetCurrentMp() >= costValue)
                     {
-                        _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
+                        _casterUnit.ChangeMp(_eSkill, _casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
                         return true;
                     }
                     else
@@ -587,7 +587,7 @@ public class CHMSkill
 
                     if (_casterUnit.GetCurrentMp() >= costValue)
                     {
-                        _casterUnit.ChangeMp(_casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
+                        _casterUnit.ChangeMp(_eSkill, _casterUnit, CHUtil.ReverseValue(costValue), Defines.EDamageType1.None);
                         return true;
                     }
                     else

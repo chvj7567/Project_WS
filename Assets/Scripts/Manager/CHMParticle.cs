@@ -47,7 +47,7 @@ public class CHMParticle
         }
     }
 
-    public void CreateParticle(Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, SkillData.EffectData _effectData)
+    public void CreateParticle(Defines.ESkill _eSkill, Transform _trCaster, List<Transform> _liTarget, List<Vector3> _liParticlePos, List<Vector3> _liParticleDir, SkillData.EffectData _effectData)
     {
         if (_trCaster == null)
         {
@@ -99,8 +99,8 @@ public class CHMParticle
             objParticle.transform.forward = dirParticle;
             objParticle.transform.forward = objParticle.transform.Angle(_effectData.effectAngle, Defines.EStandardAxis.Z);
 
-            SetParticlePositionValue(_trCaster, trTarget, objParticle, _effectData);
-            SetParticleCollision(_trCaster, trTarget, objParticle, _effectData);
+            SetParticlePositionValue(_eSkill, _trCaster, trTarget, objParticle, _effectData);
+            SetParticleCollision(_eSkill, _trCaster, trTarget, objParticle, _effectData);
         }
     }
 
@@ -158,7 +158,7 @@ public class CHMParticle
         if (_objParticle) CHMMain.Resource.Destroy(_objParticle);
     }
 
-    async void SetParticleCollision(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
+    async void SetParticleCollision(Defines.ESkill _eSkill, Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
         if (_effectData.eCollision != Defines.ECollision.None)
         {
@@ -178,7 +178,7 @@ public class CHMParticle
 
                     if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                     {
-                        SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                        SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, _objParticle, _effectData);
                     }
                 }));
             }
@@ -191,7 +191,7 @@ public class CHMParticle
 
                     if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                     {
-                        SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                        SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, _objParticle, _effectData);
                     }
                 }));
             }
@@ -202,7 +202,7 @@ public class CHMParticle
 
                 if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                 {
-                    SetParticleTriggerValue(_trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                    SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, _objParticle, _effectData);
                 }
             }));
 
@@ -228,7 +228,7 @@ public class CHMParticle
         }
     }
 
-    async void SetParticlePositionValue(Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
+    async void SetParticlePositionValue(Defines.ESkill _eSkill, Transform _trCaster, Transform _trTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
         // 이펙트가 붙어있어야하는 경우 SetParent를 해버리면 해당 타겟은 충돌체에 감지가 안되므로 타겟을 따라다니도록 수정
         if (_effectData.attach)
@@ -282,33 +282,33 @@ public class CHMParticle
         }
     }
 
-    void SetParticleTriggerValue(Transform _trCaster, Transform _trTarget, Transform _trTriggerTarget, GameObject _objParticle, SkillData.EffectData _effectData)
+    void SetParticleTriggerValue(Defines.ESkill _eSkill, Transform _trCaster, Transform _trTarget, Transform _trTriggerTarget, GameObject _objParticle, SkillData.EffectData _effectData)
     {
         // 각 이펙트에 트리거 된 타겟들 관련 처리
         switch (_effectData.eEffect)
         {
             case Defines.EEffect.FX_Healing:
                 {
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trCaster }, _effectData);
+                    CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trCaster }, _effectData);
                 }
                 break;
             case Defines.EEffect.FX_Tornado:
                 {
                     TargetAirborne(_trTriggerTarget);
 
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
+                    CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
                 }
                 break;
             case Defines.EEffect.FX_Arrow_impact:
                 {
                     _objParticle.SetActive(false);
 
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
+                    CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
                 }
                 break;
             default:
                 {
-                    CHMMain.Skill.ApplySkillValue(_trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
+                    CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
                 }
                 break;
         }

@@ -399,7 +399,7 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeHp(CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
+    public void ChangeHp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
     {
         if (GetIsDeath() == false)
         {
@@ -412,71 +412,73 @@ public class CHUnitBase : MonoBehaviour
             switch (eDamageType1)
             {
                 case Defines.EDamageType1.AtOnce:
-                    AtOnceChangeHp(_value);
+                    AtOnceChangeHp(_eSkill, _attackUnit, _value);
                     break;
                 case Defines.EDamageType1.Continuous_1Sec_3Count:
-                    ContinuousChangeHp(1f, 3, _value);
+                    ContinuousChangeHp(_eSkill, _attackUnit, 1f, 3, _value);
                     break;
                 case Defines.EDamageType1.Continuous_Dot1Sec_10Count:
-                    ContinuousChangeHp(.1f, 10, _value);
+                    ContinuousChangeHp(_eSkill, _attackUnit, .1f, 10, _value);
                     break;
                 default:
-                    AtOnceChangeHp(_value);
+                    AtOnceChangeHp(_eSkill, _attackUnit, _value);
                     break;
             }
         }
     }
 
-    public void ChangeMp(CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
+    public void ChangeMp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
     {
         if (GetIsDeath() == false)
         {
             switch (eDamageType1)
             {
                 case Defines.EDamageType1.AtOnce:
-                    AtOnceChangeMp(_value);
+                    AtOnceChangeMp(_eSkill, _attackUnit, _value);
                     break;
                 case Defines.EDamageType1.Continuous_1Sec_3Count:
-                    ContinuousChangeMp(1f, 3, _value);
+                    ContinuousChangeMp(_eSkill, _attackUnit, 1f, 3, _value);
                     break;
                 default:
-                    AtOnceChangeMp(_value);
+                    AtOnceChangeMp(_eSkill, _attackUnit, _value);
                     break;
             }
         }
     }
 
-    public void ChangeAttackPower(CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
+    public void ChangeAttackPower(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
     {
         if (GetIsDeath() == false)
         {
             switch (eDamageType1)
             {
                 case Defines.EDamageType1.AtOnce:
-                    AtOnceChangeAttackPower(_value);
+                    AtOnceChangeAttackPower(_eSkill, _attackUnit, _value);
                     break;
                 case Defines.EDamageType1.Continuous_1Sec_3Count:
-                    ContinuousChangeAttackPower(1f, 3, _value);
+                    ContinuousChangeAttackPower(_eSkill, _attackUnit, 1f, 3, _value);
                     break;
                 default:
+                    AtOnceChangeAttackPower(_eSkill, _attackUnit, _value);
                     break;
             }
         }
     }
 
-    public void ChangeDefensePower(CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
+    public void ChangeDefensePower(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value, Defines.EDamageType1 eDamageType1)
     {
         if (GetIsDeath() == false)
         {
             switch (eDamageType1)
             {
                 case Defines.EDamageType1.AtOnce:
-                    AtOnceChangeDefensePower(_value);
+                    AtOnceChangeDefensePower(_eSkill, _attackUnit, _value);
                     break;
                 case Defines.EDamageType1.Continuous_1Sec_3Count:
-                    ContinuousChangeDefensePower(1f, 3, _value);
+                    ContinuousChangeDefensePower(_eSkill, _attackUnit, 1f, 3, _value);
                     break;
                 default:
+                    AtOnceChangeDefensePower(_eSkill, _attackUnit, _value);
                     break;
             }
         }
@@ -554,7 +556,7 @@ public class CHUnitBase : MonoBehaviour
         }));
     }
 
-    void AtOnceChangeHp(float _value)
+    void AtOnceChangeHp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)
     {
         float hpOrigin = hp;
         float hpResult = hp + _value;
@@ -565,7 +567,8 @@ public class CHUnitBase : MonoBehaviour
 
         hp = hpResult;
         if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetOriginUnitData().maxHp, hpResult, hpResult - hpOrigin);
-        Debug.Log($"{unitData.unitName}<{gameObject.name}> => Hp : {hpOrigin} -> Hp : {hpResult}");
+        Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
+            $"{unitData.unitName}<{gameObject.name}> => Hp : {hpOrigin} -> {hpResult}");
 
         // Á×À½ Die
         if (hpResult <= 0.00001f)
@@ -592,7 +595,7 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    void AtOnceChangeMp(float _value)
+    void AtOnceChangeMp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)
     {
         float mpOrigin = mp;
         float mpResult = mp + _value;
@@ -606,36 +609,39 @@ public class CHUnitBase : MonoBehaviour
         }
 
         mp = mpResult;
-        if (unitData) Debug.Log($"{unitData.unitName} => Mp : {mpOrigin} -> Mp : {mpResult}");
+        Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
+            $"{unitData.unitName}<{gameObject.name}> => Mp : {mpOrigin} -> {mpResult}");
     }
 
-    void AtOnceChangeAttackPower(float _value)
+    void AtOnceChangeAttackPower(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)
     {
         float attackPowerOrigin = unitData.attackPower;
         float attackPowerResult = unitData.attackPower + _value;
         CheckMaxStatValue(Defines.EStat.AttackPower, ref attackPowerResult);
 
         unitData.attackPower = attackPowerResult;
-        Debug.Log($"{unitData.unitName} => AttackPower : {attackPowerOrigin} -> AttackPower : {attackPowerResult}");
+        Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
+            $"{unitData.unitName}<{gameObject.name}> => AttackPower : {attackPowerOrigin} -> {attackPowerResult}");
     }
 
-    void AtOnceChangeDefensePower(float _value)
+    void AtOnceChangeDefensePower(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)
     {
         float defensePowerOrigin = unitData.defensePower;
         float defensePowerResult = unitData.defensePower + _value;
         CheckMaxStatValue(Defines.EStat.DefensePower, ref defensePowerResult);
 
         unitData.attackPower = defensePowerResult;
-        Debug.Log($"{unitData.unitName} => DefensePower : {defensePowerOrigin} -> DefensePower : {defensePowerResult}");
+        Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
+            $"{unitData.unitName}<{gameObject.name}> => DefensePower : {defensePowerOrigin} -> {defensePowerResult}");
     }
 
-    async void ContinuousChangeHp(float _time, int _count, float _value)
+    async void ContinuousChangeHp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _time, int _count, float _value)
     {
         float tickTime = _time / (_count - 1);
 
         for (int i = 0; i < _count; ++i)
         {
-            AtOnceChangeHp(_value);
+            AtOnceChangeHp(_eSkill, _attackUnit, _value);
 
             if (i == _count - 1)
             {
@@ -648,13 +654,13 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    async void ContinuousChangeMp(float _time, int _count, float _value)
+    async void ContinuousChangeMp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _time, int _count, float _value)
     {
         float tickTime = _time / (_count - 1);
 
         for (int i = 0; i < _count; ++i)
         {
-            AtOnceChangeMp(_value);
+            AtOnceChangeMp(_eSkill, _attackUnit, _value);
 
             if (i == _count - 1)
             {
@@ -667,13 +673,13 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    async void ContinuousChangeAttackPower(float _time, int _count, float _value)
+    async void ContinuousChangeAttackPower(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _time, int _count, float _value)
     {
         float tickTime = _time / (_count - 1);
 
         for (int i = 0; i < _count; ++i)
         {
-            AtOnceChangeAttackPower(_value);
+            AtOnceChangeAttackPower(_eSkill, _attackUnit, _value);
 
             if (i == _count - 1)
             {
@@ -686,13 +692,13 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    async void ContinuousChangeDefensePower(float _time, int _count, float _value)
+    async void ContinuousChangeDefensePower(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _time, int _count, float _value)
     {
         float tickTime = _time / (_count - 1);
 
         for (int i = 0; i < _count; ++i)
         {
-            AtOnceChangeDefensePower(_value);
+            AtOnceChangeDefensePower(_eSkill, _attackUnit, _value);
 
             if (i == _count - 1)
             {
