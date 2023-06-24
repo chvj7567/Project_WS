@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,46 +8,73 @@ using static Infomation;
 
 public class SceneStage : SceneBase
 {
-    [SerializeField] Button btnExitReady;
-    [SerializeField] Button btnCreateUnit;
-    [SerializeField] Button btnWarStart;
-    [SerializeField] List<CreateUnitInfo> liMyUnitInfo = new List<CreateUnitInfo>();
-    [SerializeField] List<CHTargetTracker> liEnemyTargetTracker = new List<CHTargetTracker>();
+    [Header("수동 설정")] 
+    [SerializeField] Button exitBtn;
+    [SerializeField] Button createUnitBtn;
+    [SerializeField] CHTMPro remainCountText;
+    [SerializeField] Button warStartBtn;
+    [SerializeField] List<Transform> myPositionList = new List<Transform>();
+    [SerializeField] List<CHTargetTracker> enemyTargetTrackerList = new List<CHTargetTracker>();
 
-    [SerializeField, ReadOnly] List<CHTargetTracker> liMyTargetTracker = new List<CHTargetTracker>();
+    [Header("자동 설정")]
+    [SerializeField, ReadOnly] List<CreateUnitInfo> myCreateUnitInfoList = new List<CreateUnitInfo>();
+    [SerializeField, ReadOnly] List<CHTargetTracker> myTargetTrackerList = new List<CHTargetTracker>();
+    [SerializeField, ReadOnly] List<LayerMask> myTargetMaskList = new List<LayerMask>();
+    [SerializeField, ReadOnly] List<LayerMask> enemyTargetMaskList= new List<LayerMask>();
 
-    [SerializeField, ReadOnly] List<LayerMask> liMyTargetMask = new List<LayerMask>();
-    [SerializeField, ReadOnly] List<LayerMask> liEnemyTargetMask= new List<LayerMask>();
+    int myPositionIndex = 0;
+    int remainCount = 0;
 
     void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
+        remainCount = myPositionList.Count;
+        remainCountText.SetText(remainCount);
+
         // 적 유닛 바로 공격하지 않도록 비활성화
-        foreach (var targetTracker in liEnemyTargetTracker)
+        foreach (var targetTracker in enemyTargetTrackerList)
         {
-            liEnemyTargetMask.Add(targetTracker.targetMask);
+            enemyTargetMaskList.Add(targetTracker.targetMask);
             targetTracker.targetMask = 0;
         }
 
-        btnExitReady.OnClickAsObservable().Subscribe(_ =>
+        exitBtn.OnClickAsObservable().Subscribe(_ =>
         {
             CHMMain.Particle.OnApplicationQuitHandler();
             CHMMain.Skill.OnApplicationQuitHandler();
 
-            Debug.Log("Exit Ready Ok");
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
         });
 
-        btnCreateUnit.OnClickAsObservable().Subscribe(_ =>
+        createUnitBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            foreach (var createUnit in liMyUnitInfo)
+            if (myPositionIndex >= myPositionList.Count) return;
+
+            int randomUnit = Random.Range(0, (int)Defines.EUnit.Max);
+
+            var createUnit = new CreateUnitInfo
             {
-                CHMMain.Unit.CreateUnit(createUnit.eUnit, createUnit.eTeamLayer, createUnit.eTargetLayer, createUnit.trCreate.position, liMyTargetTracker, liMyTargetMask);
-            }
+                eUnit = (Defines.EUnit)randomUnit,
+                trCreate = myPositionList[myPositionIndex++],
+                eTeamLayer = Defines.ELayer.Blue,
+                eTargetLayer = Defines.ELayer.Red
+            };
+
+            CHMMain.Unit.CreateUnit(createUnit.eUnit, createUnit.eTeamLayer, createUnit.eTargetLayer, createUnit.trCreate.position, myTargetTrackerList, myTargetMaskList);
+
+            myCreateUnitInfoList.Add(createUnit);
+
+            --remainCount;
+            remainCountText.SetText(remainCount);
         });
 
-        btnWarStart.OnClickAsObservable().Subscribe(_ =>
+        warStartBtn.OnClickAsObservable().Subscribe(_ =>
         {
             WarStart();
         });
@@ -54,14 +82,14 @@ public class SceneStage : SceneBase
 
     public void WarStart()
     {
-        for (int i = 0; i < liMyTargetMask.Count; ++i)
+        for (int i = 0; i < myTargetMaskList.Count; ++i)
         {
-            liMyTargetTracker[i].targetMask = liMyTargetMask[i];
+            myTargetTrackerList[i].targetMask = myTargetMaskList[i];
         }
 
-        for (int i = 0; i < liEnemyTargetMask.Count; ++i)
+        for (int i = 0; i < enemyTargetMaskList.Count; ++i)
         {
-            liEnemyTargetTracker[i].targetMask = liEnemyTargetMask[i];
+            enemyTargetTrackerList[i].targetMask = enemyTargetMaskList[i];
         }
     }
 }
