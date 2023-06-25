@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,9 +25,6 @@ public class SceneStage : SceneBase
 
     void Start()
     {
-        CHMMain.UI.CreateEventSystemObject();
-        CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
-
         CreateEnemy();
 
         btnExit.OnClickAsObservable().Subscribe(_ =>

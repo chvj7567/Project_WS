@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class SceneBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        CHMMain.UI.CreateEventSystemObject();
+        CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
     }
 }
