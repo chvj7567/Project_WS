@@ -44,7 +44,7 @@ public class SceneStage : SceneBase
 #endif
         });
 
-        liMyPosition.AddRange(CHMMain.Json.GetTeamPositionList(1, 1));
+        liMyPosition.AddRange(CHMMain.Json.GetPositionListFromStageInfo(1, 1));
         remainCount = liMyPosition.Count;
         txtRemainCount.SetText(remainCount);
 
@@ -76,9 +76,9 @@ public class SceneStage : SceneBase
 
     void CreateEnemy()
     {
-        liEnemyPosition.AddRange(CHMMain.Json.GetTeamPositionList(1, 2));
+        liEnemyPosition.AddRange(CHMMain.Json.GetPositionListFromStageInfo(1, 2));
 
-        var positionInfoList = CHMMain.Json.GetTeamPositionInfoList(1, 2);
+        var positionInfoList = CHMMain.Json.GetStageInfoList(1, 2);
 
         foreach (var posInfo in positionInfoList)
         {
@@ -90,7 +90,7 @@ public class SceneStage : SceneBase
                 createUnitInfo = new CreateUnitInfo
                 {
                     eUnit = (Defines.EUnit)randomUnit,
-                    createPos = CHMMain.Json.GetPositionFromPositionInfo(posInfo),
+                    createPos = CHMMain.Json.GetPositionFromStageInfo(posInfo),
                     eTeamLayer = Defines.ELayer.Red,
                     eTargetLayer = Defines.ELayer.Blue
                 };
@@ -100,7 +100,7 @@ public class SceneStage : SceneBase
                 createUnitInfo = new CreateUnitInfo
                 {
                     eUnit = posInfo.eUnit,
-                    createPos = CHMMain.Json.GetPositionFromPositionInfo(posInfo),
+                    createPos = CHMMain.Json.GetPositionFromStageInfo(posInfo),
                     eTeamLayer = Defines.ELayer.Red,
                     eTargetLayer = Defines.ELayer.Blue
                 };

@@ -8,7 +8,7 @@ public class Defines
         None = -1,
 
         String,
-        Position,
+        Stage,
 
         Max
     }

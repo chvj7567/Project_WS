@@ -12,7 +12,7 @@ public class Infomation
     }
 
     [Serializable]
-    public class PositionInfo
+    public class StageInfo
     {
         public int team = -1; // 1 : ¿ì¸®ÆÀ, 2 : ÀûÆÀ
         public int stage = -1;

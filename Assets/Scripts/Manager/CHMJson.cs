@@ -10,7 +10,7 @@ public class CHMJson
     public class JsonData
     {
         public StringInfo[] stringInfoArray;
-        public PositionInfo[] positionInfoArray;
+        public StageInfo[] positionInfoArray;
     }
 
     int loadCompleteFileCount = 0;
@@ -18,7 +18,7 @@ public class CHMJson
 
     List<Action<TextAsset>> actionList = new List<Action<TextAsset>>();
     Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
-    List<PositionInfo> positionInfoList = new List<PositionInfo>();
+    List<StageInfo> positionInfoList = new List<StageInfo>();
 
     public void Init()
     {
@@ -78,7 +78,7 @@ public class CHMJson
 
         positionInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Position, callback = (TextAsset textAsset) =>
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"positionInfoArray\":" + textAsset.text + "}"));
             foreach (var data in jsonData.positionInfoArray)
@@ -102,12 +102,12 @@ public class CHMJson
         return "";
     }
 
-    public List<PositionInfo> GetTeamPositionInfoList(int _stage, int _team)
+    public List<StageInfo> GetStageInfoList(int _stage, int _team)
     {
         return positionInfoList.FindAll(_ => _.stage == _stage && _.team == _team);
     }
 
-    public Vector3 GetPositionFromPositionInfo(PositionInfo _positionInfo)
+    public Vector3 GetPositionFromStageInfo(StageInfo _positionInfo)
     {
         return new Vector3
         {
@@ -117,10 +117,10 @@ public class CHMJson
         };
     }
 
-    public List<Vector3> GetTeamPositionList(int _stage, int _team)
+    public List<Vector3> GetPositionListFromStageInfo(int _stage, int _team)
     {
         List<Vector3> posList = new List<Vector3>();
-        var tempPositionInfoList = GetTeamPositionInfoList(_stage, _team);
+        var tempPositionInfoList = GetStageInfoList(_stage, _team);
         foreach (var positionInfo in tempPositionInfoList)
         {
             posList.Add(new Vector3
