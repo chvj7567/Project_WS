@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Infomation;
 
@@ -8,14 +9,16 @@ public class CHMJson
     [Serializable]
     public class JsonData
     {
-        public StringInfo[] arrStringInfo;
+        public StringInfo[] stringInfoArray;
+        public PositionInfo[] positionInfoArray;
     }
 
     int loadCompleteFileCount = 0;
     int loadingFileCount = 0;
 
-    List<Action<TextAsset>> liAction = new List<Action<TextAsset>>();
-    Dictionary<int, string> dicStringInfo = new Dictionary<int, string>();
+    List<Action<TextAsset>> actionList = new List<Action<TextAsset>>();
+    Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
+    List<PositionInfo> positionInfoList = new List<PositionInfo>();
 
     public void Init()
     {
@@ -24,18 +27,19 @@ public class CHMJson
 
     public void Clear()
     {
-        liAction.Clear();
-        dicStringInfo.Clear();
+        actionList.Clear();
+        stringInfoDic.Clear();
     }
 
     void LoadJsonData()
     {
         loadCompleteFileCount = 0;
-        liAction.Clear();
+        actionList.Clear();
 
-        liAction.Add(LoadStringInfo());
+        actionList.Add(LoadStringInfo());
+        actionList.Add(LoadPositionInfo());
 
-        loadingFileCount = liAction.Count;
+        loadingFileCount = actionList.Count;
     }
 
     public float GetJsonLoadingPercent()
@@ -52,14 +56,34 @@ public class CHMJson
     {
         Action<TextAsset> callback;
 
-        dicStringInfo.Clear();
+        stringInfoDic.Clear();
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.String, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"arrStringInfo\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.arrStringInfo)
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stringInfoArray\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stringInfoArray)
             {
-                dicStringInfo.Add(data.stringID, data.value);
+                stringInfoDic.Add(data.stringID, data.value);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
+    Action<TextAsset> LoadPositionInfo()
+    {
+        Action<TextAsset> callback;
+
+        positionInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Position, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"positionInfoArray\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.positionInfoArray)
+            {
+                positionInfoList.Add(data);
             }
 
             ++loadCompleteFileCount;
@@ -70,11 +94,43 @@ public class CHMJson
 
     public string TryGetString(int _stringID)
     {
-        if (dicStringInfo.TryGetValue(_stringID, out string result))
+        if (stringInfoDic.TryGetValue(_stringID, out string result))
         {
             return result;
         }
 
         return "";
+    }
+
+    public List<PositionInfo> GetTeamPositionInfoList(int _team)
+    {
+        return positionInfoList.FindAll(_ => _.team == _team);
+    }
+
+    public Vector3 GetPositionFromPositionInfo(PositionInfo _positionInfo)
+    {
+        return new Vector3
+        {
+            x = _positionInfo.posX,
+            y = _positionInfo.posY,
+            z = _positionInfo.posZ
+        };
+    }
+
+    public List<Vector3> GetTeamPositionList(int _team)
+    {
+        List<Vector3> posList = new List<Vector3>();
+        var tempPositionInfoList = GetTeamPositionInfoList(_team);
+        foreach (var positionInfo in tempPositionInfoList)
+        {
+            posList.Add(new Vector3
+            {
+                x = positionInfo.posX,
+                y = positionInfo.posY,
+                z = positionInfo.posZ
+            });
+        }
+
+        return posList;
     }
 }

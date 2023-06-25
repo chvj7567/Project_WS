@@ -12,6 +12,17 @@ public class Infomation
     }
 
     [Serializable]
+    public class PositionInfo
+    {
+        public int team = -1; // 1 : ¿ì¸®ÆÀ, 2 : ÀûÆÀ
+        public int stage = -1;
+        public Defines.EUnit eUnit = Defines.EUnit.None;
+        public float posX = -1;
+        public float posY = -1;
+        public float posZ = -1;
+    }
+
+    [Serializable]
     public class UnitInfo
     {
         public Defines.EUnit eUnit = Defines.EUnit.None;
@@ -77,7 +88,7 @@ public class Infomation
     public class CreateUnitInfo
     {
         public Defines.EUnit eUnit;
-        public Transform trCreate;
+        public Vector3 createPos;
         public Defines.ELayer eTeamLayer;
         public Defines.ELayer eTargetLayer;
     }

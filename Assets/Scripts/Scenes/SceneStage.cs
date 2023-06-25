@@ -9,18 +9,18 @@ using static Infomation;
 public class SceneStage : SceneBase
 {
     [Header("수동 설정")] 
-    [SerializeField] Button exitBtn;
-    [SerializeField] Button createUnitBtn;
-    [SerializeField] CHTMPro remainCountText;
-    [SerializeField] Button warStartBtn;
-    [SerializeField] List<Transform> myPositionList = new List<Transform>();
-    [SerializeField] List<CHTargetTracker> enemyTargetTrackerList = new List<CHTargetTracker>();
-
+    [SerializeField] Button btnExit;
+    [SerializeField] Button btnCreateUnit;
+    [SerializeField] CHTMPro txtRemainCount;
+    [SerializeField] Button btnWarStart;
+    
     [Header("자동 설정")]
-    [SerializeField, ReadOnly] List<CreateUnitInfo> myCreateUnitInfoList = new List<CreateUnitInfo>();
-    [SerializeField, ReadOnly] List<CHTargetTracker> myTargetTrackerList = new List<CHTargetTracker>();
-    [SerializeField, ReadOnly] List<LayerMask> myTargetMaskList = new List<LayerMask>();
-    [SerializeField, ReadOnly] List<LayerMask> enemyTargetMaskList= new List<LayerMask>();
+    [SerializeField, ReadOnly] List<Vector3> liMyPosition = new List<Vector3>();
+    [SerializeField, ReadOnly] List<Vector3> liEnemyPosition = new List<Vector3>();
+    [SerializeField, ReadOnly] List<CHTargetTracker> liMyTargetTracker = new List<CHTargetTracker>();
+    [SerializeField, ReadOnly] List<CHTargetTracker> liEnemyTargetTracker = new List<CHTargetTracker>();
+    [SerializeField, ReadOnly] List<LayerMask> liMyTargetMask = new List<LayerMask>();
+    [SerializeField, ReadOnly] List<LayerMask> liEnemyTargetMask= new List<LayerMask>();
 
     int myPositionIndex = 0;
     int remainCount = 0;
@@ -30,17 +30,9 @@ public class SceneStage : SceneBase
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
-        remainCount = myPositionList.Count;
-        remainCountText.SetText(remainCount);
+        CreateEnemy();
 
-        // 적 유닛 바로 공격하지 않도록 비활성화
-        foreach (var targetTracker in enemyTargetTrackerList)
-        {
-            enemyTargetMaskList.Add(targetTracker.targetMask);
-            targetTracker.targetMask = 0;
-        }
-
-        exitBtn.OnClickAsObservable().Subscribe(_ =>
+        btnExit.OnClickAsObservable().Subscribe(_ =>
         {
             CHMMain.Particle.OnApplicationQuitHandler();
             CHMMain.Skill.OnApplicationQuitHandler();
@@ -52,44 +44,82 @@ public class SceneStage : SceneBase
 #endif
         });
 
-        createUnitBtn.OnClickAsObservable().Subscribe(_ =>
+        liMyPosition.AddRange(CHMMain.Json.GetTeamPositionList(1));
+        remainCount = liMyPosition.Count;
+        txtRemainCount.SetText(remainCount);
+
+        btnCreateUnit.OnClickAsObservable().Subscribe(_ =>
         {
-            if (myPositionIndex >= myPositionList.Count) return;
+            if (myPositionIndex >= liMyPosition.Count) return;
 
             int randomUnit = Random.Range(0, (int)Defines.EUnit.Max);
 
-            var createUnit = new CreateUnitInfo
+            var createUnitInfo = new CreateUnitInfo
             {
                 eUnit = (Defines.EUnit)randomUnit,
-                trCreate = myPositionList[myPositionIndex++],
+                createPos = liMyPosition[myPositionIndex++],
                 eTeamLayer = Defines.ELayer.Blue,
                 eTargetLayer = Defines.ELayer.Red
             };
 
-            CHMMain.Unit.CreateUnit(createUnit.eUnit, createUnit.eTeamLayer, createUnit.eTargetLayer, createUnit.trCreate.position, myTargetTrackerList, myTargetMaskList);
-
-            myCreateUnitInfoList.Add(createUnit);
+            CHMMain.Unit.CreateUnit(createUnitInfo.eUnit, createUnitInfo.eTeamLayer, createUnitInfo.eTargetLayer, createUnitInfo.createPos, liMyTargetTracker, liMyTargetMask);
 
             --remainCount;
-            remainCountText.SetText(remainCount);
+            txtRemainCount.SetText(remainCount);
         });
 
-        warStartBtn.OnClickAsObservable().Subscribe(_ =>
+        btnWarStart.OnClickAsObservable().Subscribe(_ =>
         {
             WarStart();
         });
     }
 
+    void CreateEnemy()
+    {
+        liEnemyPosition.AddRange(CHMMain.Json.GetTeamPositionList(2));
+
+        var positionInfoList = CHMMain.Json.GetTeamPositionInfoList(2);
+
+        foreach (var posInfo in positionInfoList)
+        {
+            CreateUnitInfo createUnitInfo;
+            if (posInfo.eUnit == Defines.EUnit.None)
+            {
+                int randomUnit = Random.Range(0, (int)Defines.EUnit.Max);
+
+                createUnitInfo = new CreateUnitInfo
+                {
+                    eUnit = (Defines.EUnit)randomUnit,
+                    createPos = CHMMain.Json.GetPositionFromPositionInfo(posInfo),
+                    eTeamLayer = Defines.ELayer.Red,
+                    eTargetLayer = Defines.ELayer.Blue
+                };
+            }
+            else
+            {
+                createUnitInfo = new CreateUnitInfo
+                {
+                    eUnit = posInfo.eUnit,
+                    createPos = CHMMain.Json.GetPositionFromPositionInfo(posInfo),
+                    eTeamLayer = Defines.ELayer.Red,
+                    eTargetLayer = Defines.ELayer.Blue
+                };
+            }
+
+            CHMMain.Unit.CreateUnit(createUnitInfo.eUnit, createUnitInfo.eTeamLayer, createUnitInfo.eTargetLayer, createUnitInfo.createPos, liEnemyTargetTracker, liEnemyTargetMask);
+        }
+    }
+
     public void WarStart()
     {
-        for (int i = 0; i < myTargetMaskList.Count; ++i)
+        for (int i = 0; i < liMyTargetMask.Count; ++i)
         {
-            myTargetTrackerList[i].targetMask = myTargetMaskList[i];
+            liMyTargetTracker[i].targetMask = liMyTargetMask[i];
         }
 
-        for (int i = 0; i < enemyTargetMaskList.Count; ++i)
+        for (int i = 0; i < liEnemyTargetMask.Count; ++i)
         {
-            enemyTargetTrackerList[i].targetMask = enemyTargetMaskList[i];
+            liEnemyTargetTracker[i].targetMask = liEnemyTargetMask[i];
         }
     }
 }

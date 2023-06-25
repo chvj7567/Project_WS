@@ -8,8 +8,7 @@ public class Defines
         None = -1,
 
         String,
-        Skill,
-        Unit,
+        Position,
 
         Max
     }
@@ -133,12 +132,12 @@ public class Defines
 
         Hp_Up,
         Hp_Down,
-        /*Mp_Up,
+        Mp_Up,
         Mp_Down,
         AttackPower_Up,
         AttackPower_Down,
         DefensePower_Up,
-        DefensePower_Down,*/
+        DefensePower_Down,
 
         Max,
     }
@@ -195,32 +194,6 @@ public class Defines
         Percent_Me_RemainHp, // 나의 남은 Hp 퍼센트 데미지
         Percent_Target_MaxHp, // 타겟의 전체 Hp 퍼센트 데미지
         Percent_Target_RemainHp, // 타겟의 남은 Hp 퍼센트 데미지
-
-        Max
-    }
-
-    public enum EGunType
-    {
-        None = -1,
-
-        Machinegun,
-        MachinegunLauncher,
-        Pistol,
-        Rocketlauncher,
-        RocketlauncherModern,
-        Shotgun,
-        Sniper,
-        Uzi,
-
-        Max
-    }
-
-    public enum EGunSkin
-    {
-        None = -1,
-
-        SniperCamo,
-        UziGold,
 
         Max
     }
