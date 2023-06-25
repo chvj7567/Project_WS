@@ -44,7 +44,7 @@ public class SceneStage : SceneBase
 #endif
         });
 
-        liMyPosition.AddRange(CHMMain.Json.GetTeamPositionList(1));
+        liMyPosition.AddRange(CHMMain.Json.GetTeamPositionList(1, 1));
         remainCount = liMyPosition.Count;
         txtRemainCount.SetText(remainCount);
 
@@ -76,9 +76,9 @@ public class SceneStage : SceneBase
 
     void CreateEnemy()
     {
-        liEnemyPosition.AddRange(CHMMain.Json.GetTeamPositionList(2));
+        liEnemyPosition.AddRange(CHMMain.Json.GetTeamPositionList(1, 2));
 
-        var positionInfoList = CHMMain.Json.GetTeamPositionInfoList(2);
+        var positionInfoList = CHMMain.Json.GetTeamPositionInfoList(1, 2);
 
         foreach (var posInfo in positionInfoList)
         {

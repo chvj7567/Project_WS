@@ -102,9 +102,9 @@ public class CHMJson
         return "";
     }
 
-    public List<PositionInfo> GetTeamPositionInfoList(int _team)
+    public List<PositionInfo> GetTeamPositionInfoList(int _stage, int _team)
     {
-        return positionInfoList.FindAll(_ => _.team == _team);
+        return positionInfoList.FindAll(_ => _.stage == _stage && _.team == _team);
     }
 
     public Vector3 GetPositionFromPositionInfo(PositionInfo _positionInfo)
@@ -117,10 +117,10 @@ public class CHMJson
         };
     }
 
-    public List<Vector3> GetTeamPositionList(int _team)
+    public List<Vector3> GetTeamPositionList(int _stage, int _team)
     {
         List<Vector3> posList = new List<Vector3>();
-        var tempPositionInfoList = GetTeamPositionInfoList(_team);
+        var tempPositionInfoList = GetTeamPositionInfoList(_stage, _team);
         foreach (var positionInfo in tempPositionInfoList)
         {
             posList.Add(new Vector3
