@@ -21,7 +21,7 @@ MonoBehaviour:
   eSkillCost: 0
   cost: 0
   liEffectData:
-  - eEffect: 12
+  - eEffect: 13
     effectAngle: 0
     createCasterPosition: 0
     startDelay: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
     triggerEnter: 0
     triggerExit: 0
     stayTickTime: -1
-  - eEffect: 13
+  - eEffect: 14
     effectAngle: 0
     createCasterPosition: 0
     startDelay: 1.15
@@ -73,7 +73,7 @@ MonoBehaviour:
     triggerEnter: 0
     triggerExit: 0
     stayTickTime: 0
-  - eEffect: 14
+  - eEffect: 15
     effectAngle: 0
     createCasterPosition: 0
     startDelay: 0.35

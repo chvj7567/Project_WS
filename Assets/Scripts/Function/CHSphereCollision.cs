@@ -133,7 +133,7 @@ public class CHSphereCollision : MonoBehaviour
         {
             case Defines.EEffect.FX_Poison:
                 {
-                    sphereCollider.radius = 1f;
+                    sphereCollider.radius = effectData.sphereRadius;
                     sphereCollider.center = new Vector3(0f, 0f, 0f);
                 }
                 break;
@@ -141,6 +141,12 @@ public class CHSphereCollision : MonoBehaviour
                 {
                     sphereCollider.radius = effectData.sphereRadius;
                     sphereCollider.center = new Vector3(0f, -23f, 0f);
+                }
+                break;
+            case Defines.EEffect.SlashHit:
+                {
+                    sphereCollider.radius = effectData.sphereRadius;
+                    sphereCollider.center = new Vector3(0f, 3f, 0f);
                 }
                 break;
             default:

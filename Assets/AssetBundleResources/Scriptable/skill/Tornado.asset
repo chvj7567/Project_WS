@@ -21,7 +21,7 @@ MonoBehaviour:
   eSkillCost: 0
   cost: 0
   liEffectData:
-  - eEffect: 16
+  - eEffect: 17
     effectAngle: 0
     createCasterPosition: 1
     startDelay: 1
