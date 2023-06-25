@@ -76,6 +76,7 @@ public class Defines
         IceArrow,
         IceArrow2,
         Ax,
+        Devil,
 
         Max
     }
