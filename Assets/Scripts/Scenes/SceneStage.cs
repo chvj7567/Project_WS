@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using static Infomation;
 
 public class SceneStage : SceneBase
 {
@@ -25,6 +25,9 @@ public class SceneStage : SceneBase
 
     void Start()
     {
+        CHMMain.UI.CreateEventSystemObject();
+        CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
+
         CreateEnemy();
 
         btnExit.OnClickAsObservable().Subscribe(_ =>
@@ -49,7 +52,7 @@ public class SceneStage : SceneBase
 
             int randomUnit = Random.Range(0, (int)Defines.EUnit.Max);
 
-            var createUnitInfo = new CreateUnitInfo
+            var createUnitInfo = new Infomation.CreateUnitInfo
             {
                 eUnit = (Defines.EUnit)randomUnit,
                 createPos = liMyPosition[myPositionIndex++],
@@ -77,12 +80,12 @@ public class SceneStage : SceneBase
 
         foreach (var posInfo in positionInfoList)
         {
-            CreateUnitInfo createUnitInfo;
+            Infomation.CreateUnitInfo createUnitInfo;
             if (posInfo.eUnit == Defines.EUnit.None)
             {
                 int randomUnit = Random.Range(0, (int)Defines.EUnit.Max);
 
-                createUnitInfo = new CreateUnitInfo
+                createUnitInfo = new Infomation.CreateUnitInfo
                 {
                     eUnit = (Defines.EUnit)randomUnit,
                     createPos = CHMMain.Json.GetPositionFromStageInfo(posInfo),
@@ -92,7 +95,7 @@ public class SceneStage : SceneBase
             }
             else
             {
-                createUnitInfo = new CreateUnitInfo
+                createUnitInfo = new Infomation.CreateUnitInfo
                 {
                     eUnit = posInfo.eUnit,
                     createPos = CHMMain.Json.GetPositionFromStageInfo(posInfo),
@@ -105,7 +108,7 @@ public class SceneStage : SceneBase
         }
     }
 
-    public void WarStart()
+    public async void WarStart()
     {
         for (int i = 0; i < liMyTargetMask.Count; ++i)
         {
@@ -116,5 +119,55 @@ public class SceneStage : SceneBase
         {
             liEnemyTargetTracker[i].targetMask = liEnemyTargetMask[i];
         }
+
+        bool gameEnd = false;
+        do
+        {
+            await Task.Delay(1000);
+            gameEnd = CheckGameEnd();
+        } while (gameEnd == false);
+
+        Debug.Log("Game End");
+    }
+
+    public bool CheckGameEnd()
+    {
+        bool gameEnd = true;
+
+        foreach (var targetTracker in liMyTargetTracker)
+        {
+            if (targetTracker != null)
+            {
+                var targetInfo = targetTracker.GetClosestTargetInfo();
+                if (targetInfo.objTarget != null)
+                {
+                    if (targetInfo.objTarget.activeSelf == false)
+                    {
+                        continue;
+                    }
+                    gameEnd = false;
+                    break;
+                }
+            }
+        }
+
+        foreach (var targetTracker in liEnemyTargetTracker)
+        {
+            if (targetTracker != null)
+            {
+                var targetInfo = targetTracker.GetClosestTargetInfo();
+                if (targetInfo.objTarget != null)
+                {
+                    if (targetInfo.objTarget.activeSelf == false)
+                    {
+                        continue;
+                    }
+                    gameEnd = false;
+                    break;
+                }
+            }
+        }
+
+        return gameEnd;
     }
 }

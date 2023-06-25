@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using System.Linq;
-using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
-using Unity.VisualScripting;
+#endif
 
 [Serializable]
 public class AssetBundleInfo

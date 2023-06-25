@@ -31,7 +31,7 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField, ReadOnly] CHUnitBase unitBase;
     [SerializeField, ReadOnly] CHContBase contBase;
 
-    [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget;
+    [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget = new Infomation.TargetInfo();
 
     [SerializeField, ReadOnly] float orgStoppingDistance = -1f;
     [SerializeField, ReadOnly] float orgRangeMulti = -1f;
@@ -102,7 +102,7 @@ public class CHTargetTracker : MonoBehaviour
                     break;
             }
 
-            if (closestTarget == null)
+            if (closestTarget.objTarget == null)
             {
                 if (expensionRange == false)
                 {
@@ -308,7 +308,7 @@ public class CHTargetTracker : MonoBehaviour
 
     public Infomation.TargetInfo GetClosestTargetInfo(Vector3 _originPos, Vector3 _direction, LayerMask _lmTarget, float _range, float _viewAngle = 360f)
     {
-        Infomation.TargetInfo closestTargetInfo = null;
+        Infomation.TargetInfo closestTargetInfo = new Infomation.TargetInfo();
         List<Infomation.TargetInfo> targetInfoList = GetTargetInfoListInRange(_originPos, _direction, _lmTarget, _range, _viewAngle);
 
         if (targetInfoList.Count > 0)
