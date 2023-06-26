@@ -6,6 +6,11 @@ public class CHMUnit
     Dictionary<Defines.EUnit, UnitData> dicUnitData = new Dictionary<Defines.EUnit, UnitData>();
     List<Material> liMaterial = new List<Material>();
 
+    List<GameObject> unitList = new List<GameObject>();
+
+    int redIndex = 0;
+    int blueIndex = 0;
+
     public void Init()
     {
         for (int i = 0; i < (int)Defines.EUnit.Max; ++i)
@@ -30,6 +35,23 @@ public class CHMUnit
     {
         dicUnitData.Clear();
         liMaterial.Clear();
+
+        foreach (var unit in unitList)
+        {
+            GameObject.Destroy(unit);
+        }
+
+        unitList.Clear();
+    }
+    
+    public void RemoveUnitAll()
+    {
+        foreach (var unit in unitList)
+        {
+            CHMMain.Resource.Destroy(unit);
+        }
+
+        unitList.Clear();
     }
 
     public UnitData GetUnitData(Defines.EUnit _eUnit)
@@ -43,6 +65,16 @@ public class CHMUnit
     {
         CHMMain.Resource.InstantiateBall((ball) =>
         {
+            unitList.Add(ball);
+            if (_eTargetLayer == Defines.ELayer.Red)
+            {
+                ball.name = $"{_eUnit}Unit(My) {redIndex++}";
+            }
+            else
+            {
+                ball.name = $"{_eUnit}Unit(Enemy) {blueIndex++}";
+            }
+
             CHMMain.Unit.SetUnit(ball, _eUnit);
             CHMMain.Unit.SetColor(ball, _eUnit);
             CHMMain.Unit.SetLayer(ball, _eTeamLayer);

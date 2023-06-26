@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using static Infomation;
 
 public class SceneStage : SceneBase
 {
@@ -22,14 +23,14 @@ public class SceneStage : SceneBase
 
     int myPositionIndex = 0;
     int remainCount = 0;
+    int stage = 1;
 
     void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
-        CreateEnemy();
-
+        SetStage(stage);
         btnExit.OnClickAsObservable().Subscribe(_ =>
         {
             CHMMain.Particle.OnApplicationQuitHandler();
@@ -41,11 +42,6 @@ public class SceneStage : SceneBase
         Application.Quit();
 #endif
         });
-
-        liMyPosition.AddRange(CHMMain.Json.GetPositionListFromStageInfo(1, 1));
-        remainCount = liMyPosition.Count;
-        txtRemainCount.SetText(remainCount);
-
         btnCreateUnit.OnClickAsObservable().Subscribe(_ =>
         {
             if (myPositionIndex >= liMyPosition.Count) return;
@@ -72,11 +68,19 @@ public class SceneStage : SceneBase
         });
     }
 
-    void CreateEnemy()
+    void SetStage(int _stage)
     {
-        liEnemyPosition.AddRange(CHMMain.Json.GetPositionListFromStageInfo(1, 2));
+        myPositionIndex = 0;
+        liMyPosition.Clear();
+        liEnemyPosition.Clear();
 
-        var positionInfoList = CHMMain.Json.GetStageInfoList(1, 2);
+        liMyPosition.AddRange(CHMMain.Json.GetPositionListFromStageInfo(_stage, 1));
+        remainCount = liMyPosition.Count;
+        txtRemainCount.SetText(remainCount);
+
+        liEnemyPosition.AddRange(CHMMain.Json.GetPositionListFromStageInfo(_stage, 2));
+
+        var positionInfoList = CHMMain.Json.GetStageInfoList(_stage, 2);
 
         foreach (var posInfo in positionInfoList)
         {
@@ -127,7 +131,11 @@ public class SceneStage : SceneBase
             gameEnd = CheckGameEnd();
         } while (gameEnd == false);
 
+        CHMMain.Unit.RemoveUnitAll();
         Debug.Log("Game End");
+
+        await Task.Delay(3000);
+        SetStage(stage);
     }
 
     public bool CheckGameEnd()
