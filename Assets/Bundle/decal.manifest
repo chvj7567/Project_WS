@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+CRC: 344381550
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 560518ae50feb11fc2488ecd2ad8f318
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c93d4b8b559144058be7fab2fe2b302f
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleResources/decal/Box.prefab
+- Assets/AssetBundleResources/decal/RoundTiming.prefab
+- Assets/AssetBundleResources/decal/RoundArea.prefab
+Dependencies:
+- C:/Users/chvj7567/Desktop/UnityProject/WarSimulator/Assets/Bundle/material

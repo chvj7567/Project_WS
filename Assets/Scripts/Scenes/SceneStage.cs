@@ -135,6 +135,9 @@ public class SceneStage : SceneBase
         Debug.Log("Game End");
 
         await Task.Delay(3000);
+
+        if (Application.isPlaying == false) return;
+
         SetStage(stage);
     }
 

@@ -1303,6 +1303,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1196766394}
   - component: {fileID: 1196766395}
+  - component: {fileID: 1196766396}
   m_Layer: 0
   m_Name: SceneStage
   m_TagString: Untagged
@@ -1347,6 +1348,32 @@ MonoBehaviour:
   liEnemyTargetTracker: []
   liMyTargetMask: []
   liEnemyTargetMask: []
+--- !u!114 &1196766396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196766392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558f24f99a9b3fd4aa308aab95c0d019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadingBar: {fileID: 0}
+  loadingText: {fileID: 0}
+  useS3: 0
+  downloadKey:
+  - 1nXjZT7ZA7MrqY56ByW6YmGpqMUlSz9wj
+  - 18OsLick_NPgIL_r1Ms1cxWc5MIvfM-fO
+  - 1MK4jOoDll7mNMvXJpMRTIpfHUz71REOu
+  - 1mD8ozdy26YRpNVTHykk-qRLY2Z_03WPv
+  - 1P-X1FKBLsdCv6fqyVqmEN4gyV_zO7Fa2
+  - 1421A24miInDBLldxH-cmm_b5fZ4yXjFE
+  - 1F2jh4M1iNk2qTWHqGDbJM5xeTOvxqfTk
+  - 1lf2mzCDufhUd3d5P0tzv_hVm2tVSkDhP
+  - 1C2ss9Vr5mbfl1hYC8_5K3KF7g-6w62gc
+  - 19o028yY-mQZgyNiz4256G88Oz-bbnQea
 --- !u!1001 &1230378156
 PrefabInstance:
   m_ObjectHideFlags: 0

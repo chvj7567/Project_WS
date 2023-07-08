@@ -1,0 +1,26 @@
+ManifestFileVersion: 0
+CRC: 3116656930
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 50345a2f5d9b0f4228f98df304d86591
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 076b392c1bf44d6f3b5dbf2a05223767
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: 398879e25a2280a4586ebcee5da6ca41, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleResources/scriptable/unit/Yellow.asset
+- Assets/AssetBundleResources/scriptable/unit/Orange.asset
+- Assets/AssetBundleResources/scriptable/unit/Brown.asset
+- Assets/AssetBundleResources/scriptable/unit/Red.asset
+- Assets/AssetBundleResources/scriptable/unit/White.asset
+- Assets/AssetBundleResources/scriptable/unit/Blue.asset
+- Assets/AssetBundleResources/scriptable/unit/Pink.asset
+- Assets/AssetBundleResources/scriptable/unit/Green.asset
+Dependencies: []

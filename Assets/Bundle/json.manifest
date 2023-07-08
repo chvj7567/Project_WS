@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 1898291536
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b3fdc5f5f252b2817756ab77ce316265
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleResources/json/String.json
+- Assets/AssetBundleResources/json/Stage.json
+Dependencies: []
