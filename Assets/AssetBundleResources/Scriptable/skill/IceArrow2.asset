@@ -58,7 +58,7 @@ MonoBehaviour:
     eStatModifyType: 1
     eDamageType1: 2
     eDamageType2: 0
-    damage: 2.57
+    damage: 1
     eTarget: 0
     eTargetMask: 2
     moveToPos: 0

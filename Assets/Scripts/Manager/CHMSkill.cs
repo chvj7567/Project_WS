@@ -493,8 +493,17 @@ public class CHMSkill
     {
         if (_casterUnit == null || _targetUnit == null || _effectData == null) return 0f;
 
-        float damage = _effectData.damage + _casterUnit.GetOriginItem1Data().damage;
-
+        float damage = 0f;
+        var itemData = _casterUnit.GetOriginItem1Data();
+        if (itemData == null)
+        {
+            damage = _effectData.damage;
+        }
+        else
+        {
+            damage = _effectData.damage + _casterUnit.GetOriginItem1Data().damage;
+        }
+        
         // 데미지 타입에 따라 구분
         switch (_effectData.eDamageType2)
         {

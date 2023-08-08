@@ -30,6 +30,7 @@ public class SceneStage : SceneBase
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
+        stage = 0;
         SetStage(stage);
         btnExit.OnClickAsObservable().Subscribe(_ =>
         {

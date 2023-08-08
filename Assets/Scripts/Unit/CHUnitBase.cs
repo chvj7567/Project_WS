@@ -25,8 +25,10 @@ public class CHUnitBase : MonoBehaviour
 
     [SerializeField] public EUnitState unitState = EUnitState.None;
 
-    [SerializeField, ReadOnly] public float hp;
-    [SerializeField, ReadOnly] public float mp;
+    [SerializeField, ReadOnly] public float maxHp;
+    [SerializeField, ReadOnly] public float maxMp;
+    [SerializeField, ReadOnly] public float curHp;
+    [SerializeField, ReadOnly] public float curMp;
 
     protected CHGaugeBar hpGaugeBar;
 
@@ -50,8 +52,16 @@ public class CHUnitBase : MonoBehaviour
         {
             if (GetIsDeath() == false)
             {
-                /*ChangeHp(this, unitData.hpRegenPerSecond, Defines.EDamageType1.None);
-                ChangeMp(this, unitData.mpRegenPerSecond, Defines.EDamageType1.None);*/
+                /*if (item1Data == null)
+                {
+                    ChangeHp(Defines.ESkill.None, this, unitData.hpRegenPerSecond, Defines.EDamageType1.None);
+                    ChangeMp(Defines.ESkill.None, this, unitData.mpRegenPerSecond, Defines.EDamageType1.None);
+                }
+                else
+                {
+                    ChangeHp(Defines.ESkill.None, this, unitData.hpRegenPerSecond + item1Data.hpRegenPerSecond, Defines.EDamageType1.None);
+                    ChangeMp(Defines.ESkill.None, this, unitData.mpRegenPerSecond + item1Data.mpRegenPerSecond, Defines.EDamageType1.None);
+                }*/
             }
         });
 
@@ -349,12 +359,12 @@ public class CHUnitBase : MonoBehaviour
 
     public float GetCurrentHp()
     {
-        return hp;
+        return curHp;
     }
 
     public float GetCurrentMp()
     {
-        return mp;
+        return curMp;
     }
 
     public void ResetUnit()
@@ -364,8 +374,16 @@ public class CHUnitBase : MonoBehaviour
         InitUnitData();
         InitGaugeBar();
 
-        hp = unitData.maxHp;
-        mp = unitData.maxMp;
+        if (item1Data == null)
+        {
+            curHp = unitData.maxHp;
+            curMp = unitData.maxMp;
+        }
+        else
+        {
+            curHp = unitData.maxHp + item1Data.maxHp;
+            curMp = unitData.maxMp + item1Data.maxMp;
+        }
 
         unitCollider.enabled = true;
 
@@ -404,7 +422,7 @@ public class CHUnitBase : MonoBehaviour
         if (GetIsDeath() == false)
         {
             var targetTracker = GetComponent<CHTargetTracker>();
-            if (targetTracker != null)
+            if (targetTracker != null && targetTracker.GetClosestTargetInfo() != null && targetTracker.GetClosestTargetInfo().objTarget != null)
             {
                 targetTracker.ExpensionRange();
             }
@@ -515,9 +533,6 @@ public class CHUnitBase : MonoBehaviour
         {
             CHMMain.Unit.SetColor(gameObject, unit);
 
-            hp = unitData.maxHp;
-            mp = unitData.maxMp;
-
             levelData = CHMMain.Level.GetLevelData(unit, unitData.eLevel);
 
             skill1Data = CHMMain.Skill.GetSkillData(unitData.eSkill1);
@@ -526,6 +541,21 @@ public class CHUnitBase : MonoBehaviour
             skill4Data = CHMMain.Skill.GetSkillData(unitData.eSkill4);
 
             item1Data = CHMMain.Item.GetItemData(unitData.eItem1);
+
+            if (item1Data == null)
+            {
+                maxHp = unitData.maxHp;
+                maxMp = unitData.maxMp;
+                curHp = unitData.maxHp;
+                curMp = unitData.maxMp;
+            }
+            else
+            {
+                maxHp = unitData.maxHp + item1Data.maxHp;
+                maxMp = unitData.maxMp + item1Data.maxMp;
+                curHp = unitData.maxHp + item1Data.maxHp;
+                curMp = unitData.maxMp + item1Data.maxMp;
+            }
         }
     }
 
@@ -550,7 +580,7 @@ public class CHUnitBase : MonoBehaviour
 
                     // HP 게이지가 스케일에 영향받지 않도록 
                     hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
-                    hpGaugeBar.SetGaugeBar(GetOriginUnitData().maxHp, this.GetCurrentHp(), 0f);
+                    hpGaugeBar.SetGaugeBar(maxHp, this.GetCurrentHp(), 0f);
                 }
             }
         }));
@@ -558,17 +588,22 @@ public class CHUnitBase : MonoBehaviour
 
     void AtOnceChangeHp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)
     {
-        float hpOrigin = hp;
-        float hpResult = hp + _value;
-        if (hpResult >= GetOriginUnitData().maxHp)
+        float hpOrigin = curHp;
+        float hpResult = curHp + _value;
+        if (hpResult >= maxHp)
         {
-            hpResult = GetOriginUnitData().maxHp;
+            hpResult = maxHp;
         }
 
-        hp = hpResult;
-        if (hpGaugeBar) hpGaugeBar.SetGaugeBar(GetOriginUnitData().maxHp, hpResult, hpResult - hpOrigin);
-        Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
+        curHp = hpResult;
+        if (hpGaugeBar)
+            hpGaugeBar.SetGaugeBar(maxHp, this.GetCurrentHp(), _value);
+
+        if (_eSkill != Defines.ESkill.None)
+        {
+            Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
             $"{unitData.unitName}<{gameObject.name}> => Hp : {hpOrigin} -> {hpResult}");
+        }
 
         // 죽음 Die
         if (hpResult <= 0.00001f)
@@ -597,20 +632,23 @@ public class CHUnitBase : MonoBehaviour
 
     void AtOnceChangeMp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)
     {
-        float mpOrigin = mp;
-        float mpResult = mp + _value;
-        if (mpResult >= GetOriginUnitData().maxMp)
+        float mpOrigin = curMp;
+        float mpResult = curMp + _value;
+        if (mpResult >= maxMp)
         {
-            mpResult = GetOriginUnitData().maxMp;
+            mpResult = maxMp;
         }
         else if (mpResult < 0)
         {
             mpResult = 0f;
         }
 
-        mp = mpResult;
-        Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
+        curMp = mpResult;
+        if (_eSkill != Defines.ESkill.None)
+        {
+            Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
             $"{unitData.unitName}<{gameObject.name}> => Mp : {mpOrigin} -> {mpResult}");
+        }
     }
 
     void AtOnceChangeAttackPower(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)
