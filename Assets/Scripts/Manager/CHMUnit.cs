@@ -13,6 +13,14 @@ public class CHMUnit
 
     public void Init()
     {
+        for (int i = 0; i < (int)Defines.EShader.Max; ++i)
+        {
+            CHMMain.Resource.LoadShader((Defines.EShader)i, (mat) =>
+            {
+                liShader.Add(mat);
+            });
+        }
+
         for (int i = 0; i < (int)Defines.EUnit.Max; ++i)
         {
             var unit = (Defines.EUnit)i;
@@ -27,14 +35,6 @@ public class CHMUnit
             CHMMain.Resource.LoadUnitMaterial((Defines.EUnit)i, (mat) =>
             {
                 liMaterial.Add(mat);
-            });
-        }
-
-        for (int i = 0; i < (int)Defines.EShader.Max; ++i)
-        {
-            CHMMain.Resource.LoadShader((Defines.EShader)i, (mat) =>
-            {
-                liShader.Add(mat);
             });
         }
     }
