@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -59,7 +58,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         if (assetBundle != null)
         {
-            CHMMain.Bundle.LoadAssetBundle(_bundleName, assetBundle);
+            CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
         }
         else
         {
@@ -152,7 +151,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
             Debug.Log($"Success : {_bundleName}");
 
-            CHMMain.Bundle.LoadAssetBundle(_bundleName, assetBundle);
+            CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
         }
     }
 }

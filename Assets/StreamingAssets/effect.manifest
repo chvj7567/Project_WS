@@ -1,0 +1,63 @@
+ManifestFileVersion: 0
+CRC: 755264068
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a035e91610ce7d128dc6d4fa358183b6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e43a95d118a2f95781b4a913793aedc8
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 96
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleResources/effect/FX_Iceflake.prefab
+- Assets/AssetBundleResources/effect/FX_Circle_ring.prefab
+- Assets/AssetBundleResources/effect/FX_Energy.prefab
+- Assets/AssetBundleResources/effect/FX_Curse.prefab
+- Assets/AssetBundleResources/effect/FX_Fire.prefab
+- Assets/AssetBundleResources/effect/FX_Circle_meteor.prefab
+- Assets/AssetBundleResources/effect/FX_Explosion_Magic2.prefab
+- Assets/AssetBundleResources/effect/FX_Electricity_Hit.prefab
+- Assets/AssetBundleResources/effect/FX_Poison.prefab
+- Assets/AssetBundleResources/effect/FX_Tornado.prefab
+- Assets/AssetBundleResources/effect/FX_Arrow_impact2.prefab
+- Assets/AssetBundleResources/effect/SlashHit.prefab
+- Assets/AssetBundleResources/effect/FX_Arrow_impact_sub.prefab
+- Assets/AssetBundleResources/effect/FX_Explosion_Hit.prefab
+- Assets/AssetBundleResources/effect/FX_Defense.prefab
+- Assets/AssetBundleResources/effect/FX_Devil.prefab
+- Assets/AssetBundleResources/effect/FX_Explosion.prefab
+- Assets/AssetBundleResources/effect/FX_Circle_hit.prefab
+- Assets/AssetBundleResources/effect/Fx_Healing.prefab
+- Assets/AssetBundleResources/effect/FX_Arrow_impact.prefab
+- Assets/AssetBundleResources/effect/Slash.prefab
+- Assets/AssetBundleResources/effect/FX_Explosion_Magic.prefab
+- Assets/AssetBundleResources/effect/FX_Ax.prefab
+- Assets/AssetBundleResources/effect/FX_Electricity.prefab
+- Assets/AssetBundleResources/effect/FX_Gun_Impact.prefab
+Dependencies:
+- C:/Users/chvj7567/Desktop/UnityProject/WarSimulator/Assets/Bundle/material
+- C:/Users/chvj7567/Desktop/UnityProject/WarSimulator/Assets/Bundle/mesh

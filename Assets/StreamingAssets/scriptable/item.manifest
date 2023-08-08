@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 4173771133
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 43fb9035cc2b7fe23dfab80f4c7068ed
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a30c76c5e7de01cd62c2c0c3cedc471b
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: a2dcf4b91a0f7c041a7086644b9628a5, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleResources/scriptable/item/A.asset
+- Assets/AssetBundleResources/scriptable/item/B.asset
+Dependencies: []

@@ -27,21 +27,13 @@ public class AssetBundleData
 public partial class AssetBundlePool
 {
     [Serializable]
-    public class Task
-    {
-        public string key;
-        public Subject<AssetBundle> onDownloaded;
-    }
-
-    [Serializable]
     class Item
     {
         public string key;
         public AssetBundle obj;
     }
 
-    private Dictionary<string, Item> dicItem = new Dictionary<string, Item>();
-    private Dictionary<string, Task> dicTask = new Dictionary<string, Task>();
+    Dictionary<string, Item> dicItem = new Dictionary<string, Item>();
 
     public void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
     {
@@ -68,62 +60,103 @@ public partial class AssetBundlePool
     }
 }
 
-public class CHMAssetBundle
+public partial class ObjectPool
 {
-    private AssetBundlePool assetBundlePool = new AssetBundlePool();
-    //private static ObjectPool objectPool = new ObjectPool();
+    [Serializable]
+    class Item
+    {
+        public string key;
+        public UnityEngine.Object obj;
+    }
 
-    public void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
+    Dictionary<string, Item> dicItem = new Dictionary<string, Item>();
+
+    public void Load<T>(string _bundleName, string _assetName, T _object)
+    {
+        string key = $"{_bundleName.ToLower()}/{_assetName.ToLower()}";
+        if (dicItem.TryGetValue(key, out Item item) == false && _object != null)
+        {
+            dicItem.Add(key, new Item
+            {
+                key = _bundleName,
+                obj = _object as UnityEngine.Object,
+            });
+        }
+    }
+
+    public UnityEngine.Object GetItem(string _bundleName, string _assetName)
+    {
+        string key = $"{_bundleName.ToLower()}/{_assetName.ToLower()}";
+        if (dicItem.TryGetValue(key, out Item ret))
+        {
+            return ret.obj;
+        }
+        else
+        {
+            return null;
+        }
+    }
+}
+
+public static class CHMAssetBundle
+{
+    public static bool firstDownload = true;
+    static AssetBundlePool assetBundlePool = new AssetBundlePool();
+    static ObjectPool objectPool = new ObjectPool();
+
+    public static void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
     {
         assetBundlePool.LoadAssetBundle(_bundleName, _assetBundle);
     }
 
-    public void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
+    public static void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
-        AssetBundle assetBundle = assetBundlePool.GetItem(_bundleName);
-
-        if (assetBundle != null)
+        var obj = objectPool.GetItem(_bundleName, _assetName);
+        if (obj == null)
         {
-            _callback(assetBundle.LoadAsset<T>(_assetName));
+            AssetBundle assetBundle = assetBundlePool.GetItem(_bundleName);
+
+            if (assetBundle != null)
+            {
+                var tempObj = assetBundle.LoadAsset<T>(_assetName);
+                objectPool.Load<T>(_bundleName, _assetName, tempObj);
+
+                _callback(assetBundle.LoadAsset<T>(_assetName));
+            }
+            else
+            {
+                _callback(null);
+            }
         }
         else
         {
-            _callback(null);
+            _callback(obj as T);
         }
     }
 
 #if UNITY_EDITOR
-    public void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
+    public static void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
         string path = null;
 
         if (typeof(T) == typeof(GameObject))
         {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.prefab";
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.prefab";
         }
         else if (typeof(T) == typeof(TextAsset))
         {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.json";
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.json";
         }
-        else if (typeof(T) == typeof(SkillData))
+        else if (typeof(T) == typeof(Sprite))
         {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/skill/{_assetName}.asset";
-        }
-        else if (typeof(T) == typeof(UnitData))
-        {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/unit/{_assetName}.asset";
-        }
-        else if (typeof(T) == typeof(Material))
-        {
-            path += $"Assets/AssetPieces/{_bundleName.ToLower()}/{_assetName}.mat";
-        }
-        else if (typeof(T) == typeof(LevelData))
-        {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/level/{_assetName}.asset";
-        }
-        else if (typeof(T) == typeof(ItemData))
-        {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/item/{_assetName}.asset";
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.jpg";
+
+            T temp = AssetDatabase.LoadAssetAtPath<T>(path);
+
+            if (temp == null)
+            {
+                path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.png";
+            }
         }
 
         T original = AssetDatabase.LoadAssetAtPath<T>(path);

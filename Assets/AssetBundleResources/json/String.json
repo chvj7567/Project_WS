@@ -2,5 +2,13 @@
   {
     "stringID": "1",
     "value": "{0}"
+  },
+  {
+    "stringID": "2",
+    "value": "Win"
+  },
+  {
+    "stringID": "3",
+    "value": "Lose"
   }
 ]

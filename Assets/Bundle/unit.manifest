@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 771127038
+CRC: 4170131698
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b0293a14fe760aabbc7512deb4ad4953
+    Hash: 07606bb7618359abb785f21b2022eb15
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 75672fa2892cdfd008e49445e2de65ba
+    Hash: 0b73189a13f9f0a676a2323e1323f1d9
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -39,4 +39,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/AssetBundleResources/unit/Ball.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/WarSimulator/Assets/Bundle/material
+- C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/material

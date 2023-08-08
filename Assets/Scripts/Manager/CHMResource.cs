@@ -13,9 +13,9 @@ public class CHMResource
     private void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
 #if UNITY_EDITOR
-        CHMMain.Bundle.LoadAssetOnEditor<T>(_bundleName, _assetName, _callback);
+        CHMAssetBundle.LoadAsset<T>(_bundleName, _assetName, _callback);
 #else
-        CHMMain.Bundle.LoadAsset<T>(_bundleName, _assetName, _callback);
+        CHMAssetBundle.LoadAsset<T>(_bundleName, _assetName, _callback);
 #endif
     }
 
@@ -26,27 +26,27 @@ public class CHMResource
 
     public void LoadSkillData(Defines.ESkill _skill, Action<SkillData> _callback)
     {
-        LoadAsset<SkillData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_skill.ToString()}", _callback);
+        LoadAsset<SkillData>($"{Defines.EResourceType.Scriptable.ToString()}/skill", $"{_skill.ToString()}", _callback);
     }
 
     public void LoadUnitData(Defines.EUnit _unit, Action<UnitData> _callback)
     {
-        LoadAsset<UnitData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_unit.ToString()}", _callback);
+        LoadAsset<UnitData>($"{Defines.EResourceType.Scriptable.ToString()}/unit", $"{_unit.ToString()}", _callback);
     }
 
     public void LoadUnitMaterial(Defines.EUnit _material, Action<Material> _callback)
     {
-        LoadAsset<Material>($"{Defines.EAssetPiece.Materials.ToString()}", $"{_material.ToString()}", _callback);
+        LoadAsset<Material>($"{Defines.EAssetPiece.Material.ToString()}", $"{_material.ToString()}", _callback);
     }
 
     public void LoadLevelData(Defines.EUnit _unit, Defines.ELevel _level, Action<LevelData> _callback)
     {
-        LoadAsset<LevelData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_unit.ToString()}{_level.ToString()}", _callback);
+        LoadAsset<LevelData>($"{Defines.EResourceType.Scriptable.ToString()}/level", $"{_unit.ToString()}{_level.ToString()}", _callback);
     }
 
     public void LoadItemData(Defines.EItem _item, Action<ItemData> _callback)
     {
-        LoadAsset<ItemData>($"{Defines.EResourceType.Scriptable.ToString()}", $"{_item.ToString()}", _callback);
+        LoadAsset<ItemData>($"{Defines.EResourceType.Scriptable.ToString()}/item", $"{_item.ToString()}", _callback);
     }
 
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object

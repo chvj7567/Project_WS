@@ -12,6 +12,7 @@ public class SceneStage : SceneBase
     [SerializeField] CHTMPro txtRemainCount;
     [SerializeField] Button btnWarStart;
     [SerializeField] CHTMPro stageText;
+    [SerializeField] CHTMPro resultText;
 
     [Header("자동 설정")]
     [SerializeField, ReadOnly] List<Vector3> liMyPosition = new List<Vector3>();
@@ -30,7 +31,9 @@ public class SceneStage : SceneBase
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
+        resultText.gameObject.SetActive(false);
         SetStage(stage);
+
         btnExit.OnClickAsObservable().Subscribe(_ =>
         {
             CHMMain.Particle.OnApplicationQuitHandler();
@@ -64,10 +67,10 @@ public class SceneStage : SceneBase
 
         btnWarStart.OnClickAsObservable().Subscribe(_ =>
         {
-            foreach (var my in liMyTargetTracker)
+            /*foreach (var my in liMyTargetTracker)
             {
                 my.GetComponent<CHUnitBase>().ChangeItem1(Defines.EItem.A);
-            }
+            }*/
             WarStart();
         });
     }
@@ -141,11 +144,14 @@ public class SceneStage : SceneBase
         bool alive = false;
         foreach (var targetTracker in liMyTargetTracker)
         {
-            var unitBase = targetTracker.GetComponent<CHUnitBase>();
-            if (unitBase != null && unitBase.GetCurrentHp() > 0)
+            if (targetTracker != null)
             {
-                alive = true;
-                break;
+                var unitBase = targetTracker.GetComponent<CHUnitBase>();
+                if (unitBase != null && unitBase.GetCurrentHp() > 0)
+                {
+                    alive = true;
+                    break;
+                }
             }
         }
 
@@ -158,12 +164,23 @@ public class SceneStage : SceneBase
 
         Debug.Log("Game End");
 
-        await Task.Delay(3000);
-
-        if (Application.isPlaying == false) return;
+        resultText.gameObject.SetActive(true);
 
         if (alive)
+        {
             ++stage;
+            resultText.SetStringID(2);
+        }
+        else
+        {
+            resultText.SetStringID(3);
+        }
+
+        await Task.Delay(3000);
+
+        resultText.gameObject.SetActive(false);
+
+        if (Application.isPlaying == false) return;
 
         SetStage(stage);
     }

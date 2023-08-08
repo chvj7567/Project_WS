@@ -1,0 +1,65 @@
+ManifestFileVersion: 0
+CRC: 2190007580
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 80add0090e5ce06d401e009b76afc03f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f9f3d136959ac0e7043e721e899342fb
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPieces/Materials/RoundAreaMaterial.mat
+- Assets/AssetPieces/Materials/M_ef_vfx_tornado02.mat
+- Assets/AssetPieces/Materials/SimpleNaturePack_BG.mat
+- Assets/AssetPieces/Materials/BoxMaterial.mat
+- Assets/AssetPieces/Materials/Light_Asphalt.mat
+- Assets/AssetPieces/Materials/M_ef_vfx 1.mat
+- Assets/AssetPieces/Materials/M_ef_vfx_distortion.mat
+- Assets/AssetPieces/Materials/Cold Night.mat
+- Assets/AssetPieces/Materials/Skybox_Mat.mat
+- Assets/AssetPieces/Materials/M_ef_vfx_slash.mat
+- Assets/AssetPieces/Materials/Clear.mat
+- Assets/AssetPieces/Materials/Greeble_Material_1.mat
+- Assets/AssetPieces/Materials/Green.mat
+- Assets/AssetPieces/Materials/Orange.mat
+- Assets/AssetPieces/Materials/M_ef_vfx.mat
+- Assets/AssetPieces/Materials/Alternate_Dirt.mat
+- Assets/AssetPieces/Materials/M_ef_vfx 2.mat
+- Assets/AssetPieces/Materials/Brown.mat
+- Assets/AssetPieces/Materials/Yellow.mat
+- Assets/AssetPieces/Materials/MagicCraftLab_Object.mat
+- Assets/AssetPieces/Materials/HP.mat
+- Assets/AssetPieces/Materials/M_ef_ax.mat
+- Assets/AssetPieces/Materials/M_ef_ice.mat
+- Assets/AssetPieces/Materials/Grey_Asphalt.mat
+- Assets/AssetPieces/Materials/White.mat
+- Assets/AssetPieces/Materials/FrontColor.mat
+- Assets/AssetPieces/Materials/Greeble_Material_Windows.mat
+- Assets/AssetPieces/Materials/Blue.mat
+- Assets/AssetPieces/Materials/Grass.mat
+- Assets/AssetPieces/Materials/Land.mat
+- Assets/AssetPieces/Materials/SimpleNaturePack_Texture_01.mat
+- Assets/AssetPieces/Materials/Pink.mat
+- Assets/AssetPieces/Materials/PBR.mat
+- Assets/AssetPieces/Materials/Greeble_Materials_Windows_Diffuse.mat
+- Assets/AssetPieces/Materials/MagicCraftLab.mat
+- Assets/AssetPieces/Materials/M_ef_vfx_arrow.mat
+- Assets/AssetPieces/Materials/Stage.mat
+- Assets/AssetPieces/Materials/defense.mat
+- Assets/AssetPieces/Materials/Greeble_Material_2.mat
+- Assets/AssetPieces/Materials/RoundTimingMaterial.mat
+- Assets/AssetPieces/Materials/M_ef_vfx_tornado01.mat
+- Assets/AssetPieces/Materials/Red.mat
+- Assets/AssetPieces/Materials/Asphalt.mat
+Dependencies:
+- C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/shader
+- C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/texture

@@ -14,7 +14,6 @@ public class CHMMain : MonoBehaviour
     CHMParticle m_particle = new CHMParticle();
     CHMSkill m_skill = new CHMSkill();
     CHMUnit m_unit = new CHMUnit();
-    CHMAssetBundle m_bundle = new CHMAssetBundle();
     CHMLevel m_level = new CHMLevel();
     CHMItem m_item = new CHMItem();
 
@@ -26,7 +25,6 @@ public class CHMMain : MonoBehaviour
     public static CHMParticle Particle { get { return Instance.m_particle; } }
     public static CHMSkill Skill { get { return Instance.m_skill; } }
     public static CHMUnit Unit { get { return Instance.m_unit; } }
-    public static CHMAssetBundle Bundle { get { return Instance.m_bundle; } }
     public static CHMLevel Level { get { return Instance.m_level; } }
     public static CHMItem Item { get { return Instance.m_item; } }
     #endregion

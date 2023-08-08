@@ -1,0 +1,76 @@
+ManifestFileVersion: 0
+CRC: 434195214
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 62772b7c9ebec79515df972099800e6e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c21d61fe394c58399df3c6fb5c7c99b3
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPieces/Texture/Tex_ef_particle_02.tga
+- Assets/AssetPieces/Texture/Handle Solid 128px.png
+- Assets/AssetPieces/Texture/Blue.png
+- Assets/AssetPieces/Texture/Tex_ef_test.tga
+- Assets/AssetPieces/Texture/Red.png
+- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Normal.png
+- Assets/AssetPieces/Texture/Tex_ef_particle_hexagon2.tga
+- Assets/AssetPieces/Texture/hpBar.png
+- Assets/AssetPieces/Texture/Tex_ef_particle_03.tga
+- Assets/AssetPieces/Texture/FreeMS.png
+- Assets/AssetPieces/Texture/FreeEmission.png
+- Assets/AssetPieces/Texture/circle.png
+- Assets/AssetPieces/Texture/Greeble_Material_1_Metalilc.png
+- Assets/AssetPieces/Texture/Tex_ef_tornado_01.tga
+- Assets/AssetPieces/Texture/Cold Night__Cam_4_Up+Y.png
+- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Height.png
+- Assets/AssetPieces/Texture/slash_test.tga
+- Assets/AssetPieces/Texture/Greeble_Material_1_Occlusion.png
+- Assets/AssetPieces/Texture/Tex_ef_arrow.tga
+- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Diffuse.png
+- Assets/AssetPieces/Texture/Button Fram 256px.png
+- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Emissive.png
+- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Metal.tga
+- Assets/AssetPieces/Texture/Cold Night__Cam_2_Left+X.png
+- Assets/AssetPieces/Texture/Yellow.png
+- Assets/AssetPieces/Texture/Cold Night__Cam_5_Down-Y.png
+- Assets/AssetPieces/Texture/White.png
+- Assets/AssetPieces/Texture/Cold Night__Cam_0_Front+Z.png
+- Assets/AssetPieces/Texture/FreeNormal.png
+- Assets/AssetPieces/Texture/Tex_ef_tornado_02.tga
+- Assets/AssetPieces/Texture/Orange.png
+- Assets/AssetPieces/Texture/Cold Night__Cam_1_Back-Z.png
+- Assets/AssetPieces/Texture/Pink.png
+- Assets/AssetPieces/Texture/Brown.png
+- Assets/AssetPieces/Texture/Greeble_material_2_Occlusion.png
+- Assets/AssetPieces/Texture/FreeAlbedo.png
+- Assets/AssetPieces/Texture/Greeble_Material_1_Normal.png
+- Assets/AssetPieces/Texture/NaturePackLite_Texture_01.png
+- Assets/AssetPieces/Texture/Greeble_material_2_Height.png
+- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Occlusion.png
+- Assets/AssetPieces/Texture/Handle Outline 256px.png
+- Assets/AssetPieces/Texture/Tex_ef_ax.tga
+- Assets/AssetPieces/Texture/Button Frame Press 256px.png
+- Assets/AssetPieces/Texture/Cold Night__Cam_3_Right-X.png
+- Assets/AssetPieces/Texture/Greeble_material_2_Metal.png
+- Assets/AssetPieces/Texture/ring.png
+- Assets/AssetPieces/Texture/Tex_ef_particle_hexagon.tga
+- Assets/AssetPieces/Texture/Button Highlighted 256px.png
+- Assets/AssetPieces/Texture/Greeble_material_2_Diffuse.png
+- Assets/AssetPieces/Texture/tex_ef_glow.png
+- Assets/AssetPieces/Texture/Tex_ef_particle_01.tga
+- Assets/AssetPieces/Texture/Greeble_Material_1_Diffuse.png
+- Assets/AssetPieces/Texture/Green.png
+- Assets/AssetPieces/Texture/Greeble_material_2_Emissive.png
+- Assets/AssetPieces/Texture/Greeble_Material_1_Height.png
+- Assets/AssetPieces/Texture/Button Frame Hover 256px.png
+- Assets/AssetPieces/Texture/Greeble_material_2_Normal.png
+- Assets/AssetPieces/Texture/FreeAO.png
+Dependencies: []

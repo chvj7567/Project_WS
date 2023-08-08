@@ -1,54 +1,62 @@
 ManifestFileVersion: 0
-CRC: 3626633721
+CRC: 1391669915
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: ui
+      Name: texture
       Dependencies: {}
     Info_1:
-      Name: json
-      Dependencies: {}
-    Info_2:
-      Name: unit
-      Dependencies:
-        Dependency_0: material
-    Info_3:
-      Name: scriptable/unit
-      Dependencies: {}
-    Info_4:
-      Name: scriptable/skill
-      Dependencies: {}
-    Info_5:
-      Name: scriptable/level
-      Dependencies: {}
-    Info_6:
-      Name: scriptable/item
-      Dependencies: {}
-    Info_7:
-      Name: major
-      Dependencies:
-        Dependency_0: texture
-    Info_8:
       Name: effect
       Dependencies:
         Dependency_0: material
         Dependency_1: mesh
+    Info_2:
+      Name: material
+      Dependencies:
+        Dependency_0: texture
+        Dependency_1: shader
+    Info_3:
+      Name: scriptable/level
+      Dependencies: {}
+    Info_4:
+      Name: shader
+      Dependencies:
+        Dependency_0: texture
+    Info_5:
+      Name: major
+      Dependencies:
+        Dependency_0: texture
+    Info_6:
+      Name: scriptable/unit
+      Dependencies: {}
+    Info_7:
+      Name: scriptable/skill
+      Dependencies: {}
+    Info_8:
+      Name: mesh
+      Dependencies: {}
     Info_9:
       Name: decal
       Dependencies:
         Dependency_0: material
     Info_10:
-      Name: material
-      Dependencies:
-        Dependency_0: shader
-        Dependency_1: texture
+      Name: json
+      Dependencies: {}
     Info_11:
-      Name: mesh
+      Name: ui
       Dependencies: {}
     Info_12:
-      Name: shader
-      Dependencies:
-        Dependency_0: texture
-    Info_13:
-      Name: texture
+      Name: scriptable/item
       Dependencies: {}
+    Info_13:
+      Name: unit
+      Dependencies:
+        Dependency_0: material
+    Info_14:
+      Name: model
+      Dependencies: {}
+    Info_15:
+      Name: map
+      Dependencies:
+        Dependency_0: material
+        Dependency_1: model

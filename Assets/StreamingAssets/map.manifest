@@ -1,0 +1,31 @@
+ManifestFileVersion: 0
+CRC: 26768710
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 56ab6a0aee430091881b9d8774130528
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 71fae6ce9612b55492988b7c6597434c
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleResources/map/Map.prefab
+- Assets/AssetBundleResources/map/Tree.prefab
+- Assets/AssetBundleResources/map/Load.prefab
+Dependencies:
+- C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/material
+- C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/model

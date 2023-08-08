@@ -3,7 +3,7 @@ CRC: 1739850775
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a4ac7f4babbe8def6c01cbb71ce31284
+    Hash: e929609a27be122549c83f153b4c00da
   TypeTreeHash:
     serializedVersion: 2
     Hash: f02e305cc7faf10796c89ae81b6d7c78
@@ -124,4 +124,4 @@ Assets:
 - Assets/AssetBundleResources/major/GlobalVolume.prefab
 - Assets/AssetBundleResources/major/Button2.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/WarSimulator/Assets/Bundle/texture
+- C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/texture

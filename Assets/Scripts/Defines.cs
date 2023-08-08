@@ -43,9 +43,10 @@ public class Defines
     {
         None = -1,
 
-        Materials,
-        Meshes,
-        Shaders,
+        Material,
+        Meshe,
+        Model,
+        Shader,
         Texture,
 
         Max

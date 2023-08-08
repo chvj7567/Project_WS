@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 1304139997
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c76567316af8f1a8c9bf12c9875c3bca
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 71e478ae8f887e9ffad52cf4c9fb6e39
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: be057a474a649a44e8fdc21bdf54ca50, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: SkillData/EffectData
+Assets:
+- Assets/AssetBundleResources/scriptable/skill/Tornado.asset
+- Assets/AssetBundleResources/scriptable/skill/Explosion.asset
+- Assets/AssetBundleResources/scriptable/skill/Devil.asset
+- Assets/AssetBundleResources/scriptable/skill/IceArrow2.asset
+- Assets/AssetBundleResources/scriptable/skill/Meteor.asset
+- Assets/AssetBundleResources/scriptable/skill/Ax.asset
+- Assets/AssetBundleResources/scriptable/skill/IceArrow.asset
+- Assets/AssetBundleResources/scriptable/skill/Heal.asset
+- Assets/AssetBundleResources/scriptable/skill/Slash.asset
+Dependencies: []
