@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using static Infomation;
 
 public class SceneStage : SceneBase
 {
@@ -12,7 +11,8 @@ public class SceneStage : SceneBase
     [SerializeField] Button btnCreateUnit;
     [SerializeField] CHTMPro txtRemainCount;
     [SerializeField] Button btnWarStart;
-    
+    [SerializeField] CHTMPro stageText;
+
     [Header("자동 설정")]
     [SerializeField, ReadOnly] List<Vector3> liMyPosition = new List<Vector3>();
     [SerializeField, ReadOnly] List<Vector3> liEnemyPosition = new List<Vector3>();
@@ -30,7 +30,6 @@ public class SceneStage : SceneBase
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
-        stage = 0;
         SetStage(stage);
         btnExit.OnClickAsObservable().Subscribe(_ =>
         {
@@ -65,12 +64,19 @@ public class SceneStage : SceneBase
 
         btnWarStart.OnClickAsObservable().Subscribe(_ =>
         {
+            foreach (var my in liMyTargetTracker)
+            {
+                my.GetComponent<CHUnitBase>().ChangeItem1(Defines.EItem.A);
+            }
             WarStart();
         });
     }
 
     void SetStage(int _stage)
     {
+        if (stageText)
+            stageText.SetText(_stage);
+
         myPositionIndex = 0;
         liMyPosition.Clear();
         liEnemyPosition.Clear();
@@ -132,12 +138,32 @@ public class SceneStage : SceneBase
             gameEnd = CheckGameEnd();
         } while (gameEnd == false);
 
+        bool alive = false;
+        foreach (var targetTracker in liMyTargetTracker)
+        {
+            var unitBase = targetTracker.GetComponent<CHUnitBase>();
+            if (unitBase != null && unitBase.GetCurrentHp() > 0)
+            {
+                alive = true;
+                break;
+            }
+        }
+
         CHMMain.Unit.RemoveUnitAll();
+
+        liMyTargetTracker.Clear();
+        liEnemyTargetTracker.Clear();
+        liMyTargetMask.Clear();
+        liEnemyTargetMask.Clear();
+
         Debug.Log("Game End");
 
         await Task.Delay(3000);
 
         if (Application.isPlaying == false) return;
+
+        if (alive)
+            ++stage;
 
         SetStage(stage);
     }

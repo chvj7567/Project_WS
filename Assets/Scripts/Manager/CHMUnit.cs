@@ -75,10 +75,10 @@ public class CHMUnit
                 ball.name = $"{_eUnit}Unit(Enemy) {blueIndex++}";
             }
 
-            CHMMain.Unit.SetUnit(ball, _eUnit);
-            CHMMain.Unit.SetColor(ball, _eUnit);
-            CHMMain.Unit.SetLayer(ball, _eTeamLayer);
-            CHMMain.Unit.SetTargetMask(ball, _eTargetLayer);
+            SetUnit(ball, _eUnit);
+            SetColor(ball, _eUnit);
+            SetLayer(ball, _eTeamLayer);
+            SetTargetMask(ball, _eTargetLayer);
 
             ball.transform.position = _position;
 

@@ -27,4 +27,4 @@ MonoBehaviour:
   viewAngle: 0
   distance: 0
   coolTime: 0
-  damage: 2
+  damage: 200

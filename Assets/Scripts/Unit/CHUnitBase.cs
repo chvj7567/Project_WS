@@ -522,6 +522,14 @@ public class CHUnitBase : MonoBehaviour
     public void ChangeItem1(Defines.EItem _item)
     {
         item1Data = CHMMain.Item.GetItemData(_item);
+        if (item1Data != null)
+        {
+            maxHp = unitData.maxHp + item1Data.maxHp;
+            maxMp = unitData.maxMp + item1Data.maxMp;
+
+            curHp += item1Data.maxHp;
+            curMp += item1Data.maxMp;
+        }
     }
 
     void InitUnitData()
