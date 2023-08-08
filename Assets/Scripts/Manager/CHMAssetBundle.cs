@@ -39,6 +39,7 @@ public partial class AssetBundlePool
     {
         if (dicItem.TryGetValue(_bundleName, out Item item) == false && _assetBundle != null)
         {
+            Debug.Log(_bundleName);
             dicItem.Add(_bundleName, new Item
             {
                 key = _bundleName,

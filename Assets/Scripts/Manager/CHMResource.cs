@@ -49,6 +49,11 @@ public class CHMResource
         LoadAsset<ItemData>($"{Defines.EResourceType.Scriptable.ToString()}/item", $"{_item.ToString()}", _callback);
     }
 
+    public void LoadShader(Defines.EShader _shader, Action<Shader> _callback)
+    {
+        LoadAsset<Shader>($"{Defines.EResourceType.Shader.ToString()}", $"{_shader.ToString()}", _callback);
+    }
+
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object
     {
         Action<T> _callbackTemp = original =>

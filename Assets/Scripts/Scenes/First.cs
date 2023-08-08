@@ -28,7 +28,7 @@ public class First : MonoBehaviour
             {
                 if (loadingBar.fillAmount == 1f)
                 {
-                    SceneManager.LoadScene(1);
+                    CHMMain.Unit.CreateUnit(Defines.EUnit.White, Defines.ELayer.Red, Defines.ELayer.Blue, Vector3.zero, null, null);
                 }
             });
         }

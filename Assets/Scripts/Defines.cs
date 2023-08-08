@@ -35,6 +35,7 @@ public class Defines
         Effect,
         Decal,
         Scriptable,
+        Shader,
 
         Max
     }
@@ -306,6 +307,22 @@ public class Defines
 
         A,
         B,
+
+        Max
+    }
+
+    public enum EShader
+    {
+        None = -1,
+
+        ef_ice,
+        ef_particle,
+        ef_particle_defense,
+        ef_particle_distortion,
+        ef_particle_slash,
+        ef_particle_tornado,
+        ForceField,
+        MagicCraftLab,
 
         Max
     }

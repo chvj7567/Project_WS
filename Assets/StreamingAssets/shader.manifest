@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1185256160
+CRC: 389084516
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c0d692b59bd2bd50d081b4a61d6b822b
+    Hash: 846c48bc4496f5eef787e83be37e787e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4aa26f8f1366e2888248d90234c49b73
@@ -21,7 +21,7 @@ Assets:
 - Assets/AssetPieces/Shaders/ef_ice.shadergraph
 - Assets/AssetPieces/Shaders/ef_particle.shadergraph
 - Assets/AssetPieces/Shaders/MagicCraftLab.shadergraph
-- Assets/AssetPieces/Shaders/Force Field.shader
+- Assets/AssetPieces/Shaders/ForceField.shader
 - Assets/AssetPieces/Shaders/ef_particle_slash.shadergraph
 Dependencies:
 - C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/texture

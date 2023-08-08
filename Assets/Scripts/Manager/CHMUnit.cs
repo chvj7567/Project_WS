@@ -5,7 +5,7 @@ public class CHMUnit
 {
     Dictionary<Defines.EUnit, UnitData> dicUnitData = new Dictionary<Defines.EUnit, UnitData>();
     List<Material> liMaterial = new List<Material>();
-
+    List<Shader> liShader = new List<Shader>();
     List<GameObject> unitList = new List<GameObject>();
 
     int redIndex = 0;
@@ -27,6 +27,14 @@ public class CHMUnit
             CHMMain.Resource.LoadUnitMaterial((Defines.EUnit)i, (mat) =>
             {
                 liMaterial.Add(mat);
+            });
+        }
+
+        for (int i = 0; i < (int)Defines.EShader.Max; ++i)
+        {
+            CHMMain.Resource.LoadShader((Defines.EShader)i, (mat) =>
+            {
+                liShader.Add(mat);
             });
         }
     }
@@ -85,8 +93,10 @@ public class CHMUnit
             var targetTracker = ball.GetComponent<CHTargetTracker>();
             if (targetTracker != null)
             {
-                _liTargetTracker.Add(targetTracker);
-                _liTargetMask.Add(targetTracker.targetMask);
+                if (_liTargetTracker != null)
+                    _liTargetTracker.Add(targetTracker);
+                if (_liTargetMask != null)
+                    _liTargetMask.Add(targetTracker.targetMask);
 
                 // 유닛 생성 시 바로 공격하지 않도록 비활성화
                 targetTracker.targetMask = 0;
@@ -114,6 +124,7 @@ public class CHMUnit
         if (meshRenderer != null && index < liMaterial.Count)
         {
             meshRenderer.material = liMaterial[index];
+            meshRenderer.material.shader = liShader[(int)Defines.EShader.ForceField];
         }
     }
 
