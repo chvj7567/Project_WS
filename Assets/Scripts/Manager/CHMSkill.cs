@@ -119,7 +119,7 @@ public class CHMSkill
                 }
                 
                 // 스킬 시전 딜레이 시간 전에 데칼로 스킬 시전 구역 알려줌
-                if (effectInfo.onDecal && (Mathf.Approximately(0f, effectInfo.startDelay) == false))
+                if (effectInfo.onDecal && (Mathf.Approximately(0f, effectInfo.startDelay) == false) && effectInfo.onDecal)
                 {
                     await CreateDecal(_skillLocationInfo, effectInfo, skillData.isTargeting);
                 }

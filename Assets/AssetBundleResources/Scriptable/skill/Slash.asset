@@ -54,7 +54,7 @@ MonoBehaviour:
     createOnEmpty: 0
     attach: 0
     duplication: 1
-    onDecal: 1
+    onDecal: 0
     eStatModifyType: 1
     eDamageType1: 0
     eDamageType2: 0

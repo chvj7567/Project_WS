@@ -13,6 +13,8 @@ public class SceneStage : SceneBase
     [SerializeField] Button btnWarStart;
     [SerializeField] CHTMPro stageText;
     [SerializeField] CHTMPro resultText;
+    [SerializeField] Button stagePlusBtn;
+    [SerializeField] Button stageMinusBtn;
 
     [Header("자동 설정")]
     [SerializeField, ReadOnly] List<Vector3> liMyPosition = new List<Vector3>();
@@ -22,15 +24,17 @@ public class SceneStage : SceneBase
     [SerializeField, ReadOnly] List<LayerMask> liMyTargetMask = new List<LayerMask>();
     [SerializeField, ReadOnly] List<LayerMask> liEnemyTargetMask= new List<LayerMask>();
 
-    int myPositionIndex = 0;
-    int remainCount = 0;
-    int stage = 1;
+    [SerializeField, ReadOnly] int myPositionIndex = 0;
+    [SerializeField, ReadOnly] int remainCount = 0;
+    [SerializeField, ReadOnly] int stage = 1;
+    [SerializeField, ReadOnly] bool warEnd = false;
 
     void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
+        warEnd = true;
         resultText.gameObject.SetActive(false);
         SetStage(stage);
 
@@ -72,6 +76,40 @@ public class SceneStage : SceneBase
                 my.GetComponent<CHUnitBase>().ChangeItem1(Defines.EItem.A);
             }*/
             WarStart();
+        });
+
+        stagePlusBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            if (warEnd == true)
+            {
+                stage = Mathf.Min(++stage, 9);
+
+                CHMMain.Unit.RemoveUnitAll();
+
+                liMyTargetTracker.Clear();
+                liEnemyTargetTracker.Clear();
+                liMyTargetMask.Clear();
+                liEnemyTargetMask.Clear();
+
+                SetStage(stage);
+            }
+        });
+
+        stageMinusBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            if (warEnd == true)
+            {
+                stage = Mathf.Max(--stage, 1);
+
+                CHMMain.Unit.RemoveUnitAll();
+
+                liMyTargetTracker.Clear();
+                liEnemyTargetTracker.Clear();
+                liMyTargetMask.Clear();
+                liEnemyTargetMask.Clear();
+
+                SetStage(stage);
+            }
         });
     }
 
@@ -124,6 +162,8 @@ public class SceneStage : SceneBase
 
     public async void WarStart()
     {
+        warEnd = false;
+
         for (int i = 0; i < liMyTargetMask.Count; ++i)
         {
             liMyTargetTracker[i].targetMask = liMyTargetMask[i];
@@ -134,12 +174,11 @@ public class SceneStage : SceneBase
             liEnemyTargetTracker[i].targetMask = liEnemyTargetMask[i];
         }
 
-        bool gameEnd = false;
         do
         {
             await Task.Delay(1000);
-            gameEnd = CheckGameEnd();
-        } while (gameEnd == false);
+            warEnd = CheckGameEnd();
+        } while (warEnd == false);
 
         bool alive = false;
         foreach (var targetTracker in liMyTargetTracker)
