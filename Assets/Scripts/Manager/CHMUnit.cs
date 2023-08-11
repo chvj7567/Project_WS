@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 
 public class CHMUnit
@@ -7,6 +8,8 @@ public class CHMUnit
     List<Material> liMaterial = new List<Material>();
     List<Shader> liShader = new List<Shader>();
     List<GameObject> unitList = new List<GameObject>();
+    GameObject orginBall = null;
+    GameObject originGaugeBar = null;
 
     int redIndex = 0;
     int blueIndex = 0;
@@ -37,6 +40,16 @@ public class CHMUnit
                 liMaterial.Add(mat);
             });
         }
+
+        CHMMain.Resource.LoadOriginBall((ball) =>
+        {
+            orginBall = ball;
+        });
+
+        CHMMain.Resource.LoadOriginGaugeBar((gaugeBar) =>
+        {
+            originGaugeBar = gaugeBar;
+        });
     }
 
     public void Clear()
@@ -60,6 +73,16 @@ public class CHMUnit
         }
 
         unitList.Clear();
+    }
+
+    public GameObject GetOriginBall()
+    {
+        return orginBall;
+    }
+
+    public GameObject GetOriginGaugeBar()
+    {
+        return originGaugeBar;
     }
 
     public UnitData GetUnitData(Defines.EUnit _eUnit)

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -124,6 +125,7 @@ public class CHTargetTracker : MonoBehaviour
                     }
                     else
                     {
+                        transform.DOMove(trDestination.transform.position, 10f).SetEase(Ease.Linear);
                         LookAtPosition(trDestination.position);
                     }
 

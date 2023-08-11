@@ -371,9 +371,6 @@ public class CHUnitBase : MonoBehaviour
     {
         unitState = 0;
 
-        InitUnitData();
-        InitGaugeBar();
-
         if (item1Data == null)
         {
             curHp = unitData.maxHp;

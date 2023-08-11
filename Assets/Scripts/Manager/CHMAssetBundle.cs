@@ -159,7 +159,41 @@ public static class CHMAssetBundle
                 path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.png";
             }
         }
+        else if (typeof(T) == typeof(Material))
+        {
+            path = $"Assets/AssetPieces/{_bundleName.ToLower()}/{_assetName}.mat";
+        }
+        else if (typeof(T) == typeof(Shader))
+        {
+            path = $"Assets/AssetPieces/{_bundleName.ToLower()}/{_assetName}.shader";
 
+            T temp = AssetDatabase.LoadAssetAtPath<T>(path);
+
+            if (temp == null)
+            {
+                path = $"Assets/AssetPieces/{_bundleName.ToLower()}/{_assetName}.shadergraph";
+            }
+        }
+        else if (typeof(T) == typeof(Material))
+        {
+            path = $"Assets/AssetPieces/{_bundleName.ToLower()}/{_assetName}.json";
+        }
+        else if (typeof(T) == typeof(SkillData))
+        {
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.asset";
+        }
+        else if (typeof(T) == typeof(UnitData))
+        {
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.asset";
+        }
+        else if (typeof(T) == typeof(LevelData))
+        {
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.asset";
+        }
+        else if (typeof(T) == typeof(ItemData))
+        {
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.asset";
+        }
         T original = AssetDatabase.LoadAssetAtPath<T>(path);
 
         _callback(original);

@@ -13,7 +13,7 @@ public class CHMResource
     private void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
 #if UNITY_EDITOR
-        CHMAssetBundle.LoadAsset<T>(_bundleName, _assetName, _callback);
+        CHMAssetBundle.LoadAssetOnEditor<T>(_bundleName, _assetName, _callback);
 #else
         CHMAssetBundle.LoadAsset<T>(_bundleName, _assetName, _callback);
 #endif
@@ -27,6 +27,15 @@ public class CHMResource
     public void LoadSkillData(Defines.ESkill _skill, Action<SkillData> _callback)
     {
         LoadAsset<SkillData>($"{Defines.EResourceType.Scriptable.ToString()}/skill", $"{_skill.ToString()}", _callback);
+    }
+
+    public void LoadOriginBall(Action<GameObject> _callback)
+    {
+        LoadAsset<GameObject>($"unit", $"ball", _callback);
+    }
+    public void LoadOriginGaugeBar(Action<GameObject> _callback)
+    {
+        LoadAsset<GameObject>($"major", $"GaugeBar", _callback);
     }
 
     public void LoadUnitData(Defines.EUnit _unit, Action<UnitData> _callback)

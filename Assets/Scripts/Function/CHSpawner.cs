@@ -18,7 +18,7 @@ public class CHSpawner : MonoBehaviour
         cts = new CancellationTokenSource();
         token = cts.Token;
 
-        StartSpawn();
+        //StartSpawn();
     }
 
     public void SetSpawnDelay(float _value)
@@ -35,21 +35,22 @@ public class CHSpawner : MonoBehaviour
         {
             try
             {
-                var obj = CHMMain.Resource.Instantiate(objSpawn, transform);
-                obj.transform.localPosition = Vector3.zero;
-
-                if (trDestination)
+                var obj = CHMMain.Resource.Instantiate(CHMMain.Unit.GetOriginBall(), transform);
+                if (obj != null)
                 {
-                    var targetTracker = obj.GetComponent<CHTargetTracker>();
-                    targetTracker.trDestination = trDestination;
-                }
+                    obj.transform.localPosition = Vector3.zero;
+                    obj.layer = (int)Defines.ELayer.Red;
+                    if (trDestination)
+                    {
+                        var targetTracker = obj.GetComponent<CHTargetTracker>();
+                        targetTracker.trDestination = trDestination;
+                    }
 
-                var unitBase = obj.GetComponent<CHUnitBase>();
-                if (unitBase != null)
-                {
-                    unitBase.ResetUnit();
-                    unitBase.gameObject.SetActive(true);
-
+                    var unitBase = obj.GetComponent<CHUnitBase>();
+                    if (unitBase != null)
+                    {
+                        unitBase.gameObject.SetActive(true);
+                    }
                 }
 
                 await Task.Delay((int)(spawnDelay * 1000f), cts.Token);
