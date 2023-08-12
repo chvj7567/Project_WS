@@ -15,6 +15,7 @@ public class SceneStage : SceneBase
     [SerializeField] CHTMPro resultText;
     [SerializeField] Button stagePlusBtn;
     [SerializeField] Button stageMinusBtn;
+    [SerializeField] CHSpawner spawner;
 
     [Header("자동 설정")]
     [SerializeField, ReadOnly] List<Vector3> liMyPosition = new List<Vector3>();
@@ -29,7 +30,7 @@ public class SceneStage : SceneBase
     [SerializeField, ReadOnly] int stage = 1;
     [SerializeField, ReadOnly] bool warEnd = false;
 
-    void Start()
+    async void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
@@ -111,6 +112,8 @@ public class SceneStage : SceneBase
                 SetStage(stage);
             }
         });
+
+        spawner.StartSpawn();
     }
 
     void SetStage(int _stage)
