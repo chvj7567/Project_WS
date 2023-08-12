@@ -24,6 +24,11 @@ public class CHMResource
         LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_jsonType.ToString()}", _callback);
     }
 
+    public void LoadPlayerData(Action<TextAsset> _callback)
+    {
+        LoadAsset<TextAsset>($"data", $"Player", _callback);
+    }
+
     public void LoadSkillData(Defines.ESkill _skill, Action<SkillData> _callback)
     {
         LoadAsset<SkillData>($"{Defines.EResourceType.Scriptable.ToString()}/skill", $"{_skill.ToString()}", _callback);
@@ -33,6 +38,7 @@ public class CHMResource
     {
         LoadAsset<GameObject>($"unit", $"ball", _callback);
     }
+
     public void LoadOriginGaugeBar(Action<GameObject> _callback)
     {
         LoadAsset<GameObject>($"major", $"GaugeBar", _callback);

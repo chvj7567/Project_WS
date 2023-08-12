@@ -16,6 +16,7 @@ public class CHMMain : MonoBehaviour
     CHMUnit m_unit = new CHMUnit();
     CHMLevel m_level = new CHMLevel();
     CHMItem m_item = new CHMItem();
+    CHMData m_data = new CHMData();
 
     public static CHMPool Pool { get { return Instance.m_pool; } }
     public static CHMResource Resource { get { return Instance.m_resource; } }
@@ -27,6 +28,7 @@ public class CHMMain : MonoBehaviour
     public static CHMUnit Unit { get { return Instance.m_unit; } }
     public static CHMLevel Level { get { return Instance.m_level; } }
     public static CHMItem Item { get { return Instance.m_item; } }
+    public static CHMData Data { get { return Instance.m_data; } }
     #endregion
 
     void Start()
@@ -63,6 +65,7 @@ public class CHMMain : MonoBehaviour
             m_instance.m_pool.Init();
             m_instance.m_json.Init();
             m_instance.m_particle.Init();
+            m_instance.m_data.Init();
         }
     }
 

@@ -1,0 +1,5 @@
+{
+	"playerList" : [
+		{"key": "Player","plusDamage": 0,"minusCoolTime": 0,"plusDistance": 0}
+	]
+}

@@ -147,7 +147,6 @@ public class CHMUnit
         if (meshRenderer != null && index < liMaterial.Count)
         {
             meshRenderer.material = liMaterial[index];
-            meshRenderer.material.shader = liShader[(int)Defines.EShader.ForceField];
         }
     }
 

@@ -225,6 +225,7 @@ public class Defines
         Orange,
         Pink,
         Red,
+        Monster1,
 
         Max
     }
@@ -323,6 +324,15 @@ public class Defines
         ef_particle_tornado,
         ForceField,
         MagicCraftLab,
+
+        Max
+    }
+
+    public enum EData
+    {
+        None = -1,
+
+        Player,
 
         Max
     }

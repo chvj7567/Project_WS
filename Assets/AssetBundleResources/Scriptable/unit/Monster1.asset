@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 398879e25a2280a4586ebcee5da6ca41, type: 3}
-  m_Name: Orange
+  m_Name: Monster1
   m_EditorClassIdentifier: 
-  eUnit: 0
+  eUnit: 8
   unitName: 
   eLevel: 0
   maxHp: 100
@@ -21,12 +21,12 @@ MonoBehaviour:
   mpRegenPerSecond: 0
   attackPower: 0
   defensePower: 0
-  moveSpeed: 0
+  moveSpeed: 1
   rotateSpeed: 0
-  range: 100
-  rangeMulti: 2
-  viewAngle: 360
-  eSkill1: 0
+  range: 0
+  rangeMulti: 0
+  viewAngle: 0
+  eSkill1: 2
   eSkill2: -1
   eSkill3: -1
   eSkill4: -1

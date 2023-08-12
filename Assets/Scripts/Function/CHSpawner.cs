@@ -8,6 +8,7 @@ public class CHSpawner : MonoBehaviour
 {
     [SerializeField] Transform trDestination;
     [SerializeField] float spawnDelay = 1f;
+    [SerializeField] Defines.EUnit unit;
 
     bool isSpawn;
     CancellationTokenSource cts;
@@ -24,6 +25,8 @@ public class CHSpawner : MonoBehaviour
             var obj = CHMMain.Resource.Instantiate(CHMMain.Unit.GetOriginBall(), transform);
             if (obj != null)
             {
+                CHMMain.Unit.SetUnit(obj, unit);
+                CHMMain.Unit.SetColor(obj, unit);
                 obj.transform.localPosition = Vector3.zero;
                 obj.layer = (int)Defines.ELayer.Red;
                 if (trDestination)
