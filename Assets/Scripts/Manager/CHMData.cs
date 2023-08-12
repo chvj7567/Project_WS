@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,7 +14,6 @@ public class CHMData
     public Dictionary<string, Data.Player> playerDataDic = new Dictionary<string, Data.Player>();
 
     string _playerPath;
-    string _monsterPath;
 
     public async void Init()
     {
@@ -27,8 +24,6 @@ public class CHMData
         var playerData = await LoadJson<Data.ExtractData<Data.Player>, string, Data.Player>(Defines.EData.Player.ToString());
 
         playerDataDic = playerData.MakeDict();
-
-        SaveJson();
     }
 
     async Task<Loader> LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

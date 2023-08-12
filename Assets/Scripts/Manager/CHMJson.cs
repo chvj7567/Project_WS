@@ -9,8 +9,8 @@ public class CHMJson
     [Serializable]
     public class JsonData
     {
-        public StringInfo[] stringInfoArray;
-        public StageInfo[] positionInfoArray;
+        public StringInfo[] stringInfoArr;
+        public StageInfo[] stageInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -18,7 +18,7 @@ public class CHMJson
 
     List<Action<TextAsset>> actionList = new List<Action<TextAsset>>();
     Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
-    List<StageInfo> positionInfoList = new List<StageInfo>();
+    List<StageInfo> stageInfoList = new List<StageInfo>();
 
     public void Init()
     {
@@ -37,7 +37,7 @@ public class CHMJson
         actionList.Clear();
 
         actionList.Add(LoadStringInfo());
-        actionList.Add(LoadPositionInfo());
+        actionList.Add(LoadStageInfo());
 
         loadingFileCount = actionList.Count;
     }
@@ -60,8 +60,8 @@ public class CHMJson
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.String, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stringInfoArray\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.stringInfoArray)
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stringInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stringInfoArr)
             {
                 stringInfoDic.Add(data.stringID, data.value);
             }
@@ -72,18 +72,18 @@ public class CHMJson
         return callback;
     }
 
-    Action<TextAsset> LoadPositionInfo()
+    Action<TextAsset> LoadStageInfo()
     {
         Action<TextAsset> callback;
 
-        positionInfoList.Clear();
+        stageInfoList.Clear();
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"positionInfoArray\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.positionInfoArray)
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stageInfoArr)
             {
-                positionInfoList.Add(data);
+                stageInfoList.Add(data);
             }
 
             ++loadCompleteFileCount;
@@ -104,7 +104,7 @@ public class CHMJson
 
     public List<StageInfo> GetStageInfoList(int _stage, int _team)
     {
-        return positionInfoList.FindAll(_ => _.stage == _stage && _.team == _team);
+        return stageInfoList.FindAll(_ => _.stage == _stage && _.team == _team);
     }
 
     public Vector3 GetPositionFromStageInfo(StageInfo _positionInfo)
@@ -132,5 +132,17 @@ public class CHMJson
         }
 
         return posList;
+    }
+
+    public List<Defines.EUnit> GetUnitListFromStageInfo(int _stage, int _team)
+    {
+        List<Defines.EUnit> unitList = new List<Defines.EUnit>();
+        var stageInfoList = GetStageInfoList(_stage, _team);
+        foreach (var stageInfo in stageInfoList)
+        {
+            unitList.Add(stageInfo.eUnit);
+        }
+
+        return unitList;
     }
 }

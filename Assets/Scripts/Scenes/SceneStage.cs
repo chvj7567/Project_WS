@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
@@ -19,13 +20,14 @@ public class SceneStage : SceneBase
 
     [Header("자동 설정")]
     [SerializeField, ReadOnly] List<Vector3> liMyPosition = new List<Vector3>();
+    [SerializeField, ReadOnly] List<Defines.EUnit> liMyUnit = new List<Defines.EUnit>();
     [SerializeField, ReadOnly] List<Vector3> liEnemyPosition = new List<Vector3>();
     [SerializeField, ReadOnly] List<CHTargetTracker> liMyTargetTracker = new List<CHTargetTracker>();
     [SerializeField, ReadOnly] List<CHTargetTracker> liEnemyTargetTracker = new List<CHTargetTracker>();
     [SerializeField, ReadOnly] List<LayerMask> liMyTargetMask = new List<LayerMask>();
     [SerializeField, ReadOnly] List<LayerMask> liEnemyTargetMask= new List<LayerMask>();
 
-    [SerializeField, ReadOnly] int myPositionIndex = 0;
+    [SerializeField, ReadOnly] int myIndex = 0;
     [SerializeField, ReadOnly] int remainCount = 0;
     [SerializeField, ReadOnly] int stage = 1;
     [SerializeField, ReadOnly] bool warEnd = false;
@@ -52,17 +54,34 @@ public class SceneStage : SceneBase
         });
         btnCreateUnit.OnClickAsObservable().Subscribe(_ =>
         {
-            if (myPositionIndex >= liMyPosition.Count) return;
+            if (myIndex >= liMyPosition.Count) return;
 
-            int randomUnit = Random.Range(0, (int)Defines.EUnit.Max);
+            Infomation.CreateUnitInfo createUnitInfo;
 
-            var createUnitInfo = new Infomation.CreateUnitInfo
+            if (liMyUnit[myIndex] == Defines.EUnit.None)
             {
-                eUnit = (Defines.EUnit)randomUnit,
-                createPos = liMyPosition[myPositionIndex++],
-                eTeamLayer = Defines.ELayer.Blue,
-                eTargetLayer = Defines.ELayer.Red
-            };
+                int randomUnit = UnityEngine.Random.Range(0, (int)Defines.EUnit.Max);
+
+                createUnitInfo = new Infomation.CreateUnitInfo
+                {
+                    eUnit = (Defines.EUnit)randomUnit,
+                    createPos = liMyPosition[myIndex],
+                    eTeamLayer = Defines.ELayer.Blue,
+                    eTargetLayer = Defines.ELayer.Red
+                };
+            }
+            else
+            {
+                createUnitInfo = new Infomation.CreateUnitInfo
+                {
+                    eUnit = liMyUnit[myIndex],
+                    createPos = liMyPosition[myIndex],
+                    eTeamLayer = Defines.ELayer.Blue,
+                    eTargetLayer = Defines.ELayer.Red
+                };
+            }
+
+            ++myIndex;
 
             CHMMain.Unit.CreateUnit(createUnitInfo.eUnit, createUnitInfo.eTeamLayer, createUnitInfo.eTargetLayer, createUnitInfo.createPos, liMyTargetTracker, liMyTargetMask);
 
@@ -72,10 +91,6 @@ public class SceneStage : SceneBase
 
         btnWarStart.OnClickAsObservable().Subscribe(_ =>
         {
-            /*foreach (var my in liMyTargetTracker)
-            {
-                my.GetComponent<CHUnitBase>().ChangeItem1(Defines.EItem.A);
-            }*/
             WarStart();
         });
 
@@ -113,6 +128,8 @@ public class SceneStage : SceneBase
             }
         });
 
+        await Task.Delay(1000);
+
         spawner.StartSpawn();
     }
 
@@ -121,15 +138,17 @@ public class SceneStage : SceneBase
         if (stageText)
             stageText.SetText(_stage);
 
-        myPositionIndex = 0;
+        myIndex = 0;
         liMyPosition.Clear();
+        liMyUnit.Clear();
         liEnemyPosition.Clear();
 
-        liMyPosition.AddRange(CHMMain.Json.GetPositionListFromStageInfo(_stage, 1));
+        liMyPosition = CHMMain.Json.GetPositionListFromStageInfo(_stage, 1);
+        liMyUnit = CHMMain.Json.GetUnitListFromStageInfo(_stage, 1);
         remainCount = liMyPosition.Count;
         txtRemainCount.SetText(remainCount);
 
-        liEnemyPosition.AddRange(CHMMain.Json.GetPositionListFromStageInfo(_stage, 2));
+        liEnemyPosition = CHMMain.Json.GetPositionListFromStageInfo(_stage, 2);
 
         var positionInfoList = CHMMain.Json.GetStageInfoList(_stage, 2);
 
@@ -138,7 +157,7 @@ public class SceneStage : SceneBase
             Infomation.CreateUnitInfo createUnitInfo;
             if (posInfo.eUnit == Defines.EUnit.None)
             {
-                int randomUnit = Random.Range(0, (int)Defines.EUnit.Max);
+                int randomUnit = UnityEngine.Random.Range(0, (int)Defines.EUnit.Max);
 
                 createUnitInfo = new Infomation.CreateUnitInfo
                 {

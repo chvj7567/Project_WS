@@ -68,8 +68,7 @@ public class CHTargetTracker : MonoBehaviour
         contBase = gameObject.GetComponent<CHContBase>();
         unitBase = gameObject.GetComponent<CHUnitBase>();
         animator = gameObject.GetComponent<Animator>();
-
-        agent = gameObject.GetOrAddComponent<NavMeshAgent>();
+        agent = gameObject.GetComponent<NavMeshAgent>();
     }
 
     private void Start()
@@ -125,7 +124,7 @@ public class CHTargetTracker : MonoBehaviour
                     }
                     else
                     {
-                        transform.DOMove(trDestination.transform.position, 10f).SetEase(Ease.Linear);
+                        //transform.DOMove(trDestination.transform.position, 10f).SetEase(Ease.Linear);
                         LookAtPosition(trDestination.position);
                     }
 

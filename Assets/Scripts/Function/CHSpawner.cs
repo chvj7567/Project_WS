@@ -1,8 +1,9 @@
+using DG.Tweening;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CHSpawner : MonoBehaviour
 {
@@ -22,24 +23,27 @@ public class CHSpawner : MonoBehaviour
     {
         while (!cts.Token.IsCancellationRequested)
         {
-            var obj = CHMMain.Resource.Instantiate(CHMMain.Unit.GetOriginBall(), transform);
+            var obj = CHMMain.Resource.Instantiate(CHMMain.Unit.GetOriginBall());
             if (obj != null)
             {
                 CHMMain.Unit.SetUnit(obj, unit);
                 CHMMain.Unit.SetColor(obj, unit);
-                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localPosition = transform.position;
                 obj.layer = (int)Defines.ELayer.Red;
-                if (trDestination)
+
+                var targetTracker = obj.GetComponent<CHTargetTracker>();
+                if (targetTracker != null)
                 {
-                    var targetTracker = obj.GetComponent<CHTargetTracker>();
-                    targetTracker.trDestination = trDestination;
+                    Destroy(targetTracker);
                 }
 
-                var unitBase = obj.GetComponent<CHUnitBase>();
-                if (unitBase != null)
+                var agent = obj.GetComponent<NavMeshAgent>();
+                if (agent != null)
                 {
-                    unitBase.gameObject.SetActive(true);
+                    agent.SetDestination(trDestination.position);
                 }
+
+                obj.SetActive(true);
             }
 
             await Task.Delay((int)(spawnDelay * 1000f), cts.Token);
