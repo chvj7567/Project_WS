@@ -149,7 +149,7 @@ public class CHContBase : MonoBehaviour
                     timeSinceLastSkill1 = -1f;
                     if (unitBase.coolTimeGaugeBar)
                     {
-                        unitBase.coolTimeGaugeBar.SetGaugeBar(unitBase.GetCurrentSkill1CoolTime(), 0, 0, 0, 0);
+                        unitBase.coolTimeGaugeBar.SetGaugeBar(unitBase.GetCurrentSkill1CoolTime(), unitBase.GetCurrentSkill1CoolTime(), 0, 0, 0);
                     }
                 }
 
