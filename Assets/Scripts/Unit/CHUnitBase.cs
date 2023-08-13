@@ -512,6 +512,10 @@ public class CHUnitBase : MonoBehaviour
     public void InitUnitData()
     {
         unitState = 0;
+        maxHp = 0;
+        maxMp = 0;
+        curHp = 0;
+        curMp = 0;
         unitCollider.enabled = true;
 
         unitData = CHMMain.Unit.GetUnitData(unit);
