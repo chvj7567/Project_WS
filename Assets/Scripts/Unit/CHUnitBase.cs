@@ -367,26 +367,6 @@ public class CHUnitBase : MonoBehaviour
         return curMp;
     }
 
-    public void ResetUnit()
-    {
-        unitState = 0;
-
-        if (item1Data == null)
-        {
-            curHp = unitData.maxHp;
-            curMp = unitData.maxMp;
-        }
-        else
-        {
-            curHp = unitData.maxHp + item1Data.maxHp;
-            curMp = unitData.maxMp + item1Data.maxMp;
-        }
-
-        unitCollider.enabled = true;
-
-        hpGaugeBar.ResetGaugeBar();
-    }
-
     public bool IsNormalState()
     {
         return unitState == 0;
@@ -529,16 +509,30 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    void InitUnitData()
+    public void InitUnitData()
     {
-        if (unitData) return;
+        unitState = 0;
+        unitCollider.enabled = true;
 
         unitData = CHMMain.Unit.GetUnitData(unit);
         if (unitData != null)
         {
+            maxHp += unitData.maxHp;
+            maxMp += unitData.maxMp;
+            curHp += unitData.maxHp;
+            curMp += unitData.maxMp;
+
             CHMMain.Unit.SetColor(gameObject, unit);
 
             levelData = CHMMain.Level.GetLevelData(unit, unitData.eLevel);
+
+            if (levelData != null)
+            {
+                maxHp += levelData.maxHp;
+                maxMp += levelData.maxMp;
+                curHp += levelData.maxHp;
+                curMp += levelData.maxMp;
+            }
 
             skill1Data = CHMMain.Skill.GetSkillData(unitData.eSkill1);
             skill2Data = CHMMain.Skill.GetSkillData(unitData.eSkill2);
@@ -547,48 +541,46 @@ public class CHUnitBase : MonoBehaviour
 
             item1Data = CHMMain.Item.GetItemData(unitData.eItem1);
 
-            if (item1Data == null)
+            if (item1Data != null)
             {
-                maxHp = unitData.maxHp;
-                maxMp = unitData.maxMp;
-                curHp = unitData.maxHp;
-                curMp = unitData.maxMp;
-            }
-            else
-            {
-                maxHp = unitData.maxHp + item1Data.maxHp;
-                maxMp = unitData.maxMp + item1Data.maxMp;
-                curHp = unitData.maxHp + item1Data.maxHp;
-                curMp = unitData.maxMp + item1Data.maxMp;
+                maxHp += item1Data.maxHp;
+                maxMp += item1Data.maxMp;
+                curHp += item1Data.maxHp;
+                curMp += item1Data.maxMp;
             }
         }
     }
 
     void InitGaugeBar()
     {
-        if (hpGaugeBar) return;
-
-        CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, ((gaugeBar) =>
+        if (hpGaugeBar == null)
         {
-            if (gaugeBar)
+            CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, ((gaugeBar) =>
             {
-                gaugeBar.transform.SetParent(transform);
-                gaugeBar.transform.localPosition = Vector3.zero;
-
-                hpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
-                if (hpGaugeBar)
+                if (gaugeBar)
                 {
-                    if (unitCollider == null)
-                    {
-                        unitCollider = gameObject.GetOrAddComponent<Collider>();
-                    }
+                    gaugeBar.transform.SetParent(transform);
+                    gaugeBar.transform.localPosition = Vector3.zero;
 
-                    // HP 게이지가 스케일에 영향받지 않도록 
-                    hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
-                    hpGaugeBar.SetGaugeBar(maxHp, this.GetCurrentHp(), 0f);
+                    hpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
+                    if (hpGaugeBar)
+                    {
+                        if (unitCollider == null)
+                        {
+                            unitCollider = gameObject.GetOrAddComponent<Collider>();
+                        }
+
+                        // HP 게이지가 스케일에 영향받지 않도록 
+                        hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
+                        hpGaugeBar.SetGaugeBar(maxHp, this.GetCurrentHp(), 0f);
+                    }
                 }
-            }
-        }));
+            }));
+        }
+        else
+        {
+            hpGaugeBar.ResetGaugeBar();
+        }
     }
 
     void AtOnceChangeHp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)

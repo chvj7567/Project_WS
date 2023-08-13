@@ -44,6 +44,12 @@ public class CHSpawner : MonoBehaviour
                     agent.SetDestination(trDestination.position);
                 }
 
+                var unitBase = obj.GetComponent<CHUnitBase>();
+                if (unitBase != null)
+                {
+                    unitBase.InitUnitData();
+                }
+
                 obj.SetActive(true);
                 ++spawnCount;
             }
