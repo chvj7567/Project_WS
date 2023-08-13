@@ -81,7 +81,7 @@ public class SceneStage : SceneBase
 
             ++myIndex;
 
-            CHMMain.Unit.CreateUnit(createUnitInfo.eUnit, createUnitInfo.eTeamLayer, createUnitInfo.eTargetLayer, createUnitInfo.createPos, liMyTargetTracker, liMyTargetMask, false);
+            CHMMain.Unit.CreateUnit(createUnitInfo.eUnit, createUnitInfo.eTeamLayer, createUnitInfo.eTargetLayer, createUnitInfo.createPos, liMyTargetTracker, liMyTargetMask, false, false, true);
 
             --remainCount;
             txtRemainCount.SetText(remainCount);

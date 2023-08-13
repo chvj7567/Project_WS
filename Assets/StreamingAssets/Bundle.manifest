@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3560846168
+CRC: 2675307328
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -52,11 +52,3 @@ AssetBundleManifest:
       Name: unit
       Dependencies:
         Dependency_0: material
-    Info_14:
-      Name: model
-      Dependencies: {}
-    Info_15:
-      Name: map
-      Dependencies:
-        Dependency_0: material
-        Dependency_1: model

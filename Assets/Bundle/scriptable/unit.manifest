@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3800602720
+CRC: 2048625688
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 77516243a6dc5e16f232827f7593833a
+    Hash: d401dcf7cd89b5d2bd2fa426233faeb2
   TypeTreeHash:
     serializedVersion: 2
     Hash: 076b392c1bf44d6f3b5dbf2a05223767
@@ -19,6 +19,7 @@ Assets:
 - Assets/AssetBundleResources/scriptable/unit/Orange.asset
 - Assets/AssetBundleResources/scriptable/unit/Brown.asset
 - Assets/AssetBundleResources/scriptable/unit/Red.asset
+- Assets/AssetBundleResources/scriptable/unit/Monster1.asset
 - Assets/AssetBundleResources/scriptable/unit/White.asset
 - Assets/AssetBundleResources/scriptable/unit/Blue.asset
 - Assets/AssetBundleResources/scriptable/unit/Pink.asset

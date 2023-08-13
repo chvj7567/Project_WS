@@ -26,13 +26,18 @@ public class CHUnitBase : MonoBehaviour
 
     [SerializeField] public EUnitState unitState = EUnitState.None;
 
-    [SerializeField, ReadOnly] public bool onHpBar = true;
     [SerializeField, ReadOnly] public float maxHp;
     [SerializeField, ReadOnly] public float maxMp;
     [SerializeField, ReadOnly] public float curHp;
     [SerializeField, ReadOnly] public float curMp;
 
-    protected CHGaugeBar hpGaugeBar;
+    [SerializeField, ReadOnly] public bool onHpBar = true;
+    [SerializeField, ReadOnly] public bool onMpBar = false;
+    [SerializeField, ReadOnly] public bool onCoolTimeBar = false;
+
+    public CHGaugeBar hpGaugeBar;
+    public CHGaugeBar mpGaugeBar;
+    public CHGaugeBar coolTimeGaugeBar;
 
     CancellationTokenSource cts;
     CancellationToken token;
@@ -68,11 +73,7 @@ public class CHUnitBase : MonoBehaviour
         });
 
         InitUnitData();
-        
-        if (onHpBar == true)
-        {
-            InitGaugeBar();
-        }
+        InitGaugeBar(onHpBar, onMpBar, onCoolTimeBar);
     }
 
     private void OnDestroy()
@@ -561,14 +562,15 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
-    void InitGaugeBar()
+    void InitGaugeBar(bool onHpBar, bool onMpBar, bool onCoolTimeBar)
     {
-        if (hpGaugeBar == null)
+        if (onHpBar && hpGaugeBar == null)
         {
             CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, ((gaugeBar) =>
             {
                 if (gaugeBar)
                 {
+                    gaugeBar.name = "HpBar";
                     gaugeBar.transform.SetParent(transform);
                     gaugeBar.transform.localPosition = Vector3.zero;
 
@@ -582,14 +584,77 @@ public class CHUnitBase : MonoBehaviour
 
                         // HP 게이지가 스케일에 영향받지 않도록 
                         hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
-                        hpGaugeBar.SetGaugeBar(maxHp, this.GetCurrentHp(), 0f);
+                        hpGaugeBar.SetGaugeBar(1, 1, 0, 1.5f, 1f);
                     }
                 }
             }));
         }
         else
         {
-            hpGaugeBar.ResetGaugeBar();
+            if (hpGaugeBar != null)
+                hpGaugeBar.ResetGaugeBar();
+        }
+
+        if (onMpBar && mpGaugeBar == null)
+        {
+            CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, ((gaugeBar) =>
+            {
+                if (gaugeBar)
+                {
+                    gaugeBar.name = "MpBar";
+                    gaugeBar.transform.SetParent(transform);
+                    gaugeBar.transform.localPosition = new Vector3(0, -1, 0);
+
+                    mpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
+                    if (mpGaugeBar)
+                    {
+                        if (unitCollider == null)
+                        {
+                            unitCollider = gameObject.GetOrAddComponent<Collider>();
+                        }
+
+                        // HP 게이지가 스케일에 영향받지 않도록 
+                        mpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
+                        mpGaugeBar.SetGaugeBar(1, 1, 0f, 1.5f, 1f);
+                    }
+                }
+            }));
+        }
+        else
+        {
+            if (mpGaugeBar != null)
+                mpGaugeBar.ResetGaugeBar();
+        }
+
+        if (onCoolTimeBar && coolTimeGaugeBar == null)
+        {
+            CHMMain.Resource.InstantiateMajor(EMajor.GaugeBar, ((gaugeBar) =>
+            {
+                if (gaugeBar)
+                {
+                    gaugeBar.name = "CoolTimeBar";
+                    gaugeBar.transform.SetParent(transform);
+                    gaugeBar.transform.localPosition = new Vector3(0, -5, 0);
+
+                    coolTimeGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
+                    if (coolTimeGaugeBar)
+                    {
+                        if (unitCollider == null)
+                        {
+                            unitCollider = gameObject.GetOrAddComponent<Collider>();
+                        }
+
+                        // HP 게이지가 스케일에 영향받지 않도록 
+                        coolTimeGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
+                        coolTimeGaugeBar.SetGaugeBar(1, 1, 0f, 1.5f, 1f);
+                    }
+                }
+            }));
+        }
+        else
+        {
+            if (coolTimeGaugeBar != null)
+                coolTimeGaugeBar.ResetGaugeBar();
         }
     }
 
@@ -604,7 +669,7 @@ public class CHUnitBase : MonoBehaviour
 
         curHp = hpResult;
         if (hpGaugeBar)
-            hpGaugeBar.SetGaugeBar(maxHp, this.GetCurrentHp(), _value);
+            hpGaugeBar.SetGaugeBar(maxHp, this.GetCurrentHp(), _value, 1.5f, 1f);
 
         if (_eSkill != Defines.ESkill.None)
         {

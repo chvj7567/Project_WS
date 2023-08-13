@@ -26,12 +26,15 @@ public class CHGaugeBar : MonoBehaviour
         originPosYText = _posY;
     }
 
-    public void SetGaugeBar(float _maxValue, float _curValue, float _damage)
+    public void SetGaugeBar(float _maxValue, float _curValue, float _damage, float _backGaugeTime, float _gaugeTime)
     {
-        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, 1.5f);
-        if (imgGaugeBar) imgGaugeBar.DOFillAmount(_curValue / _maxValue, 1f);
+        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, _backGaugeTime);
+        if (imgGaugeBar) imgGaugeBar.DOFillAmount(_curValue / _maxValue, _gaugeTime);
 
-        ShowDamageText(_damage, 2f);
+        if (Mathf.Approximately(_damage, 0f) == false)
+        {
+            ShowDamageText(_damage, 2f);
+        }
     }
 
     public void ResetGaugeBar()

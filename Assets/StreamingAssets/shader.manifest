@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 389084516
+CRC: 3439394020
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 846c48bc4496f5eef787e83be37e787e
+    Hash: a3ab78e119346b147858d3b4c2e1c1d1
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4aa26f8f1366e2888248d90234c49b73
@@ -15,13 +15,13 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/AssetPieces/Shaders/ef_particle_tornado.shadergraph
-- Assets/AssetPieces/Shaders/ef_particle_distortion.shadergraph
-- Assets/AssetPieces/Shaders/ef_particle_defense.shadergraph
-- Assets/AssetPieces/Shaders/ef_ice.shadergraph
-- Assets/AssetPieces/Shaders/ef_particle.shadergraph
-- Assets/AssetPieces/Shaders/MagicCraftLab.shadergraph
-- Assets/AssetPieces/Shaders/ForceField.shader
-- Assets/AssetPieces/Shaders/ef_particle_slash.shadergraph
+- Assets/AssetPieces/Shader/ef_particle_tornado.shadergraph
+- Assets/AssetPieces/Shader/ef_particle_distortion.shadergraph
+- Assets/AssetPieces/Shader/ef_particle_defense.shadergraph
+- Assets/AssetPieces/Shader/ef_ice.shadergraph
+- Assets/AssetPieces/Shader/ef_particle.shadergraph
+- Assets/AssetPieces/Shader/MagicCraftLab.shadergraph
+- Assets/AssetPieces/Shader/ForceField.shader
+- Assets/AssetPieces/Shader/ef_particle_slash.shadergraph
 Dependencies:
 - C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/texture

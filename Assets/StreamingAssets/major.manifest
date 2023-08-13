@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4187508817
+CRC: 3129310571
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e3bb449fb809cf05acdb24bf7817d22f
+    Hash: da3b7a81c56a4810c1fc96cbd873aea3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: f02e305cc7faf10796c89ae81b6d7c78
+    Hash: 6f53733802994cc5529b06ffedb65170
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -114,6 +114,7 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/AssetBundleResources/major/Button.prefab
+- Assets/AssetBundleResources/major/DamageText.prefab
 - Assets/AssetBundleResources/major/GaugeBar.prefab
 - Assets/AssetBundleResources/major/GlobalVolume.prefab
 - Assets/AssetBundleResources/major/Button2.prefab

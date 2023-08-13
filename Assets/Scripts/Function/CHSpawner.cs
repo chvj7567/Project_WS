@@ -47,7 +47,9 @@ public class CHSpawner : MonoBehaviour
                 var unitBase = obj.GetComponent<CHUnitBase>();
                 if (unitBase != null)
                 {
-                    unitBase.InitUnitData();
+                    unitBase.onHpBar = true;
+                    unitBase.onMpBar = false;
+                    unitBase.onCoolTimeBar = false;
                 }
 
                 obj.SetActive(true);

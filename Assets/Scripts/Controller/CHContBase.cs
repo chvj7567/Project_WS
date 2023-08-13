@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -5,6 +6,7 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class CHContBase : MonoBehaviour
 {
@@ -31,6 +33,7 @@ public class CHContBase : MonoBehaviour
     [SerializeField, ReadOnly] Animator animator;
     [SerializeField, ReadOnly] CHUnitBase unitBase;
     [SerializeField, ReadOnly] CHTargetTracker targetTracker;
+
     enum Anim
     {
         Idle,
@@ -136,10 +139,18 @@ public class CHContBase : MonoBehaviour
                 if (timeSinceLastSkill1 >= 0f && timeSinceLastSkill1 < unitBase.GetCurrentSkill1CoolTime())
                 {
                     timeSinceLastSkill1 += Time.deltaTime;
+                    if (unitBase.coolTimeGaugeBar)
+                    {
+                        unitBase.coolTimeGaugeBar.SetGaugeBar(unitBase.GetCurrentSkill1CoolTime(), timeSinceLastSkill1, 0, 0, 0);
+                    }
                 }
                 else
                 {
                     timeSinceLastSkill1 = -1f;
+                    if (unitBase.coolTimeGaugeBar)
+                    {
+                        unitBase.coolTimeGaugeBar.SetGaugeBar(unitBase.GetCurrentSkill1CoolTime(), 0, 0, 0, 0);
+                    }
                 }
 
                 if (timeSinceLastSkill2 >= 0f && timeSinceLastSkill2 < unitBase.GetCurrentSkill2CoolTime())

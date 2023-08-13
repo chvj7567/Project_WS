@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3095793964
+CRC: 3627329278
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a68209d251ee5051fa940c21100b6af4
+    Hash: d7d8ee93d107097475f7e18ee2e4eeaf
   TypeTreeHash:
     serializedVersion: 2
     Hash: 81fc4833398717ae320ec5bd08c661f4
@@ -25,17 +25,17 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/AssetPieces/Meshes/FBX_fx_circle_03.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_cone_01.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_Slash_01.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_tornado_03.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_Round_02.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_tornado_01.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_Ice_01.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_circle_04.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_Defense.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_Circle_01.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_circle_02.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_Round_01.fbx
-- Assets/AssetPieces/Meshes/FBX_fx_circle_01 1.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_circle_03.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_cone_01.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_Slash_01.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_tornado_03.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_Round_02.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_tornado_01.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_Ice_01.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_circle_04.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_Defense.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_Circle_01.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_circle_02.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_Round_01.fbx
+- Assets/AssetPieces/Meshe/FBX_fx_circle_01 1.fbx
 Dependencies: []

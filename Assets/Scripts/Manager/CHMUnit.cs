@@ -63,9 +63,6 @@ public class CHMUnit
         liMaterial.Clear();
         liShader.Clear();
 
-        GameObject.Destroy(orginBall);
-        GameObject.Destroy(originGaugeBar);
-        GameObject.Destroy(originDamageText);
         orginBall = null;
         originGaugeBar = null;
         originDamageText = null;
@@ -110,7 +107,7 @@ public class CHMUnit
         return dicUnitData[_eUnit];
     }
 
-    public void CreateUnit(Defines.EUnit _eUnit, Defines.ELayer _eTeamLayer, Defines.ELayer _eTargetLayer, Vector3 _position, List<CHTargetTracker> _liTargetTracker, List<LayerMask> _liTargetMask, bool onHpBar = true)
+    public void CreateUnit(Defines.EUnit _eUnit, Defines.ELayer _eTeamLayer, Defines.ELayer _eTargetLayer, Vector3 _position, List<CHTargetTracker> _liTargetTracker, List<LayerMask> _liTargetMask, bool onHpBar = true, bool onMpBar = false, bool onCoolTimeBar = false)
     {
         CHMMain.Resource.InstantiateBall((ball) =>
         {
@@ -133,6 +130,8 @@ public class CHMUnit
             if (unitBase != null)
             {
                 unitBase.onHpBar = onHpBar;
+                unitBase.onMpBar = onMpBar;
+                unitBase.onCoolTimeBar = onCoolTimeBar;
             }
 
             ball.transform.position = _position;
