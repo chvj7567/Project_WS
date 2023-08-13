@@ -30,14 +30,12 @@ public class SceneStage : SceneBase
     [SerializeField, ReadOnly] int myIndex = 0;
     [SerializeField, ReadOnly] int remainCount = 0;
     [SerializeField, ReadOnly] int stage = 1;
-    [SerializeField, ReadOnly] bool warEnd = false;
 
     async void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
-        warEnd = true;
         resultText.gameObject.SetActive(false);
         SetStage(stage);
 
@@ -96,41 +94,31 @@ public class SceneStage : SceneBase
 
         stagePlusBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (warEnd == true)
-            {
-                stage = Mathf.Min(++stage, 9);
+            stage = Mathf.Min(++stage, 9);
 
-                CHMMain.Unit.RemoveUnitAll();
+            CHMMain.Unit.RemoveUnitAll();
 
-                liMyTargetTracker.Clear();
-                liEnemyTargetTracker.Clear();
-                liMyTargetMask.Clear();
-                liEnemyTargetMask.Clear();
+            liMyTargetTracker.Clear();
+            liEnemyTargetTracker.Clear();
+            liMyTargetMask.Clear();
+            liEnemyTargetMask.Clear();
 
-                SetStage(stage);
-            }
+            SetStage(stage);
         });
 
         stageMinusBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (warEnd == true)
-            {
-                stage = Mathf.Max(--stage, 1);
+            stage = Mathf.Max(--stage, 1);
 
-                CHMMain.Unit.RemoveUnitAll();
+            CHMMain.Unit.RemoveUnitAll();
 
-                liMyTargetTracker.Clear();
-                liEnemyTargetTracker.Clear();
-                liMyTargetMask.Clear();
-                liEnemyTargetMask.Clear();
+            liMyTargetTracker.Clear();
+            liEnemyTargetTracker.Clear();
+            liMyTargetMask.Clear();
+            liEnemyTargetMask.Clear();
 
-                SetStage(stage);
-            }
+            SetStage(stage);
         });
-
-        await Task.Delay(1000);
-
-        spawner.StartSpawn();
     }
 
     void SetStage(int _stage)
@@ -182,68 +170,9 @@ public class SceneStage : SceneBase
         }
     }
 
-    public async void WarStart()
+    public void WarStart()
     {
-        warEnd = false;
-
-        for (int i = 0; i < liMyTargetMask.Count; ++i)
-        {
-            liMyTargetTracker[i].targetMask = liMyTargetMask[i];
-        }
-
-        for (int i = 0; i < liEnemyTargetMask.Count; ++i)
-        {
-            liEnemyTargetTracker[i].targetMask = liEnemyTargetMask[i];
-        }
-
-        do
-        {
-            await Task.Delay(1000);
-            warEnd = CheckGameEnd();
-        } while (warEnd == false);
-
-        bool alive = false;
-        foreach (var targetTracker in liMyTargetTracker)
-        {
-            if (targetTracker != null)
-            {
-                var unitBase = targetTracker.GetComponent<CHUnitBase>();
-                if (unitBase != null && unitBase.GetCurrentHp() > 0)
-                {
-                    alive = true;
-                    break;
-                }
-            }
-        }
-
-        CHMMain.Unit.RemoveUnitAll();
-
-        liMyTargetTracker.Clear();
-        liEnemyTargetTracker.Clear();
-        liMyTargetMask.Clear();
-        liEnemyTargetMask.Clear();
-
-        Debug.Log("Game End");
-
-        resultText.gameObject.SetActive(true);
-
-        if (alive)
-        {
-            ++stage;
-            resultText.SetStringID(2);
-        }
-        else
-        {
-            resultText.SetStringID(3);
-        }
-
-        await Task.Delay(3000);
-
-        resultText.gameObject.SetActive(false);
-
-        if (Application.isPlaying == false) return;
-
-        SetStage(stage);
+        spawner.StartSpawn();
     }
 
     public bool CheckGameEnd()

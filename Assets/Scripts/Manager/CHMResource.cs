@@ -44,6 +44,11 @@ public class CHMResource
         LoadAsset<GameObject>($"major", $"GaugeBar", _callback);
     }
 
+    public void LoadOriginDamageText(Action<GameObject> _callback)
+    {
+        LoadAsset<GameObject>($"major", $"DamageText", _callback);
+    }
+
     public void LoadUnitData(Defines.EUnit _unit, Action<UnitData> _callback)
     {
         LoadAsset<UnitData>($"{Defines.EResourceType.Scriptable.ToString()}/unit", $"{_unit.ToString()}", _callback);

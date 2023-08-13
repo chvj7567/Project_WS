@@ -10,6 +10,7 @@ public class CHSpawner : MonoBehaviour
     [SerializeField] Transform trDestination;
     [SerializeField] float spawnDelay = 1f;
     [SerializeField] Defines.EUnit unit;
+    [SerializeField, ReadOnly] int spawnCount = 0;
 
     bool isSpawn;
     CancellationTokenSource cts;
@@ -44,6 +45,7 @@ public class CHSpawner : MonoBehaviour
                 }
 
                 obj.SetActive(true);
+                ++spawnCount;
             }
 
             await Task.Delay((int)(spawnDelay * 1000f), cts.Token);

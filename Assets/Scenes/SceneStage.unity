@@ -2451,8 +2451,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trDestination: {fileID: 148759408}
-  spawnDelay: 3
+  spawnDelay: 5
   unit: 8
+  spawnCount: 0
 --- !u!4 &1564628082
 Transform:
   m_ObjectHideFlags: 0

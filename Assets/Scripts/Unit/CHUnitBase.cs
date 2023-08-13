@@ -631,7 +631,7 @@ public class CHUnitBase : MonoBehaviour
 
             unitCollider.enabled = false;
 
-            CHMMain.Resource.Destroy(gameObject, 3f);
+            CHMMain.Resource.Destroy(gameObject);
         }
     }
 

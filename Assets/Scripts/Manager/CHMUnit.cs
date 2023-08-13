@@ -10,6 +10,7 @@ public class CHMUnit
     List<GameObject> unitList = new List<GameObject>();
     GameObject orginBall = null;
     GameObject originGaugeBar = null;
+    GameObject originDamageText = null;
 
     int redIndex = 0;
     int blueIndex = 0;
@@ -50,6 +51,11 @@ public class CHMUnit
         {
             originGaugeBar = gaugeBar;
         });
+
+        CHMMain.Resource.LoadOriginDamageText((damageText) =>
+        {
+            originDamageText = damageText;
+        });
     }
 
     public void Clear()
@@ -83,6 +89,11 @@ public class CHMUnit
     public GameObject GetOriginGaugeBar()
     {
         return originGaugeBar;
+    }
+
+    public GameObject GetOriginDamageText()
+    {
+        return originDamageText;
     }
 
     public UnitData GetUnitData(Defines.EUnit _eUnit)
@@ -122,7 +133,7 @@ public class CHMUnit
                     _liTargetMask.Add(targetTracker.targetMask);
 
                 // 유닛 생성 시 바로 공격하지 않도록 비활성화
-                targetTracker.targetMask = 0;
+                //targetTracker.targetMask = 0;
             }
         });
     }
