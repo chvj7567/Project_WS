@@ -1847,7 +1847,6 @@ MonoBehaviour:
   myIndex: 0
   remainCount: 0
   stage: 1
-  warEnd: 0
 --- !u!1001 &1230378156
 PrefabInstance:
   m_ObjectHideFlags: 0

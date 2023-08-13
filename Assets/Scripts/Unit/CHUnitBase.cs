@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ public class CHUnitBase : MonoBehaviour
 
     [SerializeField] public EUnitState unitState = EUnitState.None;
 
+    [SerializeField, ReadOnly] public bool onHpBar = true;
     [SerializeField, ReadOnly] public float maxHp;
     [SerializeField, ReadOnly] public float maxMp;
     [SerializeField, ReadOnly] public float curHp;
@@ -66,7 +68,11 @@ public class CHUnitBase : MonoBehaviour
         });
 
         InitUnitData();
-        InitGaugeBar();
+        
+        if (onHpBar == true)
+        {
+            InitGaugeBar();
+        }
     }
 
     private void OnDestroy()
@@ -627,7 +633,9 @@ public class CHUnitBase : MonoBehaviour
 
             unitCollider.enabled = false;
 
-            CHMMain.Resource.Destroy(gameObject);
+            hpGaugeBar.gameObject.SetActive(false);
+            transform.DOMoveY(-10f, 5f);
+            CHMMain.Resource.Destroy(gameObject, 5f);
         }
     }
 

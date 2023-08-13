@@ -62,6 +62,14 @@ public class CHMUnit
     {
         dicUnitData.Clear();
         liMaterial.Clear();
+        liShader.Clear();
+
+        GameObject.Destroy(orginBall);
+        GameObject.Destroy(originGaugeBar);
+        GameObject.Destroy(originDamageText);
+        orginBall = null;
+        originGaugeBar = null;
+        originDamageText = null;
 
         foreach (var unit in unitList)
         {
@@ -103,7 +111,7 @@ public class CHMUnit
         return dicUnitData[_eUnit];
     }
 
-    public void CreateUnit(Defines.EUnit _eUnit, Defines.ELayer _eTeamLayer, Defines.ELayer _eTargetLayer, Vector3 _position, List<CHTargetTracker> _liTargetTracker, List<LayerMask> _liTargetMask)
+    public void CreateUnit(Defines.EUnit _eUnit, Defines.ELayer _eTeamLayer, Defines.ELayer _eTargetLayer, Vector3 _position, List<CHTargetTracker> _liTargetTracker, List<LayerMask> _liTargetMask, bool onHpBar = true)
     {
         CHMMain.Resource.InstantiateBall((ball) =>
         {
@@ -121,6 +129,12 @@ public class CHMUnit
             SetColor(ball, _eUnit);
             SetLayer(ball, _eTeamLayer);
             SetTargetMask(ball, _eTargetLayer);
+
+            var unitBase = ball.GetComponent<CHUnitBase>();
+            if (unitBase != null)
+            {
+                unitBase.onHpBar = onHpBar;
+            }
 
             ball.transform.position = _position;
 

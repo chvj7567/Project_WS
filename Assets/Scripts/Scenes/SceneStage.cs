@@ -81,7 +81,7 @@ public class SceneStage : SceneBase
 
             ++myIndex;
 
-            CHMMain.Unit.CreateUnit(createUnitInfo.eUnit, createUnitInfo.eTeamLayer, createUnitInfo.eTargetLayer, createUnitInfo.createPos, liMyTargetTracker, liMyTargetMask);
+            CHMMain.Unit.CreateUnit(createUnitInfo.eUnit, createUnitInfo.eTeamLayer, createUnitInfo.eTargetLayer, createUnitInfo.createPos, liMyTargetTracker, liMyTargetMask, false);
 
             --remainCount;
             txtRemainCount.SetText(remainCount);
@@ -94,7 +94,7 @@ public class SceneStage : SceneBase
 
         stagePlusBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            stage = Mathf.Min(++stage, 9);
+            stage = Mathf.Min(++stage, 8);
 
             CHMMain.Unit.RemoveUnitAll();
 
