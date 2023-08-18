@@ -1,29 +1,36 @@
 using DG.Tweening;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UniRx;
 
 public class CHGaugeBar : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
     [SerializeField] Image imgBackGaugeBar;
     [SerializeField] Image imgGaugeBar;
+    [SerializeField] Button levelUpBtn;
 
-    float originPosYText;
+    [SerializeField, ReadOnly] CHUnitBase unitBase;
+    [SerializeField, ReadOnly] float originPosYText;
 
     private void Update()
     {
         transform.rotation = Camera.main.transform.rotation;
     }
 
-    public void Init(float _posY)
+    public void Init(CHUnitBase _unitBase, float _posY, float _gaugeBarPosY)
     {
+        unitBase = _unitBase;
         canvas.worldCamera = Camera.main;
         transform.localPosition = new Vector3(0f, _posY, 0f);
         originPosYText = _posY;
+        imgBackGaugeBar.rectTransform.anchoredPosition = new Vector2(imgBackGaugeBar.rectTransform.anchoredPosition.x, _gaugeBarPosY);
+        imgGaugeBar.rectTransform.anchoredPosition = new Vector2(imgGaugeBar.rectTransform.anchoredPosition.x, _gaugeBarPosY);
+
+        levelUpBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            unitBase.ChangeLevel(Defines.ELevel.Level2);
+        });
     }
 
     public void SetGaugeBar(float _maxValue, float _curValue, float _damage, float _backGaugeTime, float _gaugeTime)

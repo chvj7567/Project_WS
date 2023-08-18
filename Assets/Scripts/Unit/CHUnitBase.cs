@@ -516,6 +516,30 @@ public class CHUnitBase : MonoBehaviour
         }
     }
 
+    public void ChangeLevel(Defines.ELevel _eLevel)
+    {
+        var changeLevelData = CHMMain.Level.GetLevelData(unit, _eLevel);
+        if (changeLevelData == null)
+            return;
+
+        if (levelData != null)
+        {
+            maxHp += changeLevelData.maxHp - levelData.maxHp;
+            maxMp += changeLevelData.maxMp - levelData.maxMp;
+            curHp += changeLevelData.maxHp - levelData.maxHp;
+            curMp += changeLevelData.maxMp - levelData.maxMp;
+        }
+        else
+        {
+            maxHp += changeLevelData.maxHp;
+            maxMp += changeLevelData.maxMp;
+            curHp += changeLevelData.maxHp;
+            curMp += changeLevelData.maxMp;
+        }
+
+        levelData = changeLevelData;
+    }
+
     public void InitUnitData()
     {
         unitState = 0;
@@ -572,7 +596,6 @@ public class CHUnitBase : MonoBehaviour
                 {
                     gaugeBar.name = "HpBar";
                     gaugeBar.transform.SetParent(transform);
-                    gaugeBar.transform.localPosition = Vector3.zero;
 
                     hpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
                     if (hpGaugeBar)
@@ -583,7 +606,7 @@ public class CHUnitBase : MonoBehaviour
                         }
 
                         // HP 게이지가 스케일에 영향받지 않도록 
-                        hpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
+                        hpGaugeBar.Init(this, unitCollider.bounds.size.y / 2f / transform.localScale.x, 2.3f);
                         hpGaugeBar.SetGaugeBar(1, 1, 0, 1.5f, 1f);
                     }
                 }
@@ -603,7 +626,6 @@ public class CHUnitBase : MonoBehaviour
                 {
                     gaugeBar.name = "MpBar";
                     gaugeBar.transform.SetParent(transform);
-                    gaugeBar.transform.localPosition = new Vector3(0, -1, 0);
 
                     mpGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
                     if (mpGaugeBar)
@@ -614,7 +636,7 @@ public class CHUnitBase : MonoBehaviour
                         }
 
                         // HP 게이지가 스케일에 영향받지 않도록 
-                        mpGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
+                        mpGaugeBar.Init(this, unitCollider.bounds.size.y / 2f / transform.localScale.x, 1.7f);
                         mpGaugeBar.SetGaugeBar(1, 1, 0f, 1.5f, 1f);
                     }
                 }
@@ -634,7 +656,6 @@ public class CHUnitBase : MonoBehaviour
                 {
                     gaugeBar.name = "CoolTimeBar";
                     gaugeBar.transform.SetParent(transform);
-                    gaugeBar.transform.localPosition = new Vector3(0, -5, 0);
 
                     coolTimeGaugeBar = gaugeBar.GetComponent<CHGaugeBar>();
                     if (coolTimeGaugeBar)
@@ -645,7 +666,7 @@ public class CHUnitBase : MonoBehaviour
                         }
 
                         // HP 게이지가 스케일에 영향받지 않도록 
-                        coolTimeGaugeBar.Init(unitCollider.bounds.size.y / 2f / transform.localScale.x);
+                        coolTimeGaugeBar.Init(this, unitCollider.bounds.size.y / 2f / transform.localScale.x, -1.3f);
                         coolTimeGaugeBar.SetGaugeBar(1, 1, 0f, 1.5f, 1f);
                     }
                 }

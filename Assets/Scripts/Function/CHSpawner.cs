@@ -10,7 +10,10 @@ public class CHSpawner : MonoBehaviour
     [SerializeField] Transform trDestination;
     [SerializeField] float spawnDelay = 1f;
     [SerializeField] Defines.EUnit unit;
-    [SerializeField, ReadOnly] int spawnCount = 0;
+    [SerializeField, ReadOnly] int totSpawnCount = 0; // 총 스폰 카운트
+
+    [SerializeField, ReadOnly] int oneTimeSpawnCount = 0; // 한 번 스폰할 때 스폰 카운트(maxSpawnCount 까지)
+    [SerializeField, ReadOnly] int maxSpawnCount = 0; // 한 번 스폰할 때 지정한 스폰 카운트
 
     bool isSpawn;
     CancellationTokenSource cts;
@@ -53,7 +56,15 @@ public class CHSpawner : MonoBehaviour
                 }
 
                 obj.SetActive(true);
-                ++spawnCount;
+                ++totSpawnCount;
+
+                if (maxSpawnCount > 0)
+                {
+                    if (++oneTimeSpawnCount >= maxSpawnCount)
+                    {
+                        StopSpawn();
+                    }
+                }
             }
 
             await Task.Delay((int)(spawnDelay * 1000f), cts.Token);
@@ -64,6 +75,19 @@ public class CHSpawner : MonoBehaviour
     {
         if (!isSpawn)
         {
+            maxSpawnCount = 0;
+            isSpawn = true;
+            cts = new CancellationTokenSource();
+            cts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
+            _ = SpawnLoopAsync();
+        }
+    }
+
+    public void StartSpawn(int _maxSpawnCount)
+    {
+        if (!isSpawn)
+        {
+            maxSpawnCount = _maxSpawnCount;
             isSpawn = true;
             cts = new CancellationTokenSource();
             cts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
@@ -75,6 +99,8 @@ public class CHSpawner : MonoBehaviour
     {
         if (isSpawn)
         {
+            maxSpawnCount = 0;
+            oneTimeSpawnCount = 0;
             isSpawn = false;
             if (cts != null && !cts.IsCancellationRequested)
             {

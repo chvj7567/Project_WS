@@ -172,7 +172,7 @@ public class SceneStage : SceneBase
 
     public void WarStart()
     {
-        spawner.StartSpawn();
+        spawner.StartSpawn(5);
     }
 
     public bool CheckGameEnd()

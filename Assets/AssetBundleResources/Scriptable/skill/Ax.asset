@@ -24,7 +24,7 @@ MonoBehaviour:
   - eEffect: 22
     effectAngle: 0
     createCasterPosition: 1
-    startDelay: 1
+    startDelay: 0
     createOnEmpty: 1
     attach: 0
     duplication: 0

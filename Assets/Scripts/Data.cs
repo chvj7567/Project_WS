@@ -9,9 +9,7 @@ namespace Data
     public class Player
     {
         public string key;
-        public float plusDamage;
-        public float minusCoolTime;
-        public float plusDistance;
+        public Int64 exp;
     }
 
     [Serializable]
