@@ -6,6 +6,7 @@ using UniRx;
 public class CHGaugeBar : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
+    [SerializeField] Image background;
     [SerializeField] Image imgBackGaugeBar;
     [SerializeField] Image imgGaugeBar;
     [SerializeField] Button levelUpBtn;
@@ -24,6 +25,7 @@ public class CHGaugeBar : MonoBehaviour
         canvas.worldCamera = Camera.main;
         transform.localPosition = new Vector3(0f, _posY, 0f);
         originPosYText = _posY;
+        background.rectTransform.anchoredPosition = new Vector2(background.rectTransform.anchoredPosition.x, _gaugeBarPosY);
         imgBackGaugeBar.rectTransform.anchoredPosition = new Vector2(imgBackGaugeBar.rectTransform.anchoredPosition.x, _gaugeBarPosY);
         imgGaugeBar.rectTransform.anchoredPosition = new Vector2(imgGaugeBar.rectTransform.anchoredPosition.x, _gaugeBarPosY);
 

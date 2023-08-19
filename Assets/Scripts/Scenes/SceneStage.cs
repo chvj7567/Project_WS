@@ -16,7 +16,8 @@ public class SceneStage : SceneBase
     [SerializeField] CHTMPro resultText;
     [SerializeField] Button stagePlusBtn;
     [SerializeField] Button stageMinusBtn;
-    [SerializeField] CHSpawner spawner;
+    [SerializeField] List<CHSpawner> spawnerList = new List<CHSpawner>();
+    [SerializeField] CHUnitBase protectUnit;
 
     [Header("자동 설정")]
     [SerializeField, ReadOnly] List<Vector3> liMyPosition = new List<Vector3>();
@@ -38,6 +39,11 @@ public class SceneStage : SceneBase
 
         resultText.gameObject.SetActive(false);
         SetStage(stage);
+
+        if (protectUnit != null)
+        {
+            CHMMain.Unit.SetLayer(protectUnit.gameObject, Defines.ELayer.Blue);
+        }
 
         btnExit.OnClickAsObservable().Subscribe(_ =>
         {
@@ -172,10 +178,14 @@ public class SceneStage : SceneBase
 
     public void WarStart()
     {
-        spawner.StartSpawn(5);
+        for (int i = 0; i < spawnerList.Count; ++i)
+        {
+            spawnerList[i].StartSpawn(5);
+        }
     }
 
-    public bool CheckGameEnd()
+    public bool CheckGameEnd_Ver1()
+    // 아군, 적군 모두 인식하는 적이 없을 경우 게임 종료
     {
         bool gameEnd = true;
 
@@ -214,5 +224,11 @@ public class SceneStage : SceneBase
         }
 
         return gameEnd;
+    }
+
+    public bool CheckGameEnd_Ver2()
+    // 보호하는 오브젝트의 Hp가 0이하일 경우 게임 종료
+    {
+        return protectUnit.curHp <= 0;
     }
 }

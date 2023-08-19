@@ -719,7 +719,8 @@ public class CHUnitBase : MonoBehaviour
 
             unitCollider.enabled = false;
 
-            hpGaugeBar.gameObject.SetActive(false);
+            if (hpGaugeBar)
+                hpGaugeBar.gameObject.SetActive(false);
             transform.DOMoveY(-10f, 5f);
             CHMMain.Resource.Destroy(gameObject, 5f);
         }

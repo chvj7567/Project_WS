@@ -10,6 +10,8 @@ public class CHSpawner : MonoBehaviour
     [SerializeField] Transform trDestination;
     [SerializeField] float spawnDelay = 1f;
     [SerializeField] Defines.EUnit unit;
+    [SerializeField] bool onTargetTracker = true;
+
     [SerializeField, ReadOnly] int totSpawnCount = 0; // 총 스폰 카운트
 
     [SerializeField, ReadOnly] int oneTimeSpawnCount = 0; // 한 번 스폰할 때 스폰 카운트(maxSpawnCount 까지)
@@ -32,19 +34,21 @@ public class CHSpawner : MonoBehaviour
             {
                 CHMMain.Unit.SetUnit(obj, unit);
                 CHMMain.Unit.SetColor(obj, unit);
+                CHMMain.Unit.SetTargetMask(obj, Defines.ELayer.Blue);
                 obj.transform.localPosition = transform.position;
                 obj.layer = (int)Defines.ELayer.Red;
 
                 var targetTracker = obj.GetComponent<CHTargetTracker>();
                 if (targetTracker != null)
                 {
-                    Destroy(targetTracker);
-                }
-
-                var agent = obj.GetComponent<NavMeshAgent>();
-                if (agent != null)
-                {
-                    agent.SetDestination(trDestination.position);
+                    if (onTargetTracker == false)
+                    {
+                        Destroy(targetTracker);
+                    }
+                    else
+                    {
+                        targetTracker.trDestination = trDestination;
+                    }
                 }
 
                 var unitBase = obj.GetComponent<CHUnitBase>();
