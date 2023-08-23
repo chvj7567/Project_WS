@@ -9,7 +9,6 @@ public class CHGaugeBar : MonoBehaviour
     [SerializeField] Image background;
     [SerializeField] Image imgBackGaugeBar;
     [SerializeField] Image imgGaugeBar;
-    [SerializeField] Button levelUpBtn;
 
     [SerializeField, ReadOnly] CHUnitBase unitBase;
     [SerializeField, ReadOnly] float originPosYText;
@@ -28,11 +27,6 @@ public class CHGaugeBar : MonoBehaviour
         background.rectTransform.anchoredPosition = new Vector2(background.rectTransform.anchoredPosition.x, _gaugeBarPosY);
         imgBackGaugeBar.rectTransform.anchoredPosition = new Vector2(imgBackGaugeBar.rectTransform.anchoredPosition.x, _gaugeBarPosY);
         imgGaugeBar.rectTransform.anchoredPosition = new Vector2(imgGaugeBar.rectTransform.anchoredPosition.x, _gaugeBarPosY);
-
-        levelUpBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            unitBase.ChangeLevel(Defines.ELevel.Level2);
-        });
     }
 
     public void SetGaugeBar(float _maxValue, float _curValue, float _damage, float _backGaugeTime, float _gaugeTime, bool viewDamage = true)
@@ -59,7 +53,7 @@ public class CHGaugeBar : MonoBehaviour
     {
         var copyTextDamage = CHMMain.Resource.Instantiate(CHMMain.Unit.GetOriginDamageText(), transform).GetComponent<CHTMPro>();
         copyTextDamage.gameObject.SetActive(true);
-        copyTextDamage.transform.localPosition = Vector3.zero;
+        copyTextDamage.transform.localPosition = new Vector3(copyTextDamage.transform.localPosition.x, copyTextDamage.transform.position.y + originPosYText);
         copyTextDamage.SetText(_damage);
 
         if (_damage < 0)

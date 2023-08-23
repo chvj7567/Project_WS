@@ -8,16 +8,17 @@ using UnityEngine.UI;
 public class SceneStage : SceneBase
 {
     [Header("수동 설정")] 
-    [SerializeField] Button btnExit;
-    [SerializeField] Button btnCreateUnit;
+    [SerializeField] Button exitBtn;
+    [SerializeField] Button createUnitBtn;
     [SerializeField] CHTMPro txtRemainCount;
-    [SerializeField] Button btnWarStart;
+    [SerializeField] Button startBtn;
     [SerializeField] CHTMPro stageText;
     [SerializeField] CHTMPro resultText;
     [SerializeField] Button stagePlusBtn;
     [SerializeField] Button stageMinusBtn;
     [SerializeField] List<CHSpawner> spawnerList = new List<CHSpawner>();
-    [SerializeField] CHUnitBase protectUnit;
+    [SerializeField] CHContBase myUnitCont;
+    [SerializeField] Button myUnitAttackBtn;
 
     [Header("자동 설정")]
     [SerializeField, ReadOnly] List<Vector3> liMyPosition = new List<Vector3>();
@@ -40,12 +41,12 @@ public class SceneStage : SceneBase
         resultText.gameObject.SetActive(false);
         SetStage(stage);
 
-        if (protectUnit != null)
+        myUnitAttackBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMMain.Unit.SetLayer(protectUnit.gameObject, Defines.ELayer.Blue);
-        }
+            myUnitCont.UseSkill1(true);
+        });
 
-        btnExit.OnClickAsObservable().Subscribe(_ =>
+        exitBtn.OnClickAsObservable().Subscribe(_ =>
         {
             CHMMain.Particle.OnApplicationQuitHandler();
             CHMMain.Skill.OnApplicationQuitHandler();
@@ -56,7 +57,7 @@ public class SceneStage : SceneBase
         Application.Quit();
 #endif
         });
-        btnCreateUnit.OnClickAsObservable().Subscribe(_ =>
+        createUnitBtn.OnClickAsObservable().Subscribe(_ =>
         {
             if (myIndex >= liMyPosition.Count) return;
 
@@ -93,7 +94,7 @@ public class SceneStage : SceneBase
             txtRemainCount.SetText(remainCount);
         });
 
-        btnWarStart.OnClickAsObservable().Subscribe(_ =>
+        startBtn.OnClickAsObservable().Subscribe(_ =>
         {
             WarStart();
         });
@@ -224,11 +225,5 @@ public class SceneStage : SceneBase
         }
 
         return gameEnd;
-    }
-
-    public bool CheckGameEnd_Ver2()
-    // 보호하는 오브젝트의 Hp가 0이하일 경우 게임 종료
-    {
-        return protectUnit.curHp <= 0;
     }
 }

@@ -7,6 +7,8 @@ using UnityEngine.AI;
 using System.Threading;
 using Unity.VisualScripting;
 using DG.Tweening;
+using static Defines;
+using Unity.Burst.CompilerServices;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -178,7 +180,8 @@ public class CHMParticle
 
                     if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                     {
-                        SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                        var hit = collider.ClosestPointOnBounds(sphereCollision.transform.position);
+                        SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, hit, _objParticle, _effectData);
                     }
                 }));
             }
@@ -191,7 +194,8 @@ public class CHMParticle
 
                     if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                     {
-                        SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                        var hit = collider.ClosestPointOnBounds(sphereCollision.transform.position);
+                        SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, hit, _objParticle, _effectData);
                     }
                 }));
             }
@@ -202,7 +206,8 @@ public class CHMParticle
 
                 if (IsTarget(_trCaster.gameObject.layer, collider.gameObject.layer, _effectData.eTargetMask))
                 {
-                    SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, _objParticle, _effectData);
+                    var hit = collider.ClosestPointOnBounds(sphereCollision.transform.position);
+                    SetParticleTriggerValue(_eSkill, _trCaster, _trTarget, collider.transform, hit, _objParticle, _effectData);
                 }
             }));
 
@@ -288,7 +293,7 @@ public class CHMParticle
         }
     }
 
-    void SetParticleTriggerValue(Defines.ESkill _eSkill, Transform _trCaster, Transform _trTarget, Transform _trTriggerTarget, GameObject _objParticle, SkillData.EffectData _effectData)
+    void SetParticleTriggerValue(Defines.ESkill _eSkill, Transform _trCaster, Transform _trTarget, Transform _trTriggerTarget, Vector3 _hitPoint, GameObject _objParticle, SkillData.EffectData _effectData)
     {
         // 각 이펙트에 트리거 된 타겟들 관련 처리
         switch (_effectData.eEffect)
@@ -308,6 +313,9 @@ public class CHMParticle
             case Defines.EEffect.FX_Arrow_impact:
                 {
                     _objParticle.SetActive(false);
+
+                    var hitParticle = GetParticleObject(Defines.EEffect.FX_IceArrow_Hit);
+                    hitParticle.transform.position = _hitPoint;
 
                     CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
                 }

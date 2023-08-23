@@ -19,7 +19,7 @@ MonoBehaviour:
   distance: 20
   coolTime: 3
   eSkillCost: 3
-  cost: 10
+  cost: 1
   liEffectData:
   - eEffect: 18
     effectAngle: 0

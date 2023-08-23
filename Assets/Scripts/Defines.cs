@@ -136,6 +136,7 @@ public class Defines
         FX_Explosion_Hit,
         FX_Ax,
         FX_Electricity_Hit,
+        FX_IceArrow_Hit,
 
         Max
     }

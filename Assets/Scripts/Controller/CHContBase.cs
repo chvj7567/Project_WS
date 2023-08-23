@@ -71,6 +71,12 @@ public class CHContBase : MonoBehaviour
     public float GetTimeSinceLastSkill2() { return timeSinceLastSkill2; }
     public float GetTimeSinceLastSkill3() { return timeSinceLastSkill3; }
     public float GetTimeSinceLastSkill4() { return timeSinceLastSkill4; }
+
+    public void UseSkill1(bool _use)
+    {
+        useSkill1 = _use;
+    }
+
     public void OpenSkill2()
     {
         useSkill2 = true;

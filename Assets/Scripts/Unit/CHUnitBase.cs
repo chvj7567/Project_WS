@@ -689,6 +689,7 @@ public class CHUnitBase : MonoBehaviour
         }
 
         curHp = hpResult;
+
         if (hpGaugeBar)
             hpGaugeBar.SetGaugeBar(maxHp, this.GetCurrentHp(), _value, 1.5f, 1f);
 
