@@ -80,6 +80,17 @@ public class Defines
         Ax,
         Devil,
 
+        Arrow1,
+        Arrow2,
+        Arrow3,
+        Arrow4,
+        Arrow5,
+        Arrow6,
+        Arrow7,
+        Arrow8,
+        Arrow9,
+        Arrow10,
+
         Max
     }
 
