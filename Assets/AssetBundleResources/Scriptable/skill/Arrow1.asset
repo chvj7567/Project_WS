@@ -18,8 +18,8 @@ MonoBehaviour:
   isChanneling: 1
   distance: 20
   coolTime: 3
-  eSkillCost: 0
-  cost: 0
+  eSkillCost: 3
+  cost: 10
   liEffectData:
   - eEffect: 18
     effectAngle: 0

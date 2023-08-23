@@ -10,21 +10,31 @@ using UnityEngine.UI;
 
 public class CHContBase : MonoBehaviour
 {
-    [SerializeField] bool useSkill1 = false;
-    [SerializeField] bool useSkill2 = false;
-    [SerializeField] bool useSkill3 = false;
-    [SerializeField] bool useSkill4 = false;
+    // 스킬 사용 여부
+    [SerializeField] bool useSkill1 = true;
+    [SerializeField] bool useSkill2 = true;
+    [SerializeField] bool useSkill3 = true;
+    [SerializeField] bool useSkill4 = true;
 
+    // 클릭으로 스킬 활성화할지 여부(활성화 시 스킬 쿨타입 0인 대신 클릭하여 수동 스킬 사용(useSkill 사용))
+    [SerializeField] bool skill1NoCoolClick = false;
+    [SerializeField] bool skill2NoCoolClick = false;
+    [SerializeField] bool skill3NoCoolClick = false;
+    [SerializeField] bool skill4NoCoolClick = false;
+
+    // 스킬 잠금 여부(잠금되어있으면 해당 스킬은 NULL)
     [SerializeField, ReadOnly] bool skill1Lock = false;
     [SerializeField, ReadOnly] bool skill2Lock = false;
     [SerializeField, ReadOnly] bool skill3Lock = false;
     [SerializeField, ReadOnly] bool skill4Lock = false;
 
+    // 스킬 채널링 여부(애니메이션 있을 경우)
     [SerializeField, ReadOnly] bool skill1Channeling = false;
     [SerializeField, ReadOnly] bool skill2Channeling = false;
     [SerializeField, ReadOnly] bool skill3Channeling = false;
     [SerializeField, ReadOnly] bool skill4Channeling = false;
 
+    // 스킬 쓴 후 지난 시간
     [SerializeField, ReadOnly] float timeSinceLastSkill1 = -1f;
     [SerializeField, ReadOnly] float timeSinceLastSkill2 = -1f;
     [SerializeField, ReadOnly] float timeSinceLastSkill3 = -1f;
@@ -213,9 +223,6 @@ public class CHContBase : MonoBehaviour
                     {
                         if ((skill1Channeling == false) && (timeSinceLastSkill1 < 0f) && (mainTarget.distance <= unitBase.GetCurrentSkill1Distance()))
                         {
-                            // 스킬 쿨타임 초기화
-                            timeSinceLastSkill1 = 0.0001f;
-
                             if (animator)
                             {
                                 animator.SetTrigger(attackRange);
@@ -245,6 +252,16 @@ public class CHContBase : MonoBehaviour
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
                             }, unitBase.GetOriginSkill1Data().eSkill);
+
+                            if (skill1NoCoolClick == true)
+                            {
+                                useSkill1 = false;
+                            }
+                            else
+                            {
+                                // 스킬 쿨타임 초기화
+                                timeSinceLastSkill1 = 0.0001f;
+                            }
                         }
                     }
 
@@ -253,9 +270,6 @@ public class CHContBase : MonoBehaviour
                     {
                         if ((skill2Channeling == false) && timeSinceLastSkill2 < 0f && mainTarget.distance <= unitBase.GetCurrentSkill2Distance())
                         {
-                            // 스킬 쿨타임 초기화
-                            timeSinceLastSkill2 = 0.0001f;
-
                             if (animator)
                             {
                                 animator.SetTrigger(attackRange);
@@ -283,7 +297,16 @@ public class CHContBase : MonoBehaviour
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
                             }, unitBase.GetOriginSkill2Data().eSkill);
-                            timeSinceLastSkill2 = 0.0001f;
+
+                            if (skill2NoCoolClick == true)
+                            {
+                                useSkill2 = false;
+                            }
+                            else
+                            {
+                                // 스킬 쿨타임 초기화
+                                timeSinceLastSkill2 = 0.0001f;
+                            }
                         }
                     }
 
@@ -292,9 +315,6 @@ public class CHContBase : MonoBehaviour
                     {
                         if ((skill3Channeling == false) && timeSinceLastSkill3 < 0f && mainTarget.distance <= unitBase.GetCurrentSkill3Distance())
                         {
-                            // 스킬 쿨타임 초기화
-                            timeSinceLastSkill3 = 0.0001f;
-
                             if (animator)
                             {
                                 animator.SetTrigger(attackRange);
@@ -322,7 +342,16 @@ public class CHContBase : MonoBehaviour
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
                             }, unitBase.GetOriginSkill3Data().eSkill);
-                            timeSinceLastSkill3 = 0.0001f;
+
+                            if (skill3NoCoolClick == true)
+                            {
+                                useSkill3 = false;
+                            }
+                            else
+                            {
+                                // 스킬 쿨타임 초기화
+                                timeSinceLastSkill3 = 0.0001f;
+                            }
                         }
                     }
 
@@ -331,9 +360,6 @@ public class CHContBase : MonoBehaviour
                     {
                         if ((skill4Channeling == false) && timeSinceLastSkill4 < 0f && mainTarget.distance <= unitBase.GetCurrentSkill4Distance())
                         {
-                            // 스킬 쿨타임 초기화
-                            timeSinceLastSkill4 = 0.0001f;
-
                             if (animator)
                             {
                                 animator.SetTrigger(attackRange);
@@ -361,7 +387,16 @@ public class CHContBase : MonoBehaviour
                                 posSkill = posMainTarget,
                                 dirSkill = posMainTarget - posMy,
                             }, unitBase.GetOriginSkill4Data().eSkill);
-                            timeSinceLastSkill4 = 0.0001f;
+
+                            if (skill4NoCoolClick == true)
+                            {
+                                useSkill4 = false;
+                            }
+                            else
+                            {
+                                // 스킬 쿨타임 초기화
+                                timeSinceLastSkill4 = 0.0001f;
+                            }
                         }
                     }
                 }

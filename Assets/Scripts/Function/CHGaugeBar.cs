@@ -35,14 +35,17 @@ public class CHGaugeBar : MonoBehaviour
         });
     }
 
-    public void SetGaugeBar(float _maxValue, float _curValue, float _damage, float _backGaugeTime, float _gaugeTime)
+    public void SetGaugeBar(float _maxValue, float _curValue, float _damage, float _backGaugeTime, float _gaugeTime, bool viewDamage = true)
     {
         if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, _backGaugeTime);
         if (imgGaugeBar) imgGaugeBar.DOFillAmount(_curValue / _maxValue, _gaugeTime);
 
-        if (Mathf.Approximately(_damage, 0f) == false)
+        if (_maxValue > _curValue + _damage)
         {
-            ShowDamageText(_damage, 2f);
+            if (viewDamage == true && Mathf.Approximately(_damage, 0f) == false)
+            {
+                ShowDamageText(_damage, 2f);
+            }
         }
     }
 

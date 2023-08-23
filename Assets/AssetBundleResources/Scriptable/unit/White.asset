@@ -16,9 +16,9 @@ MonoBehaviour:
   unitName: 
   eLevel: 0
   maxHp: 100
-  hpRegenPerSecond: 0
+  hpRegenPerSecond: 1
   maxMp: 100
-  mpRegenPerSecond: 0
+  mpRegenPerSecond: 1
   attackPower: 0
   defensePower: 0
   moveSpeed: 0

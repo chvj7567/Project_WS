@@ -106,6 +106,7 @@ public class CHMSkill
             var casterUnit = _skillLocationInfo.trCaster.GetComponent<CHUnitBase>();
             if (casterUnit != null)
             {
+                // 스킬을 사용할 비용이 있는지 확인
                 if (CanUseSkill(_skill, casterUnit, skillData) == false) return;
             }
 

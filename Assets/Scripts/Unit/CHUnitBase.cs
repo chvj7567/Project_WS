@@ -13,6 +13,10 @@ public class CHUnitBase : MonoBehaviour
     [SerializeField] public Collider unitCollider;
     [SerializeField] public MeshRenderer meshRenderer;
 
+    [SerializeField] public bool onHpBar = true;
+    [SerializeField] public bool onMpBar = false;
+    [SerializeField] public bool onCoolTimeBar = false;
+
     [SerializeField] public UnitData unitData;
 
     [SerializeField] public LevelData levelData;
@@ -30,10 +34,6 @@ public class CHUnitBase : MonoBehaviour
     [SerializeField, ReadOnly] public float maxMp;
     [SerializeField, ReadOnly] public float curHp;
     [SerializeField, ReadOnly] public float curMp;
-
-    [SerializeField, ReadOnly] public bool onHpBar = true;
-    [SerializeField, ReadOnly] public bool onMpBar = false;
-    [SerializeField, ReadOnly] public bool onCoolTimeBar = false;
 
     public CHGaugeBar hpGaugeBar;
     public CHGaugeBar mpGaugeBar;
@@ -59,7 +59,7 @@ public class CHUnitBase : MonoBehaviour
         {
             if (GetIsDeath() == false)
             {
-                /*if (item1Data == null)
+                if (item1Data == null)
                 {
                     ChangeHp(Defines.ESkill.None, this, unitData.hpRegenPerSecond, Defines.EDamageType1.None);
                     ChangeMp(Defines.ESkill.None, this, unitData.mpRegenPerSecond, Defines.EDamageType1.None);
@@ -68,7 +68,7 @@ public class CHUnitBase : MonoBehaviour
                 {
                     ChangeHp(Defines.ESkill.None, this, unitData.hpRegenPerSecond + item1Data.hpRegenPerSecond, Defines.EDamageType1.None);
                     ChangeMp(Defines.ESkill.None, this, unitData.mpRegenPerSecond + item1Data.mpRegenPerSecond, Defines.EDamageType1.None);
-                }*/
+                }
             }
         });
 
@@ -740,6 +740,10 @@ public class CHUnitBase : MonoBehaviour
         }
 
         curMp = mpResult;
+
+        if (mpGaugeBar)
+            mpGaugeBar.SetGaugeBar(maxMp, this.GetCurrentMp(), _value, 1.5f, 1f, false);
+
         if (_eSkill != Defines.ESkill.None)
         {
             Debug.Log($"attacker : {_attackUnit.name}, skill : {_eSkill.ToString()}, " +
