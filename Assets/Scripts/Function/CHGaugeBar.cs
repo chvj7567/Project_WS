@@ -38,7 +38,7 @@ public class CHGaugeBar : MonoBehaviour
         {
             if (viewDamage == true && Mathf.Approximately(_damage, 0f) == false)
             {
-                ShowDamageText(_damage, 2f);
+                ShowDamageText(_damage, .5f);
             }
         }
     }
@@ -74,7 +74,7 @@ public class CHGaugeBar : MonoBehaviour
         var rtTextDamage = copyTextDamage.GetComponent<RectTransform>();
         if (rtTextDamage)
         {
-            rtTextDamage.DOAnchorPosY(originPosYText + 10f, _time).OnComplete(() =>
+            rtTextDamage.DOAnchorPosY(originPosYText + 6f, _time).OnComplete(() =>
             {
                 copyTextDamage.text.alpha = 1f;
                 rtTextDamage.anchoredPosition = new Vector2(rtTextDamage.anchoredPosition.x, originPosYText);

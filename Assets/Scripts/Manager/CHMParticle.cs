@@ -317,6 +317,7 @@ public class CHMParticle
                     var hitParticle = GetParticleObject(Defines.EEffect.FX_IceArrow_Hit);
                     hitParticle.transform.position = _hitPoint;
 
+                    _trTriggerTarget.DOShakePosition(0.1f);
                     CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
                 }
                 break;

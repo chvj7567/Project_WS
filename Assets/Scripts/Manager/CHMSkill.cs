@@ -450,7 +450,7 @@ public class CHMSkill
         {
             case Defines.EStatModifyType.Hp_Up:
                 Debug.Log($"HpUp : {skillValue}");
-                _targetUnit.ChangeHp(_eSkill, _casterUnit, Mathf.Round(skillValue), _effectData.eDamageType1);
+                _targetUnit.ChangeHp(_eSkill, _casterUnit, skillValue, _effectData.eDamageType1);
                 break;
             case Defines.EStatModifyType.Hp_Down:
                 {
@@ -463,7 +463,7 @@ public class CHMSkill
                         totalValue = 0f;
                     }
                     Debug.Log($"HpDown : {totalValue}");
-                    _targetUnit.ChangeHp(_eSkill, _casterUnit, Mathf.Round(CHUtil.ReverseValue(totalValue)), _effectData.eDamageType1);
+                    _targetUnit.ChangeHp(_eSkill, _casterUnit, CHUtil.ReverseValue(totalValue), _effectData.eDamageType1);
                 }
                 break;
                 // 우선 HP만 사용 아래는 사용 시 추가 작업 필요
