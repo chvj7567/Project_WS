@@ -22,7 +22,7 @@ public class CHTargetTracker : MonoBehaviour
     // 타겟을 감지할 시야각
     [Range(0, 360)] public float viewAngle;
     // 가야할 위치
-    public Transform trDestination;
+    public List<Transform> destList = new List<Transform>();
     // 에디터 상에서 시야각 확인 여부
     public bool viewEditor;
 
@@ -38,6 +38,7 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField, ReadOnly] float orgRangeMulti = -1f;
     [SerializeField, ReadOnly] float orgViewAngle = -1f;
     [SerializeField, ReadOnly] bool expensionRange = false;
+    [SerializeField, ReadOnly] int curDestinationIndex = 0;
 
     public void UpdateSkillValue()
     {
@@ -83,7 +84,6 @@ public class CHTargetTracker : MonoBehaviour
 
             if (isDead)
             {
-                agent.ResetPath();
                 return;
             }
 
@@ -115,17 +115,32 @@ public class CHTargetTracker : MonoBehaviour
                     rangeMulti = orgRangeMulti;
                 }
 
-                if (unitBase != null && unitBase.IsNormalState() && trDestination)
+                if (unitBase != null && unitBase.IsNormalState() && destList.Count > 0)
                 {
-                    if (agent.isOnNavMesh && IsRunAnimPlaying())
+                    var distance = Vector3.Distance(transform.position, destList[curDestinationIndex].position);
+                    if (distance < agent.radius * 2)
                     {
-                        agent.stoppingDistance = 0f;
-                        agent.SetDestination(trDestination.position);
+                        agent.isStopped = true;
+                        agent.velocity = Vector3.zero;
+                        if (destList.Count > curDestinationIndex + 1)
+                        {
+                            ++curDestinationIndex;
+                        }
                     }
                     else
                     {
-                        //transform.DOMove(trDestination.transform.position, 10f).SetEase(Ease.Linear);
-                        LookAtPosition(trDestination.position);
+                        agent.isStopped = false;
+                    }
+
+                    if (agent.isOnNavMesh && IsRunAnimPlaying())
+                    {
+                        agent.stoppingDistance = 0f;
+                        agent.SetDestination(destList[curDestinationIndex].position);
+                        Debug.Log($"@@{unitBase.unit}/{curDestinationIndex}");
+                    }
+                    else
+                    {
+                        LookAtPosition(destList[curDestinationIndex].position);
                     }
 
                     PlayRunAnim();
@@ -142,6 +157,7 @@ public class CHTargetTracker : MonoBehaviour
             }
             else
             {
+                Debug.Log($"@@{unitBase.unit}/{closestTarget.objTarget.name} Target Discover");
                 // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
                 viewAngle = 360f;
                 // 타겟 발견 시 시야 해당 배수만큼 증가

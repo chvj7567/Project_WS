@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
@@ -7,7 +8,8 @@ using UnityEngine.AI;
 
 public class CHSpawner : MonoBehaviour
 {
-    [SerializeField] Transform trDestination;
+    [SerializeField] Transform createPosition;
+    [SerializeField] List<Transform> destList = new List<Transform>();
     [SerializeField] float spawnDelay = 1f;
     [SerializeField] Defines.EUnit unit;
     [SerializeField] bool onTargetTracker = true;
@@ -19,6 +21,11 @@ public class CHSpawner : MonoBehaviour
 
     bool isSpawn;
     CancellationTokenSource cts;
+
+    private void Start()
+    {
+        StartSpawn();
+    }
 
     public void SetSpawnDelay(float _value)
     {
@@ -34,8 +41,8 @@ public class CHSpawner : MonoBehaviour
             {
                 CHMMain.Unit.SetUnit(obj, unit);
                 CHMMain.Unit.SetColor(obj, unit);
-                CHMMain.Unit.SetTargetMask(obj, Defines.ELayer.Blue);
-                obj.transform.localPosition = transform.position;
+                CHMMain.Unit.SetTargetMask(obj, Defines.ELayer.None);
+                obj.transform.position = createPosition.position;
                 obj.layer = (int)Defines.ELayer.Red;
 
                 var targetTracker = obj.GetComponent<CHTargetTracker>();
@@ -47,7 +54,7 @@ public class CHSpawner : MonoBehaviour
                     }
                     else
                     {
-                        targetTracker.trDestination = trDestination;
+                        targetTracker.destList = destList;
                     }
                 }
 
