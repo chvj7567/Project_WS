@@ -136,7 +136,6 @@ public class CHTargetTracker : MonoBehaviour
                     {
                         agent.stoppingDistance = 0f;
                         agent.SetDestination(destList[curDestinationIndex].position);
-                        Debug.Log($"@@{unitBase.unit}/{curDestinationIndex}");
                     }
                     else
                     {
@@ -157,7 +156,6 @@ public class CHTargetTracker : MonoBehaviour
             }
             else
             {
-                Debug.Log($"@@{unitBase.unit}/{closestTarget.objTarget.name} Target Discover");
                 // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
                 viewAngle = 360f;
                 // 타겟 발견 시 시야 해당 배수만큼 증가

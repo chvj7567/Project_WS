@@ -21,7 +21,7 @@ MonoBehaviour:
   mpRegenPerSecond: 0
   attackPower: 0
   defensePower: 0
-  moveSpeed: 10
+  moveSpeed: 3
   rotateSpeed: 0
   range: 100
   rangeMulti: 2
