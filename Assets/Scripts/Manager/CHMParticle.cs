@@ -321,6 +321,17 @@ public class CHMParticle
                     CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
                 }
                 break;
+            case Defines.EEffect.FX_Arrow_impact_sub:
+                {
+                    CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trTriggerTarget }, _effectData);
+
+                    var cont = _trTriggerTarget.GetComponent<CHContBase>();
+                    if (cont != null)
+                    {
+                        cont.VarianceMoveSpeed(-7f, 1f);
+                    }
+                }
+                break;
             default:
                 {
                     CHMMain.Skill.ApplySkillValue(_eSkill, _trCaster, new List<Transform> { _trTriggerTarget }, _effectData);

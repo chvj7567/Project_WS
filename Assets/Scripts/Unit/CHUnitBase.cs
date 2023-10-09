@@ -35,6 +35,13 @@ public class CHUnitBase : MonoBehaviour
     [SerializeField, ReadOnly] public float curHp;
     [SerializeField, ReadOnly] public float curMp;
 
+    [SerializeField, ReadOnly] public float tempHp;
+    [SerializeField, ReadOnly] public float tempMp;
+    [SerializeField, ReadOnly] public float tempAttackPower;
+    [SerializeField, ReadOnly] public float tempDefensePower;
+    [SerializeField, ReadOnly] public float tempMoveSpeed;
+    [SerializeField, ReadOnly] public float tempRotateSpeed;
+
     public CHGaugeBar hpGaugeBar;
     public CHGaugeBar mpGaugeBar;
     public CHGaugeBar coolTimeGaugeBar;

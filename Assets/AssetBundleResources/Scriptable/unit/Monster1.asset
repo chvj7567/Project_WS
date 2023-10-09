@@ -15,13 +15,13 @@ MonoBehaviour:
   eUnit: 8
   unitName: 
   eLevel: 0
-  maxHp: 99999
+  maxHp: 100
   hpRegenPerSecond: 0
   maxMp: 100
   mpRegenPerSecond: 0
   attackPower: 0
-  defensePower: 1
-  moveSpeed: 1
+  defensePower: 0
+  moveSpeed: 5
   rotateSpeed: 0
   range: 0
   rangeMulti: 0

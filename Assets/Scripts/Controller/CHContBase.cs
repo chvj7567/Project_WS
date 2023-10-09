@@ -43,6 +43,7 @@ public class CHContBase : MonoBehaviour
     [SerializeField, ReadOnly] Animator animator;
     [SerializeField, ReadOnly] CHUnitBase unitBase;
     [SerializeField, ReadOnly] CHTargetTracker targetTracker;
+    [SerializeField, ReadOnly] NavMeshAgent agent;
 
     enum Anim
     {
@@ -114,7 +115,6 @@ public class CHContBase : MonoBehaviour
         token = cts.Token;
 
         animator = GetComponent<Animator>();
-
         if (animator != null)
         {
             RuntimeAnimatorController ac = animator.runtimeAnimatorController;
@@ -126,6 +126,7 @@ public class CHContBase : MonoBehaviour
             }
         }
 
+        agent = gameObject.GetOrAddComponent<NavMeshAgent>();
         unitBase = gameObject.GetOrAddComponent<CHUnitBase>();
         targetTracker = gameObject.GetOrAddComponent<CHTargetTracker>();
         if (unitBase != null && targetTracker != null)
@@ -408,5 +409,17 @@ public class CHContBase : MonoBehaviour
                 }
             }).AddTo(this);
         }
+    }
+
+    public async void VarianceMoveSpeed(float _changeSpeed, float _time)
+    {
+        if (agent == null)
+            return;
+
+        agent.speed += _changeSpeed;
+
+        await Task.Delay((int)(_time * 1000));
+
+        agent.speed -= _changeSpeed;
     }
 }

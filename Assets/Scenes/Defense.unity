@@ -1051,6 +1051,16 @@ PrefabInstance:
       propertyPath: unit
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 4082703629410463279, guid: b8cec7c541b6ebd4e8d70d78c7417098,
+        type: 3}
+      propertyPath: onHpBar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082703629410463279, guid: b8cec7c541b6ebd4e8d70d78c7417098,
+        type: 3}
+      propertyPath: onCoolTimeBar
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4082703629410463700, guid: b8cec7c541b6ebd4e8d70d78c7417098,
         type: 3}
       propertyPath: m_RootOrder
@@ -1629,6 +1639,16 @@ PrefabInstance:
       propertyPath: unit
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4082703629410463279, guid: b8cec7c541b6ebd4e8d70d78c7417098,
+        type: 3}
+      propertyPath: onHpBar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082703629410463279, guid: b8cec7c541b6ebd4e8d70d78c7417098,
+        type: 3}
+      propertyPath: onCoolTimeBar
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4082703629410463700, guid: b8cec7c541b6ebd4e8d70d78c7417098,
         type: 3}
       propertyPath: m_RootOrder
@@ -2082,6 +2102,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4082703629410463279, guid: b8cec7c541b6ebd4e8d70d78c7417098,
+        type: 3}
+      propertyPath: unit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4082703629410463700, guid: b8cec7c541b6ebd4e8d70d78c7417098,
         type: 3}
       propertyPath: m_RootOrder
@@ -2216,7 +2241,7 @@ MonoBehaviour:
   - {fileID: 984529462}
   - {fileID: 414877473}
   spawnDelay: 3
-  unit: 7
+  unit: 8
   onTargetTracker: 1
   totSpawnCount: 0
   oneTimeSpawnCount: 0
