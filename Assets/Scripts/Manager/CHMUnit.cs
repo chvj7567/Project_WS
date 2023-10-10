@@ -102,7 +102,8 @@ public class CHMUnit
 
     public UnitData GetUnitData(Defines.EUnit _eUnit)
     {
-        if (dicUnitData.ContainsKey(_eUnit) == false) return null;
+        if (dicUnitData.ContainsKey(_eUnit) == false)
+            return null;
 
         return dicUnitData[_eUnit];
     }
@@ -122,7 +123,6 @@ public class CHMUnit
             }
 
             SetUnit(ball, _eUnit);
-            SetColor(ball, _eUnit);
             SetLayer(ball, _eTeamLayer);
             SetTargetMask(ball, _eTargetLayer);
 
@@ -152,18 +152,21 @@ public class CHMUnit
 
     public void SetUnit(GameObject _objUnit, Defines.EUnit _eUnit)
     {
-        if (_objUnit == null) return;
+        if (_objUnit == null)
+            return;
 
         var unitBase = _objUnit.GetComponent<CHUnitBase>();
         if (unitBase != null)
         {
             unitBase.unit = _eUnit;
+            SetColor(_objUnit, _eUnit);
         }
     }
 
-    public void SetColor(GameObject _objUnit, Defines.EUnit _eUnit)
+    void SetColor(GameObject _objUnit, Defines.EUnit _eUnit)
     {
-        if (_objUnit == null) return;
+        if (_objUnit == null)
+            return;
 
         var index = (int)_eUnit;
         var meshRenderer = _objUnit.GetComponent<MeshRenderer>();

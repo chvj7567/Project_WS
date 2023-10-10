@@ -40,7 +40,6 @@ public class CHSpawner : MonoBehaviour
             if (obj != null)
             {
                 CHMMain.Unit.SetUnit(obj, unit);
-                CHMMain.Unit.SetColor(obj, unit);
                 CHMMain.Unit.SetTargetMask(obj, Defines.ELayer.None);
                 obj.transform.position = createPosition.position;
                 obj.layer = (int)Defines.ELayer.Red;

@@ -420,6 +420,9 @@ public class CHContBase : MonoBehaviour
 
         await Task.Delay((int)(_time * 1000));
 
+        if (agent == null)
+            return;
+
         agent.speed -= _changeSpeed;
     }
 }

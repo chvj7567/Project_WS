@@ -76,8 +76,6 @@ public class CameraControl : MonoBehaviour
         minZoomDistance = Mathf.Max(1, minZoomDistance);
 
         currentZoom = camT.localPosition.z;
-
-        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new CHUIArg());
     }
 
 

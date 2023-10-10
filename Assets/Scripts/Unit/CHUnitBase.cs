@@ -60,27 +60,27 @@ public class CHUnitBase : MonoBehaviour
 
     private void Start()
     {
+        InitUnitData();
+        InitGaugeBar(onHpBar, onMpBar, onCoolTimeBar);
+
         gameObject.UpdateAsObservable()
             .ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
-        {
-            if (GetIsDeath() == false)
             {
-                if (item1Data == null)
+                if (GetIsDeath() == false)
                 {
-                    ChangeHp(Defines.ESkill.None, this, unitData.hpRegenPerSecond, Defines.EDamageType1.None);
-                    ChangeMp(Defines.ESkill.None, this, unitData.mpRegenPerSecond, Defines.EDamageType1.None);
+                    if (item1Data == null)
+                    {
+                        ChangeHp(Defines.ESkill.None, this, unitData.hpRegenPerSecond, Defines.EDamageType1.None);
+                        ChangeMp(Defines.ESkill.None, this, unitData.mpRegenPerSecond, Defines.EDamageType1.None);
+                    }
+                    else
+                    {
+                        ChangeHp(Defines.ESkill.None, this, unitData.hpRegenPerSecond + item1Data.hpRegenPerSecond, Defines.EDamageType1.None);
+                        ChangeMp(Defines.ESkill.None, this, unitData.mpRegenPerSecond + item1Data.mpRegenPerSecond, Defines.EDamageType1.None);
+                    }
                 }
-                else
-                {
-                    ChangeHp(Defines.ESkill.None, this, unitData.hpRegenPerSecond + item1Data.hpRegenPerSecond, Defines.EDamageType1.None);
-                    ChangeMp(Defines.ESkill.None, this, unitData.mpRegenPerSecond + item1Data.mpRegenPerSecond, Defines.EDamageType1.None);
-                }
-            }
-        });
-
-        InitUnitData();
-        InitGaugeBar(onHpBar, onMpBar, onCoolTimeBar);
+            });
     }
 
     private void OnDestroy()
@@ -556,6 +556,11 @@ public class CHUnitBase : MonoBehaviour
         curMp = 0;
         unitCollider.enabled = true;
 
+        if (unit == Defines.EUnit.None)
+        {
+            unit = (Defines.EUnit)UnityEngine.Random.Range(0, (int)Defines.EUnit.Monster1);
+        }
+
         unitData = CHMMain.Unit.GetUnitData(unit);
         if (unitData != null)
         {
@@ -564,7 +569,7 @@ public class CHUnitBase : MonoBehaviour
             curHp += unitData.maxHp;
             curMp += unitData.maxMp;
 
-            CHMMain.Unit.SetColor(gameObject, unit);
+            CHMMain.Unit.SetUnit(gameObject, unit);
 
             levelData = CHMMain.Level.GetLevelData(unit, unitData.eLevel);
 
@@ -673,7 +678,7 @@ public class CHUnitBase : MonoBehaviour
                         }
 
                         // HP 게이지가 스케일에 영향받지 않도록 
-                        coolTimeGaugeBar.Init(this, unitCollider.bounds.size.y / 2f / transform.localScale.x, -1.3f);
+                        coolTimeGaugeBar.Init(this, unitCollider.bounds.size.y / 2f / transform.localScale.x, -2f);
                         coolTimeGaugeBar.SetGaugeBar(1, 1, 0f, 1.5f, 1f);
                     }
                 }
