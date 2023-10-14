@@ -25,6 +25,6 @@ public class UIAlarm : UIBase
 
     private async void Start()
     {
-
+        alarmText.SetText(10);
     }
 }

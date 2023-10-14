@@ -61,7 +61,7 @@ public class Defines
         UICamera,
         UICanvas,
         UIAlarm,
-        UIMenu,
+        UITowerMenu,
 
         Max
     }
@@ -231,10 +231,10 @@ public class Defines
 
         White,
         Brown,
+        Orange,
+        Yellow,
         Green,
         Blue,
-        Yellow,
-        Orange,
         Pink,
         Red,
         Monster1,

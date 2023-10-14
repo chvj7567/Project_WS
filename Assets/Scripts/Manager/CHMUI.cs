@@ -177,4 +177,19 @@ public class CHMUI
             }
         }
     }
+
+    public bool CheckShowUI(Defines.EUI _uiType)
+    {
+        activeUI = activeUI.FindAll(_ => _ != null);
+        foreach (var obj in activeUI)
+        {
+            var ui = obj.GetComponent<UIBase>();
+            if (ui.eUIType == _uiType)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
