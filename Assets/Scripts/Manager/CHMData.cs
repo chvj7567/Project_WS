@@ -149,23 +149,23 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         return JsonUtility.FromJson<Loader>(stringTask);
     }
 #endif
-    Data.Player CreatePlayerData(string _key)
+    Data.Player CreatePlayerData(string key)
     {
-        Debug.Log($"Create Player {_key}");
+        Debug.Log($"Create Player {key}");
 
         Data.Player data = new Data.Player
         {
-            key = _key
+            key = key
         };
 
-        playerDataDic.Add(_key, data);
+        playerDataDic.Add(key, data);
 
         return data;
     }
 
-    public Data.Player GetPlayerData(string _key)
+    public Data.Player GetPlayerData(string key)
     {
-        if (CHMData.Instance.playerDataDic.TryGetValue(_key, out var data) == false)
+        if (CHMData.Instance.playerDataDic.TryGetValue(key, out var data) == false)
         {
             data = null;
         }
@@ -173,25 +173,25 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         return data;
     }
 
-    Data.Shop CreateShopData(Defines.EShop _key)
+    Data.Shop CreateShopData(Defines.EShop key)
     {
-        Debug.Log($"Create Shop {_key}");
+        Debug.Log($"Create Shop {key}");
 
         Data.Shop data = new Data.Shop
         {
-            shopID = _key
+            shopID = key
         };
 
-        shopDataDic.Add(_key.ToString(), data);
+        shopDataDic.Add(key.ToString(), data);
 
         return data;
     }
 
-    public Data.Shop GetShopData(Defines.EShop _key)
+    public Data.Shop GetShopData(Defines.EShop key)
     {
-        if (CHMData.Instance.shopDataDic.TryGetValue(_key.ToString(), out var data) == false)
+        if (CHMData.Instance.shopDataDic.TryGetValue(key.ToString(), out var data) == false)
         {
-            data = CreateShopData(_key);
+            data = CreateShopData(key);
         }
 
         return data;

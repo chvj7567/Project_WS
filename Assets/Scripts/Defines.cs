@@ -62,6 +62,7 @@ public class Defines
         UICanvas,
         UIAlarm,
         UITowerMenu,
+        UIInfo,
 
         Max
     }
@@ -346,6 +347,7 @@ public class Defines
 
         Player,
         Shop,
+        Stage,
 
         Max
     }
@@ -378,6 +380,15 @@ public class Defines
         RedUnit,
         RedAttack,
         RedCoolTime,
+
+        Max
+    }
+
+    public enum EPlayerPrefs
+    {
+        None = -1,
+
+        Stage,
 
         Max
     }

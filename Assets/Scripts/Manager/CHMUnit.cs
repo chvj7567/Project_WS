@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CHMUnit
@@ -106,6 +107,11 @@ public class CHMUnit
             return null;
 
         return dicUnitData[_eUnit];
+    }
+
+    public List<UnitData> GetUnitDataAll()
+    {
+        return dicUnitData.Values.ToList();
     }
 
     public void CreateUnit(Defines.EUnit _eUnit, Defines.ELayer _eTeamLayer, Defines.ELayer _eTargetLayer, Vector3 _position, List<CHTargetTracker> _liTargetTracker, List<LayerMask> _liTargetMask, bool onHpBar = true, bool onMpBar = false, bool onCoolTimeBar = false)

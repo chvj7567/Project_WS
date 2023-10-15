@@ -22,5 +22,17 @@
   {
     "stringID": "6",
     "value": "골드가 부족합니다."
+  },
+  {
+    "stringID": "7",
+    "value": "유닛 정보"
+  },
+  {
+    "stringID": "8",
+    "value": "데미지 : {0}"
+  },
+  {
+    "stringID": "9",
+    "value": "쿨타임 : {0}"
   }
 ]

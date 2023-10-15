@@ -14,12 +14,9 @@ public class Infomation
     [Serializable]
     public class StageInfo
     {
-        public int team = -1; // 1 : ¿ì¸®ÆÀ, 2 : ÀûÆÀ
         public int stage = -1;
-        public Defines.EUnit eUnit = Defines.EUnit.None;
-        public float posX = -1;
-        public float posY = -1;
-        public float posZ = -1;
+        public int playerGold = -1;
+        public int unitGold = -1;
     }
 
     [Serializable]

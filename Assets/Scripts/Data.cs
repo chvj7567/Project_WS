@@ -11,6 +11,7 @@ namespace Data
         public string key;
         public Int64 exp;
         public int gold;
+        public int stage;
     }
 
     [Serializable]

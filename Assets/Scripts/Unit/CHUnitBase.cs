@@ -739,7 +739,8 @@ public class CHUnitBase : MonoBehaviour
             var playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
             if (playerData != null)
             {
-                playerData.gold += 100;
+                var stageData = CHMMain.Json.GetStageInfo(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
+                playerData.gold +=  stageData.unitGold;
             }
 
             transform.DOMoveY(-10f, 5f);

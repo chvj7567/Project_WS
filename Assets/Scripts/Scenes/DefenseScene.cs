@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DefenseScene : SceneBase
 {
+    [SerializeField] Button infoBtn;
     [SerializeField] CHTMPro goldText;
 
     Data.Player playerData;
@@ -13,9 +16,23 @@ public class DefenseScene : SceneBase
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
+        infoBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIInfo, new UIInfoArg());
+        });
+
         await CHMData.Instance.LoadLocalData("AA");
 
         playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
+
+        // 스테이지 1로 가정
+        PlayerPrefs.SetInt(Defines.EPlayerPrefs.Stage.ToString(), 1);
+
+        if (playerData != null)
+        {
+            var stageData = CHMMain.Json.GetStageInfo(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
+            playerData.gold += stageData.playerGold;
+        }
     }
 
     void Update()

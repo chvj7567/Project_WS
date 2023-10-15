@@ -102,47 +102,8 @@ public class CHMJson
         return "";
     }
 
-    public List<StageInfo> GetStageInfoList(int _stage, int _team)
+    public StageInfo GetStageInfo(int stage)
     {
-        return stageInfoList.FindAll(_ => _.stage == _stage && _.team == _team);
-    }
-
-    public Vector3 GetPositionFromStageInfo(StageInfo _positionInfo)
-    {
-        return new Vector3
-        {
-            x = _positionInfo.posX,
-            y = _positionInfo.posY,
-            z = _positionInfo.posZ
-        };
-    }
-
-    public List<Vector3> GetPositionListFromStageInfo(int _stage, int _team)
-    {
-        List<Vector3> posList = new List<Vector3>();
-        var tempPositionInfoList = GetStageInfoList(_stage, _team);
-        foreach (var positionInfo in tempPositionInfoList)
-        {
-            posList.Add(new Vector3
-            {
-                x = positionInfo.posX,
-                y = positionInfo.posY,
-                z = positionInfo.posZ
-            });
-        }
-
-        return posList;
-    }
-
-    public List<Defines.EUnit> GetUnitListFromStageInfo(int _stage, int _team)
-    {
-        List<Defines.EUnit> unitList = new List<Defines.EUnit>();
-        var stageInfoList = GetStageInfoList(_stage, _team);
-        foreach (var stageInfo in stageInfoList)
-        {
-            unitList.Add(stageInfo.eUnit);
-        }
-
-        return unitList;
+        return stageInfoList.Find(_ => _.stage == stage);
     }
 }

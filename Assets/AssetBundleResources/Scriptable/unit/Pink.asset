@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 398879e25a2280a4586ebcee5da6ca41, type: 3}
   m_Name: Pink
   m_EditorClassIdentifier: 
-  eUnit: 0
+  eUnit: 6
   unitName: 
   eLevel: 0
   maxHp: 100
