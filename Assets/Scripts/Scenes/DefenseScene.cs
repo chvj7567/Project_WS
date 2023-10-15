@@ -20,6 +20,8 @@ public class DefenseScene : SceneBase
 
             if (Physics.Raycast(ray, out hit))
             {
+                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 1.0f);
+
                 GameObject selectedObject = hit.collider.gameObject;
 
                 if (selectedObject != null && selectedObject.name.Contains("Ball"))
