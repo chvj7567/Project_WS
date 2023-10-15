@@ -15,28 +15,56 @@ public class UITowerMenu : UIBase
 {
     UITowerMenuArg arg;
 
-    [SerializeField] List<Button> unitBtnList = new List<Button>();
+    [SerializeField] List<TowerMenuItem> towerMenuItemList = new List<TowerMenuItem>();
 
+    Data.Player playerData;
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UITowerMenuArg;
     }
 
-    CancellationTokenSource delayTokenSource;
-
     private async void Start()
     {
-        for (int i = 0; i < unitBtnList.Count; ++i)
+        playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
+
+        for (int i = 0; i < towerMenuItemList.Count; ++i)
         {
             int unitIndex = i;
-            unitBtnList[unitIndex].OnClickAsObservable().Subscribe(_ =>
+
+            var shopData = CHMData.Instance.GetShopData(towerMenuItemList[i].GetShopEnum());
+            towerMenuItemList[i].goldText.SetText(shopData.gold);
+
+            towerMenuItemList[unitIndex].button.OnClickAsObservable().Subscribe(_ =>
             {
-                arg.unit.gameObject.SetActive(true);
-                arg.unit.unit = (Defines.EUnit)unitIndex;
-                arg.unit.InitUnitData();
+                if (playerData == null)
+                    return;
+
+                if (playerData.gold >= shopData.gold)
+                {
+                    playerData.gold -= shopData.gold;
+
+                    arg.unit.gameObject.SetActive(true);
+                    arg.unit.unit = (Defines.EUnit)unitIndex;
+                    arg.unit.InitUnitData();
+
+                    CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                    {
+                        stringID = 5,
+                    });
+                }
+                else
+                {
+                    CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                    {
+                        stringID = 6,
+                    });
+                }
+                
 
                 CHMMain.UI.CloseUI(gameObject);
             });
+
+            
         }
     }
 }

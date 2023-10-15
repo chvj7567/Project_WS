@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public interface ILoader<Key, Value>
 public class CHMData : CHSingleton<CHMData>
 {
     public Dictionary<string, Data.Player> playerDataDic = null;
+    public Dictionary<string, Data.Shop> shopDataDic = null;
 
     public async Task LoadLocalData(string _path)
     {
@@ -22,6 +24,13 @@ public class CHMData : CHSingleton<CHMData>
             Debug.Log("Player Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Player>, string, Data.Player>(_path, Defines.EData.Player.ToString());
             playerDataDic = data.MakeDict();
+        }
+
+        if (shopDataDic == null)
+        {
+            Debug.Log("Shop Local Data Load");
+            var data = await LoadJsonToLocal<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
+            shopDataDic = data.MakeDict();
         }
     }
 
@@ -40,7 +49,7 @@ public class CHMData : CHSingleton<CHMData>
             var data = File.ReadAllText(path);
 
             // 데이터가 없을 경우 디폴트 데이터 저장
-            if (data == "" || data.Contains($"\"{_name.ToLower()}List\":[]"))
+            if (data.Contains($"{_name.ToLower()}List") == false || data.Contains($"\"{_name.ToLower()}List\":[]"))
             {
                 return await LoadDefaultData<Loader>(_name);
             }
@@ -75,6 +84,9 @@ public class CHMData : CHSingleton<CHMData>
         Data.ExtractData<Data.Player> playerData = new Data.ExtractData<Data.Player>();
         saveData.playerList = playerData.MakeList(playerDataDic);
 
+        Data.ExtractData<Data.Shop> shopData = new Data.ExtractData<Data.Shop>();
+        saveData.shopList = shopData.MakeList(shopDataDic);
+
 #if UNITY_EDITOR == false
         json = JsonUtility.ToJson(saveData);
 #else
@@ -108,6 +120,13 @@ public async Task LoadCloudData(string _path)
             var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Player>, string, Data.Player>(_path, Defines.EData.Player.ToString());
             playerDataDic = data.MakeDict();
         }
+
+        if (shopDataDic == null)
+        {
+            Debug.Log("Shop Local Data Load");
+            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
+            shopDataDic = data.MakeDict();
+        }
     }
 public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
     {
@@ -122,7 +141,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         var stringTask = await taskCompletionSource.Task;
 
         // 데이터가 없을 경우 디폴트 데이터 저장
-        if (stringTask == "" || stringTask.Contains($"\"{_name.ToLower()}List\":[]"))
+        if (stringTask.Contains($"{_name.ToLower()}List") == false || stringTask.Contains($"\"{_name.ToLower()}List\":[]"))
         {
             return await LoadDefaultData<Loader>(_name);
         }
@@ -140,6 +159,40 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         };
 
         playerDataDic.Add(_key, data);
+
+        return data;
+    }
+
+    public Data.Player GetPlayerData(string _key)
+    {
+        if (CHMData.Instance.playerDataDic.TryGetValue(_key, out var data) == false)
+        {
+            data = null;
+        }
+
+        return data;
+    }
+
+    Data.Shop CreateShopData(Defines.EShop _key)
+    {
+        Debug.Log($"Create Shop {_key}");
+
+        Data.Shop data = new Data.Shop
+        {
+            shopID = _key
+        };
+
+        shopDataDic.Add(_key.ToString(), data);
+
+        return data;
+    }
+
+    public Data.Shop GetShopData(Defines.EShop _key)
+    {
+        if (CHMData.Instance.shopDataDic.TryGetValue(_key.ToString(), out var data) == false)
+        {
+            data = CreateShopData(_key);
+        }
 
         return data;
     }

@@ -1,0 +1,42 @@
+[
+  {
+    "shopID": "0",
+    "step": 0,
+    "gold": 500
+  },
+  {
+    "shopID": "3",
+    "step": 0,
+    "gold": 1000
+  },
+  {
+    "shopID": "6",
+    "step": 0,
+    "gold": 1500
+  },
+  {
+    "shopID": "9",
+    "step": 0,
+    "gold": 800
+  },
+  {
+    "shopID": "12",
+    "step": 0,
+    "gold": 700
+  },
+  {
+    "shopID": "15",
+    "step": 0,
+    "gold": 700
+  },
+  {
+    "shopID": "18",
+    "step": 0,
+    "gold": 700
+  },
+  {
+    "shopID": "21",
+    "step": 0,
+    "gold": 700
+  }
+]

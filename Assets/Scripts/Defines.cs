@@ -345,6 +345,39 @@ public class Defines
         None = -1,
 
         Player,
+        Shop,
+
+        Max
+    }
+
+    public enum EShop
+    {
+        None = -1,
+
+        WhiteUnit,
+        WhiteAttack,
+        WhiteCoolTime,
+        BrownUnit,
+        BrownAttack,
+        BrownCoolTime,
+        OrangeUnit,
+        OrangeAttack,
+        OrangeCoolTime,
+        YellowUnit,
+        YellowAttack,
+        YellowCoolTime,
+        GreenUnit,
+        GreenAttack,
+        GreenCoolTime,
+        BlueUnit,
+        BlueAttack,
+        BlueCoolTime,
+        PinkUnit,
+        PinkAttack,
+        PinkCoolTime,
+        RedUnit,
+        RedAttack,
+        RedCoolTime,
 
         Max
     }

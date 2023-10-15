@@ -4,18 +4,27 @@ using UnityEngine;
 
 public class DefenseScene : SceneBase
 {
-    public CHUnitBase i;
+    [SerializeField] CHTMPro goldText;
+
+    Data.Player playerData;
+
     private async void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
         await CHMData.Instance.LoadLocalData("AA");
-        CHMData.Instance.SaveData("AA");
+
+        playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
     }
 
     void Update()
     {
+        if (playerData != null)
+        {
+            goldText.SetText(playerData.gold);
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

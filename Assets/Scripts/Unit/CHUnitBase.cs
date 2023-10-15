@@ -734,6 +734,14 @@ public class CHUnitBase : MonoBehaviour
 
             if (hpGaugeBar)
                 hpGaugeBar.gameObject.SetActive(false);
+
+            // Á×¾úÀ» ¶§ ¾ò´Â °ñµå
+            var playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
+            if (playerData != null)
+            {
+                playerData.gold += 100;
+            }
+
             transform.DOMoveY(-10f, 5f);
             CHMMain.Resource.Destroy(gameObject, 5f);
         }

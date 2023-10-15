@@ -107,6 +107,7 @@ public class PathTD : MonoBehaviour
         CreatePathLine();
     }
 
+#if UNITY_EDITOR
     void OnGUI()
     {
         // 버튼을 그리는 위치와 크기를 지정합니다.
@@ -118,6 +119,7 @@ public class PathTD : MonoBehaviour
             ResetPathLine();
         }
     }
+#endif
 
     public bool showGizmo = true;
     public Color gizmoColor = Color.blue;

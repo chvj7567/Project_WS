@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class UIAlarmArg : CHUIArg
 {
-    public float closeTime = 2f;
-    public string alarmText;
+    public float closeTime = .5f;
+    public int stringID;
 }
 
 public class UIAlarm : UIBase
@@ -21,10 +21,12 @@ public class UIAlarm : UIBase
         arg = _uiArg as UIAlarmArg;
     }
 
-    CancellationTokenSource delayTokenSource;
-
     private async void Start()
     {
-        alarmText.SetText(10);
+        alarmText.SetStringID(arg.stringID);
+
+        await Task.Delay((int)(arg.closeTime * 1000));
+
+        CHMMain.UI.CloseUI(gameObject);
     }
 }

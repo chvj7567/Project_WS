@@ -10,5 +10,17 @@
   {
     "stringID": "3",
     "value": "Lose"
+  },
+  {
+    "stringID": "4",
+    "value": "{0} 골드"
+  },
+  {
+    "stringID": "5",
+    "value": "구매가 완료되었습니다."
+  },
+  {
+    "stringID": "6",
+    "value": "골드가 부족합니다."
   }
 ]
