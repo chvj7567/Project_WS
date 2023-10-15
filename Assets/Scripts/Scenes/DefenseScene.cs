@@ -5,10 +5,13 @@ using UnityEngine;
 public class DefenseScene : SceneBase
 {
     public CHUnitBase i;
-    private void Start()
+    private async void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
+
+        await CHMData.Instance.LoadLocalData("AA");
+        CHMData.Instance.SaveData("AA");
     }
 
     void Update()

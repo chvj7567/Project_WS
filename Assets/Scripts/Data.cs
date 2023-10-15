@@ -10,6 +10,23 @@ namespace Data
     {
         public string key;
         public Int64 exp;
+        public int gold;
+        public int whiteAttack;
+        public int whiteCoolTime;
+        public int brownAttack;
+        public int brownCoolTime;
+        public int orangeAttack;
+        public int orangeCoolTime;
+        public int yellowAttack;
+        public int yellowCoolTime;
+        public int greenAttack;
+        public int greenCoolTime;
+        public int blueAttack;
+        public int blueCoolTime;
+        public int pinkAttack;
+        public int pinkCoolTime;
+        public int redAttack;
+        public int redCoolTime;
     }
 
     [Serializable]

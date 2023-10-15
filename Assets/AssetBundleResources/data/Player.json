@@ -1,5 +1,23 @@
-{
-	"playerList" : [
-		{"key": "Player","plusDamage": 0,"minusCoolTime": 0,"plusDistance": 0}
-	]
-}
+[
+  {
+    "key": "Player",
+    "exp": 0,
+    "gold": 0,
+    "whiteAttack": 0,
+    "whiteCoolTime": 0,
+    "brownAttack": 0,
+    "brownCoolTime": 0,
+    "orangeAttack": 0,
+    "orangeCoolTime": 0,
+    "yellowAttack": 0,
+    "yellowCoolTime": 0,
+    "greenAttack": 0,
+    "greenCoolTime": 0,
+    "blueAttack": 0,
+    "blueCoolTime": 0,
+    "pinkAttack": 0,
+    "pinkCoolTime": 0,
+    "redAttack": 0,
+    "redCoolTime": 0
+  }
+]

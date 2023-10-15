@@ -19,6 +19,11 @@ public class CHMResource
 #endif
     }
 
+    public void LoadData(string name, Action<TextAsset> _callback)
+    {
+        LoadAsset<TextAsset>($"data", name, _callback);
+    }
+
     public void LoadJson(Defines.EJsonType _jsonType, Action<TextAsset> _callback)
     {
         LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_jsonType.ToString()}", _callback);
