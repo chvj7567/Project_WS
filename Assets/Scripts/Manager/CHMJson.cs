@@ -11,6 +11,7 @@ public class CHMJson
     {
         public StringInfo[] stringInfoArr;
         public StageInfo[] stageInfoArr;
+        public ShopInfo[] shopInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -19,6 +20,7 @@ public class CHMJson
     List<Action<TextAsset>> actionList = new List<Action<TextAsset>>();
     Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
     List<StageInfo> stageInfoList = new List<StageInfo>();
+    List<ShopInfo> shopInfoList = new List<ShopInfo>();
 
     public void Init()
     {
@@ -38,6 +40,7 @@ public class CHMJson
 
         actionList.Add(LoadStringInfo());
         actionList.Add(LoadStageInfo());
+        actionList.Add(LoadShopInfo());
 
         loadingFileCount = actionList.Count;
     }
@@ -92,6 +95,26 @@ public class CHMJson
         return callback;
     }
 
+    Action<TextAsset> LoadShopInfo()
+    {
+        Action<TextAsset> callback;
+
+        shopInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Shop, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"shopInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.shopInfoArr)
+            {
+                shopInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
     public string TryGetString(int _stringID)
     {
         if (stringInfoDic.TryGetValue(_stringID, out string result))
@@ -105,5 +128,10 @@ public class CHMJson
     public StageInfo GetStageInfo(int stage)
     {
         return stageInfoList.Find(_ => _.stage == stage);
+    }
+
+    public ShopInfo GetShopInfo(Defines.EShop shopID, int step)
+    {
+        return shopInfoList.Find(_ => _.shopID == shopID && _.step == step);
     }
 }

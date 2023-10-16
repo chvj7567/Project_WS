@@ -89,4 +89,12 @@ public class Infomation
         public Defines.ELayer eTeamLayer;
         public Defines.ELayer eTargetLayer;
     }
+
+    [Serializable]
+    public class ShopInfo
+    {
+        public Defines.EShop shopID = Defines.EShop.None;
+        public int step = 0;
+        public int gold = 0;
+    }
 }

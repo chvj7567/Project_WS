@@ -178,6 +178,17 @@ public class CHMUI
         }
     }
 
+    public bool CheckShowUI()
+    {
+        activeUI = activeUI.FindAll(_ => _ != null);
+        foreach (var obj in activeUI)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public bool CheckShowUI(Defines.EUI _uiType)
     {
         activeUI = activeUI.FindAll(_ => _ != null);

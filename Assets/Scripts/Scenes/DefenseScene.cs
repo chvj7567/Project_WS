@@ -42,7 +42,7 @@ public class DefenseScene : SceneBase
             goldText.SetText(playerData.gold);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && CHMMain.UI.CheckShowUI() == false)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;

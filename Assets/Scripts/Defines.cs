@@ -9,6 +9,7 @@ public class Defines
 
         String,
         Stage,
+        Shop,
 
         Max
     }

@@ -18,12 +18,13 @@ public class UITowerMenu : UIBase
     [SerializeField] List<TowerMenuItem> towerMenuItemList = new List<TowerMenuItem>();
 
     Data.Player playerData;
+
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UITowerMenuArg;
     }
 
-    private async void Start()
+    private void Start()
     {
         playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
 
@@ -31,17 +32,20 @@ public class UITowerMenu : UIBase
         {
             int unitIndex = i;
 
-            var shopData = CHMData.Instance.GetShopData(towerMenuItemList[i].GetShopEnum());
-            towerMenuItemList[i].goldText.SetText(shopData.gold);
+            var shopData = CHMData.Instance.GetShopData(towerMenuItemList[unitIndex].GetShopEnum());
+            var shopInfo = CHMMain.Json.GetShopInfo(shopData.shopID, shopData.step);
+            if (shopInfo == null)
+                return;
 
+            towerMenuItemList[unitIndex].goldText.SetText(shopInfo.gold);
             towerMenuItemList[unitIndex].button.OnClickAsObservable().Subscribe(_ =>
             {
                 if (playerData == null)
                     return;
 
-                if (playerData.gold >= shopData.gold)
+                if (playerData.gold >= shopInfo.gold)
                 {
-                    playerData.gold -= shopData.gold;
+                    playerData.gold -= shopInfo.gold;
 
                     arg.unit.gameObject.SetActive(true);
                     arg.unit.unit = (Defines.EUnit)unitIndex;

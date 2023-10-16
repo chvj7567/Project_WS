@@ -18,7 +18,14 @@ public class InfoScrollViewItem : MonoBehaviour
             return;
 
         unitImg.sprite = sprite;
-        attackText.SetText(info.liEffectData.Last().damage);
+
+        float damage = 0f;
+        for (int i = 0; i < info.liEffectData.Count; ++i)
+        {
+            damage += info.liEffectData[i].damage;
+        }
+
+        attackText.SetText(damage);
         coolTimeText.SetText(info.coolTime);
         skillDescText.SetText(info.skillDesc);
         

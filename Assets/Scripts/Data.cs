@@ -19,7 +19,6 @@ namespace Data
     {
         public Defines.EShop shopID;
         public int step;
-        public int gold;
     }
 
     [Serializable]

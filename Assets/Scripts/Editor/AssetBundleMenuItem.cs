@@ -49,4 +49,26 @@ public class AssetBundleMenuItem
 
         BuildPipeline.BuildAssetBundles(directory, BuildAssetBundleOptions.None, BuildTarget.Android);
     }
+
+    [MenuItem("CHTools/AssetBundleBuild Copy")]
+    public static void AssetBundleBuildCopy()
+    {
+        string directory = "Assets/Bundle";
+        string moveDirectory = "Assets/StreamingAssets";
+
+        if (Directory.Exists(moveDirectory) == false)
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        string[] files = Directory.GetFiles(directory);
+
+        for (int i = 0; i < files.Length; ++i)
+        {
+            string fileName = Path.GetFileName(files[i]);
+            string destFilePath = Path.Combine(moveDirectory, fileName);
+
+            File.Copy(files[i], destFilePath, true);
+        }
+    }
 }
