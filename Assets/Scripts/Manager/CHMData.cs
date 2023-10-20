@@ -96,17 +96,6 @@ public class CHMData : CHSingleton<CHMData>
         Debug.Log($"Save Local Data is {json}");
 
         File.WriteAllText($"{Application.persistentDataPath}/{_path}.json", json);
-
-
-#if UNITY_EDITOR == false
-        if (saveData.loginList.First().connectGPGS == true)
-        {
-            CHMGPGS.Instance.SaveCloud(_path, json, success =>
-            {
-                Debug.Log($"Save Cloud Data is {success} : {json}");
-            });
-        }
-#endif
     }
 
 #if UNITY_EDITOR == false
