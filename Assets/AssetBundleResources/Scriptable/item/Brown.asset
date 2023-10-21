@@ -9,25 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 398879e25a2280a4586ebcee5da6ca41, type: 3}
-  m_Name: Monster1
+  m_Script: {fileID: 11500000, guid: a2dcf4b91a0f7c041a7086644b9628a5, type: 3}
+  m_Name: Brown
   m_EditorClassIdentifier: 
-  eUnit: 8
-  unitName: 
-  eLevel: 0
-  maxHp: 100
+  eItem: 1
+  itemDesc: 
+  maxHp: 0
   hpRegenPerSecond: 0
-  maxMp: 100
+  maxMp: 0
   mpRegenPerSecond: 0
   attackPower: 0
   defensePower: 0
-  moveSpeed: 5
+  moveSpeed: 0
   rotateSpeed: 0
   range: 0
   rangeMulti: 0
   viewAngle: 0
-  eSkill1: 2
-  eSkill2: -1
-  eSkill3: -1
-  eSkill4: -1
-  eItem1: 8
+  distance: 0
+  coolTime: 0
+  damage: 0

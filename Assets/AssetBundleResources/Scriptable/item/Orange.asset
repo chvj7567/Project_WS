@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2dcf4b91a0f7c041a7086644b9628a5, type: 3}
-  m_Name: A
+  m_Name: Orange
   m_EditorClassIdentifier: 
-  eItem: 0
+  eItem: 1
   itemDesc: 
-  maxHp: 50
+  maxHp: 0
   hpRegenPerSecond: 0
   maxMp: 0
   mpRegenPerSecond: 0
@@ -27,4 +27,4 @@ MonoBehaviour:
   viewAngle: 0
   distance: 0
   coolTime: 0
-  damage: 200
+  damage: 0

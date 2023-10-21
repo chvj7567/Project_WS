@@ -14,6 +14,7 @@ public class CHMData : CHSingleton<CHMData>
 {
     public Dictionary<string, Data.Player> playerDataDic = null;
     public Dictionary<string, Data.Shop> shopDataDic = null;
+    public Dictionary<string, Data.Unit> unitDataDic = null;
 
     public async Task LoadLocalData(string _path)
     {
@@ -31,6 +32,13 @@ public class CHMData : CHSingleton<CHMData>
             Debug.Log("Shop Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
             shopDataDic = data.MakeDict();
+        }
+
+        if (unitDataDic == null)
+        {
+            Debug.Log("Unit Local Data Load");
+            var data = await LoadJsonToLocal<Data.ExtractData<Data.Unit>, string, Data.Unit>(_path, Defines.EData.Unit.ToString());
+            unitDataDic = data.MakeDict();
         }
     }
 
@@ -64,6 +72,7 @@ public class CHMData : CHSingleton<CHMData>
     {
         TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
 
+        Debug.Log($"LoadDefaultData : {_name}");
         CHMMain.Resource.LoadData(_name, (data) =>
         {
             Debug.Log($"Load Default {_name} Data is {data}");
@@ -116,6 +125,13 @@ public async Task LoadCloudData(string _path)
             var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
             shopDataDic = data.MakeDict();
         }
+
+        if (unitDataDic == null)
+        {
+            Debug.Log("Unit Local Data Load");
+            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Unit>, string, Data.Unit>(_path, Defines.EData.Unit.ToString());
+            unitDataDic = data.MakeDict();
+        }
     }
 public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
     {
@@ -154,7 +170,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Player GetPlayerData(string key)
     {
-        if (CHMData.Instance.playerDataDic.TryGetValue(key, out var data) == false)
+        if (playerDataDic.TryGetValue(key, out var data) == false)
         {
             data = null;
         }
@@ -178,9 +194,19 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Shop GetShopData(Defines.EShop key)
     {
-        if (CHMData.Instance.shopDataDic.TryGetValue(key.ToString(), out var data) == false)
+        if (shopDataDic.TryGetValue(key.ToString(), out var data) == false)
         {
             data = CreateShopData(key);
+        }
+
+        return data;
+    }
+
+    public Data.Unit GetUnitData(Defines.EUnit key)
+    {
+        if (unitDataDic.TryGetValue(key.ToString(), out var data) == false)
+        {
+            data = null;
         }
 
         return data;

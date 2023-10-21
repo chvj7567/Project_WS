@@ -12,7 +12,6 @@ public class CHUIWaitData
     public int uid;
     public Defines.EUI uiType;
     public CHUIArg uiArg;
-    public bool showCurrentBackground;
 }
 
 public class CHMUI
@@ -54,14 +53,13 @@ public class CHMUI
         }
     }
 
-    public int ShowUI(Defines.EUI _uiType, CHUIArg _uiArg, bool _bCurrentBackground = true)
+    public int ShowUI(Defines.EUI _uiType, CHUIArg _uiArg)
     {
         var uiWateData = new CHUIWaitData
         {
             uid = uid,
             uiType = _uiType,
             uiArg = _uiArg,
-            showCurrentBackground = _bCurrentBackground,
         };
 
         activeUID.Add(uid);
@@ -74,40 +72,14 @@ public class CHMUI
     {
         GameObject uiCanvas = null;
 
-        // 현재 화면 위에 UI를 보여줄지 별도의 화면에 보여줄지 확인
-        if (_uiWaitData.showCurrentBackground)
+        uiCanvas = GameObject.FindGameObjectWithTag("UICanvas");
+
+        if (uiCanvas == null)
         {
-            uiCanvas = GameObject.FindGameObjectWithTag("UICanvas");
-
-            if (uiCanvas == null)
+            CHMMain.Resource.InstantiateUI(Defines.EUI.UICanvas, (GameObject canvas) =>
             {
-                CHMMain.Resource.InstantiateUI(Defines.EUI.UICanvas, (GameObject canvas) =>
-                {
-                    uiCanvas = canvas;
-                });
-            }
-        }
-        else
-        {
-            uiCanvas = GameObject.FindGameObjectWithTag("UICamera");
-
-            if (uiCamera == null)
-            {
-                CHMMain.Resource.InstantiateUI(Defines.EUI.UICamera, (GameObject camera) =>
-                {
-                    uiCamera = camera;
-                });
-            }
-
-            uiCamera.SetActive(true);
-
-            if (uiCanvas == null)
-            {
-                CHMMain.Resource.InstantiateUI(Defines.EUI.UICanvas, (GameObject canvas) =>
-                {
-                    uiCanvas = canvas;
-                });
-            }
+                uiCanvas = canvas;
+            });
         }
 
         CHMMain.Resource.InstantiateUI(_uiWaitData.uiType, (GameObject uiObj) =>

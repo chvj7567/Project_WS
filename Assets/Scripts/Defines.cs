@@ -64,6 +64,7 @@ public class Defines
         UIAlarm,
         UITowerMenu,
         UIInfo,
+        UIStart,
 
         Max
     }
@@ -320,8 +321,15 @@ public class Defines
     {
         None = -1,
 
-        A,
-        B,
+        White,
+        Brown,
+        Orange,
+        Yellow,
+        Green,
+        Blue,
+        Pink,
+        Red,
+        Monster1,
 
         Max
     }
@@ -349,6 +357,7 @@ public class Defines
         Player,
         Shop,
         Stage,
+        Unit,
 
         Max
     }

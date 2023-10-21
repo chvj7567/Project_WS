@@ -60,8 +60,6 @@ public class First : MonoBehaviour
         // 다운로드 표시
         float downloadProgress = 0;
 
-        ++downloadCount;
-
         while (!bundleRequest.isDone)
         {
             downloadProgress = bundleRequest.progress;
@@ -74,15 +72,20 @@ public class First : MonoBehaviour
 
         downloadProgress = bundleRequest.progress;
 
-        if (loadingBar) loadingBar.fillAmount = downloadProgress;
-        if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
-
         AssetBundle assetBundle = bundleRequest.assetBundle;
 
         CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
 
+        ++downloadCount;
+
+        if (loadingBar) loadingBar.fillAmount = downloadProgress;
+        if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
+
         if (downloadCount == liDownloadKey.Count)
         {
+            CHMMain.UI.CreateEventSystemObject();
+            yield return CHMData.Instance.LoadLocalData("AA");
+
             canStart = true;
             CHMAssetBundle.firstDownload = false;
         }

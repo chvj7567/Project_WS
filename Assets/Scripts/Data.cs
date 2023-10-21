@@ -22,10 +22,19 @@ namespace Data
     }
 
     [Serializable]
+    public class Unit
+    {
+        public Defines.EUnit eUnit;
+        public int plusDamage;
+        public float minusCoolTime;
+    }
+
+    [Serializable]
     public class ExtractData<T> : ILoader<string, T> where T : class
     {
         public List<Player> playerList = new List<Player>();
         public List<Shop> shopList = new List<Shop>();
+        public List<Unit> unitList = new List<Unit>();
 
         public Dictionary<string, T> MakeDict()
         {
@@ -40,6 +49,11 @@ namespace Data
             {
                 foreach (Shop data in shopList)
                     dict.Add(data.shopID.ToString(), data as T);
+            }
+            if (typeof(T) == typeof(Unit))
+            {
+                foreach (Unit data in unitList)
+                    dict.Add(data.eUnit.ToString(), data as T);
             }
 
             return dict;
