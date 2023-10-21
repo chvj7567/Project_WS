@@ -23,7 +23,7 @@ public class DefenseScene : SceneBase
 
         CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg());
 
-        await CHMData.Instance.LoadLocalData("AA");
+        //await CHMData.Instance.LoadLocalData("AA");
 
         playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
 

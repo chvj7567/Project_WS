@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using System.Linq;
+using System;
 
 public class InfoScrollViewItem : MonoBehaviour
 {
@@ -64,6 +65,7 @@ public class InfoScrollViewItem : MonoBehaviour
             if (unitData != null)
             {
                 unitData.minusCoolTime -= 0.1f;
+                unitData.minusCoolTime = (float)Math.Round((double)unitData.minusCoolTime, 2);
                 minusCoolTimeText.SetText(unitData.minusCoolTime);
                 minusCoolTimeText.gameObject.SetActive(true);
             }

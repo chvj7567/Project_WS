@@ -1,7 +1,5 @@
 using System;
 using UniRx;
-using Unity.Collections;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.UI;
 
