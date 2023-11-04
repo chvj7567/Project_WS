@@ -65,6 +65,7 @@ public class Defines
         UITowerMenu,
         UIInfo,
         UIStart,
+        UICount,
 
         Max
     }

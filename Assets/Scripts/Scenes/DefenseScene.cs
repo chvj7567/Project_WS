@@ -16,6 +16,8 @@ public class DefenseScene : SceneBase
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
+        CHMMain.UI.ShowUI(Defines.EUI.UICount, new UICountArg());
+
         infoBtn.OnClickAsObservable().Subscribe(_ =>
         {
             CHMMain.UI.ShowUI(Defines.EUI.UIInfo, new UIInfoArg());
