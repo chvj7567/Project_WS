@@ -9,6 +9,7 @@ using UnityEngine;
 
 public class UICountArg : CHUIArg
 {
+    public float delay = 1;
     public int count = 3;
 }
 
@@ -25,13 +26,19 @@ public class UICount : UIBase
 
     private async void Start()
     {
-        for (int i = arg.count; i >= 0; --i)
+        countText.gameObject.SetActive(false);
+        await Task.Delay((int)(arg.delay * 1000));
+
+        countText.gameObject.SetActive(true);
+        for (int i = arg.count; i > 0; --i)
         {
+            countText.SetText(i);
             countText.text.rectTransform.localScale = Vector3.zero;
             countText.text.rectTransform.DOScale(Vector2.one, 1f);
-            countText.SetText(i);
 
             await Task.Delay(1000);
         }
+
+        CHMMain.UI.CloseUI(gameObject);
     }
 }
