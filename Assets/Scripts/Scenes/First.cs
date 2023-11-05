@@ -15,7 +15,6 @@ public class First : MonoBehaviour
 
     private async void Start()
     {
-        await CHMData.Instance.LoadLocalData("Defense");
         startBtn.gameObject.SetActive(true);
 
         if (startBtn)
@@ -29,8 +28,9 @@ public class First : MonoBehaviour
             });
         }
 
-        loadingScript.bundleLoadSuccess += () =>
+        loadingScript.bundleLoadSuccess += async () =>
         {
+            await CHMData.Instance.LoadLocalData("Defense");
             Debug.Log("Can Start");
             canStart = true;
         };
