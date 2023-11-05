@@ -33,7 +33,7 @@ public class First : MonoBehaviour
             });
         }
 
-        if (CHMAssetBundle.firstDownload == true)
+        if (CHMAssetBundle.Instance.firstDownload == true)
         {
             foreach (var key in liDownloadKey)
             {
@@ -74,7 +74,7 @@ public class First : MonoBehaviour
 
         AssetBundle assetBundle = bundleRequest.assetBundle;
 
-        CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
+        CHMAssetBundle.Instance.LoadAssetBundle(_bundleName, assetBundle);
 
         ++downloadCount;
 
@@ -87,7 +87,7 @@ public class First : MonoBehaviour
             yield return CHMData.Instance.LoadLocalData("AA");
 
             canStart = true;
-            CHMAssetBundle.firstDownload = false;
+            CHMAssetBundle.Instance.firstDownload = false;
         }
     }
 }
