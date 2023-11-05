@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -16,9 +17,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
     [SerializeField] bool useStreamingAssets;
     [SerializeField] bool googleDriveDownload;
     [SerializeField] string bundleKey;
-    [SerializeField] List<string> googleDownloadKeyList = new List<string>();
-    [SerializeField] List<string> googleDownloadValueList = new List<string>();
-
+    [SerializeField] SerializableDictionary<string, string> googleDownloadDic = new SerializableDictionary<string, string>();
     [SerializeField, ReadOnly] int totalLoadCount = 0;
     [SerializeField, ReadOnly] int loadingCount = 0;
     [SerializeField, ReadOnly] int totalDownoadCount = 0;
@@ -37,7 +36,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         if (loadingBar) loadingBar.fillAmount = 0f;
 
-        totalDownoadCount = totalLoadCount = googleDownloadKeyList.Count;
+        totalDownoadCount = totalLoadCount = googleDownloadDic.Count;
 
         // 에셋 번들 저장 경로 설정
         string savePath = Path.Combine(Application.persistentDataPath, bundleKey);
@@ -46,34 +45,31 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             Directory.CreateDirectory(savePath);
         }
 
+        foreach (var dic in googleDownloadDic)
+        {
+            CHMAssetBundle.Instance.bundleDic.Add(dic.Key, dic.Value);
+        }
+
+        var valueList = googleDownloadDic.Values.ToList();
+
         if (googleDriveDownload)
         {
-            for (int i = 0; i < googleDownloadKeyList.Count; ++i)
+            for (int i = 0; i < valueList.Count; ++i)
             {
-                CHMAssetBundle.Instance.bundleDic.Add(googleDownloadValueList[i], googleDownloadKeyList[i]);
-            }
-
-            for (int i = 0; i < googleDownloadKeyList.Count; ++i)
-            {
-                StartCoroutine(DownloadAssetBundle(googleDownloadKeyList[i]));
+                StartCoroutine(DownloadAssetBundle(valueList[i]));
             }
         }
         else
         {
-            for (int i = 0; i < googleDownloadValueList.Count; ++i)
-            {
-                CHMAssetBundle.Instance.bundleDic.Add(googleDownloadValueList[i], googleDownloadValueList[i]);
-            }
-
             StartCoroutine(LoadAssetBundleAll());
         }
 
         bundleDownloadSuccess += () =>
         {
             Debug.Log("bundleDownloadSuccess");
-            foreach (var key in googleDownloadKeyList)
+            foreach (var value in valueList)
             {
-                StartCoroutine(LoadAssetBundle(key));
+                StartCoroutine(LoadAssetBundle(value));
             }
         };
     }
@@ -140,7 +136,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             bundleRequest = AssetBundle.LoadFromFileAsync(Path.Combine(bundlePath + "/", $"{bundleName}.unity3d"));
         }
 
-        downloadText.text = $"{bundleName} Loading...";
+        if (downloadText) downloadText.text = $"{bundleName} Loading...";
 
         // 다운로드 표시
         float downloadProgress = 0;
@@ -172,7 +168,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             if (loadingBar) loadingBar.fillAmount = downloadProgress / totalLoadCount * loadingCount;
             if (loadingText) loadingText.text = downloadProgress / totalLoadCount * loadingCount * 100f + "%";
 
-            downloadText.text = $"{bundleName} Load Success";
+            if (downloadText) downloadText.text = $"{bundleName} Load Success";
             Debug.Log($"{bundleName} Load Success");
 
             if (loadingCount == totalLoadCount)
@@ -265,7 +261,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             if (loadingBar) loadingBar.fillAmount = downloadProgress / totalDownoadCount * loadingCount;
             if (loadingText) loadingText.text = downloadProgress / totalDownoadCount * loadingCount * 100f + "%";
 
-            downloadText.text = $"{bundleName} Download Success";
+            if (downloadText) downloadText.text = $"{bundleName} Download Success";
             Debug.Log($"{bundleName} Download Success");
 
             if (downloadingCount == totalDownoadCount)

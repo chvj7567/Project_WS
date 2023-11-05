@@ -9,85 +9,34 @@ using UnityEngine.UI;
 
 public class First : MonoBehaviour
 {
-    [SerializeField] Image loadingBar;
-    [SerializeField] TMP_Text loadingText;
     [SerializeField] Button startBtn;
-    [SerializeField] List<string> liDownloadKey = new List<string>();
-
+    [SerializeField] CHLoadingBarFromAssetBundle loadingScript;
     bool canStart = false;
-    int downloadCount = 0;
 
-    private void Start()
+    private async void Start()
     {
+        CHMMain.UI.CreateEventSystemObject();
+
+        await CHMData.Instance.LoadLocalData("Defense");
         startBtn.gameObject.SetActive(true);
 
-        if (loadingBar) loadingBar.fillAmount = 0f;
         if (startBtn)
         {
             startBtn.OnClickAsObservable().Subscribe(_ =>
             {
-                if (loadingBar.fillAmount == 1f)
+                if (canStart)
                 {
                     SceneManager.LoadScene(1);
                 }
             });
         }
 
-        if (CHMAssetBundle.Instance.firstDownload == true)
+        loadingScript.bundleLoadSuccess += () =>
         {
-            foreach (var key in liDownloadKey)
-            {
-                StartCoroutine(LoadAssetBundle(key));
-            }
-        }
-        else
-        {
+            Debug.Log("Can Start");
             canStart = true;
-            loadingBar.gameObject.SetActive(false);
-            loadingText.gameObject.SetActive(false);
-        }
-    }
+        };
 
-    IEnumerator LoadAssetBundle(string _bundleName)
-    {
-        string bundlePath = Path.Combine(Application.streamingAssetsPath, _bundleName);
-
-        Debug.Log(bundlePath);
-
-        // 에셋 번들 로드
-        AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
-
-        // 다운로드 표시
-        float downloadProgress = 0;
-
-        while (!bundleRequest.isDone)
-        {
-            downloadProgress = bundleRequest.progress;
-
-            if (loadingBar) loadingBar.fillAmount = downloadProgress;
-            if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f+ "%";
-
-            yield return null;
-        }
-
-        downloadProgress = bundleRequest.progress;
-
-        AssetBundle assetBundle = bundleRequest.assetBundle;
-
-        CHMAssetBundle.Instance.LoadAssetBundle(_bundleName, assetBundle);
-
-        ++downloadCount;
-
-        if (loadingBar) loadingBar.fillAmount = downloadProgress;
-        if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
-
-        if (downloadCount == liDownloadKey.Count)
-        {
-            CHMMain.UI.CreateEventSystemObject();
-            yield return CHMData.Instance.LoadLocalData("AA");
-
-            canStart = true;
-            CHMAssetBundle.Instance.firstDownload = false;
-        }
+        loadingScript.Init();
     }
 }

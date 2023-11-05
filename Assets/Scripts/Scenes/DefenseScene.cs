@@ -8,7 +8,7 @@ public class DefenseScene : SceneBase
 {
     [SerializeField] Button infoBtn;
     [SerializeField] CHTMPro goldText;
-
+    [SerializeField] CHSpawner spawner;
     Data.Player playerData;
 
     private async void Start()
@@ -16,7 +16,12 @@ public class DefenseScene : SceneBase
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
-        CHMMain.UI.ShowUI(Defines.EUI.UICount, new UICountArg());
+        CHMData.Instance.SaveData("Defense");
+
+        CHMMain.UI.ShowUI(Defines.EUI.UICount, new UICountArg
+        {
+            spawner = spawner
+        });
 
         infoBtn.OnClickAsObservable().Subscribe(_ =>
         {

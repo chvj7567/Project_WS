@@ -22,11 +22,6 @@ public class CHSpawner : MonoBehaviour
     bool isSpawn;
     CancellationTokenSource cts;
 
-    private void Start()
-    {
-        StartSpawn();
-    }
-
     public void SetSpawnDelay(float _value)
     {
         spawnDelay = _value;

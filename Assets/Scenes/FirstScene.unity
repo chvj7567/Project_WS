@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -879,6 +879,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1972724474}
   - component: {fileID: 1972724473}
+  - component: {fileID: 1972724475}
   m_Layer: 0
   m_Name: First
   m_TagString: Untagged
@@ -898,24 +899,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8b9cbd3b265084d9b83f510d759a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingBar: {fileID: 1639026072}
-  loadingText: {fileID: 805651599}
   startBtn: {fileID: 1254437015}
-  liDownloadKey:
-  - decal
-  - effect
-  - json
-  - major
-  - scriptable/item
-  - scriptable/level
-  - scriptable/skill
-  - scriptable/unit
-  - ui
-  - unit
-  - material
-  - mesh
-  - texture
-  - shader
+  loadingScript: {fileID: 1972724475}
 --- !u!4 &1972724474
 Transform:
   m_ObjectHideFlags: 0
@@ -931,3 +916,55 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1972724475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972724472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558f24f99a9b3fd4aa308aab95c0d019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadingBar: {fileID: 1639026072}
+  loadingText: {fileID: 805651599}
+  downloadText: {fileID: 0}
+  useStreamingAssets: 1
+  googleDriveDownload: 0
+  bundleKey: Bundle
+  googleDownloadDic:
+    array:
+    - Key: decal
+      Value: 11H30GZm-DIl6bJKFLjkvm0QtAC57jlZN
+    - Key: effect
+      Value: 16CQNjpDSqgaF_r3TGJAdVxqXO15sjtxQ
+    - Key: json
+      Value: 1krtfCbCfzOdHcM1M00ObO1iIajcBnUi6
+    - Key: major
+      Value: 1FZKyql9wkFTGH1389UzyoiZxCmwT9rp7
+    - Key: material
+      Value: 12QJlmSE6zg5YNLCWJ6p-NWSM06AVer9Q
+    - Key: mesh
+      Value: 1Z5EWlEGE31f3s-3P7iwZuHXSkGFwbTa5
+    - Key: shader
+      Value: 14K_XGVGENua72z0l_ERFZ6JmgjxCSXf_
+    - Key: texture
+      Value: 1m3GAVpkTMMRVO5UaA05WwK228lm6UK77
+    - Key: ui
+      Value: 18b92F2pEeTk0lt4ENjgBXU7G6FhYs9t6
+    - Key: unit
+      Value: 1vC1mUq1dFaszwazrbpiOTEOkqNJbyqHF
+    - Key: scriptable/item
+      Value: 1LfwCNSfoaErcRDkUw9wMVSwaY1oqvk3I
+    - Key: scriptable/level
+      Value: 1RZtImtYsQmX8-UI4SBXdZQTryBdw10dn
+    - Key: scriptable/skill
+      Value: 1DtSp9zo8X9KRJsh3TFu0Ev5BuECyg_41
+    - Key: scriptable/unit
+      Value: 11DQRu8owILABS_IbYGCHBKn-LMdPzzeo
+  totalLoadCount: 0
+  loadingCount: 0
+  totalDownoadCount: 0
+  downloadingCount: 0

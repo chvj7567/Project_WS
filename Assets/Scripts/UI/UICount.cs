@@ -9,6 +9,7 @@ using UnityEngine;
 
 public class UICountArg : CHUIArg
 {
+    public CHSpawner spawner;
     public float delay = 1;
     public int count = 3;
 }
@@ -39,6 +40,10 @@ public class UICount : UIBase
             await Task.Delay(1000);
         }
 
+        countText.SetText("Start");
+        await Task.Delay(500);
+
+        arg.spawner.StartSpawn();
         CHMMain.UI.CloseUI(gameObject);
     }
 }
