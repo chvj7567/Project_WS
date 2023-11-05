@@ -137,11 +137,11 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
     {
         TaskCompletionSource<string> taskCompletionSource = new TaskCompletionSource<string>();
 
-        CHMGPGS.Instance.LoadCloud(_path, (success, data) =>
+        /*CHMGPGS.Instance.LoadCloud(_path, (success, data) =>
         {
             Debug.Log($"Load Cloud {_name} Data is {success} : {data}");
             taskCompletionSource.SetResult(data);
-        });
+        });*/
 
         var stringTask = await taskCompletionSource.Task;
 

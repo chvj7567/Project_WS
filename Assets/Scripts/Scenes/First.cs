@@ -15,8 +15,6 @@ public class First : MonoBehaviour
 
     private async void Start()
     {
-        CHMMain.UI.CreateEventSystemObject();
-
         await CHMData.Instance.LoadLocalData("Defense");
         startBtn.gameObject.SetActive(true);
 
