@@ -64,6 +64,11 @@ public class CHTargetTracker : MonoBehaviour
         orgStoppingDistance = unitBase.GetCurrentSkill1Distance();
     }
 
+    public void SetSpeed(float speed)
+    {
+        agent.speed = speed;
+    }
+
     private void Awake()
     {
         contBase = gameObject.GetComponent<CHContBase>();

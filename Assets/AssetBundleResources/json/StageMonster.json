@@ -1,0 +1,8 @@
+[
+  {
+    "stage": 1,
+    "monster": 1,
+    "monsterHP": 10,
+	"monsterSpeed": 1
+  }
+]

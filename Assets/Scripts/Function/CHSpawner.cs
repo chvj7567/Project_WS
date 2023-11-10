@@ -34,7 +34,10 @@ public class CHSpawner : MonoBehaviour
             var obj = CHMMain.Resource.Instantiate(CHMMain.Unit.GetOriginBall());
             if (obj != null)
             {
-                CHMMain.Unit.SetUnit(obj, unit);
+                var curStage = PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString());
+                var curStageMonsterInfo = CHMMain.Json.GetMonsterInfo(curStage);
+
+                CHMMain.Unit.SetUnit(obj, curStageMonsterInfo.monster);
                 CHMMain.Unit.SetTargetMask(obj, Defines.ELayer.None);
                 obj.transform.position = createPosition.position;
                 obj.layer = (int)Defines.ELayer.Red;
@@ -49,6 +52,7 @@ public class CHSpawner : MonoBehaviour
                     else
                     {
                         targetTracker.destList = destList;
+                        targetTracker.SetSpeed(curStageMonsterInfo.monsterSpeed);
                     }
                 }
 
@@ -58,6 +62,8 @@ public class CHSpawner : MonoBehaviour
                     unitBase.onHpBar = true;
                     unitBase.onMpBar = false;
                     unitBase.onCoolTimeBar = false;
+
+                    unitBase.bonusHp += curStageMonsterInfo.monsterHP;
                 }
 
                 obj.SetActive(true);

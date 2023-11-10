@@ -8,7 +8,8 @@ public class Defines
         None = -1,
 
         String,
-        Stage,
+        StageGold,
+        StageMonster,
         Shop,
 
         Max

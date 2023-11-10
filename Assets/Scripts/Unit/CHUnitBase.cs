@@ -34,6 +34,8 @@ public class CHUnitBase : MonoBehaviour
     [SerializeField, ReadOnly] public float maxMp;
     [SerializeField, ReadOnly] public float curHp;
     [SerializeField, ReadOnly] public float curMp;
+    [SerializeField, ReadOnly] public float bonusHp;
+    [SerializeField, ReadOnly] public float bonusMp;
 
     [SerializeField, ReadOnly] public float tempHp;
     [SerializeField, ReadOnly] public float tempMp;
@@ -550,10 +552,10 @@ public class CHUnitBase : MonoBehaviour
     public void InitUnitData()
     {
         unitState = 0;
-        maxHp = 0;
-        maxMp = 0;
-        curHp = 0;
-        curMp = 0;
+        maxHp = bonusHp;
+        maxMp = bonusMp;
+        curHp = bonusHp;
+        curMp = bonusMp;
         unitCollider.enabled = true;
 
         if (unit == Defines.EUnit.None)

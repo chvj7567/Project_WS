@@ -10,7 +10,8 @@ public class CHMJson
     public class JsonData
     {
         public StringInfo[] stringInfoArr;
-        public StageInfo[] stageInfoArr;
+        public StageGoldInfo[] stageGoldInfoArr;
+        public StageMonsterInfo[] stageMonsterInfoArr;
         public ShopInfo[] shopInfoArr;
     }
 
@@ -19,7 +20,8 @@ public class CHMJson
 
     List<Action<TextAsset>> actionList = new List<Action<TextAsset>>();
     Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
-    List<StageInfo> stageInfoList = new List<StageInfo>();
+    List<StageGoldInfo> stageGoldInfoList = new List<StageGoldInfo>();
+    List<StageMonsterInfo> stageMonsterInfoList = new List<StageMonsterInfo>();
     List<ShopInfo> shopInfoList = new List<ShopInfo>();
 
     public void Init()
@@ -31,6 +33,10 @@ public class CHMJson
     {
         actionList.Clear();
         stringInfoDic.Clear();
+        stageGoldInfoList.Clear();
+        stageMonsterInfoList.Clear();
+        shopInfoList.Clear();
+
     }
 
     void LoadJsonData()
@@ -39,7 +45,8 @@ public class CHMJson
         actionList.Clear();
 
         actionList.Add(LoadStringInfo());
-        actionList.Add(LoadStageInfo());
+        actionList.Add(LoadStageGoldInfo());
+        actionList.Add(LoadStageMonsterInfo());
         actionList.Add(LoadShopInfo());
 
         loadingFileCount = actionList.Count;
@@ -75,18 +82,38 @@ public class CHMJson
         return callback;
     }
 
-    Action<TextAsset> LoadStageInfo()
+    Action<TextAsset> LoadStageGoldInfo()
     {
         Action<TextAsset> callback;
 
-        stageInfoList.Clear();
+        stageGoldInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
+        CHMMain.Resource.LoadJson(Defines.EJsonType.StageGold, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.stageInfoArr)
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageGoldInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stageGoldInfoArr)
             {
-                stageInfoList.Add(data);
+                stageGoldInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
+    Action<TextAsset> LoadStageMonsterInfo()
+    {
+        Action<TextAsset> callback;
+
+        stageMonsterInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.StageMonster, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageMonsterInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stageMonsterInfoArr)
+            {
+                stageMonsterInfoList.Add(data);
             }
 
             ++loadCompleteFileCount;
@@ -125,13 +152,25 @@ public class CHMJson
         return "";
     }
 
-    public StageInfo GetStageInfo(int stage)
+    public StageGoldInfo GetStageInfo(int stage)
     {
-        return stageInfoList.Find(_ => _.stage == stage);
+        return stageGoldInfoList.Find(_ => _.stage == stage);
     }
 
     public ShopInfo GetShopInfo(Defines.EShop shopID, int step)
     {
         return shopInfoList.Find(_ => _.shopID == shopID && _.step == step);
+    }
+
+    public StageMonsterInfo GetMonsterInfo(int stage)
+    {
+        if (stageMonsterInfoList == null)
+            return null;
+
+        var monsterInfo = stageMonsterInfoList.Find(_ => _.stage == stage);
+        if (monsterInfo == null)
+            return null;
+
+        return monsterInfo;
     }
 }
