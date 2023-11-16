@@ -40,6 +40,8 @@ public class CHTargetTracker : MonoBehaviour
     [SerializeField, ReadOnly] bool expensionRange = false;
     [SerializeField, ReadOnly] int curDestinationIndex = 0;
 
+    public Action arrived;
+
     public void UpdateSkillValue()
     {
         orgStoppingDistance = unitBase.GetCurrentSkill1Distance();
@@ -130,6 +132,13 @@ public class CHTargetTracker : MonoBehaviour
                         if (destList.Count > curDestinationIndex + 1)
                         {
                             ++curDestinationIndex;
+                        }
+                        else
+                        {
+                            if (arrived != null)
+                                arrived.Invoke();
+
+                            CHMMain.Resource.Destroy(gameObject);
                         }
                     }
                     else

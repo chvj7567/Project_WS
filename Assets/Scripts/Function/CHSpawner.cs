@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,18 @@ public class CHSpawner : MonoBehaviour
     bool isSpawn;
     CancellationTokenSource cts;
 
+    public Action arrived;
+    public int arrivedCount = 0;
+    public Action died;
+    public int diedCount = 0;
+
+    public Action end;
+
+    public int GetMaxSpawnCount()
+    {
+        return maxSpawnCount;
+    }
+
     public void SetSpawnDelay(float _value)
     {
         spawnDelay = _value;
@@ -40,8 +53,9 @@ public class CHSpawner : MonoBehaviour
                     return;
 
                 maxSpawnCount = curStageMonsterInfo.monsterCount;
+                unit = curStageMonsterInfo.monsterUnit;
 
-                CHMMain.Unit.SetUnit(obj, curStageMonsterInfo.monsterUnit);
+                CHMMain.Unit.SetUnit(obj, unit);
                 CHMMain.Unit.SetTargetMask(obj, Defines.ELayer.None);
                 obj.transform.position = createPosition.position;
                 obj.layer = (int)Defines.ELayer.Red;
@@ -57,6 +71,15 @@ public class CHSpawner : MonoBehaviour
                     {
                         targetTracker.destList = destList;
                         targetTracker.SetSpeed(curStageMonsterInfo.monsterSpeed);
+                        targetTracker.arrived += () =>
+                        {
+                            ++arrivedCount;
+                            if (arrived != null)
+                                arrived.Invoke();
+
+                            if (arrivedCount + diedCount >= maxSpawnCount)
+                                end.Invoke();
+                        };
                     }
                 }
 
@@ -68,6 +91,16 @@ public class CHSpawner : MonoBehaviour
                     unitBase.onCoolTimeBar = false;
 
                     unitBase.bonusHp += curStageMonsterInfo.monsterHP;
+
+                    unitBase.died += () =>
+                    {
+                        ++diedCount;
+                        if (died != null)
+                            died.Invoke();
+
+                        if (arrivedCount + diedCount >= maxSpawnCount)
+                            end.Invoke();
+                    };
                 }
 
                 obj.SetActive(true);
@@ -114,7 +147,6 @@ public class CHSpawner : MonoBehaviour
     {
         if (isSpawn)
         {
-            maxSpawnCount = 0;
             oneTimeSpawnCount = 0;
             isSpawn = false;
             if (cts != null && !cts.IsCancellationRequested)

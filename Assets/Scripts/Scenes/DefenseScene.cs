@@ -8,7 +8,13 @@ public class DefenseScene : SceneBase
 {
     [SerializeField] Button infoBtn;
     [SerializeField] CHTMPro goldText;
+    [SerializeField] CHTMPro lifeText;
+    [SerializeField] int maxLife;
+    [SerializeField] int life;
     [SerializeField] CHSpawner spawner;
+    [SerializeField] int killCount;
+
+    bool gameEnd = false;
     Data.Player playerData;
 
     private async void Start()
@@ -36,8 +42,35 @@ public class DefenseScene : SceneBase
         if (playerData != null)
         {
             var stageData = CHMMain.Json.GetStageInfo(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
-            playerData.gold += stageData.playerGold;
+            playerData.gold = stageData.playerGold;
         }
+
+        maxLife = life = (int)CHMMain.Json.GetConstValue(Defines.EConstValue.StageLife);
+        lifeText.SetText(maxLife);
+
+        spawner.arrived += () =>
+        {
+            --life;
+
+            if (life < 0)
+            {
+                GameEnd();
+            }
+            else
+            {
+                lifeText.SetText(life);
+            }
+        };
+
+        spawner.died += () =>
+        {
+            ++killCount;
+        };
+
+        spawner.end += () =>
+        {
+            GameEnd();
+        };
     }
 
     void Update()
@@ -75,6 +108,39 @@ public class DefenseScene : SceneBase
                     }
                 }
             }
+        }
+    }
+
+    void GameEnd()
+    {
+        if (gameEnd)
+            return;
+
+        gameEnd = true;
+
+        bool clear = false;
+
+        if (life >= 0)
+        {
+            if (spawner.GetMaxSpawnCount() <= killCount + maxLife - life)
+            {
+                clear = true;
+            }
+        }
+
+        if (clear)
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+            {
+                text = "Game Clear"
+            });
+        }
+        else
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+            {
+                text = "Game Over"
+            });
         }
     }
 }

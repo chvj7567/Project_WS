@@ -2,7 +2,7 @@
   {
     "stage": 1,
     "monsterUnit": 1,
-    "monsterHP": 10,
+    "monsterHP": -90,
 	"monsterSpeed": 1,
 	"monsterCount": 10
   }

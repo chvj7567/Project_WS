@@ -11,6 +11,7 @@ public class Defines
         StageGold,
         StageMonster,
         Shop,
+        ConstValue,
 
         Max
     }
@@ -402,6 +403,14 @@ public class Defines
 
         Stage,
 
+        Max
+    }
+
+    public enum EConstValue
+    {
+        None = -1,
+
+        StageLife,
         Max
     }
 }

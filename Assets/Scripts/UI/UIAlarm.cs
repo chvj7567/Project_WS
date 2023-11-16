@@ -9,6 +9,7 @@ public class UIAlarmArg : CHUIArg
 {
     public float closeTime = .5f;
     public int stringID;
+    public string text;
 }
 
 public class UIAlarm : UIBase
@@ -24,7 +25,14 @@ public class UIAlarm : UIBase
 
     private async void Start()
     {
-        alarmText.SetStringID(arg.stringID);
+        if (arg.text != null)
+        {
+            alarmText.text.text = arg.text;
+        }
+        else
+        {
+            alarmText.SetStringID(arg.stringID);
+        }
 
         await Task.Delay((int)(arg.closeTime * 1000));
 

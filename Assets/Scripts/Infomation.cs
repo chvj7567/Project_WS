@@ -107,4 +107,11 @@ public class Infomation
         public int step = 0;
         public int gold = 0;
     }
+
+    [Serializable]
+    public class ConstValueInfo
+    {
+        public Defines.EConstValue eConst = Defines.EConstValue.None;
+        public float value = -1f;
+    }
 }

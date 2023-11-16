@@ -51,6 +51,8 @@ public class CHUnitBase : MonoBehaviour
     CancellationTokenSource cts;
     CancellationToken token;
 
+    public Action died;
+
     private void Awake()
     {
         cts = new CancellationTokenSource();
@@ -371,8 +373,6 @@ public class CHUnitBase : MonoBehaviour
     }
     #endregion
 
-
-
     public float GetCurrentHp()
     {
         return curHp;
@@ -499,14 +499,17 @@ public class CHUnitBase : MonoBehaviour
     {
         skill1Data = CHMMain.Skill.GetSkillData(_skill);
     }
+
     public void ChangeSkill2(Defines.ESkill _skill)
     {
         skill2Data = CHMMain.Skill.GetSkillData(_skill);
     }
+
     public void ChangeSkill3(Defines.ESkill _skill)
     {
         skill3Data = CHMMain.Skill.GetSkillData(_skill);
     }
+
     public void ChangeSkill4(Defines.ESkill _skill)
     {
         skill4Data = CHMMain.Skill.GetSkillData(_skill);
@@ -745,8 +748,12 @@ public class CHUnitBase : MonoBehaviour
                 playerData.gold +=  stageData.unitGold;
             }
 
-            transform.DOMoveY(-10f, 5f);
-            CHMMain.Resource.Destroy(gameObject, 5f);
+            transform.DOMoveY(-10f, 3f);
+
+            if (died != null)
+                died.Invoke();
+
+            CHMMain.Resource.Destroy(gameObject, 3f);
         }
     }
 

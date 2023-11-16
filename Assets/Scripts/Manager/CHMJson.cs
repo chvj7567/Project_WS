@@ -13,6 +13,7 @@ public class CHMJson
         public StageGoldInfo[] stageGoldInfoArr;
         public StageMonsterInfo[] stageMonsterInfoArr;
         public ShopInfo[] shopInfoArr;
+        public ConstValueInfo[] constValueInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -23,6 +24,7 @@ public class CHMJson
     List<StageGoldInfo> stageGoldInfoList = new List<StageGoldInfo>();
     List<StageMonsterInfo> stageMonsterInfoList = new List<StageMonsterInfo>();
     List<ShopInfo> shopInfoList = new List<ShopInfo>();
+    List<ConstValueInfo> constValueInfoList = new List<ConstValueInfo>();
 
     public void Init()
     {
@@ -36,7 +38,7 @@ public class CHMJson
         stageGoldInfoList.Clear();
         stageMonsterInfoList.Clear();
         shopInfoList.Clear();
-
+        constValueInfoList.Clear();
     }
 
     void LoadJsonData()
@@ -48,6 +50,7 @@ public class CHMJson
         actionList.Add(LoadStageGoldInfo());
         actionList.Add(LoadStageMonsterInfo());
         actionList.Add(LoadShopInfo());
+        actionList.Add(LoadConstValueInfo());
 
         loadingFileCount = actionList.Count;
     }
@@ -142,6 +145,26 @@ public class CHMJson
         return callback;
     }
 
+    Action<TextAsset> LoadConstValueInfo()
+    {
+        Action<TextAsset> callback;
+
+        constValueInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.ConstValue, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"constValueInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.constValueInfoArr)
+            {
+                constValueInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
     public string TryGetString(int _stringID)
     {
         if (stringInfoDic.TryGetValue(_stringID, out string result))
@@ -172,5 +195,17 @@ public class CHMJson
             return null;
 
         return monsterInfo;
+    }
+
+    public float GetConstValue(Defines.EConstValue eConst)
+    {
+        if (constValueInfoList == null)
+            return -1f;
+
+        var find = constValueInfoList.Find(_ => _.eConst == eConst);
+        if (find == null)
+            return -1f;
+
+        return find.value;
     }
 }
