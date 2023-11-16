@@ -18,7 +18,7 @@ public class DefenseScene : SceneBase
 
         CHMData.Instance.SaveData("Defense");
 
-        CHMMain.UI.ShowUI(Defines.EUI.UICount, new UICountArg
+        CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg
         {
             spawner = spawner
         });

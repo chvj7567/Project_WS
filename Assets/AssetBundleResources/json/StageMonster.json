@@ -1,8 +1,9 @@
 [
   {
     "stage": 1,
-    "monster": 1,
+    "monsterUnit": 1,
     "monsterHP": 10,
-	"monsterSpeed": 1
+	"monsterSpeed": 1,
+	"monsterCount": 10
   }
 ]

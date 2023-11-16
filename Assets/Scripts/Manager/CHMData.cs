@@ -57,7 +57,7 @@ public class CHMData : CHSingleton<CHMData>
             var data = File.ReadAllText(path);
 
             // 데이터가 없을 경우 디폴트 데이터 저장
-            if (data.Contains($"{_name.ToLower()}List") == false || data.Contains($"\"{_name.ToLower()}List\":[]"))
+            if (data.Contains($"{_name.ToLower()}List") == false || data.Contains($"\"{_name.ToLower()}List\": []"))
             {
                 return await LoadDefaultData<Loader>(_name);
             }

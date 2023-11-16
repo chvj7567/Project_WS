@@ -23,9 +23,10 @@ public class Infomation
     public class StageMonsterInfo
     {
         public int stage = -1;
-        public Defines.EUnit monster = Defines.EUnit.None;
+        public Defines.EUnit monsterUnit = Defines.EUnit.None;
         public int monsterHP = -1;
         public float monsterSpeed = -1f;
+        public int monsterCount = -1;
     }
 
     [Serializable]

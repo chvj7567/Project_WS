@@ -36,8 +36,12 @@ public class CHSpawner : MonoBehaviour
             {
                 var curStage = PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString());
                 var curStageMonsterInfo = CHMMain.Json.GetMonsterInfo(curStage);
+                if (curStageMonsterInfo == null)
+                    return;
 
-                CHMMain.Unit.SetUnit(obj, curStageMonsterInfo.monster);
+                maxSpawnCount = curStageMonsterInfo.monsterCount;
+
+                CHMMain.Unit.SetUnit(obj, curStageMonsterInfo.monsterUnit);
                 CHMMain.Unit.SetTargetMask(obj, Defines.ELayer.None);
                 obj.transform.position = createPosition.position;
                 obj.layer = (int)Defines.ELayer.Red;
