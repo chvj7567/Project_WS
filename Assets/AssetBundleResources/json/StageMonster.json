@@ -4,6 +4,13 @@
     "monsterUnit": 1,
     "monsterHP": -90,
 	"monsterSpeed": 1,
-	"monsterCount": 10
+	"monsterCount": 5
+  },
+  {
+    "stage": 2,
+    "monsterUnit": 3,
+    "monsterHP": -90,
+	"monsterSpeed": 1,
+	"monsterCount": 5
   }
 ]

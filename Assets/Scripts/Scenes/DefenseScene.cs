@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 
 public class DefenseScene : SceneBase
 {
+    [SerializeField] List<GameObject> balls = new List<GameObject>();
     [SerializeField] Button infoBtn;
     [SerializeField] CHTMPro goldText;
     [SerializeField] CHTMPro lifeText;
@@ -13,6 +15,8 @@ public class DefenseScene : SceneBase
     [SerializeField] int life;
     [SerializeField] CHSpawner spawner;
     [SerializeField] int killCount;
+
+    public Action<int> onStage;
 
     bool gameEnd = false;
     Data.Player playerData;
@@ -23,30 +27,6 @@ public class DefenseScene : SceneBase
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
         CHMData.Instance.SaveData("Defense");
-
-        CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg
-        {
-            spawner = spawner
-        });
-
-        infoBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            CHMMain.UI.ShowUI(Defines.EUI.UIInfo, new UIInfoArg());
-        });
-
-        playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
-
-        // 스테이지 1로 가정
-        PlayerPrefs.SetInt(Defines.EPlayerPrefs.Stage.ToString(), 1);
-
-        if (playerData != null)
-        {
-            var stageData = CHMMain.Json.GetStageInfo(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
-            playerData.gold = stageData.playerGold;
-        }
-
-        maxLife = life = (int)CHMMain.Json.GetConstValue(Defines.EConstValue.StageLife);
-        lifeText.SetText(maxLife);
 
         spawner.arrived += () =>
         {
@@ -71,6 +51,25 @@ public class DefenseScene : SceneBase
         {
             GameEnd();
         };
+
+        onStage += (stage) =>
+        {
+            SetStage(stage);
+        };
+
+        CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg
+        {
+            stage = 1,
+            spawner = spawner,
+            onStage = onStage
+        });
+
+        infoBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIInfo, new UIInfoArg());
+        });
+
+        playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
     }
 
     void Update()
@@ -111,6 +110,23 @@ public class DefenseScene : SceneBase
         }
     }
 
+    void SetStage(int stage)
+    {
+        for(int i = 0; i < balls.Count; ++i)
+        {
+            balls[i].SetActive(false);
+        }
+
+        if (playerData != null)
+        {
+            var stageData = CHMMain.Json.GetStageInfo(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
+            playerData.gold = stageData.playerGold;
+        }
+
+        maxLife = life = (int)CHMMain.Json.GetConstValue(Defines.EConstValue.StageLife);
+        lifeText.SetText(maxLife);
+    }
+
     void GameEnd()
     {
         if (gameEnd)
@@ -128,19 +144,27 @@ public class DefenseScene : SceneBase
             }
         }
 
+        var arg = new UIAlarmArg();
+        arg.closeTime = 10f;
+        arg.close += () =>
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg
+            {
+                stage = 2,
+                spawner = spawner,
+                onStage = onStage
+            });
+        };
+
         if (clear)
         {
-            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-            {
-                text = "Game Clear"
-            });
+            arg.text = "Game Clear";
+            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, arg);
         }
         else
         {
-            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-            {
-                text = "Game Over"
-            });
+            arg.text = "Game Over";
+            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, arg);
         }
     }
 }
