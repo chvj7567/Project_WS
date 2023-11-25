@@ -21,6 +21,8 @@ public class DefenseScene : SceneBase
     bool gameEnd = false;
     Data.Player playerData;
 
+    int curStage = 1;
+
     private async void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
@@ -54,12 +56,16 @@ public class DefenseScene : SceneBase
 
         onStage += (stage) =>
         {
+            infoBtn.gameObject.SetActive(true);
+            goldText.gameObject.SetActive(true);
+            lifeText.gameObject.SetActive(true);
+
             SetStage(stage);
         };
 
         CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg
         {
-            stage = 1,
+            stage = curStage,
             spawner = spawner,
             onStage = onStage
         });
@@ -70,6 +76,10 @@ public class DefenseScene : SceneBase
         });
 
         playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
+
+        infoBtn.gameObject.SetActive(false);
+        goldText.gameObject.SetActive(false);
+        lifeText.gameObject.SetActive(false);
     }
 
     void Update()
@@ -148,9 +158,22 @@ public class DefenseScene : SceneBase
         arg.closeTime = 10f;
         arg.close += () =>
         {
+            infoBtn.gameObject.SetActive(false);
+            goldText.gameObject.SetActive(false);
+            lifeText.gameObject.SetActive(false);
+
+            spawner.arrivedCount = 0;
+            spawner.diedCount = 0;
+
+            gameEnd = false;
+
+            var stageInfo = CHMMain.Json.GetStageInfo(curStage + 1);
+            if (stageInfo != null)
+                ++curStage;
+
             CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg
             {
-                stage = 2,
+                stage = curStage,
                 spawner = spawner,
                 onStage = onStage
             });

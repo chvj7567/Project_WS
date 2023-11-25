@@ -27,14 +27,7 @@ public class UIStart : UIBase
 
     private void Start()
     {
-        if (arg.stage > 0)
-        {
-            PlayerPrefs.SetInt(Defines.EPlayerPrefs.Stage.ToString(), arg.stage);
-        }
-        else
-        {
-            PlayerPrefs.SetInt(Defines.EPlayerPrefs.Stage.ToString(), 1);
-        }
+        PlayerPrefs.SetInt(Defines.EPlayerPrefs.Stage.ToString(), arg.stage);
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
