@@ -77,9 +77,7 @@ public class DefenseScene : SceneBase
 
         playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
 
-        infoBtn.gameObject.SetActive(false);
-        goldText.gameObject.SetActive(false);
-        lifeText.gameObject.SetActive(false);
+        GameReset();
     }
 
     void Update()
@@ -120,6 +118,18 @@ public class DefenseScene : SceneBase
         }
     }
 
+    void GameReset()
+    {
+        infoBtn.gameObject.SetActive(false);
+        goldText.gameObject.SetActive(false);
+        lifeText.gameObject.SetActive(false);
+
+        spawner.arrivedCount = 0;
+        spawner.diedCount = 0;
+
+        gameEnd = false;
+    }
+
     void SetStage(int stage)
     {
         for(int i = 0; i < balls.Count; ++i)
@@ -158,14 +168,7 @@ public class DefenseScene : SceneBase
         arg.closeTime = 10f;
         arg.close += () =>
         {
-            infoBtn.gameObject.SetActive(false);
-            goldText.gameObject.SetActive(false);
-            lifeText.gameObject.SetActive(false);
-
-            spawner.arrivedCount = 0;
-            spawner.diedCount = 0;
-
-            gameEnd = false;
+            GameReset();
 
             var stageInfo = CHMMain.Json.GetStageInfo(curStage + 1);
             if (stageInfo != null)
