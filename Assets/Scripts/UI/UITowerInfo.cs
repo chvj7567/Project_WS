@@ -1,28 +1,26 @@
-using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIInfoArg : CHUIArg
+public class UITowerInfoArg : CHUIArg
 {
     public float closeTime = .5f;
     public int stringID;
 }
 
-public class UIInfo : UIBase
+public class UITowerInfo : UIBase
 {
-    UIInfoArg arg;
+    UITowerInfoArg arg;
 
-    [SerializeField] InfoScrollView scrollView;
+    [SerializeField] TowerInfoScrollView scrollView;
     [SerializeField] List<Sprite> spriteList = new List<Sprite>();
     [SerializeField, ReadOnly] Dictionary<Defines.ESkill, Defines.EUnit> skillUnitDic = new Dictionary<Defines.ESkill, Defines.EUnit>();
 
     public override void InitUI(CHUIArg _uiArg)
     {
-        arg = _uiArg as UIInfoArg;
+        arg = _uiArg as UITowerInfoArg;
     }
 
     private async void Start()

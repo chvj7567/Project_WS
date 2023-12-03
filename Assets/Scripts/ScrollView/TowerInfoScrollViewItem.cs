@@ -6,7 +6,7 @@ using UniRx;
 using System.Linq;
 using System;
 
-public class InfoScrollViewItem : MonoBehaviour
+public class TowerInfoScrollViewItem : MonoBehaviour
 {
     [SerializeField] Image unitImg;
     [SerializeField] CHTMPro damageText;
@@ -57,6 +57,8 @@ public class InfoScrollViewItem : MonoBehaviour
                 plusDamageText.SetText(unitData.plusDamage);
                 plusDamageText.gameObject.SetActive(true);
             }
+
+            CHMData.Instance.SaveData("Defense");
         });
 
         coolTimeDownBtn.OnClickAsObservable().Subscribe(_ =>
@@ -69,6 +71,8 @@ public class InfoScrollViewItem : MonoBehaviour
                 minusCoolTimeText.SetText(unitData.minusCoolTime);
                 minusCoolTimeText.gameObject.SetActive(true);
             }
+
+            CHMData.Instance.SaveData("Defense");
         });
     }
 }

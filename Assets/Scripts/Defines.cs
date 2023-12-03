@@ -65,7 +65,7 @@ public class Defines
         UICanvas,
         UIAlarm,
         UITowerMenu,
-        UIInfo,
+        UITowerInfo,
         UIStart,
         UICount,
 

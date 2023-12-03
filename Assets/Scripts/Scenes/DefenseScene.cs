@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class DefenseScene : SceneBase
 {
     [SerializeField] List<GameObject> balls = new List<GameObject>();
-    [SerializeField] Button infoBtn;
     [SerializeField] CHTMPro goldText;
     [SerializeField] CHTMPro lifeText;
     [SerializeField] int maxLife;
@@ -56,7 +55,6 @@ public class DefenseScene : SceneBase
 
         onStage += (stage) =>
         {
-            infoBtn.gameObject.SetActive(true);
             goldText.gameObject.SetActive(true);
             lifeText.gameObject.SetActive(true);
 
@@ -68,11 +66,6 @@ public class DefenseScene : SceneBase
             stage = curStage,
             spawner = spawner,
             onStage = onStage
-        });
-
-        infoBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            CHMMain.UI.ShowUI(Defines.EUI.UIInfo, new UIInfoArg());
         });
 
         playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
@@ -120,7 +113,6 @@ public class DefenseScene : SceneBase
 
     void GameReset()
     {
-        infoBtn.gameObject.SetActive(false);
         goldText.gameObject.SetActive(false);
         lifeText.gameObject.SetActive(false);
 

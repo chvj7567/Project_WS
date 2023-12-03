@@ -41,5 +41,10 @@ public class UIStart : UIBase
 
             CHMMain.UI.CloseUI(gameObject);
         });
+
+        optionBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UITowerInfo, new UITowerInfoArg());
+        });
     }
 }

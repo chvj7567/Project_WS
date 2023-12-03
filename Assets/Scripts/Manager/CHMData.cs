@@ -96,6 +96,9 @@ public class CHMData : CHSingleton<CHMData>
         Data.ExtractData<Data.Shop> shopData = new Data.ExtractData<Data.Shop>();
         saveData.shopList = shopData.MakeList(shopDataDic);
 
+        Data.ExtractData<Data.Unit> unitData = new Data.ExtractData<Data.Unit>();
+        saveData.unitList = unitData.MakeList(unitDataDic);
+
 #if UNITY_EDITOR == false
         json = JsonUtility.ToJson(saveData);
 #else
@@ -202,11 +205,27 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         return data;
     }
 
+    Data.Unit CreateUnitData(Defines.EUnit key)
+    {
+        Debug.Log($"Create Unit {key}");
+
+        Data.Unit data = new Data.Unit
+        {
+            eUnit = key,
+            plusDamage = 0,
+            minusCoolTime = 0f
+        };
+
+        unitDataDic.Add(key.ToString(), data);
+
+        return data;
+    }
+
     public Data.Unit GetUnitData(Defines.EUnit key)
     {
         if (unitDataDic.TryGetValue(key.ToString(), out var data) == false)
         {
-            data = null;
+            data = CreateUnitData(key);
         }
 
         return data;
