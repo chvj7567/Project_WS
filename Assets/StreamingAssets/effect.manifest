@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 755264068
+CRC: 189279035
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a035e91610ce7d128dc6d4fa358183b6
+    Hash: 6007b39387b3a771a733d079dae450e9
   TypeTreeHash:
     serializedVersion: 2
     Hash: e43a95d118a2f95781b4a913793aedc8
@@ -43,6 +43,7 @@ Assets:
 - Assets/AssetBundleResources/effect/FX_Electricity_Hit.prefab
 - Assets/AssetBundleResources/effect/FX_Poison.prefab
 - Assets/AssetBundleResources/effect/FX_Tornado.prefab
+- Assets/AssetBundleResources/effect/FX_IceArrow_Hit.prefab
 - Assets/AssetBundleResources/effect/FX_Arrow_impact2.prefab
 - Assets/AssetBundleResources/effect/SlashHit.prefab
 - Assets/AssetBundleResources/effect/FX_Arrow_impact_sub.prefab

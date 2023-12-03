@@ -68,6 +68,8 @@ public class Defines
         UITowerInfo,
         UIStart,
         UICount,
+        UIGameSelect,
+        UIWarSimulatorSelect,
 
         Max
     }

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3656027133
+CRC: 1004369538
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 589d9c13c26ac3413275e2b96564dc7c
+    Hash: 61bc7acd248ef1eb29691ddf87b76600
   TypeTreeHash:
     serializedVersion: 2
     Hash: 71e478ae8f887e9ffad52cf4c9fb6e39
@@ -17,13 +17,23 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: SkillData/EffectData
 Assets:
+- Assets/AssetBundleResources/scriptable/skill/Arrow10.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow4.asset
 - Assets/AssetBundleResources/scriptable/skill/Tornado.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow2.asset
 - Assets/AssetBundleResources/scriptable/skill/Explosion.asset
 - Assets/AssetBundleResources/scriptable/skill/Devil.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow9.asset
 - Assets/AssetBundleResources/scriptable/skill/IceArrow2.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow8.asset
 - Assets/AssetBundleResources/scriptable/skill/Meteor.asset
 - Assets/AssetBundleResources/scriptable/skill/Ax.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow1.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow3.asset
 - Assets/AssetBundleResources/scriptable/skill/IceArrow.asset
 - Assets/AssetBundleResources/scriptable/skill/Heal.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow6.asset
 - Assets/AssetBundleResources/scriptable/skill/Slash.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow5.asset
+- Assets/AssetBundleResources/scriptable/skill/Arrow7.asset
 Dependencies: []

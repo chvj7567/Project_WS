@@ -1,10 +1,7 @@
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using System;
-using UnityEditor.SceneManagement;
-using System.Threading;
 
 public class UIStartArg : CHUIArg
 {
@@ -20,6 +17,8 @@ public class UIStart : UIBase
     [SerializeField] Button startBtn;
     [SerializeField] Button optionBtn;
 
+    Action onClose;
+
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UIStartArg;
@@ -31,20 +30,23 @@ public class UIStart : UIBase
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (arg.onStage != null)
-                arg.onStage.Invoke(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
-
-            CHMMain.UI.ShowUI(Defines.EUI.UICount, new UICountArg
+            CHMMain.UI.ShowUI(Defines.EUI.UIGameSelect, new UIGameSelectArg
             {
-                spawner = arg.spawner
+                stage = arg.stage,
+                spawner = arg.spawner,
+                onStage = arg.onStage,
+                onClose = onClose
             });
-
-            CHMMain.UI.CloseUI(gameObject);
         });
 
         optionBtn.OnClickAsObservable().Subscribe(_ =>
         {
             CHMMain.UI.ShowUI(Defines.EUI.UITowerInfo, new UITowerInfoArg());
         });
+
+        onClose += () =>
+        {
+            CHMMain.UI.CloseUI(gameObject);
+        };
     }
 }

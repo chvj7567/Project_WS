@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DefenseScene.unity
     guid: 7a676e0148d8a3944bcdc9fbe8f0ef35
+  - enabled: 1
+    path: Assets/Scenes/WarSimulatorScene.unity
+    guid: 09600c8f57302884c933f94b3f4a1beb
   m_configObjects: {}

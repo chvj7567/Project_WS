@@ -5,7 +5,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DefenseScene : SceneBase
+public class DefenseScene : BaseScene
 {
     [SerializeField] List<GameObject> balls = new List<GameObject>();
     [SerializeField] CHTMPro goldText;
@@ -58,7 +58,7 @@ public class DefenseScene : SceneBase
             goldText.gameObject.SetActive(true);
             lifeText.gameObject.SetActive(true);
 
-            SetStage(stage);
+            InitStage(stage);
         };
 
         CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg
@@ -112,6 +112,7 @@ public class DefenseScene : SceneBase
     }
 
     void GameReset()
+    // 게임 정보 리셋
     {
         goldText.gameObject.SetActive(false);
         lifeText.gameObject.SetActive(false);
@@ -122,7 +123,8 @@ public class DefenseScene : SceneBase
         gameEnd = false;
     }
 
-    void SetStage(int stage)
+    void InitStage(int stage)
+    // 스테이지 초기화
     {
         for(int i = 0; i < balls.Count; ++i)
         {
@@ -131,7 +133,7 @@ public class DefenseScene : SceneBase
 
         if (playerData != null)
         {
-            var stageData = CHMMain.Json.GetStageInfo(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
+            var stageData = CHMMain.Json.GetStageInfo(stage);
             playerData.gold = stageData.playerGold;
         }
 
@@ -140,6 +142,7 @@ public class DefenseScene : SceneBase
     }
 
     void GameEnd()
+    // 게임 종료 시 호출
     {
         if (gameEnd)
             return;

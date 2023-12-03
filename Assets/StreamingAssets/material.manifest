@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3994963607
+CRC: 1131732857
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c4c26a5f80f5c1056a38595685e646eb
+    Hash: 2cc51b82dd9bcfccac8437db7803f05c
   TypeTreeHash:
     serializedVersion: 2
     Hash: f9f3d136959ac0e7043e721e899342fb
@@ -40,7 +40,6 @@ Assets:
 - Assets/AssetPieces/Material/M_ef_vfx.mat
 - Assets/AssetPieces/Material/MagicCraftLab.mat
 - Assets/AssetPieces/Material/M_ef_vfx_arrow.mat
-- Assets/AssetPieces/Material/Monster1.mat
 - Assets/AssetPieces/Material/Stage.mat
 - Assets/AssetPieces/Material/M_ef_vfx 2.mat
 - Assets/AssetPieces/Material/Brown.mat
@@ -54,6 +53,7 @@ Assets:
 - Assets/AssetPieces/Material/M_ef_ax.mat
 - Assets/AssetPieces/Material/M_ef_vfx_tornado01.mat
 - Assets/AssetPieces/Material/Red.mat
+- Assets/AssetPieces/Material/Monster1.mat
 - Assets/AssetPieces/Material/M_ef_ice.mat
 - Assets/AssetPieces/Material/Grey_Asphalt.mat
 Dependencies:

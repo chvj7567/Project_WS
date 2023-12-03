@@ -1,0 +1,31 @@
+ManifestFileVersion: 0
+CRC: 727732737
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 542307fd16725c4baa73df4d7bf92039
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 335b637a351f4e62462fc87850020f1f
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPieces/Model/TDTK_Platform_Cube.fbx
+Dependencies: []

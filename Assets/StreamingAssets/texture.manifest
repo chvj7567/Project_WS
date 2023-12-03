@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 434195214
+CRC: 3046100352
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4e2f2127fc45d258d84b26a42bca85ed
+    Hash: 19adbb02bb7ee35da45d79c2aad4eb69
   TypeTreeHash:
     serializedVersion: 2
     Hash: c21d61fe394c58399df3c6fb5c7c99b3
@@ -21,26 +21,34 @@ Assets:
 - Assets/AssetPieces/Texture/Tex_ef_test.tga
 - Assets/AssetPieces/Texture/Red.png
 - Assets/AssetPieces/Texture/Greeble_Materials_Windows_Normal.png
-- Assets/AssetPieces/Texture/Tex_ef_particle_hexagon2.tga
+- Assets/AssetPieces/Texture/Irregular (49).png
 - Assets/AssetPieces/Texture/hpBar.png
 - Assets/AssetPieces/Texture/Tex_ef_particle_03.tga
-- Assets/AssetPieces/Texture/FreeMS.png
+- Assets/AssetPieces/Texture/Tex_ef_particle_hexagon2.tga
 - Assets/AssetPieces/Texture/FreeEmission.png
 - Assets/AssetPieces/Texture/circle.png
 - Assets/AssetPieces/Texture/Greeble_Material_1_Metalilc.png
 - Assets/AssetPieces/Texture/Tex_ef_tornado_01.tga
+- Assets/AssetPieces/Texture/FreeMS.png
 - Assets/AssetPieces/Texture/Cold Night__Cam_4_Up+Y.png
 - Assets/AssetPieces/Texture/Greeble_Materials_Windows_Height.png
-- Assets/AssetPieces/Texture/slash_test.tga
+- Assets/AssetPieces/Texture/Frame_Thin.psd
 - Assets/AssetPieces/Texture/Greeble_Material_1_Occlusion.png
+- Assets/AssetPieces/Texture/HUDLine_Slope.psd
+- Assets/AssetPieces/Texture/slash_test.tga
+- Assets/AssetPieces/Texture/DollarSign_64x64.png
+- Assets/AssetPieces/Texture/IndicatorArrow.png
 - Assets/AssetPieces/Texture/Tex_ef_arrow.tga
 - Assets/AssetPieces/Texture/Greeble_Materials_Windows_Diffuse.png
+- Assets/AssetPieces/Texture/FF_False.png
 - Assets/AssetPieces/Texture/Button Fram 256px.png
 - Assets/AssetPieces/Texture/Greeble_Materials_Windows_Emissive.png
-- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Metal.tga
+- Assets/AssetPieces/Texture/flag.png
 - Assets/AssetPieces/Texture/Cold Night__Cam_2_Left+X.png
+- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Metal.tga
 - Assets/AssetPieces/Texture/Yellow.png
 - Assets/AssetPieces/Texture/Cold Night__Cam_5_Down-Y.png
+- Assets/AssetPieces/Texture/HUDLine_Slope 1.psd
 - Assets/AssetPieces/Texture/White.png
 - Assets/AssetPieces/Texture/Cold Night__Cam_0_Front+Z.png
 - Assets/AssetPieces/Texture/FreeNormal.png
@@ -54,14 +62,17 @@ Assets:
 - Assets/AssetPieces/Texture/Greeble_Material_1_Normal.png
 - Assets/AssetPieces/Texture/NaturePackLite_Texture_01.png
 - Assets/AssetPieces/Texture/Greeble_material_2_Height.png
-- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Occlusion.png
+- Assets/AssetPieces/Texture/Heart.png
 - Assets/AssetPieces/Texture/Handle Outline 256px.png
+- Assets/AssetPieces/Texture/Bar_RoundEdge.psd
 - Assets/AssetPieces/Texture/Tex_ef_ax.tga
 - Assets/AssetPieces/Texture/Button Frame Press 256px.png
 - Assets/AssetPieces/Texture/Cold Night__Cam_3_Right-X.png
+- Assets/AssetPieces/Texture/Irregular (37).png
 - Assets/AssetPieces/Texture/Greeble_material_2_Metal.png
 - Assets/AssetPieces/Texture/ring.png
 - Assets/AssetPieces/Texture/Tex_ef_particle_hexagon.tga
+- Assets/AssetPieces/Texture/Gear.png
 - Assets/AssetPieces/Texture/Button Highlighted 256px.png
 - Assets/AssetPieces/Texture/Greeble_material_2_Diffuse.png
 - Assets/AssetPieces/Texture/tex_ef_glow.png
@@ -70,6 +81,8 @@ Assets:
 - Assets/AssetPieces/Texture/Green.png
 - Assets/AssetPieces/Texture/Greeble_material_2_Emissive.png
 - Assets/AssetPieces/Texture/Greeble_Material_1_Height.png
+- Assets/AssetPieces/Texture/FF_True.png
+- Assets/AssetPieces/Texture/Greeble_Materials_Windows_Occlusion.png
 - Assets/AssetPieces/Texture/Button Frame Hover 256px.png
 - Assets/AssetPieces/Texture/Greeble_material_2_Normal.png
 - Assets/AssetPieces/Texture/FreeAO.png

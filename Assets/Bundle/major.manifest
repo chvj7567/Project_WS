@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3129310571
+CRC: 1286839204
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: da3b7a81c56a4810c1fc96cbd873aea3
+    Hash: fe7ef4495c1075db866f6a17d5a15837
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6f53733802994cc5529b06ffedb65170
+    Hash: c4b08f8a0da94efe064107d0a7498087
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,8 +23,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
@@ -101,22 +99,10 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
   ClassName: UnityEngine.TextCore.GlyphRect
 - AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.AnimationTriggers
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.ColorBlock
-- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.Navigation
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.SpriteState
 Assets:
-- Assets/AssetBundleResources/major/Button.prefab
 - Assets/AssetBundleResources/major/DamageText.prefab
 - Assets/AssetBundleResources/major/GaugeBar.prefab
 - Assets/AssetBundleResources/major/GlobalVolume.prefab
-- Assets/AssetBundleResources/major/Button2.prefab
 Dependencies:
 - C:/Users/chvj7567/Desktop/UnityProject/TempWarSimulator/Assets/Bundle/texture

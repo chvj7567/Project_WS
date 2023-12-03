@@ -101,12 +101,12 @@ public class CHMUnit
         return originDamageText;
     }
 
-    public UnitData GetUnitData(Defines.EUnit _eUnit)
+    public UnitData GetUnitData(Defines.EUnit eUnit)
     {
-        if (dicUnitData.ContainsKey(_eUnit) == false)
+        if (dicUnitData.ContainsKey(eUnit) == false)
             return null;
 
-        return dicUnitData[_eUnit];
+        return dicUnitData[eUnit];
     }
 
     public List<UnitData> GetUnitDataAll()
@@ -114,23 +114,29 @@ public class CHMUnit
         return dicUnitData.Values.ToList();
     }
 
-    public void CreateUnit(Defines.EUnit _eUnit, Defines.ELayer _eTeamLayer, Defines.ELayer _eTargetLayer, Vector3 _position, List<CHTargetTracker> _liTargetTracker, List<LayerMask> _liTargetMask, bool onHpBar = true, bool onMpBar = false, bool onCoolTimeBar = false)
+    public void CreateRandomUnit(Defines.ELayer eTeamLayer, Defines.ELayer eTargetLayer, Vector3 position, List<CHTargetTracker> targetTrackerList = null, List<LayerMask> targetMaskList = null, bool onHpBar = true, bool onMpBar = false, bool onCoolTimeBar = false)
+    {
+        var randomUnit = (Defines.EUnit)Random.Range((int)Defines.EUnit.White, (int)Defines.EUnit.Monster1);
+        CreateUnit(randomUnit, eTeamLayer, eTargetLayer, position, targetTrackerList, targetMaskList, onHpBar, onMpBar, onCoolTimeBar);
+    }
+
+    public void CreateUnit(Defines.EUnit eUnit, Defines.ELayer eTeamLayer, Defines.ELayer eTargetLayer, Vector3 position, List<CHTargetTracker> targetTrackerList = null, List<LayerMask> targetMaskList = null, bool onHpBar = true, bool onMpBar = false, bool onCoolTimeBar = false)
     {
         CHMMain.Resource.InstantiateBall((ball) =>
         {
             unitList.Add(ball);
-            if (_eTargetLayer == Defines.ELayer.Red)
+            if (eTargetLayer == Defines.ELayer.Red)
             {
-                ball.name = $"{_eUnit}Unit(My) {redIndex++}";
+                ball.name = $"{eUnit}Unit(My) {redIndex++}";
             }
             else
             {
-                ball.name = $"{_eUnit}Unit(Enemy) {blueIndex++}";
+                ball.name = $"{eUnit}Unit(Enemy) {blueIndex++}";
             }
 
-            SetUnit(ball, _eUnit);
-            SetLayer(ball, _eTeamLayer);
-            SetTargetMask(ball, _eTargetLayer);
+            SetUnit(ball, eUnit);
+            SetLayer(ball, eTeamLayer);
+            SetTargetMask(ball, eTargetLayer);
 
             var unitBase = ball.GetComponent<CHUnitBase>();
             if (unitBase != null)
@@ -140,64 +146,74 @@ public class CHMUnit
                 unitBase.onCoolTimeBar = onCoolTimeBar;
             }
 
-            ball.transform.position = _position;
+            ball.transform.position = position;
 
             var targetTracker = ball.GetComponent<CHTargetTracker>();
             if (targetTracker != null)
             {
-                if (_liTargetTracker != null)
-                    _liTargetTracker.Add(targetTracker);
-                if (_liTargetMask != null)
-                    _liTargetMask.Add(targetTracker.targetMask);
+                if (targetTrackerList != null)
+                    targetTrackerList.Add(targetTracker);
+                if (targetMaskList != null)
+                    targetMaskList.Add(targetTracker.targetMask);
 
                 // 유닛 생성 시 바로 공격하지 않도록 비활성화
-                //targetTracker.targetMask = 0;
+                targetTracker.targetMask = 0;
             }
         });
     }
 
-    public void SetUnit(GameObject _objUnit, Defines.EUnit _eUnit)
+    public void SetUnit(GameObject unit, Defines.EUnit eUnit)
     {
-        if (_objUnit == null)
+        if (unit == null)
             return;
 
-        var unitBase = _objUnit.GetComponent<CHUnitBase>();
+        var unitBase = unit.GetComponent<CHUnitBase>();
         if (unitBase != null)
         {
-            unitBase.unit = _eUnit;
-            SetColor(_objUnit, _eUnit);
+            unitBase.unit = eUnit;
+            SetColor(unit, eUnit);
         }
     }
 
-    void SetColor(GameObject _objUnit, Defines.EUnit _eUnit)
+    void SetColor(GameObject unit, Defines.EUnit eUnit)
     {
-        if (_objUnit == null)
+        if (unit == null)
             return;
 
-        var index = (int)_eUnit;
-        var meshRenderer = _objUnit.GetComponent<MeshRenderer>();
+        var index = (int)eUnit;
+        var meshRenderer = unit.GetComponent<MeshRenderer>();
         if (meshRenderer != null && index < liMaterial.Count)
         {
             meshRenderer.material = liMaterial[index];
         }
     }
 
-    public void SetLayer(GameObject _objUnit, Defines.ELayer _eLayer)
+    public void SetLayer(GameObject unit, Defines.ELayer eLayer)
     {
-        if (_objUnit == null) return;
+        if (unit == null)
+            return;
 
-        _objUnit.layer = (int)_eLayer;
+        unit.layer = (int)eLayer;
     }
 
-    public void SetTargetMask(GameObject _objUnit, Defines.ELayer _eLayer)
+    public void SetTargetMask(GameObject unit, Defines.ELayer eLayer)
     {
-        if (_objUnit == null) return;
+        if (unit == null)
+            return;
 
-        var targetTracker = _objUnit.GetComponent<CHTargetTracker>();
+        var targetTracker = unit.GetComponent<CHTargetTracker>();
 
         if (targetTracker != null)
         {
-            targetTracker.targetMask = 1 << (int)_eLayer;
+            targetTracker.targetMask = 1 << (int)eLayer;
         }
+    }
+
+    public void SetTargetMask(CHTargetTracker targetTracker, Defines.ELayer eLayer)
+    {
+        if (targetTracker == null)
+            return;
+
+        targetTracker.targetMask = 1 << (int)eLayer;
     }
 }

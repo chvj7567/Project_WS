@@ -38,5 +38,21 @@
   {
     "stringID": "10",
     "value": "+{0}"
+  },
+  {
+    "stringID": "11",
+    "value": "적팀:{0}"
+  },
+  {
+    "stringID": "12",
+    "value": "우리팀:{0}"
+  },
+  {
+    "stringID": "13",
+    "value": "게임 선택"
+  },
+  {
+    "stringID": "14",
+    "value": "랜덤 유닛 전투"
   }
 ]

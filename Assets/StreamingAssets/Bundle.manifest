@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2675307328
+CRC: 416178680
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -44,7 +44,8 @@ AssetBundleManifest:
       Dependencies: {}
     Info_11:
       Name: ui
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: texture
     Info_12:
       Name: scriptable/item
       Dependencies: {}
@@ -52,3 +53,9 @@ AssetBundleManifest:
       Name: unit
       Dependencies:
         Dependency_0: material
+    Info_14:
+      Name: model
+      Dependencies: {}
+    Info_15:
+      Name: data
+      Dependencies: {}
