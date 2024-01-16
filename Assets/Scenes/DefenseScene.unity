@@ -2659,7 +2659,6 @@ MonoBehaviour:
   - {fileID: 489297783}
   - {fileID: 1928614783}
   - {fileID: 243466458}
-  infoBtn: {fileID: 1431412359}
   goldText: {fileID: 1216351538}
   lifeText: {fileID: 66197960}
   maxLife: 0

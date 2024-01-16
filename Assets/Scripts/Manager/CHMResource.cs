@@ -41,7 +41,7 @@ public class CHMResource
 
     public void LoadOriginBall(Action<GameObject> _callback)
     {
-        LoadAsset<GameObject>($"unit", $"ball", _callback);
+        LoadAsset<GameObject>($"unit", $"Ball", _callback);
     }
 
     public void LoadOriginGaugeBar(Action<GameObject> _callback)

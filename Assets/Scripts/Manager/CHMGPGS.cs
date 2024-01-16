@@ -1,4 +1,3 @@
-/*#if UNITY_EDITOR == false
 using GooglePlayGames.BasicApi.Events;
 using GooglePlayGames.BasicApi.SavedGame;
 using GooglePlayGames.BasicApi;
@@ -8,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SocialPlatforms;
 
 public class CHMGPGS : CHSingleton<CHMGPGS>
 {
@@ -144,6 +144,20 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
         });
     }
 
+    internal void LoadUsers(IScore[] scores, Action<IUserProfile[]> onUserProfiles)
+    {
+        List<string> userIds = new List<string>();
+
+        foreach (IScore score in scores)
+        {
+            userIds.Add(score.userID);
+        }
+        
+        Social.LoadUsers(userIds.ToArray(), (users) =>
+        {
+            onUserProfiles.Invoke(users);
+        });
+    }
 
     public void IncrementEvent(string gpgsId, uint steps)
     {
@@ -166,4 +180,3 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
         });
     }
 }
-#endif*/

@@ -27,7 +27,19 @@ public class DefenseScene : BaseScene
         CHMMain.UI.CreateEventSystemObject();
         CHMMain.Resource.InstantiateMajor(Defines.EMajor.GlobalVolume);
 
-        CHMData.Instance.SaveData("Defense");
+        CHMIAP.Instance.Init();
+
+        CHMGPGS.Instance.Login(async (success, localUser) =>
+        {
+            if (success)
+            {
+                Debug.Log($"GPGS Login Success : {localUser.userName}/{localUser.id}");
+            }
+            else
+            {
+                Debug.Log($"GPGS Login Failed {success.ToString()}");
+            }
+        });
 
         spawner.arrived += () =>
         {

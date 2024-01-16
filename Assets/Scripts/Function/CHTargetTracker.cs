@@ -138,6 +138,7 @@ public class CHTargetTracker : MonoBehaviour
                             if (arrived != null)
                                 arrived.Invoke();
 
+                            // 마지막 목표 지점에 도착 후
                             CHMMain.Resource.Destroy(gameObject);
                         }
                     }
@@ -150,6 +151,7 @@ public class CHTargetTracker : MonoBehaviour
                     {
                         agent.stoppingDistance = 0f;
                         agent.SetDestination(destList[curDestinationIndex].position);
+                        LookAtPosition(destList[curDestinationIndex].position);
                     }
                     else
                     {

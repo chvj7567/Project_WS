@@ -415,4 +415,10 @@ public class Defines
         StageLife,
         Max
     }
+
+    public enum EPurchase
+    {
+        Success,
+        Failure,
+    }
 }
