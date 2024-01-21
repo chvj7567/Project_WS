@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class WarSimulatorScene : BaseScene
+public class SceneWarSimulator : SceneBase
 {
     [SerializeField] Button mainMenuBtn;
     [SerializeField] Button warStartBtn;

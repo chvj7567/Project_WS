@@ -5,7 +5,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DefenseScene : BaseScene
+public class SceneDefense : SceneBase
 {
     [SerializeField] List<GameObject> balls = new List<GameObject>();
     [SerializeField] CHTMPro goldText;

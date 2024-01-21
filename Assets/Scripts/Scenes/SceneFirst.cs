@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class First : MonoBehaviour
+public class SceneFirst : MonoBehaviour
 {
     [SerializeField] Button startBtn;
     [SerializeField] CHLoadingBarFromAssetBundle loadingScript;
