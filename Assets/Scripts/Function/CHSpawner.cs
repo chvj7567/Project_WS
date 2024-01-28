@@ -6,82 +6,57 @@ using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AI;
+using static Defines;
 
 public class CHSpawner : MonoBehaviour
 {
     [SerializeField] Transform createPosition;
     [SerializeField] List<Transform> destList = new List<Transform>();
-    [SerializeField] float spawnDelay = 1f;
     [SerializeField] Defines.EUnit unit;
     [SerializeField] bool onTargetTracker = true;
 
     [SerializeField, ReadOnly] int totSpawnCount = 0; // 총 스폰 카운트
-
     [SerializeField, ReadOnly] int oneTimeSpawnCount = 0; // 한 번 스폰할 때 스폰 카운트(maxSpawnCount 까지)
     [SerializeField, ReadOnly] int maxSpawnCount = 0; // 한 번 스폰할 때 지정한 스폰 카운트
 
     bool isSpawn;
     CancellationTokenSource cts;
 
-    public Action arrived;
-    public int arrivedCount = 0;
-    public Action died;
-    public int diedCount = 0;
-
     public Action end;
+
+    public GameObject Target { get; set; }
+
+    public float SpawnDelay { get; set; }
+
+    public void SetUnit(Defines.EUnit unit)
+    {
+        this.unit = unit;
+    }
+
+    public void SetDest(List<Transform> destList)
+    {
+        if (destList == null)
+            return;
+
+        this.destList = destList;
+    }
 
     public int GetMaxSpawnCount()
     {
         return maxSpawnCount;
     }
 
-    public void SetSpawnDelay(float _value)
-    {
-        spawnDelay = _value;
-    }
-
     private async Task SpawnLoopAsync()
     {
         while (!cts.Token.IsCancellationRequested)
         {
-            var obj = CHMMain.Resource.Instantiate(CHMMain.Unit.GetOriginBall());
+            GameObject obj = Target == null ? CHMMain.Resource.Instantiate(CHMMain.Unit.GetOriginBall()) : CHMMain.Resource.Instantiate(Target);
             if (obj != null)
             {
-                var curStage = PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString());
-                var curStageMonsterInfo = CHMMain.Json.GetMonsterInfo(curStage);
-                if (curStageMonsterInfo == null)
-                    return;
-
-                maxSpawnCount = curStageMonsterInfo.monsterCount;
-                unit = curStageMonsterInfo.monsterUnit;
-
                 CHMMain.Unit.SetUnit(obj, unit);
                 CHMMain.Unit.SetTargetMask(obj, Defines.ELayer.None);
                 obj.transform.position = createPosition.position;
                 obj.layer = (int)Defines.ELayer.Red;
-
-                var targetTracker = obj.GetComponent<CHTargetTracker>();
-                if (targetTracker != null)
-                {
-                    if (onTargetTracker == false)
-                    {
-                        Destroy(targetTracker);
-                    }
-                    else
-                    {
-                        targetTracker.destList = destList;
-                        targetTracker.SetSpeed(curStageMonsterInfo.monsterSpeed);
-                        targetTracker.arrived += () =>
-                        {
-                            ++arrivedCount;
-                            if (arrived != null)
-                                arrived.Invoke();
-
-                            if (arrivedCount + diedCount >= maxSpawnCount)
-                                end.Invoke();
-                        };
-                    }
-                }
 
                 var unitBase = obj.GetComponent<CHUnitBase>();
                 if (unitBase != null)
@@ -90,52 +65,44 @@ public class CHSpawner : MonoBehaviour
                     unitBase.onMpBar = false;
                     unitBase.onCoolTimeBar = false;
 
-                    unitBase.bonusHp += curStageMonsterInfo.monsterHP;
-
-                    unitBase.died += () =>
-                    {
-                        ++diedCount;
-                        if (died != null)
-                            died.Invoke();
-
-                        if (arrivedCount + diedCount >= maxSpawnCount)
-                            end.Invoke();
-                    };
+                    unitBase.Active();
                 }
 
-                obj.SetActive(true);
+                var targetTracker = obj.GetOrAddComponent<CHTargetMover>();
+                if (targetTracker != null)
+                {
+                    if (onTargetTracker == false)
+                    {
+                        Destroy(targetTracker);
+                    }
+                    else
+                    {
+                        targetTracker.SetDest(createPosition.position, destList);
+                        targetTracker.StartRun();
+                    }
+                }
+
                 ++totSpawnCount;
 
                 if (maxSpawnCount > 0)
                 {
-                    if (++oneTimeSpawnCount >= maxSpawnCount)
+                    ++oneTimeSpawnCount;
+                    if (oneTimeSpawnCount >= maxSpawnCount)
                     {
                         StopSpawn();
                     }
                 }
             }
 
-            await Task.Delay((int)(spawnDelay * 1000f), cts.Token);
+            await Task.Delay((int)(SpawnDelay * 1000f), cts.Token);
         }
     }
 
-    public void StartSpawn()
+    public void StartSpawn(int maxSpawnCount = 0)
     {
         if (!isSpawn)
         {
-            maxSpawnCount = 0;
-            isSpawn = true;
-            cts = new CancellationTokenSource();
-            cts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
-            _ = SpawnLoopAsync();
-        }
-    }
-
-    public void StartSpawn(int _maxSpawnCount)
-    {
-        if (!isSpawn)
-        {
-            maxSpawnCount = _maxSpawnCount;
+            this.maxSpawnCount = maxSpawnCount;
             isSpawn = true;
             cts = new CancellationTokenSource();
             cts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);

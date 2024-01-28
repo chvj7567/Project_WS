@@ -30,7 +30,7 @@ public class UIGameSelect : UIBase
 
         defenseBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (arg.onStage != null)
+            /*if (arg.onStage != null)
                 arg.onStage.Invoke(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
 
             CHMMain.UI.ShowUI(Defines.EUI.UICount, new UICountArg
@@ -39,7 +39,9 @@ public class UIGameSelect : UIBase
             });
 
             arg.onClose.Invoke();
-            CHMMain.UI.CloseUI(gameObject);
+            CHMMain.UI.CloseUI(gameObject);*/
+
+            SceneManager.LoadScene(3);
         });
 
         warSimulatorBtn.OnClickAsObservable().Subscribe(_ =>

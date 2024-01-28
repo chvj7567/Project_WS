@@ -173,6 +173,9 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Player GetPlayerData(string key)
     {
+        if (playerDataDic == null)
+            return null;
+
         if (playerDataDic.TryGetValue(key, out var data) == false)
         {
             data = null;

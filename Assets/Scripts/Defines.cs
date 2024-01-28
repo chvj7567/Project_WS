@@ -8,7 +8,7 @@ public class Defines
         None = -1,
 
         String,
-        StageGold,
+        Stage,
         StageMonster,
         Shop,
         ConstValue,
@@ -286,7 +286,7 @@ public class Defines
     [Flags]
     public enum EUnitState
     {
-        None = 0,
+        Normal = 0,
         IsDead = 1 << 0,
         IsAirborne = 1 << 1
     }

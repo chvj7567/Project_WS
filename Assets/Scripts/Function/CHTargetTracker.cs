@@ -9,90 +9,58 @@ using UnityEngine.AI;
 
 public class CHTargetTracker : MonoBehaviour
 {
-    // 기준이 될 축
-    public Defines.EStandardAxis standardAxis;
-    // 타겟이 될 레이어 마스크
-    public LayerMask targetMask;
-    // 무시할 레이어 마스크
-    public LayerMask ignoreMask;
-    // 타겟을 감지할 범위
-    public float range;
-    // 타겟을 감지 후 늘어나는 시야 배수
-    public float rangeMulti;
-    // 타겟을 감지할 시야각
-    [Range(0, 360)] public float viewAngle;
-    // 가야할 위치
-    public List<Transform> destList = new List<Transform>();
-    // 에디터 상에서 시야각 확인 여부
-    public bool viewEditor;
+    [Header("타겟 감지 설정")]
+    public Defines.EStandardAxis standardAxis; // 정면 기준이 될 축
+    public LayerMask targetMask; // 타겟이 될 레이어
+    public LayerMask ignoreMask; // 무시할 레이어
+    public float range; // 타겟을 감지할 범위
+    public float rangeMulti = 2; // 타겟을 감지 후 늘어나는 시야 배수
+    public float rangeMultiTime = 3; // 타겟을 감지 후 시야가 늘어나는 시간(초)
+    [Range(0, 360)] public float viewAngle; // 타겟을 감지할 시야각
+    public bool viewEditor; // 에디터 상에서 시야각 확인 여부
 
-    [SerializeField, ReadOnly] NavMeshAgent agent;
-    [SerializeField, ReadOnly] Animator animator;
-
-    [SerializeField, ReadOnly] CHUnitBase unitBase;
-    [SerializeField, ReadOnly] CHContBase contBase;
-
-    [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget = new Infomation.TargetInfo();
-
-    [SerializeField, ReadOnly] float orgStoppingDistance = -1f;
+    [Header("원본 값")]
     [SerializeField, ReadOnly] float orgRangeMulti = -1f;
     [SerializeField, ReadOnly] float orgViewAngle = -1f;
+
+    [Header("스킬 사정거리")]
+    [SerializeField, ReadOnly] float skill1Distance = -1f;
+
+    [Header("시야 확장 여부")]
     [SerializeField, ReadOnly] bool expensionRange = false;
-    [SerializeField, ReadOnly] int curDestinationIndex = 0;
 
-    public Action arrived;
+    [Header("관련 컴포넌트")]
+    [SerializeField, ReadOnly] NavMeshAgent agent;
+    [SerializeField, ReadOnly] Animator animator;
+    [SerializeField, ReadOnly] CHUnitBase unitBase;
+    [SerializeField, ReadOnly] CHContBase contBase;
+    [SerializeField, ReadOnly] Infomation.TargetInfo closestTarget = new Infomation.TargetInfo();
 
-    public void UpdateSkillValue()
-    {
-        orgStoppingDistance = unitBase.GetCurrentSkill1Distance();
-    }
-
-    public void ResetValue(CHUnitBase _unitBase)
-    {
-        if (_unitBase == null) return;
-
-        unitBase = _unitBase;
-
-        range = unitBase.GetCurrentRange();
-        rangeMulti = unitBase.GetCurrentRangeMulti();
-        orgRangeMulti = rangeMulti;
-        rangeMulti = 1f;
-
-        viewAngle = unitBase.GetCurrentViewAngle();
-        orgViewAngle = viewAngle;
-
-        agent.speed = unitBase.GetCurrentMoveSpeed();
-        agent.angularSpeed = unitBase.GetCurrentRotateSpeed();
-        orgStoppingDistance = unitBase.GetCurrentSkill1Distance();
-    }
-
-    public void SetSpeed(float speed)
-    {
-        agent.speed = speed;
-    }
+    public Action actArrived { get; set; }
 
     private void Awake()
     {
-        contBase = gameObject.GetComponent<CHContBase>();
-        unitBase = gameObject.GetComponent<CHUnitBase>();
-        animator = gameObject.GetComponent<Animator>();
         agent = gameObject.GetComponent<NavMeshAgent>();
+        animator = gameObject.GetComponent<Animator>();
+        unitBase = gameObject.GetComponent<CHUnitBase>();
+        contBase = gameObject.GetComponent<CHContBase>();
     }
 
     private void Start()
     {
+        InitValue(unitBase);
+
+        // 타겟 감지
         gameObject.UpdateAsObservable().Subscribe(_ =>
         {
-            bool isDead = false;
-            if (unitBase)
-            {
-                isDead = unitBase.GetIsDeath();
-            }
-
-            if (isDead)
-            {
+            // 비활성화 되어있으면 타겟 감지 X
+            if (gameObject.activeSelf == false)
                 return;
-            }
+
+            // 죽었으면 타겟 감지 X
+            bool isDead = unitBase == null ? false : unitBase.GetIsDeath();
+            if (isDead)
+                return;
 
             // 시야 범위 안에 들어온 타겟 중 제일 가까운 타겟 감지
             switch (standardAxis)
@@ -109,98 +77,46 @@ public class CHTargetTracker : MonoBehaviour
                     break;
             }
 
+            // 감지된 타겟이 없는 경우
             if (closestTarget.objTarget == null)
             {
-                if (expensionRange == false)
-                {
-                    viewAngle = orgViewAngle;
-                    rangeMulti = 1f;
-                }
-                else
-                {
-                    viewAngle = 360f;
-                    rangeMulti = orgRangeMulti;
-                }
+                SetExpensionRange(false);
+                StopRunAnim();
+            }
+            // 감지된 타겟이 있는 경우
+            else
+            {
+                SetExpensionRange(true);
 
-                if (unitBase != null && unitBase.IsNormalState() && destList.Count > 0)
+                // 스킬 사정거리 내에 있으면 멈추도록 설정
+                agent.stoppingDistance = skill1Distance;
+
+                // 공격 가능한 상태이면(CC 등 안 걸려있는 상태인지)
+                if (unitBase.IsNormalState())
                 {
-                    var distance = Vector3.Distance(transform.position, destList[curDestinationIndex].position);
-                    if (distance < agent.radius * 2)
+                    // 스킬 사정거리 밖에 있는 경우
+                    if (closestTarget.distance > skill1Distance)
                     {
-                        agent.isStopped = true;
-                        agent.velocity = Vector3.zero;
-                        if (destList.Count > curDestinationIndex + 1)
+                        // 타겟을 향해 달리고 있는 중이면
+                        if (agent.isOnNavMesh && IsRunAnimPlaying())
                         {
-                            ++curDestinationIndex;
+                            // 타겟 위치를 갱신하여 쫒아감
+                            agent.SetDestination(closestTarget.objTarget.transform.position);
                         }
                         else
                         {
-                            if (arrived != null)
-                                arrived.Invoke();
-
-                            // 마지막 목표 지점에 도착 후
-                            CHMMain.Resource.Destroy(gameObject);
+                            // 타겟을 향해 바라보는 것만 갱신
+                            LookAtPosition(closestTarget.objTarget.transform.position);
                         }
-                    }
-                    else
-                    {
-                        agent.isStopped = false;
-                    }
 
-                    if (agent.isOnNavMesh && IsRunAnimPlaying())
-                    {
-                        agent.stoppingDistance = 0f;
-                        agent.SetDestination(destList[curDestinationIndex].position);
-                        LookAtPosition(destList[curDestinationIndex].position);
+                        PlayRunAnim();
                     }
-                    else
-                    {
-                        LookAtPosition(destList[curDestinationIndex].position);
-                    }
-
-                    PlayRunAnim();
-                }
-                else
-                {
-                    if (agent.isOnNavMesh)
-                    {
-                        agent.ResetPath();
-                    }
-
-                    StopRunAnim();
-                }
-            }
-            else
-            {
-                // 타겟 발견 시 시야각을 range를 벗어나기전에는 각도 제한 삭제
-                viewAngle = 360f;
-                // 타겟 발견 시 시야 해당 배수만큼 증가
-                rangeMulti = orgRangeMulti;
-                agent.stoppingDistance = orgStoppingDistance;
-
-                if (closestTarget.distance > orgStoppingDistance && unitBase.IsNormalState())
-                {
-                    if (agent.isOnNavMesh && IsRunAnimPlaying())
-                    {
-                        agent.SetDestination(closestTarget.objTarget.transform.position);
-                    }
+                    // 스킬 사정거리 안에 있는 경우
                     else
                     {
                         LookAtPosition(closestTarget.objTarget.transform.position);
+                        StopRunAnim();
                     }
-
-                    PlayRunAnim();
-                }
-                else
-                {
-                    LookAtPosition(closestTarget.objTarget.transform.position);
-
-                    if (agent.isOnNavMesh)
-                    {
-                        agent.ResetPath();
-                    }
-
-                    StopRunAnim();
                 }
             }
         }).AddTo(this);
@@ -223,6 +139,26 @@ public class CHTargetTracker : MonoBehaviour
             Debug.DrawRay(transform.position, left * range, Color.green);
             Debug.DrawRay(transform.position, right * range, Color.green);
         }
+    }
+
+    public void InitValue(CHUnitBase unitBase)
+    {
+        if (unitBase == null)
+            return;
+
+        this.unitBase = unitBase;
+
+        range = this.unitBase.GetCurrentRange();
+        rangeMulti = this.unitBase.GetCurrentRangeMulti();
+        orgRangeMulti = rangeMulti;
+        rangeMulti = 1f;
+
+        viewAngle = this.unitBase.GetCurrentViewAngle();
+        orgViewAngle = viewAngle;
+
+        agent.speed = this.unitBase.GetCurrentMoveSpeed();
+        agent.angularSpeed = this.unitBase.GetCurrentRotateSpeed();
+        skill1Distance = this.unitBase.GetCurrentSkill1Distance();
     }
 
     void LookAtPosition(Vector3 _pos)
@@ -250,7 +186,8 @@ public class CHTargetTracker : MonoBehaviour
 
     bool IsRunAnimPlaying()
     {
-        if (animator == null) return true;
+        if (animator == null)
+            return true;
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -281,16 +218,29 @@ public class CHTargetTracker : MonoBehaviour
         {
             animator.SetBool(contBase.sightRange, false);
         }
+
+        if (agent.isOnNavMesh)
+        {
+            agent.ResetPath();
+        }
     }
 
-    public async void ExpensionRange()
+    public async void SetExpensionRange(bool active)
     {
-        expensionRange = true;
+        if (active)
+        {
+            expensionRange = true;
+            viewAngle = 360f;
+            rangeMulti = orgRangeMulti;
+        }
+        else
+        {
+            await Task.Delay((int)(rangeMultiTime * 1000));
 
-        // 10초 동안 감지 범위 확장
-        await Task.Delay(10000);
-
-        expensionRange = false;
+            expensionRange = false;
+            viewAngle = orgViewAngle;
+            rangeMulti = 1f;
+        }
     }
 
     public Infomation.TargetInfo GetClosestTargetInfo()

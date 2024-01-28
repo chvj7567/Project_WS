@@ -1,9 +1,11 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Defines;
 
@@ -18,7 +20,6 @@ public class CHUnitBase : MonoBehaviour
     [SerializeField] public bool onCoolTimeBar = false;
 
     [SerializeField] public UnitData unitData;
-
     [SerializeField] public LevelData levelData;
 
     [SerializeField] public SkillData skill1Data;
@@ -28,7 +29,7 @@ public class CHUnitBase : MonoBehaviour
 
     [SerializeField] public ItemData item1Data;
 
-    [SerializeField] public EUnitState unitState = EUnitState.None;
+    [SerializeField] public EUnitState unitState = EUnitState.Normal;
 
     [SerializeField, ReadOnly] public float maxHp;
     [SerializeField, ReadOnly] public float maxMp;
@@ -52,6 +53,8 @@ public class CHUnitBase : MonoBehaviour
     CancellationToken token;
 
     public Action died;
+
+    DG.Tweening.Sequence seqAirborn;
 
     private void Awake()
     {
@@ -373,6 +376,31 @@ public class CHUnitBase : MonoBehaviour
     }
     #endregion
 
+    private void OnDisable()
+    {
+        if (seqAirborn != null && seqAirborn.IsComplete() == false)
+        {
+            seqAirborn.Complete();
+        }
+
+        seqAirborn = null;
+    }
+
+    public void Active()
+    {
+        if (hpGaugeBar != null)
+        {
+            hpGaugeBar.gameObject.SetActive(true);
+            hpGaugeBar.ResetGaugeBar();
+            hpGaugeBar.ActiveHpBar(onHpBar);
+        }
+        
+        curHp = maxHp;
+        curMp = maxMp;
+        unitState = EUnitState.Normal;
+        unitCollider.enabled = true;
+    }
+
     public float GetCurrentHp()
     {
         return curHp;
@@ -398,8 +426,10 @@ public class CHUnitBase : MonoBehaviour
         return (unitState & Defines.EUnitState.IsAirborne) != 0;
     }
 
-    public void SetIsAirborne(bool _airborne)
+    public void SetIsAirborne(bool _airborne, DG.Tweening.Sequence sequence = null)
     {
+        seqAirborn = sequence;
+
         if (_airborne)
         {
             unitState |= Defines.EUnitState.IsAirborne;
@@ -417,7 +447,7 @@ public class CHUnitBase : MonoBehaviour
             var targetTracker = GetComponent<CHTargetTracker>();
             if (targetTracker != null && targetTracker.GetClosestTargetInfo() != null && targetTracker.GetClosestTargetInfo().objTarget != null)
             {
-                targetTracker.ExpensionRange();
+                targetTracker.SetExpensionRange(true);
             }
 
             switch (eDamageType1)
@@ -698,6 +728,9 @@ public class CHUnitBase : MonoBehaviour
 
     void AtOnceChangeHp(Defines.ESkill _eSkill, CHUnitBase _attackUnit, float _value)
     {
+        if (GetIsDeath())
+            return;
+
         float hpOrigin = curHp;
         float hpResult = curHp + _value;
         if (hpResult >= maxHp)
@@ -719,6 +752,8 @@ public class CHUnitBase : MonoBehaviour
         // Á×À½ Die
         if (hpResult <= 0.00001f)
         {
+            Debug.Log($"{name} is Died");
+
             hpResult = 0f;
 
             var contBase = GetComponent<CHContBase>();
@@ -740,20 +775,11 @@ public class CHUnitBase : MonoBehaviour
             if (hpGaugeBar)
                 hpGaugeBar.gameObject.SetActive(false);
 
-            // Á×¾úÀ» ¶§ ¾ò´Â °ñµå
-            var playerData = CHMData.Instance.GetPlayerData(Defines.EData.Player.ToString());
-            if (playerData != null)
-            {
-                var stageData = CHMMain.Json.GetStageInfo(PlayerPrefs.GetInt(Defines.EPlayerPrefs.Stage.ToString()));
-                playerData.gold +=  stageData.unitGold;
-            }
+            transform.DOMoveY(-10f, 1f);
 
-            transform.DOMoveY(-10f, 3f);
+            died?.Invoke();
 
-            if (died != null)
-                died.Invoke();
-
-            CHMMain.Resource.Destroy(gameObject, 3f);
+            CHMMain.Resource.Destroy(gameObject, 1f);
         }
     }
 

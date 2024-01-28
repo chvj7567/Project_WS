@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CHMPool
@@ -12,15 +13,19 @@ public class CHMPool
 
         Stack<CHPoolable> stPool = new Stack<CHPoolable>();
 
-        public void Init(GameObject _original, int _count = 5)
+        public void Init(GameObject original, int count = 5)
         {
-            Original = _original;
+            Original = original;
             Root = new GameObject().transform;
-            Root.name = $"{_original.name}Root";
+            Root.name = $"{original.name}Root";
 
-            for (int i = 0; i < _count; ++i)
+            for (int i = 0; i < count; ++i)
             {
-                Push(Create());
+                CHPoolable poolable = Create();
+                poolable.transform.SetParent(Root, false);
+                poolable.isUse = false;
+                poolable.gameObject.SetActive(false);
+                Push(poolable);
             }
         }
 
@@ -31,31 +36,41 @@ public class CHMPool
             return go.GetOrAddComponent<CHPoolable>();
         }
 
-        public void Push(CHPoolable _poolable)
+        public void Push(CHPoolable poolable)
         {
-            if (_poolable == null) return;
+            if (poolable == null) return;
 
-            _poolable.transform.SetParent(Root, false);
-            _poolable.isUse = false;
-            _poolable.gameObject.SetActive(false);
+            poolable.transform.SetParent(Root, false);
+            poolable.isUse = false;
+            poolable.gameObject.SetActive(false);
 
-            stPool.Push(_poolable);
+            stPool.Push(poolable);
         }
 
-        public CHPoolable Pop(Transform _parent)
+        public CHPoolable Pop(Transform parent)
         {
             CHPoolable poolable;
 
             if (stPool.Count > 0)
             {
-                poolable = stPool.Pop();
+                do
+                {
+                    if (stPool.Count <= 0)
+                    {
+                        poolable = Create();
+                        break;
+                    }
+
+                    poolable = stPool.Pop();
+
+                } while (poolable.isUse);
             }
             else
             {
                 poolable = Create();
             }
 
-            poolable.transform.SetParent(_parent, false);
+            poolable.transform.SetParent(parent, false);
             poolable.isUse = true;
             poolable.gameObject.SetActive(true);
 
@@ -75,24 +90,22 @@ public class CHMPool
             rootObject = new GameObject { name = "@CHMPool" };
         }
 
-        if (Application.isPlaying)
-        {
-            Object.DontDestroyOnLoad(rootObject);
-        }
+        Object.DontDestroyOnLoad(rootObject);
     }
 
-    public void CreatePool(GameObject _original, int _count = 5)
+    public void CreatePool(GameObject original, int count = 5)
     {
         CHPool pool = new CHPool();
-        pool.Init(_original, _count);
+        pool.Init(original, count);
         pool.Root.parent = rootObject.transform;
 
-        poolDic.Add(_original.name, pool);
+        poolDic.Add(original.name, pool);
     }
 
     public void Push(CHPoolable poolable)
     {
-        if (poolable == null) return;
+        if (poolable == null)
+            return;
 
         if (poolDic.ContainsKey(poolable.gameObject.name) == false)
         {
@@ -103,19 +116,19 @@ public class CHMPool
         poolDic[poolable.gameObject.name].Push(poolable);
     }
 
-    public CHPoolable Pop(GameObject _original, Transform _parent = null)
+    public CHPoolable Pop(GameObject original, Transform parent = null)
     {
-        if (poolDic.ContainsKey(_original.name) == false)
-            CreatePool(_original);
+        if (poolDic.ContainsKey(original.name) == false)
+            CreatePool(original);
 
-        return poolDic[_original.name].Pop(_parent);
+        return poolDic[original.name].Pop(parent);
     }
 
-    public GameObject GetOriginal(string _name)
+    public GameObject GetOriginal(string name)
     {
-        if (poolDic.ContainsKey(_name) == false)
+        if (poolDic.ContainsKey(name) == false)
             return null;
-        return poolDic[_name].Original;
+        return poolDic[name].Original;
     }
 
     public void Clear()

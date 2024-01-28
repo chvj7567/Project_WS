@@ -41,25 +41,6 @@ public class SceneDefense : SceneBase
             }
         });
 
-        spawner.arrived += () =>
-        {
-            --life;
-
-            if (life < 0)
-            {
-                GameEnd();
-            }
-            else
-            {
-                lifeText.SetText(life);
-            }
-        };
-
-        spawner.died += () =>
-        {
-            ++killCount;
-        };
-
         spawner.end += () =>
         {
             GameEnd();
@@ -129,9 +110,6 @@ public class SceneDefense : SceneBase
         goldText.gameObject.SetActive(false);
         lifeText.gameObject.SetActive(false);
 
-        spawner.arrivedCount = 0;
-        spawner.diedCount = 0;
-
         gameEnd = false;
     }
 
@@ -141,12 +119,6 @@ public class SceneDefense : SceneBase
         for(int i = 0; i < balls.Count; ++i)
         {
             balls[i].SetActive(false);
-        }
-
-        if (playerData != null)
-        {
-            var stageData = CHMMain.Json.GetStageInfo(stage);
-            playerData.gold = stageData.playerGold;
         }
 
         maxLife = life = (int)CHMMain.Json.GetConstValue(Defines.EConstValue.StageLife);
@@ -176,10 +148,6 @@ public class SceneDefense : SceneBase
         arg.close += () =>
         {
             GameReset();
-
-            var stageInfo = CHMMain.Json.GetStageInfo(curStage + 1);
-            if (stageInfo != null)
-                ++curStage;
 
             CHMMain.UI.ShowUI(Defines.EUI.UIStart, new UIStartArg
             {

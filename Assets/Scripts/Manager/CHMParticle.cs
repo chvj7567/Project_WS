@@ -9,6 +9,8 @@ using Unity.VisualScripting;
 using DG.Tweening;
 using static Defines;
 using Unity.Burst.CompilerServices;
+using System;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -471,14 +473,14 @@ public class CHMParticle
     void TargetAirborne(Transform _target)
     {
         var unitBase = _target.GetComponent<CHUnitBase>();
-        if (unitBase != null)
-        {
-            unitBase.SetIsAirborne(true);
-        }
+        if (unitBase == null)
+            return;
 
-        _target.DOJump(_target.transform.position, 5f, 1, 3f).OnComplete(() =>
+        var seq = _target.DOJump(_target.transform.position, 5f, 1, 3f).OnComplete(() =>
         {
-            unitBase.SetIsAirborne(false);
+            unitBase?.SetIsAirborne(false);
         });
+
+        unitBase?.SetIsAirborne(true, seq);
     }
 }

@@ -136,7 +136,7 @@ public class CHContBase : MonoBehaviour
             if (unitBase.GetOriginSkill3Data() == null) skill3Lock = true;
             if (unitBase.GetOriginSkill4Data() == null) skill4Lock = true;
 
-            targetTracker.ResetValue(unitBase);
+            targetTracker.InitValue(unitBase);
 
             timeSinceLastSkill1 = -1f;
             timeSinceLastSkill2 = -1f;

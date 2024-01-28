@@ -6,7 +6,7 @@ using UniRx;
 public class CHGaugeBar : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
-    [SerializeField] Image background;
+    [SerializeField] Image imgBackground;
     [SerializeField] Image imgBackGaugeBar;
     [SerializeField] Image imgGaugeBar;
 
@@ -24,15 +24,17 @@ public class CHGaugeBar : MonoBehaviour
         canvas.worldCamera = Camera.main;
         transform.localPosition = new Vector3(0f, _posY, 0f);
         originPosYText = _posY;
-        background.rectTransform.anchoredPosition = new Vector2(background.rectTransform.anchoredPosition.x, _gaugeBarPosY);
+        imgBackground.rectTransform.anchoredPosition = new Vector2(imgBackground.rectTransform.anchoredPosition.x, _gaugeBarPosY);
         imgBackGaugeBar.rectTransform.anchoredPosition = new Vector2(imgBackGaugeBar.rectTransform.anchoredPosition.x, _gaugeBarPosY);
         imgGaugeBar.rectTransform.anchoredPosition = new Vector2(imgGaugeBar.rectTransform.anchoredPosition.x, _gaugeBarPosY);
     }
 
     public void SetGaugeBar(float _maxValue, float _curValue, float _damage, float _backGaugeTime, float _gaugeTime, bool viewDamage = true)
     {
-        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, _backGaugeTime);
-        if (imgGaugeBar) imgGaugeBar.DOFillAmount(_curValue / _maxValue, _gaugeTime);
+        if (imgBackGaugeBar)
+            imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, _backGaugeTime);
+        if (imgGaugeBar)
+            imgGaugeBar.DOFillAmount(_curValue / _maxValue, _gaugeTime);
 
         if (_maxValue > _curValue + _damage)
         {
@@ -45,8 +47,20 @@ public class CHGaugeBar : MonoBehaviour
 
     public void ResetGaugeBar()
     {
-        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(1f, 0.1f);
-        if (imgGaugeBar) imgGaugeBar.DOFillAmount(1f, 0.1f);
+        if (imgBackGaugeBar)
+            imgBackGaugeBar.DOFillAmount(1f, 0.1f);
+        if (imgGaugeBar)
+            imgGaugeBar.DOFillAmount(1f, 0.1f);
+    }
+
+    public void ActiveHpBar(bool active)
+    {
+        if (imgBackground)
+            imgBackground.gameObject.SetActive(active);
+        if (imgBackGaugeBar)
+            imgBackGaugeBar.gameObject.SetActive(active);
+        if (imgGaugeBar)
+            imgGaugeBar.gameObject.SetActive(active);
     }
 
     void ShowDamageText(float _damage, float _time)

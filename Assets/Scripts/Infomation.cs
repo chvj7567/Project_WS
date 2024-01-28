@@ -12,20 +12,22 @@ public class Infomation
     }
 
     [Serializable]
-    public class StageGoldInfo
+    public class StageInfo
     {
         public int stage = -1;
-        public int playerGold = -1;
-        public int unitGold = -1;
+        public int wave = -1;
+        public float waveTime = -1f;
+        public float spawnDelay = -1f;
+        public bool isBoss = false;
+        public float bossMultiHp = -1f;
     }
 
     [Serializable]
     public class StageMonsterInfo
     {
         public int stage = -1;
+        public int wave = -1;
         public Defines.EUnit monsterUnit = Defines.EUnit.None;
-        public int monsterHP = -1;
-        public float monsterSpeed = -1f;
         public int monsterCount = -1;
     }
 

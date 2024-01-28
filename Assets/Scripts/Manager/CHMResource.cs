@@ -142,7 +142,8 @@ public class CHMResource
         CHPoolable poolable = _object.GetComponent<CHPoolable>();
         if (poolable != null)
         {
-            return CHMMain.Pool.Pop(_object, _parent).gameObject;
+            GameObject go = CHMMain.Pool.Pop(_object, _parent).gameObject;
+            return go;
         }
         else
         {
