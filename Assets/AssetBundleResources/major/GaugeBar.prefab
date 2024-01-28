@@ -238,7 +238,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &6001395695886213160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,10 +269,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 6001395695886213162}
-  background: {fileID: 6001395695322800526}
+  imgBackground: {fileID: 6001395695322800526}
   imgBackGaugeBar: {fileID: 271114642490079693}
   imgGaugeBar: {fileID: 6001395696813514025}
-  levelUpBtn: {fileID: 0}
   unitBase: {fileID: 0}
   originPosYText: 0
 --- !u!1 &6001395696813514071
