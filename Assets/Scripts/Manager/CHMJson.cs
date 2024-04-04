@@ -10,7 +10,7 @@ public class CHMJson
     public class JsonData
     {
         public StringInfo[] stringInfoArr;
-        public StageInfo[] stageInfoArr;
+        public StageInfo[] stageGoldInfoArr;
         public StageMonsterInfo[] stageMonsterInfoArr;
         public ShopInfo[] shopInfoArr;
         public ConstValueInfo[] constValueInfoArr;
@@ -21,7 +21,7 @@ public class CHMJson
 
     List<Action<TextAsset>> actionList = new List<Action<TextAsset>>();
     Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
-    List<StageInfo> stageInfoList = new List<StageInfo>();
+    List<StageInfo> stageGoldInfoList = new List<StageInfo>();
     List<StageMonsterInfo> stageMonsterInfoList = new List<StageMonsterInfo>();
     List<ShopInfo> shopInfoList = new List<ShopInfo>();
     List<ConstValueInfo> constValueInfoList = new List<ConstValueInfo>();
@@ -35,7 +35,7 @@ public class CHMJson
     {
         actionList.Clear();
         stringInfoDic.Clear();
-        stageInfoList.Clear();
+        stageGoldInfoList.Clear();
         stageMonsterInfoList.Clear();
         shopInfoList.Clear();
         constValueInfoList.Clear();
@@ -47,7 +47,7 @@ public class CHMJson
         actionList.Clear();
 
         actionList.Add(LoadStringInfo());
-        actionList.Add(LoadStageInfo());
+        actionList.Add(LoadStageGoldInfo());
         actionList.Add(LoadStageMonsterInfo());
         actionList.Add(LoadShopInfo());
         actionList.Add(LoadConstValueInfo());
@@ -85,18 +85,18 @@ public class CHMJson
         return callback;
     }
 
-    Action<TextAsset> LoadStageInfo()
+    Action<TextAsset> LoadStageGoldInfo()
     {
         Action<TextAsset> callback;
 
-        stageInfoList.Clear();
+        stageGoldInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
+        CHMMain.Resource.LoadJson(Defines.EJsonType.StageGold, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.stageInfoArr)
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageGoldInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stageGoldInfoArr)
             {
-                stageInfoList.Add(data);
+                stageGoldInfoList.Add(data);
             }
 
             ++loadCompleteFileCount;
@@ -177,12 +177,12 @@ public class CHMJson
 
     public List<StageInfo> GetStageInfo(int stage)
     {
-        return stageInfoList?.FindAll(_ => _.stage == stage);
+        return stageGoldInfoList?.FindAll(_ => _.stage == stage);
     }
 
     public StageInfo GetStageInfo(int stage, int wave)
     {
-        return stageInfoList?.Find(_ => _.stage == stage && _.wave == wave);
+        return stageGoldInfoList?.Find(_ => _.stage == stage && _.wave == wave);
     }
 
     public ShopInfo GetShopInfo(Defines.EShop shopID, int step)
